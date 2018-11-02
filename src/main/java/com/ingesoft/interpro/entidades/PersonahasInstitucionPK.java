@@ -24,15 +24,15 @@ public class PersonahasInstitucionPK implements Serializable {
     private int idPersona;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "dGrado")
-    private int dGrado;
+    @Column(name = "idInstitucion")
+    private int idInstitucion;
 
     public PersonahasInstitucionPK() {
     }
 
-    public PersonahasInstitucionPK(int idPersona, int dGrado) {
+    public PersonahasInstitucionPK(int idPersona, int idInstitucion) {
         this.idPersona = idPersona;
-        this.dGrado = dGrado;
+        this.idInstitucion = idInstitucion;
     }
 
     public int getIdPersona() {
@@ -43,19 +43,19 @@ public class PersonahasInstitucionPK implements Serializable {
         this.idPersona = idPersona;
     }
 
-    public int getDGrado() {
-        return dGrado;
+    public int getIdInstitucion() {
+        return idInstitucion;
     }
 
-    public void setDGrado(int dGrado) {
-        this.dGrado = dGrado;
+    public void setIdInstitucion(int idInstitucion) {
+        this.idInstitucion = idInstitucion;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idPersona;
-        hash += (int) dGrado;
+        hash += (int) idInstitucion;
         return hash;
     }
 
@@ -69,7 +69,7 @@ public class PersonahasInstitucionPK implements Serializable {
         if (this.idPersona != other.idPersona) {
             return false;
         }
-        if (this.dGrado != other.dGrado) {
+        if (this.idInstitucion != other.idInstitucion) {
             return false;
         }
         return true;
@@ -77,7 +77,7 @@ public class PersonahasInstitucionPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.PersonahasInstitucionPK[ idPersona=" + idPersona + ", dGrado=" + dGrado + " ]";
+        return "com.ingesoft.interpro.entidades.PersonahasInstitucionPK[ idPersona=" + idPersona + ", idInstitucion=" + idInstitucion + " ]";
     }
     
 }

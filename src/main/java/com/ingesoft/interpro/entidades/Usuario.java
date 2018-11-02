@@ -42,10 +42,14 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "idUsuario")
     private Integer idUsuario;
-    @Size(max = 45)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "usuario")
     private String usuario;
-    @Size(max = 80)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "clave")
     private String clave;
     @Size(max = 45)
@@ -53,14 +57,18 @@ public class Usuario implements Serializable {
     private String estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<Persona> personaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario1")
-    private List<GrupoUsuario> grupoUsuarioList;
 
     public Usuario() {
     }
 
     public Usuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public Usuario(Integer idUsuario, String usuario, String clave) {
+        this.idUsuario = idUsuario;
+        this.usuario = usuario;
+        this.clave = clave;
     }
 
     public Integer getIdUsuario() {
@@ -102,15 +110,6 @@ public class Usuario implements Serializable {
 
     public void setPersonaList(List<Persona> personaList) {
         this.personaList = personaList;
-    }
-
-    @XmlTransient
-    public List<GrupoUsuario> getGrupoUsuarioList() {
-        return grupoUsuarioList;
-    }
-
-    public void setGrupoUsuarioList(List<GrupoUsuario> grupoUsuarioList) {
-        this.grupoUsuarioList = grupoUsuarioList;
     }
 
     @Override

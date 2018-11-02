@@ -6,14 +6,14 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,38 +26,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
-    , @NamedQuery(name = "GrupoUsuario.findByIdGrupoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idGrupoUsuario = :idGrupoUsuario")
-    , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")
+    , @NamedQuery(name = "GrupoUsuario.findByIdGrupoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.idGrupoUsuario = :idGrupoUsuario")
     , @NamedQuery(name = "GrupoUsuario.findByUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario = :usuario")})
 public class GrupoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GrupoUsuarioPK grupoUsuarioPK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idGrupoUsuario")
+    private Integer idGrupoUsuario;
     @Size(max = 45)
     @Column(name = "usuario")
     private String usuario;
-    @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Usuario usuario1;
 
     public GrupoUsuario() {
     }
 
-    public GrupoUsuario(GrupoUsuarioPK grupoUsuarioPK) {
-        this.grupoUsuarioPK = grupoUsuarioPK;
+    public GrupoUsuario(Integer idGrupoUsuario) {
+        this.idGrupoUsuario = idGrupoUsuario;
     }
 
-    public GrupoUsuario(int idGrupoUsuario, int idUsuario) {
-        this.grupoUsuarioPK = new GrupoUsuarioPK(idGrupoUsuario, idUsuario);
+    public Integer getIdGrupoUsuario() {
+        return idGrupoUsuario;
     }
 
-    public GrupoUsuarioPK getGrupoUsuarioPK() {
-        return grupoUsuarioPK;
-    }
-
-    public void setGrupoUsuarioPK(GrupoUsuarioPK grupoUsuarioPK) {
-        this.grupoUsuarioPK = grupoUsuarioPK;
+    public void setIdGrupoUsuario(Integer idGrupoUsuario) {
+        this.idGrupoUsuario = idGrupoUsuario;
     }
 
     public String getUsuario() {
@@ -68,18 +63,10 @@ public class GrupoUsuario implements Serializable {
         this.usuario = usuario;
     }
 
-    public Usuario getUsuario1() {
-        return usuario1;
-    }
-
-    public void setUsuario1(Usuario usuario1) {
-        this.usuario1 = usuario1;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (grupoUsuarioPK != null ? grupoUsuarioPK.hashCode() : 0);
+        hash += (idGrupoUsuario != null ? idGrupoUsuario.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +77,7 @@ public class GrupoUsuario implements Serializable {
             return false;
         }
         GrupoUsuario other = (GrupoUsuario) object;
-        if ((this.grupoUsuarioPK == null && other.grupoUsuarioPK != null) || (this.grupoUsuarioPK != null && !this.grupoUsuarioPK.equals(other.grupoUsuarioPK))) {
+        if ((this.idGrupoUsuario == null && other.idGrupoUsuario != null) || (this.idGrupoUsuario != null && !this.idGrupoUsuario.equals(other.idGrupoUsuario))) {
             return false;
         }
         return true;
@@ -98,7 +85,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
+        return "com.ingesoft.interpro.entidades.GrupoUsuario[ idGrupoUsuario=" + idGrupoUsuario + " ]";
     }
     
 }

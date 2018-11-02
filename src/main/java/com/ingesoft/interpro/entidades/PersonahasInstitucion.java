@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "PersonahasInstitucion.findAll", query = "SELECT p FROM PersonahasInstitucion p")
     , @NamedQuery(name = "PersonahasInstitucion.findByIdPersona", query = "SELECT p FROM PersonahasInstitucion p WHERE p.personahasInstitucionPK.idPersona = :idPersona")
+    , @NamedQuery(name = "PersonahasInstitucion.findByIdInstitucion", query = "SELECT p FROM PersonahasInstitucion p WHERE p.personahasInstitucionPK.idInstitucion = :idInstitucion")
     , @NamedQuery(name = "PersonahasInstitucion.findByCodigoActivacion", query = "SELECT p FROM PersonahasInstitucion p WHERE p.codigoActivacion = :codigoActivacion")
-    , @NamedQuery(name = "PersonahasInstitucion.findByFechaCaducidad", query = "SELECT p FROM PersonahasInstitucion p WHERE p.fechaCaducidad = :fechaCaducidad")
-    , @NamedQuery(name = "PersonahasInstitucion.findByDGrado", query = "SELECT p FROM PersonahasInstitucion p WHERE p.personahasInstitucionPK.dGrado = :dGrado")})
+    , @NamedQuery(name = "PersonahasInstitucion.findByFechaCaducidad", query = "SELECT p FROM PersonahasInstitucion p WHERE p.fechaCaducidad = :fechaCaducidad")})
 public class PersonahasInstitucion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,9 +41,9 @@ public class PersonahasInstitucion implements Serializable {
     @Size(max = 45)
     @Column(name = "fechaCaducidad")
     private String fechaCaducidad;
-    @JoinColumn(name = "dGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Grado grado;
+    private Institucion institucion;
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Persona persona;
@@ -55,8 +55,8 @@ public class PersonahasInstitucion implements Serializable {
         this.personahasInstitucionPK = personahasInstitucionPK;
     }
 
-    public PersonahasInstitucion(int idPersona, int dGrado) {
-        this.personahasInstitucionPK = new PersonahasInstitucionPK(idPersona, dGrado);
+    public PersonahasInstitucion(int idPersona, int idInstitucion) {
+        this.personahasInstitucionPK = new PersonahasInstitucionPK(idPersona, idInstitucion);
     }
 
     public PersonahasInstitucionPK getPersonahasInstitucionPK() {
@@ -83,12 +83,12 @@ public class PersonahasInstitucion implements Serializable {
         this.fechaCaducidad = fechaCaducidad;
     }
 
-    public Grado getGrado() {
-        return grado;
+    public Institucion getInstitucion() {
+        return institucion;
     }
 
-    public void setGrado(Grado grado) {
-        this.grado = grado;
+    public void setInstitucion(Institucion institucion) {
+        this.institucion = institucion;
     }
 
     public Persona getPersona() {

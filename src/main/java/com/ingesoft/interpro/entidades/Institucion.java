@@ -51,6 +51,8 @@ public class Institucion implements Serializable {
     @Size(max = 45)
     @Column(name = "dane")
     private String dane;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "institucion")
+    private List<PersonahasInstitucion> personahasInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
     private List<Grado> gradoList;
 
@@ -91,6 +93,15 @@ public class Institucion implements Serializable {
 
     public void setDane(String dane) {
         this.dane = dane;
+    }
+
+    @XmlTransient
+    public List<PersonahasInstitucion> getPersonahasInstitucionList() {
+        return personahasInstitucionList;
+    }
+
+    public void setPersonahasInstitucionList(List<PersonahasInstitucion> personahasInstitucionList) {
+        this.personahasInstitucionList = personahasInstitucionList;
     }
 
     @XmlTransient

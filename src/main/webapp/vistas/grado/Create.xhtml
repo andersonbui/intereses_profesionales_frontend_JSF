@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="GradoCreateDlg" widgetVar="GradoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateGradoTitle}">
+            <h:form id="GradoCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{gradoController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateGradoLabel_idGrado}" for="idGrado" />
+                        <p:inputText id="idGrado" value="#{gradoController.selected.idGrado}" title="#{bundle.CreateGradoTitle_idGrado}" required="true" requiredMessage="#{bundle.CreateGradoRequiredMessage_idGrado}"/>
+                        <p:outputLabel value="#{bundle.CreateGradoLabel_curso}" for="curso" />
+                        <p:inputText id="curso" value="#{gradoController.selected.curso}" title="#{bundle.CreateGradoTitle_curso}" required="true" requiredMessage="#{bundle.CreateGradoRequiredMessage_curso}"/>
+                        <p:outputLabel value="#{bundle.CreateGradoLabel_grado}" for="grado" />
+                        <p:inputText id="grado" value="#{gradoController.selected.grado}" title="#{bundle.CreateGradoTitle_grado}" />
+                        <p:outputLabel value="#{bundle.CreateGradoLabel_idInstitucion}" for="idInstitucion" />
+                        <p:selectOneMenu id="idInstitucion" value="#{gradoController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_idInstitucion}">
+                            <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
+                                           var="idInstitucionItem"
+                                           itemValue="#{idInstitucionItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{gradoController.create}" value="#{bundle.Save}" update="display,:GradoListForm:datalist,:growl" oncomplete="handleSubmit(args,'GradoCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="GradoCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

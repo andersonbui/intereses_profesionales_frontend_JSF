@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AmbientePersonalidadCreateDlg" widgetVar="AmbientePersonalidadCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateAmbientePersonalidadTitle}">
+            <h:form id="AmbientePersonalidadCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{ambientePersonalidadController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateAmbientePersonalidadLabel_idAmbientePersonalidad}" for="idAmbientePersonalidad" />
+                        <p:inputText id="idAmbientePersonalidad" value="#{ambientePersonalidadController.selected.idAmbientePersonalidad}" title="#{bundle.CreateAmbientePersonalidadTitle_idAmbientePersonalidad}" required="true" requiredMessage="#{bundle.CreateAmbientePersonalidadRequiredMessage_idAmbientePersonalidad}"/>
+                        <p:outputLabel value="#{bundle.CreateAmbientePersonalidadLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{ambientePersonalidadController.selected.nombre}" title="#{bundle.CreateAmbientePersonalidadTitle_nombre}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{ambientePersonalidadController.create}" value="#{bundle.Save}" update="display,:AmbientePersonalidadListForm:datalist,:growl" oncomplete="handleSubmit(args,'AmbientePersonalidadCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="AmbientePersonalidadCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EstudianteGradoViewDlg" widgetVar="EstudianteGradoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEstudianteGradoTitle}">
+            <h:form id="EstudianteGradoViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{estudianteGradoController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEstudianteGradoLabel_estudianteGradoPK_date}"/>
+                        <h:outputText value="#{estudianteGradoController.selected.estudianteGradoPK.date}" title="#{bundle.ViewEstudianteGradoTitle_estudianteGradoPK_date}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewEstudianteGradoLabel_estudiante}"/>
+                        <h:outputText value="#{estudianteGradoController.selected.estudiante}" title="#{bundle.ViewEstudianteGradoTitle_estudiante}"/>
+                        <h:outputText value="#{bundle.ViewEstudianteGradoLabel_grado}"/>
+                        <h:outputText value="#{estudianteGradoController.selected.grado}" title="#{bundle.ViewEstudianteGradoTitle_grado}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EstudianteGradoViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

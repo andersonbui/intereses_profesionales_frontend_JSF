@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PreguntaEditDlg" widgetVar="PreguntaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPreguntaTitle}">
+            <h:form id="PreguntaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{preguntaController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditPreguntaLabel_idPregunta}" for="idPregunta" />
+                        <p:inputText id="idPregunta" value="#{preguntaController.selected.idPregunta}" title="#{bundle.EditPreguntaTitle_idPregunta}" required="true" requiredMessage="#{bundle.EditPreguntaRequiredMessage_idPregunta}"/>
+                        <p:outputLabel value="#{bundle.EditPreguntaLabel_enunciado}" for="enunciado" />
+                        <p:inputText id="enunciado" value="#{preguntaController.selected.enunciado}" title="#{bundle.EditPreguntaTitle_enunciado}" />
+                        <p:outputLabel value="#{bundle.EditPreguntaLabel_segundoEnunciado}" for="segundoEnunciado" />
+                        <p:inputText id="segundoEnunciado" value="#{preguntaController.selected.segundoEnunciado}" title="#{bundle.EditPreguntaTitle_segundoEnunciado}" />
+                        <p:outputLabel value="#{bundle.EditPreguntaLabel_suma}" for="suma" />
+                        <p:selectBooleanCheckbox id="suma" value="#{preguntaController.selected.suma}" />
+                        <p:outputLabel value="#{bundle.EditPreguntaLabel_idAmbiente}" for="idAmbiente" />
+                        <p:selectOneMenu id="idAmbiente" value="#{preguntaController.selected.idAmbiente}" required="true" requiredMessage="#{bundle.EditPreguntaRequiredMessage_idAmbiente}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{ambientePersonalidadController.itemsAvailableSelectOne}"
+                                           var="idAmbienteItem"
+                                           itemValue="#{idAmbienteItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{preguntaController.update}" value="#{bundle.Save}" update="display,:PreguntaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PreguntaEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PreguntaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

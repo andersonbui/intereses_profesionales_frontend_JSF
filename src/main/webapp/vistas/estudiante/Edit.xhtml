@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EstudianteEditDlg" widgetVar="EstudianteEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditEstudianteTitle}">
+            <h:form id="EstudianteEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{estudianteController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_idEstudiante}" for="idEstudiante" />
+                        <p:inputText id="idEstudiante" value="#{estudianteController.selected.idEstudiante}" title="#{bundle.EditEstudianteTitle_idEstudiante}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idEstudiante}"/>
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_fechaIngreso}" for="fechaIngreso" />
+                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy" value="#{estudianteController.selected.fechaIngreso}" title="#{bundle.EditEstudianteTitle_fechaIngreso}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_estrato}" for="estrato" />
+                        <p:inputText id="estrato" value="#{estudianteController.selected.estrato}" title="#{bundle.EditEstudianteTitle_estrato}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_cuantosViven}" for="cuantosViven" />
+                        <p:inputText id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" title="#{bundle.EditEstudianteTitle_cuantosViven}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_cuantosTrabajan}" for="cuantosTrabajan" />
+                        <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.EditEstudianteTitle_cuantosTrabajan}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_viveConPadres}" for="viveConPadres" />
+                        <p:selectBooleanCheckbox id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_desplazados}" for="desplazados" />
+                        <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_personalidad}" for="personalidad" />
+                        <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.EditEstudianteTitle_personalidad}" />
+                        <p:outputLabel value="#{bundle.EditEstudianteLabel_idPersona}" for="idPersona" />
+                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
+                                           var="idPersonaItem"
+                                           itemValue="#{idPersonaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{estudianteController.update}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EstudianteEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

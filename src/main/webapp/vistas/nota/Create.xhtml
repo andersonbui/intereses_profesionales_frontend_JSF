@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="NotaCreateDlg" widgetVar="NotaCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateNotaTitle}">
+            <h:form id="NotaCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{notaController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateNotaLabel_nota}" for="nota" />
+                        <p:inputText id="nota" value="#{notaController.selected.nota}" title="#{bundle.CreateNotaTitle_nota}" />
+                        <p:outputLabel value="#{bundle.CreateNotaLabel_estudiante}" for="estudiante" />
+                        <p:selectOneMenu id="estudiante" value="#{notaController.selected.estudiante}" required="true" requiredMessage="#{bundle.EditNotaRequiredMessage_estudiante}">
+                            <f:selectItems value="#{estudianteController.itemsAvailableSelectOne}"
+                                           var="estudianteItem"
+                                           itemValue="#{estudianteItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateNotaLabel_grado}" for="grado" />
+                        <p:selectOneMenu id="grado" value="#{notaController.selected.grado}" required="true" requiredMessage="#{bundle.EditNotaRequiredMessage_grado}">
+                            <f:selectItems value="#{gradoController.itemsAvailableSelectOne}"
+                                           var="gradoItem"
+                                           itemValue="#{gradoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateNotaLabel_materia}" for="materia" />
+                        <p:selectOneMenu id="materia" value="#{notaController.selected.materia}" required="true" requiredMessage="#{bundle.EditNotaRequiredMessage_materia}">
+                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                           var="materiaItem"
+                                           itemValue="#{materiaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{notaController.create}" value="#{bundle.Save}" update="display,:NotaListForm:datalist,:growl" oncomplete="handleSubmit(args,'NotaCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="NotaCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

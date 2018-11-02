@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EncuestaEditDlg" widgetVar="EncuestaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditEncuestaTitle}">
+            <h:form id="EncuestaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{encuestaController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditEncuestaLabel_idEncuesta}" for="idEncuesta" />
+                        <p:inputText id="idEncuesta" value="#{encuestaController.selected.idEncuesta}" title="#{bundle.EditEncuestaTitle_idEncuesta}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_idEncuesta}"/>
+                        <p:outputLabel value="#{bundle.EditEncuestaLabel_fecha}" for="fecha" />
+                        <p:calendar id="fecha" pattern="MM/dd/yyyy HH:mm:ss" value="#{encuestaController.selected.fecha}" title="#{bundle.EditEncuestaTitle_fecha}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_fecha}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditEncuestaLabel_idEstudiante}" for="idEstudiante" />
+                        <p:selectOneMenu id="idEstudiante" value="#{encuestaController.selected.idEstudiante}" required="true" requiredMessage="#{bundle.EditEncuestaRequiredMessage_idEstudiante}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estudianteController.itemsAvailableSelectOne}"
+                                           var="idEstudianteItem"
+                                           itemValue="#{idEstudianteItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{encuestaController.update}" value="#{bundle.Save}" update="display,:EncuestaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EncuestaEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EncuestaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

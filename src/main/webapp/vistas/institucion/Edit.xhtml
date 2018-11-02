@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InstitucionEditDlg" widgetVar="InstitucionEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditInstitucionTitle}">
+            <h:form id="InstitucionEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{institucionController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditInstitucionLabel_idInstitucion}" for="idInstitucion" />
+                        <p:inputText id="idInstitucion" value="#{institucionController.selected.idInstitucion}" title="#{bundle.EditInstitucionTitle_idInstitucion}" required="true" requiredMessage="#{bundle.EditInstitucionRequiredMessage_idInstitucion}"/>
+                        <p:outputLabel value="#{bundle.EditInstitucionLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{institucionController.selected.nombre}" title="#{bundle.EditInstitucionTitle_nombre}" />
+                        <p:outputLabel value="#{bundle.EditInstitucionLabel_nit}" for="nit" />
+                        <p:inputText id="nit" value="#{institucionController.selected.nit}" title="#{bundle.EditInstitucionTitle_nit}" />
+                        <p:outputLabel value="#{bundle.EditInstitucionLabel_dane}" for="dane" />
+                        <p:inputText id="dane" value="#{institucionController.selected.dane}" title="#{bundle.EditInstitucionTitle_dane}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{institucionController.update}" value="#{bundle.Save}" update="display,:InstitucionListForm:datalist,:growl" oncomplete="handleSubmit(args, 'InstitucionEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="InstitucionEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

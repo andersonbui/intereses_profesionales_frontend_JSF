@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EstudianteCreateDlg" widgetVar="EstudianteCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateEstudianteTitle}">
+            <h:form id="EstudianteCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{estudianteController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idEstudiante}" for="idEstudiante" />
+                        <p:inputText id="idEstudiante" value="#{estudianteController.selected.idEstudiante}" title="#{bundle.CreateEstudianteTitle_idEstudiante}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_idEstudiante}"/>
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_fechaIngreso}" for="fechaIngreso" />
+                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy" value="#{estudianteController.selected.fechaIngreso}" title="#{bundle.EditEstudianteTitle_fechaIngreso}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_estrato}" for="estrato" />
+                        <p:inputText id="estrato" value="#{estudianteController.selected.estrato}" title="#{bundle.CreateEstudianteTitle_estrato}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosViven}" for="cuantosViven" />
+                        <p:inputText id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" title="#{bundle.CreateEstudianteTitle_cuantosViven}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosTrabajan}" for="cuantosTrabajan" />
+                        <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.CreateEstudianteTitle_cuantosTrabajan}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_viveConPadres}" for="viveConPadres" />
+                        <p:selectBooleanCheckbox id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_desplazados}" for="desplazados" />
+                        <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_personalidad}" for="personalidad" />
+                        <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.CreateEstudianteTitle_personalidad}" />
+                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idPersona}" for="idPersona" />
+                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
+                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
+                                           var="idPersonaItem"
+                                           itemValue="#{idPersonaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

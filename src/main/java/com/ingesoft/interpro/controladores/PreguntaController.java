@@ -6,6 +6,8 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.facades.PreguntaFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -23,12 +25,14 @@ import javax.faces.convert.FacesConverter;
 @SessionScoped
 public class PreguntaController implements Serializable {
 
+    private int tamGrupo;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
     private List<Pregunta> items = null;
     private Pregunta selected;
-
+    
     public PreguntaController() {
+        tamGrupo=4;
     }
 
     public Pregunta getSelected() {
@@ -49,6 +53,33 @@ public class PreguntaController implements Serializable {
         return ejbFacade;
     }
 
+    public List<Integer> getGrupos() {
+        System.out.println("gruposPreguntas: "+items);
+        List<Integer> gruposPreguntas = new ArrayList<>();
+        getItems();
+        int numGrupos = items.size()/tamGrupo;
+        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        for (int i = 1; i <= numGrupos; i++) {
+            gruposPreguntas.add(i);
+        }
+        System.out.println("gruposPreguntas: "+gruposPreguntas);
+        return gruposPreguntas;
+    }
+    
+    public List<Pregunta> getItems(int grupo) {
+        getItems();
+        List<Pregunta> listaPreguntas = new ArrayList<>();
+        for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
+            if (i < items.size()) {
+                listaPreguntas.add(items.get(i));
+            }else{
+                break;
+            }
+        }
+        System.out.println("gruposPreguntas: "+listaPreguntas);
+        return listaPreguntas;
+    }
+    
     public Pregunta prepareCreate() {
         selected = new Pregunta();
         initializeEmbeddableKey();

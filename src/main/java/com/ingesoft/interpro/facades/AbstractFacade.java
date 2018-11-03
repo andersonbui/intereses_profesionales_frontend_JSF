@@ -5,8 +5,12 @@
  */
 package com.ingesoft.interpro.facades;
 
+import java.util.Iterator;
 import java.util.List;
+import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
@@ -27,7 +31,25 @@ public abstract class AbstractFacade<T> {
     }
 
     public void edit(T entity) {
-        getEntityManager().merge(entity);
+        //        getEntityManager().merge(entity);
+        try {
+            getEntityManager().merge(entity);
+
+        } catch (EJBException e) {
+            @SuppressWarnings("ThrowableResultIgnored")
+            Exception cause = e.getCausedByException();
+            System.out.println("---------------------------EXCEPCION-------------------");
+            if (cause instanceof ConstraintViolationException) {
+                @SuppressWarnings("ThrowableResultIgnored")
+                ConstraintViolationException cve = (ConstraintViolationException) e.getCausedByException();
+                for (Iterator<ConstraintViolation<?>> it = cve.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<? extends Object> v = it.next();
+                    System.err.println(v);
+                    System.err.println("==>>" + v.getMessage());
+                }
+            }
+//            Assert.fail("ejb exception");
+        }
     }
 
     public void remove(T entity) {

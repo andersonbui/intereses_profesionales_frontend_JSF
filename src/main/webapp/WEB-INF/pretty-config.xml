@@ -1,0 +1,22 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<!--<url-mapping>-->
+	<url-mapping id="lista-ambientes">
+		<pattern value="/ambientes/" />
+		<view-id>/faces/vistas/ambientePersonalidad/List.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="lista-instituciones">
+		<pattern value="/instituciones/" />
+		<view-id>/faces/vistas/institucion/List.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="lista-estudiantes">
+		<pattern value="/estudiantes/" />
+		<view-id>/faces/vistas/estudiante/List.xhtml</view-id>
+	</url-mapping>
+
+</pretty-config>

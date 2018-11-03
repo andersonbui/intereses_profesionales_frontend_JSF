@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,9 @@ import javax.faces.convert.FacesConverter;
 @ManagedBean(name = "preguntaController")
 @SessionScoped
 public class PreguntaController implements Serializable {
-
+    
+    private static final long serialVersionUID = 1L;
+   
     private int tamGrupo;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
@@ -54,15 +57,15 @@ public class PreguntaController implements Serializable {
     }
 
     public List<Integer> getGrupos() {
-        System.out.println("gruposPreguntas: "+items);
         List<Integer> gruposPreguntas = new ArrayList<>();
-        getItems();
-        int numGrupos = items.size()/tamGrupo;
+        items = getItems();
+        System.out.println("items: " + items);
+        int numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
-        System.out.println("gruposPreguntas: "+gruposPreguntas);
+        System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
     

@@ -9,8 +9,8 @@
     <p:dialog id="PreguntaCreateDlgPersonalidad" widgetVar="PreguntaCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePreguntaTitle}">
         <h:form id="PreguntaCreatePersonalidadForm" >
             <p:wizard widgetVar="preguntasPersonalidad" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
-                
-                    <p:tab title="Preguntas de personalidad ">
+                <ui:repeat value="#{preguntaController.getGrupos()}" var="grupo">
+                    <p:tab title="Preguntas de personalidad #{grupo}">
                         <p:panel header="Preguntas de personalidad">
                             <p:panelGrid  id="panel" styleClass="panelgrid">
                                 <ui:repeat value="#{preguntaController.getItems(1)}" var="item">
@@ -36,6 +36,7 @@
                             </p:panelGrid>
                         </p:panel>
                     </p:tab>
+                </ui:repeat>
             </p:wizard>
         </h:form>
     </p:dialog>

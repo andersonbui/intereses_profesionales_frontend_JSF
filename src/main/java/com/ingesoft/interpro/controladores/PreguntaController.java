@@ -21,6 +21,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "preguntaController")
 @SessionScoped
@@ -29,14 +30,56 @@ public class PreguntaController implements Serializable {
     private static final long serialVersionUID = 1L;
    
     private int tamGrupo;
+    public boolean skip;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
     private List<Pregunta> items = null;
     private Pregunta selected;
+    private int pasoActual;
+    private int numGrupos;
     
     public PreguntaController() {
-        tamGrupo=4;
+        tamGrupo = 4;
+        pasoActual = 0;
     }
+    
+    public int getPasoActual() {
+        return pasoActual;
+    }
+    public int getUltimoPaso() {
+        return (numGrupos);
+    }
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
+    }
+    
+    public int getStep() {
+        return pasoActual;
+    }
+
+    public int getnombrePaso(int i) {
+        return (i*100/numGrupos);
+    }
+    
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePaso() {
+        return pasoActual < (numGrupos );
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso");
+        pasoActual += 1;
+        return pasoActual;
+    }
+
 
     public Pregunta getSelected() {
         return selected;
@@ -57,10 +100,11 @@ public class PreguntaController implements Serializable {
     }
 
     public List<Integer> getGrupos() {
+        System.out.println("Hola mundo");
         List<Integer> gruposPreguntas = new ArrayList<>();
         items = getItems();
         System.out.println("items: " + items);
-        int numGrupos = items.size() / tamGrupo;
+        numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
@@ -86,7 +130,13 @@ public class PreguntaController implements Serializable {
     public Pregunta prepareCreate() {
         selected = new Pregunta();
         initializeEmbeddableKey();
+        pasoActual = 0;
         return selected;
+    }
+    
+    public Pregunta preparePreguntas() {
+        pasoActual= 0;
+        return null;
     }
 
     public void create() {

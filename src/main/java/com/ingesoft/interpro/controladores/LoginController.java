@@ -155,7 +155,7 @@ public class LoginController implements Serializable {
 //        for (Grupousuario gruposUsuario : gruposUsuarios) {
 //            System.out.println("grupo: " + gruposUsuario);
 //        }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales/faces/vistas/pregunta/List.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/List.xhtml");
     }
 
     public String salir() throws IOException {
@@ -171,7 +171,7 @@ public class LoginController implements Serializable {
         } catch (ServletException e) {
             fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Cerrar Sesion"));
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales/faces/login.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
 //        return "/login.xhtml";
         return "";
     }

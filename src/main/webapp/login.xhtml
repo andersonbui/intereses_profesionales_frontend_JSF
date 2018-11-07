@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      lang="es">
+    <h:head>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
+        <meta charset="UTF-8"></meta>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
+        <title>Login Social com JSF</title>
+        <h:outputStylesheet library="css" name="util.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
+
+    </h:head>
+    <h:body>
+        <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
+                <h:form class="login100-form validate-form">
+                    <span class="login100-form-title p-b-37" >
+                        Iniciar sesion
+                    </span>
+                    <div rendered="#{empty usuarioController.profile}">
+
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su usuario o correo">
+                            <input id="login-username" type="text" class="form-control"
+                                   name="username" value="" placeholder="usuario o correo" />
+                        </div>
+                        <div class="wrap-input100 validate-input m-b-20" >
+                            <input id="login-password" type="password" class="form-control"
+                                   name="password" placeholder="contraseña" />
+                        </div>
+
+                        <label> <input id="s" type="checkbox"
+                                       name="remember" value="1" /> Recuerdame
+                        </label>
+
+
+                        <h:commandLink class="container-login100-form-btn" type="submit">
+                            <a id="btn-login" href="#" 
+                               class="login100-form-btn"
+                               >Iniciar sesion</a>
+                        </h:commandLink>
+
+                        <div class="text-center p-t-57 p-b-20" >
+                            <span class="txt1" >
+                                O iniciar sesion con
+                            </span>
+
+                        </div>
+                        <div class="flex-c p-b-20" >
+                            <h:commandLink class="login100-social-item bg1" action="#{usuarioController.conectar()}">
+                                <i class="fab fa-facebook-f" alt="f" ></i>
+                            </h:commandLink >
+                            <h:commandLink class="login100-social-item  bg2" action="#{usuarioController.conectar()}" >
+                                <i class="fab fa-google" alt="google" ></i>
+                            </h:commandLink >
+                            <a href="#" class="login100-social-item bg3">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+
+                        <dir class="text-center">
+                            <a href="#" class="txt2 hov1" >Crear cuenta</a>
+                        </dir>
+                    </div>
+                    <h:panelGrid rendered="#{not empty usuarioController.profile}">
+                        <h:graphicImage value="#{usuarioController.profile.profileImageURL}"
+                                        styleClass="media-object" />
+
+                        <h3 class="media-heading" style="margin-left: 10px;">#{usuarioController.profile.fullName}</h3>
+                        <h:commandLink action="#{usuarioController.salir()}" styleClass="btn btn-primary" value="Salir" />			
+                    </h:panelGrid>
+
+                </h:form>
+
+            </div>
+        </div>
+    </h:body>
+</html>

@@ -1,0 +1,199 @@
+
+body {
+    /*background: url(../img/body-bkg.png) ;*/
+    background: #28c2f1;    
+    background: -webkit-linear-gradient(bottom, #28c2f1, #58d6ff);
+    background: -o-linear-gradient(bottom, #28c2f1, #58d6ff);
+    background: -moz-linear-gradient(bottom, #28c2f1, #58d6ff);
+    background: linear-gradient(bottom, #28c2f1, #58d6ff);
+    line-height: 1;
+    font-size: 14px !important;
+    font-family: helvetica !important;
+    width: 98.5%;
+}
+
+#header{
+    height: 50px;
+    background-color: rgb(241, 241, 241);
+    box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.5);
+    margin-bottom: 5px;
+}
+
+#header .con_escudo_titulo {
+    position: relative;
+    top: 40px;
+    padding-left: 25px;
+    background: linear-gradient(to right,rgb(236, 236, 236)0%,rgb(163, 243, 217)51%,rgb(22, 33, 47)100%);
+    box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.5);
+    height: 125px;
+}
+
+#header .con_escudo_titulo .borde-redondo {
+    position: absolute;
+    margin-top: -20px;
+    width: 125px;
+    height: 125px;
+    border-radius: 60px;
+    background-color: rgb(34,65,154);
+}
+
+#header .con_escudo_titulo .logo {
+    position: relative;
+    z-index: 1;
+    float: left;
+    margin-top: 8px;
+    margin-left: 13px;
+}
+#header .con_escudo_titulo .logo a {
+    width: 110px;
+    margin-top: -20px;
+    height: 110px;
+    display: block;
+    background: url(../img/logo-unicauca.png) no-repeat;
+}
+
+#header .bottom{
+    height: 85px;
+    background: black;
+    /*background: linear-gradient(to right,rgb(119,0,0)0%,rgb(203,0,0)51%,rgb(119,0,0)100%);*/
+}
+
+#menu {
+    background-color: rgba(194,223,239,0.5);
+}
+
+#tituloMenu{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(194,223,239,0.5);
+}
+
+#content{
+    background-color: #FFFFFd;
+    padding: 4px;
+    font-size: 12px !important;
+    height: auto;
+    min-height: 500px
+}
+
+.ui-widget .ui-widget{
+    font-size: 14px !important;
+}
+
+.ui-datatable th{
+    font-size: 14px !important;
+}
+.ui-menu{
+    min-width: 100px !important;
+}
+
+.recaudoTable td{
+    text-align: center !important;
+    font-size: 14px !important;
+    color: #000000;
+}
+
+.ui-button-text{
+    font-size: 14px !important;
+}
+
+.fechaRed{
+    background-color: rgba(255,0,0,0.35) !important;
+}
+
+.ui-panel-titlebar{
+    padding-bottom: 0px !important;
+}
+
+.CampoLabelObligatorios
+{
+    font-style: italic;
+    font-size: 15px;    
+}
+.CampoLabelEspecificacion
+{
+    font-style: italic;
+    font-size: 14px;
+}
+.panelgrid , .panelgrid tr , .panelgrid td
+{
+    border-style: none !important
+
+}
+
+.BotonesSesion
+{
+    position: absolute;
+    padding: 5px;
+    color: #FFFFFF;
+    text-align: center;
+    border: 2px  solid #ffffff;
+    border-style: dashed;
+    right: 30px;
+    top: 10px;
+    border-radius: 10px;    
+}
+
+.ui-progressbar.ui-widget-content {
+    background-color:#dddddd;
+    background-image:none;    
+}
+
+.ui-progressbar.ui-widget.ui-widget-content.ui-corner-all{
+    width: 60px;
+    height: 20px;
+    margin: -3px;
+    padding: 0px;
+}
+
+.cursor{
+    cursor:pointer
+}
+
+.ui-tabs {
+    font-size:0.5em;
+} 
+
+.ui-panelgrid .ui-panelgrid-cell{
+    vertical-align: top;
+
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    font-size: 14px;
+}
+
+
+.ui-datatable .ui-paginator {
+    background:  transparent;
+    border:0;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    border: 1px solid #1b00ff !important;
+    background: #12045d 50% 50% repeat-x !important;
+    color: #FFFFFF !important;
+}
+
+#floater {
+    position: absolute;
+    top: 100px;
+    right: 1px;
+    width: 150px;
+    height: 60px;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+    z-index: 1;
+    border-radius: 3px 0 0 3px;
+    padding: 5px;
+    background-color: #41a6d9;
+    color: white;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.ui-datagrid-content {
+    border: none !important;
+}

@@ -3,6 +3,9 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Pregunta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Respuesta;
+import com.ingesoft.interpro.entidades.RespuestaPK;
 import com.ingesoft.interpro.facades.PreguntaFacade;
 
 import java.io.Serializable;
@@ -34,9 +37,12 @@ public class PreguntaController implements Serializable {
     @EJB
     private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
     private List<Pregunta> items = null;
+    private List<Pregunta> itemsPersonalidad = null;
     private Pregunta selected;
     private int pasoActual;
     private int numGrupos;
+    
+    
     
     public PreguntaController() {
         tamGrupo = 4;
@@ -138,6 +144,19 @@ public class PreguntaController implements Serializable {
         pasoActual= 0;
         return null;
     }
+    public Pregunta preparePreguntasPersonalidad(Encuesta encuesta) {
+        System.out.println("esta es una una encuesta: "+encuesta);
+        System.out.println(" Pregunta preparandola");
+        getPreguntasPersonalidad();
+        Respuesta[] respuestas = new Respuesta[itemsPersonalidad.size()];
+        for (int i = 0; i < 10; i++) {
+            Pregunta item = itemsPersonalidad.get(i);
+            RespuestaPK respPK = new RespuestaPK(i, i);
+            respuestas[i] = new Respuesta(respPK);
+        }
+        System.out.println(" Pregunta Preparada");
+        return null;
+    }
 
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaCreated"));
@@ -161,6 +180,20 @@ public class PreguntaController implements Serializable {
     public List<Pregunta> getItems() {
         if (items == null) {
             items = getFacade().findAll();
+        }
+        return items;
+    }
+    
+    public List<Pregunta> getPreguntasPersonalidad() {
+        if (itemsPersonalidad == null) {
+            itemsPersonalidad = getFacade().findAllPersonalidad();
+        }
+        return itemsPersonalidad;
+    }
+
+    public List<Pregunta> getPreguntasAmbientes() {
+        if (items == null) {
+            items = getFacade().findAllAmbiente();
         }
         return items;
     }

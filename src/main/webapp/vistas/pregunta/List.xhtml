@@ -55,12 +55,18 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListPreguntaTitle_idAmbiente}"/>
                             </f:facet>
-                            <h:outputText value="#{item.idAmbiente}"/>
+                            <h:outputText value="#{item.idTipo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="orden"/>
+                            </f:facet>
+                            <h:outputText value="#{item.orden}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{preguntaController.prepareCreate}" update=":PreguntaCreateForm" oncomplete="PF('PreguntaCreateDialog').show()"/>
                             <p:commandButton id="createButtonAmbiente" icon="ui-icon-plus"   value="Preguntas Ambiente" actionListener="#{preguntaController.preparePreguntas}" update=":PreguntaCreateAmbienteForm" oncomplete="PF('PreguntaAmbienteCreateDialog').show()"/>
-                            <p:commandButton id="createButtonPersonalidad" icon="ui-icon-plus"   value="Preguntas Personalidad" actionListener="#{preguntaController.preparePreguntas}" update=":PreguntaCreatePersonalidadForm" oncomplete="PF('PreguntaPersonalidadCreateDialog').show()"/>
+                            <p:commandButton id="createButtonPersonalidad" icon="ui-icon-plus"   value="Preguntas Personalidad" action="#{encuestaController.prepareCreate()}" actionListener="#{preguntaController.preparePreguntasPersonalidad(encuestaController.selected)}" update=":PreguntaCreatePersonalidadForm" oncomplete="PF('PreguntaPersonalidadCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":PreguntaViewForm" oncomplete="PF('PreguntaViewDialog').show()" disabled="#{empty preguntaController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":PreguntaEditForm" oncomplete="PF('PreguntaEditDialog').show()" disabled="#{empty preguntaController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{preguntaController.destroy}" update=":growl,datalist" disabled="#{empty preguntaController.selected}"/>

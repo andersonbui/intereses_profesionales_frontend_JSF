@@ -6,22 +6,19 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,13 +32,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Pregunta.findByIdPregunta", query = "SELECT p FROM Pregunta p WHERE p.idPregunta = :idPregunta")
     , @NamedQuery(name = "Pregunta.findByEnunciado", query = "SELECT p FROM Pregunta p WHERE p.enunciado = :enunciado")
     , @NamedQuery(name = "Pregunta.findBySegundoEnunciado", query = "SELECT p FROM Pregunta p WHERE p.segundoEnunciado = :segundoEnunciado")
-    , @NamedQuery(name = "Pregunta.findBySuma", query = "SELECT p FROM Pregunta p WHERE p.suma = :suma")})
+    , @NamedQuery(name = "Pregunta.findBySuma", query = "SELECT p FROM Pregunta p WHERE p.suma = :suma")
+    , @NamedQuery(name = "Pregunta.findByOrden", query = "SELECT p FROM Pregunta p WHERE p.orden = :orden")
+    , @NamedQuery(name = "Pregunta.findByIdTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo = :idTipo")})
+
 public class Pregunta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idPregunta")
     private Integer idPregunta;
     @Size(max = 100)
@@ -52,11 +52,11 @@ public class Pregunta implements Serializable {
     private String segundoEnunciado;
     @Column(name = "suma")
     private Boolean suma;
-    @JoinColumn(name = "idAmbiente", referencedColumnName = "idAmbientePersonalidad")
+    @Column(name = "orden")
+    private Integer orden;
+    @JoinColumn(name = "idTipo", referencedColumnName = "idTipo")
     @ManyToOne(optional = false)
-    private AmbientePersonalidad idAmbiente;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pregunta")
-    private List<Respuesta> respuestaList;
+    private Tipo idTipo;
 
     public Pregunta() {
     }
@@ -97,21 +97,20 @@ public class Pregunta implements Serializable {
         this.suma = suma;
     }
 
-    public AmbientePersonalidad getIdAmbiente() {
-        return idAmbiente;
+    public Integer getOrden() {
+        return orden;
     }
 
-    public void setIdAmbiente(AmbientePersonalidad idAmbiente) {
-        this.idAmbiente = idAmbiente;
+    public void setOrden(Integer orden) {
+        this.orden = orden;
     }
 
-    @XmlTransient
-    public List<Respuesta> getRespuestaList() {
-        return respuestaList;
+    public Tipo getIdTipo() {
+        return idTipo;
     }
 
-    public void setRespuestaList(List<Respuesta> respuestaList) {
-        this.respuestaList = respuestaList;
+    public void setIdTipo(Tipo idTipo) {
+        this.idTipo = idTipo;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.AmbientePersonalidad;
+import com.ingesoft.interpro.entidades.Tipo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.facades.AmbientePersonalidadFacade;
+import com.ingesoft.interpro.facades.TipoFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,18 +24,18 @@ import javax.faces.convert.FacesConverter;
 public class AmbientePersonalidadController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.AmbientePersonalidadFacade ejbFacade;
-    private List<AmbientePersonalidad> items = null;
-    private AmbientePersonalidad selected;
+    private com.ingesoft.interpro.facades.TipoFacade ejbFacade;
+    private List<Tipo> items = null;
+    private Tipo selected;
 
     public AmbientePersonalidadController() {
     }
 
-    public AmbientePersonalidad getSelected() {
+    public Tipo getSelected() {
         return selected;
     }
 
-    public void setSelected(AmbientePersonalidad selected) {
+    public void setSelected(Tipo selected) {
         this.selected = selected;
     }
 
@@ -45,12 +45,12 @@ public class AmbientePersonalidadController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private AmbientePersonalidadFacade getFacade() {
+    private TipoFacade getFacade() {
         return ejbFacade;
     }
 
-    public AmbientePersonalidad prepareCreate() {
-        selected = new AmbientePersonalidad();
+    public Tipo prepareCreate() {
+        selected = new Tipo();
         initializeEmbeddableKey();
         return selected;
     }
@@ -74,7 +74,7 @@ public class AmbientePersonalidadController implements Serializable {
         }
     }
 
-    public List<AmbientePersonalidad> getItems() {
+    public List<Tipo> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -109,19 +109,19 @@ public class AmbientePersonalidadController implements Serializable {
         }
     }
 
-    public AmbientePersonalidad getAmbientePersonalidad(java.lang.Integer id) {
+    public Tipo getAmbientePersonalidad(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<AmbientePersonalidad> getItemsAvailableSelectMany() {
+    public List<Tipo> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<AmbientePersonalidad> getItemsAvailableSelectOne() {
+    public List<Tipo> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = AmbientePersonalidad.class)
+    @FacesConverter(forClass = Tipo.class)
     public static class AmbientePersonalidadControllerConverter implements Converter {
 
         @Override
@@ -151,11 +151,11 @@ public class AmbientePersonalidadController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof AmbientePersonalidad) {
-                AmbientePersonalidad o = (AmbientePersonalidad) object;
-                return getStringKey(o.getIdAmbientePersonalidad());
+            if (object instanceof Tipo) {
+                Tipo o = (Tipo) object;
+                return getStringKey(o.getIdTipo());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), AmbientePersonalidad.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Tipo.class.getName()});
                 return null;
             }
         }

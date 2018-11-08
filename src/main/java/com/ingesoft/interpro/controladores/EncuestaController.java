@@ -52,6 +52,7 @@ public class EncuestaController implements Serializable {
     public Encuesta prepareCreate() {
         selected = new Encuesta();
         initializeEmbeddableKey();
+        System.out.println(" Encuesta Preparada");
         return selected;
     }
 

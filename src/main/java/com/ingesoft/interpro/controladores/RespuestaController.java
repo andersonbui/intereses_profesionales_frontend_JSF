@@ -27,7 +27,8 @@ public class RespuestaController implements Serializable {
     private com.ingesoft.interpro.facades.RespuestaFacade ejbFacade;
     private List<Respuesta> items = null;
     private Respuesta selected;
-
+    
+    
     public RespuestaController() {
     }
 

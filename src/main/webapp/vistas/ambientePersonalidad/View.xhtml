@@ -8,16 +8,16 @@
 
     <ui:composition>
 
-        <p:dialog id="AmbientePersonalidadViewDlg" widgetVar="AmbientePersonalidadViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewAmbientePersonalidadTitle}">
-            <h:form id="AmbientePersonalidadViewForm">
+        <p:dialog id="TipoViewDlg" widgetVar="TipoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewTipoTitle}">
+            <h:form id="TipoViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{ambientePersonalidadController.selected != null}">
-                        <h:outputText value="#{bundle.ViewAmbientePersonalidadLabel_idAmbientePersonalidad}"/>
-                        <h:outputText value="#{ambientePersonalidadController.selected.idAmbientePersonalidad}" title="#{bundle.ViewAmbientePersonalidadTitle_idAmbientePersonalidad}"/>
-                        <h:outputText value="#{bundle.ViewAmbientePersonalidadLabel_nombre}"/>
-                        <h:outputText value="#{ambientePersonalidadController.selected.nombre}" title="#{bundle.ViewAmbientePersonalidadTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewTipoLabel_idTipo}"/>
+                        <h:outputText value="#{ambientePersonalidadController.selected.idTipo}" title="#{bundle.ViewTipoTitle_idTipo}"/>
+                        <h:outputText value="#{bundle.ViewTipoLabel_nombre}"/>
+                        <h:outputText value="#{ambientePersonalidadController.selected.nombre}" title="#{bundle.ViewTipoTitle_nombre}"/>
                     </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="AmbientePersonalidadViewDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Close}" onclick="TipoViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

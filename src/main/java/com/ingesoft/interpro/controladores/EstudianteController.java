@@ -112,6 +112,9 @@ public class EstudianteController implements Serializable {
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);
     }
+    public Estudiante getEstudiantePorIdUsuario(java.lang.Integer idUsuario) {
+        return getFacade().findPorIdUsuario(idUsuario);
+    }
 
     public List<Estudiante> getItemsAvailableSelectMany() {
         return getFacade().findAll();

@@ -6,9 +6,7 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -43,7 +39,6 @@ public class Grado implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idGrado")
     private Integer idGrado;
     @Basic(optional = false)
@@ -54,10 +49,6 @@ public class Grado implements Serializable {
     @Size(max = 45)
     @Column(name = "grado")
     private String grado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
-    private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
-    private List<EstudianteGrado> estudianteGradoList;
     @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
     @ManyToOne(optional = false)
     private Institucion idInstitucion;
@@ -96,24 +87,6 @@ public class Grado implements Serializable {
 
     public void setGrado(String grado) {
         this.grado = grado;
-    }
-
-    @XmlTransient
-    public List<Nota> getNotaList() {
-        return notaList;
-    }
-
-    public void setNotaList(List<Nota> notaList) {
-        this.notaList = notaList;
-    }
-
-    @XmlTransient
-    public List<EstudianteGrado> getEstudianteGradoList() {
-        return estudianteGradoList;
-    }
-
-    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
-        this.estudianteGradoList = estudianteGradoList;
     }
 
     public Institucion getIdInstitucion() {

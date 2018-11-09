@@ -15,7 +15,7 @@
                         <p:outputLabel value="#{bundle.CreateTipoLabel_idTipo}" for="idTipo" />
                         <p:inputText id="idTipo" value="#{ambientePersonalidadController.selected.idTipo}" title="#{bundle.CreateTipoTitle_idTipo}" required="true" requiredMessage="#{bundle.CreateTipoRequiredMessage_idTipo}"/>
                         <p:outputLabel value="#{bundle.CreateTipoLabel_nombre}" for="nombre" />
-                        <p:inputText id="nombre" value="#{ambientePersonalidadController.selected.nombre}" title="#{bundle.CreateTipoTitle_nombre}" />
+                        <p:inputText id="nombre" value="#{ambientePersonalidadController.selected.tipo}" title="#{bundle.CreateTipoTitle_nombre}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{ambientePersonalidadController.create}" value="#{bundle.Save}" update="display,:TipoListForm:datalist,:growl" oncomplete="handleSubmit(args,'TipoCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="TipoCreateDialog.hide()"/>

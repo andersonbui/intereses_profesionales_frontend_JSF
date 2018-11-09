@@ -6,9 +6,11 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Respuesta;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,26 @@ public class RespuestaFacade extends AbstractFacade<Respuesta> {
     public RespuestaFacade() {
         super(Respuesta.class);
     }
+
+    public List<Respuesta> findAllByIdEncuesta(int idEncuesta) {
+
+        Query query = em.createNamedQuery("Respuesta.findByIdEncuesta");
+        query.setParameter("idEncuesta", idEncuesta);
+        List<Respuesta> preguntas = query.getResultList();
+        if (preguntas != null) {
+            return preguntas;
+        }
+        return null;
+    }
     
+    public List<Respuesta> findAllByIdEncuestaIdTipo(int idEncuesta, int idTipo) {
+
+        Query query = em.createNamedQuery("Respuesta.findByIdEncuesta");
+        query.setParameter("idEncuesta", idEncuesta);
+        List<Respuesta> preguntas = query.getResultList();
+        if (preguntas != null) {
+            return preguntas;
+        }
+        return null;
+    }
 }

@@ -42,7 +42,6 @@ public class Materia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idMateria")
     private Integer idMateria;
     @Size(max = 45)

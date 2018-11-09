@@ -57,7 +57,6 @@ public class Persona implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idPersona")
     private Integer idPersona;
     @Size(max = 100)

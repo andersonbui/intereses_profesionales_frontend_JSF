@@ -51,7 +51,6 @@ public class Estudiante implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idEstudiante")
     private Integer idEstudiante;
     @Column(name = "fechaIngreso")

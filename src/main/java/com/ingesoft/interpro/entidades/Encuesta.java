@@ -7,9 +7,7 @@ package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +17,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Encuesta.findAll", query = "SELECT e FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
+    , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")})
 public class Encuesta implements Serializable {
 
@@ -44,7 +41,6 @@ public class Encuesta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idEncuesta")
     private Integer idEncuesta;
     @Basic(optional = false)
@@ -52,8 +48,6 @@ public class Encuesta implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<Respuesta> respuestaList;
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")
     @ManyToOne(optional = false)
     private Estudiante idEstudiante;
@@ -84,15 +78,6 @@ public class Encuesta implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    @XmlTransient
-    public List<Respuesta> getRespuestaList() {
-        return respuestaList;
-    }
-
-    public void setRespuestaList(List<Respuesta> respuestaList) {
-        this.respuestaList = respuestaList;
     }
 
     public Estudiante getIdEstudiante() {

@@ -42,7 +42,6 @@ public class Institucion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idInstitucion")
     private Integer idInstitucion;
     @Size(max = 45)

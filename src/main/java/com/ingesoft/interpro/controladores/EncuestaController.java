@@ -3,15 +3,21 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.VistasEstudiante;
+import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -56,6 +62,44 @@ public class EncuestaController implements Serializable {
         return selected;
     }
 
+    public int getIdEncuesta() {
+        Integer valor = ejbFacade.autogenerarIdEncuesta();
+        return valor == null ? 1 : valor;
+    }
+
+    /**
+     * Prepara y crea una encuesta con fecha y esudiante
+     *
+     * @throws java.io.IOException
+     */
+    public void prepararYCrear() throws IOException {
+//        System.out.println("intenteando crear una encuesta");
+        // @TODO : Falta obtener el usuario
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+        LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
+        Usuario usu = loginController.getActual();
+        try {
+            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+//          EstudianteController estudianteController = (EstudianteController) elOtroResolver.getValue(facesContext.getELContext(), null, "estudianteController");
+            selected = new Encuesta();
+            initializeEmbeddableKey();
+            selected.setFecha(new Date());
+            selected.setIdEstudiante(estud);
+            selected.setIdEncuesta(getIdEncuesta());
+            System.out.println("antes encuesta creada: " + selected);
+            create();
+//            selected = getEncuesta(selected.toString());
+            System.out.println("despues encuesta creada: " + selected);
+        } catch (Exception e) {
+            System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
+            e.printStackTrace();
+        }
+
+        FacesContext.getCurrentInstance().getExternalContext().redirect(VistasEstudiante.verPreguntas());
+
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -83,6 +127,7 @@ public class EncuestaController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
+        System.out.println("encuesta seleccionada:  " + selected);
         if (selected != null) {
             setEmbeddableKeys();
             try {

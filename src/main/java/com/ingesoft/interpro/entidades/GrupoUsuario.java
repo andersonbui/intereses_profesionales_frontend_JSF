@@ -36,7 +36,6 @@ public class GrupoUsuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idGrupoUsuario")
     private Integer idGrupoUsuario;
     @Size(max = 45)

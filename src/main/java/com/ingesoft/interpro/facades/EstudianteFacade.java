@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.Estudiante;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +29,14 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> {
     public EstudianteFacade() {
         super(Estudiante.class);
     }
-    
+
+    public Estudiante findPorIdUsuario(Integer idUsuario) {
+        Query query = em.createNamedQuery("Pregunta.findPoIdUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        Estudiante estud = (Estudiante) query.getResultList().get(0);
+        if (estud != null) {
+            return estud;
+        }
+        return null;
+    }
 }

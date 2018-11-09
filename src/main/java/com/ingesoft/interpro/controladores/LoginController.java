@@ -113,7 +113,24 @@ public class LoginController implements Serializable {
         this.password = password;
     }
 
+    public Usuario getActual() {
+        return actual;
+    }
+
+    public void setActual(Usuario actual) {
+        this.actual = actual;
+    }
+
+    public Usuario getUsuario(java.lang.Integer id) {
+        return getFacade().find(id); 
+    }
+
+    public UsuarioFacade getFacade() {
+        return ejbFacade;
+    }
+    
     public void login() throws IOException {
+        actual = getUsuario(1);
 //        FacesContext context = FacesContext.getCurrentInstance();
 //        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
 //        FacesMessage msg;
@@ -155,6 +172,12 @@ public class LoginController implements Serializable {
 //        for (Grupousuario gruposUsuario : gruposUsuarios) {
 //            System.out.println("grupo: " + gruposUsuario);
 //        }
+
+
+//           FacesContext facesContext = FacesContext.getCurrentInstance();
+//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+//        LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
+        
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/List.xhtml");
     }
 

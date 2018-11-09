@@ -3,9 +3,12 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Respuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Pregunta;
 import com.ingesoft.interpro.facades.RespuestaFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,9 +29,9 @@ public class RespuestaController implements Serializable {
     @EJB
     private com.ingesoft.interpro.facades.RespuestaFacade ejbFacade;
     private List<Respuesta> items = null;
+    private List<Respuesta> respuestasPersonalidad = null;
     private Respuesta selected;
-    
-    
+
     public RespuestaController() {
     }
 
@@ -59,6 +62,68 @@ public class RespuestaController implements Serializable {
         return selected;
     }
 
+    public List<Respuesta> prepararRespuestasPersonalidad(List<Pregunta> preguntasPersonalidad, Encuesta encuesta) {
+
+        respuestasPersonalidad = new ArrayList(preguntasPersonalidad.size());
+        for (Pregunta pregunta : preguntasPersonalidad) {
+            selected = new Respuesta(pregunta.getIdPregunta(), encuesta.getIdEncuesta());
+            selected.setPregunta(pregunta);
+            selected.setEncuesta(encuesta);
+            respuestasPersonalidad.add(selected);
+            create();
+        }
+        return respuestasPersonalidad;
+    }
+
+    public List<Respuesta> getItems(int idEncuesta, int idTipo) {
+        if (respuestasPersonalidad == null) {
+            respuestasPersonalidad = getFacade().findAllByIdEncuestaIdTipo(idEncuesta, idTipo);
+        }
+        return respuestasPersonalidad;
+    }
+    /**
+     * obtiene las respuestas de un determinado grupo
+     * @param grupo
+     * @param tamGrupo
+     * @return 
+     */
+    public List<Respuesta> getGrupoItemsPersonalidad(int grupo, int tamGrupo) {
+        System.out.println("grupo getGrupoItemsPersonalidad: "+grupo);
+        List<Respuesta> listaRespuestas = null;
+        if (respuestasPersonalidad != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
+                if (i >= 0 && i < respuestasPersonalidad.size()) {
+                    listaRespuestas.add(respuestasPersonalidad.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        // System.out.println("gruposPreguntas: "+listaPreguntas);
+        return listaRespuestas;
+    }
+
+    public List<Respuesta> getRespuestasPersonalidad(Encuesta encuesta) {
+        
+        if (encuesta != null && respuestasPersonalidad == null) {
+            respuestasPersonalidad = getFacade().findAllByIdEncuestaIdTipo(encuesta.getIdEncuesta(), 1);
+        }
+        return respuestasPersonalidad;
+    }
+
+//    public List<Respuesta> getRespuestasPersonalidad() {
+//        return respuestasPersonalidad;
+//    }
+
+    public List<Respuesta> actualizarRespuestas(List<Respuesta> respuestas) {
+        for (Respuesta pregunta : respuestas) {
+            selected = pregunta;
+            create();
+        }
+        return respuestas;
+    }
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -78,9 +143,9 @@ public class RespuestaController implements Serializable {
         }
     }
 
-    public List<Respuesta> getItems() {
+    public List<Respuesta> getItems(int idEncuesta) {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().findAllByIdEncuesta(idEncuesta);
         }
         return items;
     }

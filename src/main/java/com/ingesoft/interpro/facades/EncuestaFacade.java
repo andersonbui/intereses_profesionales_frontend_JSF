@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +29,14 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
     public EncuestaFacade() {
         super(Encuesta.class);
     }
-    
+
+    public Integer autogenerarIdEncuesta() {
+        Query query = em.createNamedQuery("Encuesta.maxIdEncuesta");
+        Integer estud = (Integer) query.getSingleResult();
+        System.out.println("maxIdEncuesta: "+estud);
+        if (estud != null) {
+            return estud+1;
+        }
+        return null;
+    }
 }

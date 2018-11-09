@@ -89,6 +89,7 @@ public class RespuestaController implements Serializable {
      */
     public List<Respuesta> getGrupoItemsPersonalidad(int grupo, int tamGrupo) {
         System.out.println("grupo getGrupoItemsPersonalidad: "+grupo);
+        System.out.println("tamGrupo getGrupoItemsPersonalidad: "+tamGrupo);
         List<Respuesta> listaRespuestas = null;
         if (respuestasPersonalidad != null) {
             listaRespuestas = new ArrayList<>();
@@ -112,15 +113,12 @@ public class RespuestaController implements Serializable {
         return respuestasPersonalidad;
     }
 
-//    public List<Respuesta> getRespuestasPersonalidad() {
-//        return respuestasPersonalidad;
-//    }
-
     public List<Respuesta> actualizarRespuestas(List<Respuesta> respuestas) {
         for (Respuesta pregunta : respuestas) {
             selected = pregunta;
             create();
         }
+        //pasoActual=0
         return respuestas;
     }
     

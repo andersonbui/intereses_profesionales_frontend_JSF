@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Pregunta.findBySegundoEnunciado", query = "SELECT p FROM Pregunta p WHERE p.segundoEnunciado = :segundoEnunciado")
     , @NamedQuery(name = "Pregunta.findBySuma", query = "SELECT p FROM Pregunta p WHERE p.suma = :suma")
     , @NamedQuery(name = "Pregunta.findByOrden", query = "SELECT p FROM Pregunta p WHERE p.orden = :orden")
-    , @NamedQuery(name = "Pregunta.findByIdTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.idTipo = :idTipo")})
+    , @NamedQuery(name = "Pregunta.findByIdTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.idTipo = :idTipo")
+    , @NamedQuery(name = "Pregunta.findByUrlImagen", query = "SELECT p FROM Pregunta p WHERE p.urlImagen = :urlImagen")})
 
 public class Pregunta implements Serializable {
 
@@ -54,6 +55,9 @@ public class Pregunta implements Serializable {
     private Boolean suma;
     @Column(name = "orden")
     private Integer orden;
+    @Size(max = 100)
+    @Column(name = "urlImagen")
+    private String urlImagen;
     @JoinColumn(name = "idTipo", referencedColumnName = "idTipo")
     @ManyToOne(optional = false)
     private Tipo idTipo;
@@ -103,6 +107,14 @@ public class Pregunta implements Serializable {
 
     public void setOrden(Integer orden) {
         this.orden = orden;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 
     public Tipo getIdTipo() {

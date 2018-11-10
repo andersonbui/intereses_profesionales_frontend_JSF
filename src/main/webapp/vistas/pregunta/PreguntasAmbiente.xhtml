@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PreguntaCreateDlgAmbiente"  widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">
+    <p:dialog id="PreguntaCreateDlgAmbiente"  closable="true" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">
         <h:form id="PreguntaCreateAmbienteForm"  style="width:1200px !important;" >
             <center><div id="display">
                     <h:panelGroup class="panel-preguntas-ambiente" >
@@ -13,7 +13,7 @@
                                 <p:row>
                                     <p:column style="background-color:rgba(255, 99, 71, 0.2);">
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg"  alt="Pregunta en texto" width="200px" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg"  alt="Pregunta en texto" width="170px" height="170"></img>
                                         <div class="dock">
                                             <ul>
                                                 <li id="megusta1">
@@ -46,7 +46,7 @@
                                     </p:column>
                                     <p:column>
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="200" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="170" height="170"></img>
                                         <!--                                <p:dock position="bottom">
                                                                             <p:menuitem value="Home" icon="https://www.w3schools.com/images/w3schools_green.jpg" url="#"/>
                                                                             <p:menuitem value="Home" icon="https://www.w3schools.com/images/w3schools_green.jpg" url="#"/>
@@ -83,7 +83,7 @@
                                     </p:column>
                                     <p:column>
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="200" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="170" height="170"></img>
                                         <!-- CSS Dock Code -->
                                         <div class="dock">
                                             <ul>
@@ -120,7 +120,7 @@
                                 <p:row>
                                     <p:column>
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="200" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="170" height="170"></img>
                                         <!-- CSS Dock Code -->
                                         <div class="dock">
                                             <ul>
@@ -153,7 +153,7 @@
                                     </p:column>
                                     <p:column>
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="200" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="170" height="170"></img>
                                         <!-- CSS Dock Code -->
                                         <div class="dock">
                                             <ul>
@@ -186,7 +186,7 @@
                                     </p:column>
                                     <p:column>
                                         <!--<h2>HTML Image</h2>-->
-                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="200" height="200"></img>
+                                        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Girl in a jacket" width="170" height="170"></img>
                                         <!-- CSS Dock Code -->
                                         <div class="dock">
                                             <ul>
@@ -220,7 +220,14 @@
                                 </p:row>
                             </p:panelGrid>
                         </p:panel>
+                        <p:commandButton value="siguiente" ajax="true" actionListener="#{preguntaController.siguientePaso}"
+                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaController.puedeSiguientePaso()}" >
+                        </p:commandButton>
+                        <p:commandButton value="anterior" ajax="true" actionListener="#{preguntaController.anteriorPaso}"
+                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaController.puedeAnteriorPaso()}" >
+                        </p:commandButton>
                     </h:panelGroup>
+
                 </div></center>
         </h:form>
     </p:dialog>

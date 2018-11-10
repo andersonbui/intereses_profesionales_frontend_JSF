@@ -51,6 +51,11 @@ public class EstudianteController implements Serializable {
 
     public Estudiante prepareCreate() {
         selected = new Estudiante();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "personaController");
+        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "institucionController");
         initializeEmbeddableKey();
         return selected;
     }

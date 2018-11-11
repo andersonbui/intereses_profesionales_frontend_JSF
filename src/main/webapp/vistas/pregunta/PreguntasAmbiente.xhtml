@@ -5,10 +5,11 @@
       xmlns:p="http://primefaces.org/ui">
 
     <p:dialog id="PreguntaCreateDlgAmbiente"  closable="true" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">
-        <h:form id="PreguntaCreateAmbienteForm"  style="width:1200px !important;" >
+        <h:form id="PreguntaCreateAmbienteForm"  style="width:1200px !important;" >         
             <center><div id="display">
                     <h:panelGroup class="panel-preguntas-ambiente" >
                         <p:panel header="Preguntas de ambiente">
+                            <h1><p:progressBar value="#{preguntaController.getnombrePaso(item-1)}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             <p:panelGrid styleClass="panelgrid">
                                 <p:row>
                                     <p:column style="background-color:rgba(255, 99, 71, 0.2);">

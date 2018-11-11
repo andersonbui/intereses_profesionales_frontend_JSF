@@ -10,7 +10,7 @@
         <h:body>
             <p:dialog id="EstudianteCreateDlg" closable="false" widgetVar="EstudianteCreateDialog" modal="true" resizable="false" appendTo="@(body)">
                 <h:form id="EstudianteCreateForm">
-                    <h:panelGroup id="display">
+                    <h:panelGroup rendered="#{estudianteController.pasoActual == 1}">
                         <p:panelGrid styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
                             <p:row >
                                 <p:column style="font-weight:bold; color: white; background: #339cdf" colspan="4">
@@ -113,6 +113,20 @@
                                     <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.CreateEstudianteTitle_cuantosTrabajan}" />
                                 </p:column>
                             </p:row>
+
+                        </p:panelGrid>
+                        <p:commandButton value="siguiente" ajax="true" actionListener="#{estudianteController.siguientePaso}"
+                                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeSiguientePaso()}" >
+                        </p:commandButton>
+                        <p:commandButton value="anterior" ajax="true" actionListener="#{estudianteController.anteriorPaso}"
+                                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeAnteriorPaso()}" >
+                        </p:commandButton>
+
+                        <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
+                    </h:panelGroup>
+<!--                    <h:panelGroup rendered="#{estudianteController.pasoActual == 2}">
+                        <p:panelGrid styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
                             <p:row >
                                 <p:column style="font-weight:bold; color: white; background: #339cdf" colspan="4">
                                     <p:outputLabel value="DATOS INSTITUCIONALES"/>
@@ -155,11 +169,11 @@
                                 <p:column>
                                     <p:selectOneMenu filter="true" id="materia1" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-            <!--                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                        <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
                                                        var="materia1Item"
                                                        itemValue="#{materia1Item}"
                                                        itemLabel="#{materia1Item.nombre}"
-                                                       />-->
+                                                       />
                                     </p:selectOneMenu>
                                 </p:column>
                                 <p:column>
@@ -175,32 +189,25 @@
                                 <p:column>
                                     <p:selectOneMenu filter="true" id="materia3" value="#{materiaController.materia3}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-            <!--                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                        <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
                                                        var="materia3Item"
                                                        itemValue="#{materia3Item}"
                                                        itemLabel="#{materia3Item.nombre}"
-                                                       />-->
+                                                       />
                                     </p:selectOneMenu>
                                 </p:column>
                             </p:row>
 
-<!--                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idEstudiante}" for="idEstudiante" />
-                        <p:inputText id="idEstudiante" value="#{estudianteController.selected.idEstudiante}" title="#{bundle.CreateEstudianteTitle_idEstudiante}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_idEstudiante}"/>
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_fechaIngreso}" for="fechaIngreso" />
-                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy" value="#{estudianteController.selected.fechaIngreso}" title="#{bundle.EditEstudianteTitle_fechaIngreso}"  showOn="button"/>
-
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_personalidad}" for="personalidad" />
-                        <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.CreateEstudianteTitle_personalidad}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idPersona}" for="idPersona" />
-                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
-                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
-                                           var="idPersonaItem"
-                                           itemValue="#{idPersonaItem}"/>
-                        </p:selectOneMenu>-->
                         </p:panelGrid>
+        <p:commandButton value="siguiente" ajax="true" actionListener="#{estudianteController.siguientePaso}"
+                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeSiguientePaso()}" >
+                        </p:commandButton>
+        <p:commandButton value="anterior" ajax="true" actionListener="#{estudianteController.anteriorPaso}"
+                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeAnteriorPaso()}" >
+                        </p:commandButton>
                         <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
                         <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
-                    </h:panelGroup>
+                    </h:panelGroup>-->
                 </h:form>
             </p:dialog>
         </h:body>

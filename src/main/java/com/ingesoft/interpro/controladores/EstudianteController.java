@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "estudianteController")
 @SessionScoped
@@ -27,9 +28,20 @@ public class EstudianteController implements Serializable {
     private com.ingesoft.interpro.facades.EstudianteFacade ejbFacade;
     private List<Estudiante> items = null;
     private Estudiante selected;
+    private int pasoActual;
 
     public EstudianteController() {
+        pasoActual = 0;
     }
+
+    public int getPasoActual() {
+        return pasoActual;
+    }
+
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
+    }    
+    
 
     public Estudiante getSelected() {
         return selected;
@@ -37,6 +49,25 @@ public class EstudianteController implements Serializable {
 
     public void setSelected(Estudiante selected) {
         this.selected = selected;
+    }
+    
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePaso() {
+        return pasoActual < (10 );
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso");
+        pasoActual += 1;
+        return pasoActual;
     }
 
     protected void setEmbeddableKeys() {
@@ -51,6 +82,11 @@ public class EstudianteController implements Serializable {
 
     public Estudiante prepareCreate() {
         selected = new Estudiante();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "personaController");
+        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "institucionController");
         initializeEmbeddableKey();
         return selected;
     }

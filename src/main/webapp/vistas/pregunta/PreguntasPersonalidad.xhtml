@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog id="PreguntaCreateDlgPersonalidad"  widgetVar="PreguntaPersonalidadCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePreguntaTitle}">
+    <p:dialog id="PreguntaCreateDlgPersonalidad"  widgetVar="PreguntaPersonalidadCreateDialog" modal="true" resizable="false" appendTo="@(body)">
         <h:form id="PreguntaCreatePersonalidadForm"  style="width:1200px !important;" >
             <div id="display">
                 <ui:repeat value="#{preguntaController. getGrupos()}" var="grupo">

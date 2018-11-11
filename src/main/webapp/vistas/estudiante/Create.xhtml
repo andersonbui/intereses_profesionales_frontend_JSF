@@ -7,39 +7,210 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
+        <h:body>
+            <p:dialog id="EstudianteCreateDlg" closable="false" widgetVar="EstudianteCreateDialog" modal="true" resizable="false" appendTo="@(body)">
+                <h:form id="EstudianteCreateForm">
+                    <h:panelGroup rendered="#{estudianteController.pasoActual == 1}">
+                        <p:panelGrid styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
+                            <p:row >
+                                <p:column style="font-weight:bold; color: white; background: #339cdf" colspan="4">
+                                    <p:outputLabel value="DATOS PERSONALES"/>
+                                </p:column>
+                                <br/></p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Codigo colegio: " for="idInstitucion" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Nombres: " for="nombres" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Apellidos: " for="apellidos" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Fecha nacimiento" for="fechaNacimiento" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText id="idInstitucion" value="#{personahasInstitucionController.selected.institucion}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_idEstudiante}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="nombres" value="#{personaController.selected.nombre}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="apellidos" value="#{personaController.selected.apellido}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Sexo: " for="sexo" /> 
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="País " for="pais" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Departamento: " for="depto" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Ciudad: " for="ciudad" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText id="sexo" value="#{personaController.selected.sexo}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="pais" value="#{personaController.selected.pais}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="depto" value="#{personaController.selected.departamento}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="ciudad" value="#{personaController.selected.ciudad}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Dirección: " for="direccion" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="#{bundle.CreateEstudianteLabel_viveConPadres}" for="viveConPadres" />
+                                    <p:selectBooleanCheckbox id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="#{bundle.CreateEstudianteLabel_estrato}" for="estrato" /> 
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText id="direccion" value="#{personaController.selected.direccion}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="#{bundle.CreateEstudianteLabel_desplazados}" for="desplazados" />
+                                    <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="estrato" value="#{estudianteController.selected.estrato}" title="#{bundle.CreateEstudianteTitle_estrato}" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosViven}" for="cuantosViven" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosTrabajan}" for="cuantosTrabajan" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" title="#{bundle.CreateEstudianteTitle_cuantosViven}" />
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.CreateEstudianteTitle_cuantosTrabajan}" />
+                                </p:column>
+                            </p:row>
 
-        <p:dialog id="EstudianteCreateDlg" widgetVar="EstudianteCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateEstudianteTitle}">
-            <h:form id="EstudianteCreateForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{estudianteController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idEstudiante}" for="idEstudiante" />
-                        <p:inputText id="idEstudiante" value="#{estudianteController.selected.idEstudiante}" title="#{bundle.CreateEstudianteTitle_idEstudiante}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_idEstudiante}"/>
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_fechaIngreso}" for="fechaIngreso" />
-                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy" value="#{estudianteController.selected.fechaIngreso}" title="#{bundle.EditEstudianteTitle_fechaIngreso}"  showOn="button"/>
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_estrato}" for="estrato" />
-                        <p:inputText id="estrato" value="#{estudianteController.selected.estrato}" title="#{bundle.CreateEstudianteTitle_estrato}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosViven}" for="cuantosViven" />
-                        <p:inputText id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" title="#{bundle.CreateEstudianteTitle_cuantosViven}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_cuantosTrabajan}" for="cuantosTrabajan" />
-                        <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.CreateEstudianteTitle_cuantosTrabajan}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_viveConPadres}" for="viveConPadres" />
-                        <p:selectBooleanCheckbox id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_desplazados}" for="desplazados" />
-                        <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_personalidad}" for="personalidad" />
-                        <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.CreateEstudianteTitle_personalidad}" />
-                        <p:outputLabel value="#{bundle.CreateEstudianteLabel_idPersona}" for="idPersona" />
-                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
-                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
-                                           var="idPersonaItem"
-                                           itemValue="#{idPersonaItem}"/>
-                        </p:selectOneMenu>
-                    </p:panelGrid>
-                    <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
+                        </p:panelGrid>
+                        <p:commandButton value="siguiente" ajax="true" actionListener="#{estudianteController.siguientePaso}"
+                                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeSiguientePaso()}" >
+                        </p:commandButton>
+                        <p:commandButton value="anterior" ajax="true" actionListener="#{estudianteController.anteriorPaso}"
+                                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeAnteriorPaso()}" >
+                        </p:commandButton>
+
+                        <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
+                    </h:panelGroup>
+<!--                    <h:panelGroup rendered="#{estudianteController.pasoActual == 2}">
+                        <p:panelGrid styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
+                            <p:row >
+                                <p:column style="font-weight:bold; color: white; background: #339cdf" colspan="4">
+                                    <p:outputLabel value="DATOS INSTITUCIONALES"/>
+                                </p:column>
+                                <br/></p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Institución Educativa: " for="institucionEducativa" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Grado: " for="grado" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Curso: " for="curso" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:inputText id="institucionEducativa" value="#{institucionController.selected.nombre}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="grado" value="#{gradoController.selected.grado}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="curso" value="#{gradoController.selected.curso}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Materia 1 " for="materia1" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Materia 2 " for="materia2" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Materia 3 " for="materia3" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:selectOneMenu filter="true" id="materia1" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                        <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                        <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                                       var="materia1Item"
+                                                       itemValue="#{materia1Item}"
+                                                       itemLabel="#{materia1Item.nombre}"
+                                                       />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu filter="true" id="materia2" value="#{materiaController.materia2}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                        <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                        <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                                       var="materia2Item"
+                                                       itemValue="#{materia2Item}"
+                                                       itemLabel="#{materia2Item.nombre}"
+                                                       />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu filter="true" id="materia3" value="#{materiaController.materia3}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                        <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                        <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
+                                                       var="materia3Item"
+                                                       itemValue="#{materia3Item}"
+                                                       itemLabel="#{materia3Item.nombre}"
+                                                       />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+        <p:commandButton value="siguiente" ajax="true" actionListener="#{estudianteController.siguientePaso}"
+                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeSiguientePaso()}" >
+                        </p:commandButton>
+        <p:commandButton value="anterior" ajax="true" actionListener="#{estudianteController.anteriorPaso}"
+                         update=":EstudianteCreateForm, @form" rendered="#{estudianteController.puedeAnteriorPaso()}" >
+                        </p:commandButton>
+                        <p:commandButton actionListener="#{estudianteController.create}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>
+                    </h:panelGroup>-->
+                </h:form>
+            </p:dialog>
+        </h:body>
 
     </ui:composition>
 </html>

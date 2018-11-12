@@ -68,28 +68,20 @@ public class EncuestaController implements Serializable {
         this.pasoActivo = 1;
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasAmbiente.xhtml");
     }
-    
+
     public void pasoPreguntasPersonalidad() throws IOException {
         this.pasoActivo = 2;
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasPersonalidad.xhtml");
     }
-    
+
     public void pasoResumen() throws IOException {
         this.pasoActivo = 3;
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
     }
-    
-    public void finalizar() throws IOException {
-        this.pasoActivo = 3;
-        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
-    }
 
-    public Encuesta prepareCreate() {
-        pasoActivo = 1;
-        selected = new Encuesta();
-        initializeEmbeddableKey();
-        System.out.println(" Encuesta Preparada");
-        return selected;
+    public void finalizar() throws IOException {
+        this.pasoActivo = 0;
+        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
     }
 
     public int getIdEncuesta() {
@@ -103,7 +95,7 @@ public class EncuestaController implements Serializable {
      * @throws java.io.IOException
      */
     public void prepararYCrear() throws IOException {
-//        System.out.println("intenteando crear una encuesta");
+        pasoActivo = 0;
         // @TODO : Falta obtener el usuario
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -111,7 +103,6 @@ public class EncuestaController implements Serializable {
         Usuario usu = loginController.getActual();
         try {
             Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
-//          EstudianteController estudianteController = (EstudianteController) elOtroResolver.getValue(facesContext.getELContext(), null, "estudianteController");
             selected = new Encuesta();
             initializeEmbeddableKey();
             selected.setFecha(new Date());
@@ -121,12 +112,11 @@ public class EncuestaController implements Serializable {
             create();
 //            selected = getEncuesta(selected.toString());
             System.out.println("despues encuesta creada: " + selected);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
         }
-
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
     }
 

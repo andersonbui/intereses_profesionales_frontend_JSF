@@ -16,12 +16,17 @@ import javax.inject.Named;
  */
 @javax.faces.bean.ManagedBean(name = "vistasEstudiante")
 @SessionScoped
-public class VistasEstudiante implements Serializable {
+public class Vistas implements Serializable {
 
     private static String ruta;
     private static String rutaGeneral = "/intereses_profesionales_frontend_JSF/faces";
 
     public static String getRuta() {
+        return ruta;
+    }
+
+    public static String verPaginaPrincipal() {
+        ruta = rutaGeneral + "/vistas/pregunta/List.xhtml";
         return ruta;
     }
 

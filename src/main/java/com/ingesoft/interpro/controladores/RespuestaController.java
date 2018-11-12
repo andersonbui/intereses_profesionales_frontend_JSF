@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Pregunta;
 import com.ingesoft.interpro.facades.RespuestaFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -113,12 +114,12 @@ public class RespuestaController implements Serializable {
         return respuestasPersonalidad;
     }
 
-    public List<Respuesta> actualizarRespuestas(List<Respuesta> respuestas) {
-        for (Respuesta pregunta : respuestas) {
-            selected = pregunta;
-            create();
-        }
-        //pasoActual=0
+    public List<Respuesta> actualizarRespuestas(List<Respuesta> respuestas) throws IOException {
+//        for (Respuesta pregunta : respuestas) {
+//            selected = pregunta;
+//            create();
+//        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
         return respuestas;
     }
     

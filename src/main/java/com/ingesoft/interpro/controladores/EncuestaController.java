@@ -3,7 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.controladores.util.VistasEstudiante;
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
@@ -33,6 +33,7 @@ public class EncuestaController implements Serializable {
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
     private List<Encuesta> items = null;
     private Encuesta selected;
+    private int pasoActivo;
 
     public EncuestaController() {
     }
@@ -55,7 +56,36 @@ public class EncuestaController implements Serializable {
         return ejbFacade;
     }
 
+    public int getPasoActivo() {
+        return pasoActivo;
+    }
+
+    public void setPasoActivo(int pasoActivo) {
+        this.pasoActivo = pasoActivo;
+    }
+
+    public void pasoPreguntasAmbiente() throws IOException {
+        this.pasoActivo = 1;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasAmbiente.xhtml");
+    }
+    
+    public void pasoPreguntasPersonalidad() throws IOException {
+        this.pasoActivo = 2;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasPersonalidad.xhtml");
+    }
+    
+    public void pasoResumen() throws IOException {
+        this.pasoActivo = 3;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+    }
+    
+    public void finalizar() throws IOException {
+        this.pasoActivo = 3;
+        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
+    }
+
     public Encuesta prepareCreate() {
+        pasoActivo = 1;
         selected = new Encuesta();
         initializeEmbeddableKey();
         System.out.println(" Encuesta Preparada");
@@ -96,7 +126,7 @@ public class EncuestaController implements Serializable {
             e.printStackTrace();
         }
 
-        FacesContext.getCurrentInstance().getExternalContext().redirect(VistasEstudiante.verPreguntas());
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
     }
 

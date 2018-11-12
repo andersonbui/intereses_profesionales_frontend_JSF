@@ -102,7 +102,7 @@
                             <p:menuitem value="Usuario" outcome="/vistas/usuario/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="Admministracion">
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
                             <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
                             <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
                         </p:submenu>

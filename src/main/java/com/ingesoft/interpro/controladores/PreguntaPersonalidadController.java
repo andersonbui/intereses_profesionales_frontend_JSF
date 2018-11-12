@@ -4,12 +4,18 @@ import com.ingesoft.interpro.entidades.Pregunta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Respuesta;
+import com.ingesoft.interpro.entidades.RespuestaPK;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PreguntaFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +30,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 
-@ManagedBean(name = "preguntaController")
+@ManagedBean(name = "preguntaPersonalidadController")
 @SessionScoped
-public class PreguntaController implements Serializable {
+public class PreguntaPersonalidadController implements Serializable {
     
     private static final long serialVersionUID = 1L;
    
@@ -42,7 +48,7 @@ public class PreguntaController implements Serializable {
     
     
     
-    public PreguntaController() {
+    public PreguntaPersonalidadController() {
         tamGrupo = 4;
         pasoActual = 0;
         numGrupos=1;
@@ -243,7 +249,7 @@ public class PreguntaController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            PreguntaController controller = (PreguntaController) facesContext.getApplication().getELResolver().
+            PreguntaPersonalidadController controller = (PreguntaPersonalidadController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "preguntaController");
             return controller.getPregunta(getKey(value));
         }

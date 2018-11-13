@@ -30,7 +30,7 @@ public class RespuestaController implements Serializable {
     @EJB
     private com.ingesoft.interpro.facades.RespuestaFacade ejbFacade;
     private List<Respuesta> items = null;
-    private List<Respuesta> respuestasPersonalidad = null;
+    private List<Respuesta> respuestas = null;
     private Respuesta selected;
 
     public RespuestaController() {
@@ -63,66 +63,66 @@ public class RespuestaController implements Serializable {
         return selected;
     }
 
-    public List<Respuesta> prepararRespuestasPersonalidad(List<Pregunta> preguntasPersonalidad, Encuesta encuesta) {
-
-        respuestasPersonalidad = new ArrayList(preguntasPersonalidad.size());
-        for (Pregunta pregunta : preguntasPersonalidad) {
+    public List<Respuesta> prepararRespuestas(List<Pregunta> preguntas, Encuesta encuesta) {
+        System.out.println("encuesta: " + encuesta);
+        System.out.println("preguntas: " + preguntas);
+        respuestas = new ArrayList(preguntas.size());
+        for (Pregunta pregunta : preguntas) {
             selected = new Respuesta(pregunta.getIdPregunta(), encuesta.getIdEncuesta());
             selected.setPregunta(pregunta);
             selected.setEncuesta(encuesta);
-            respuestasPersonalidad.add(selected);
+            respuestas.add(selected);
             create();
         }
-        return respuestasPersonalidad;
+        return respuestas;
     }
 
     public List<Respuesta> getItems(int idEncuesta, int idTipo) {
-        if (respuestasPersonalidad == null) {
-            respuestasPersonalidad = getFacade().findAllByIdEncuestaIdTipo(idEncuesta, idTipo);
+        if (respuestas == null) {
+            respuestas = getFacade().findAllByIdEncuestaIdTipo(idEncuesta, idTipo);
         }
-        return respuestasPersonalidad;
+        return respuestas;
     }
+
     /**
      * obtiene las respuestas de un determinado grupo
+     *
      * @param grupo
      * @param tamGrupo
-     * @return 
+     * @return
      */
     public List<Respuesta> getGrupoItemsPersonalidad(int grupo, int tamGrupo) {
-        System.out.println("grupo getGrupoItemsPersonalidad: "+grupo);
-        System.out.println("tamGrupo getGrupoItemsPersonalidad: "+tamGrupo);
         List<Respuesta> listaRespuestas = null;
-        if (respuestasPersonalidad != null) {
+        if (respuestas != null) {
             listaRespuestas = new ArrayList<>();
             for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
-                if (i >= 0 && i < respuestasPersonalidad.size()) {
-                    listaRespuestas.add(respuestasPersonalidad.get(i));
+                if (i >= 0 && i < respuestas.size()) {
+                    listaRespuestas.add(respuestas.get(i));
                 } else {
                     break;
                 }
             }
         }
-        // System.out.println("gruposPreguntas: "+listaPreguntas);
         return listaRespuestas;
     }
-
+    
+    public String obtenerImagen(Respuesta respuesta) {
+        String url = "img/ambiente/"+respuesta.getPregunta().getUrlImagen();
+        return url;
+    }
     public List<Respuesta> getRespuestasPersonalidad(Encuesta encuesta) {
-        
-        if (encuesta != null && respuestasPersonalidad == null) {
-            respuestasPersonalidad = getFacade().findAllByIdEncuestaIdTipo(encuesta.getIdEncuesta(), 1);
+
+        if (encuesta != null && respuestas == null) {
+            respuestas = getFacade().findAllByIdEncuestaIdTipo(encuesta.getIdEncuesta(), 1);
         }
-        return respuestasPersonalidad;
+        return respuestas;
     }
 
     public List<Respuesta> actualizarRespuestas(List<Respuesta> respuestas) throws IOException {
-//        for (Respuesta pregunta : respuestas) {
-//            selected = pregunta;
-//            create();
-//        }
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
         return respuestas;
     }
-    
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {

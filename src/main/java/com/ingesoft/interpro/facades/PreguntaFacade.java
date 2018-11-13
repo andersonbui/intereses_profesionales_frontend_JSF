@@ -32,17 +32,26 @@ public class PreguntaFacade extends AbstractFacade<Pregunta> {
     }
 
     public List<Pregunta> findAllAmbiente() {
-        return findAll(2);
+        return buscarPorTipo("AMBIENTE");
     }
 
     public List<Pregunta> findAllPersonalidad() {
-        return findAll(1);
+        return buscarPorTipo("PERSONALIDAD");
     }
     
-    private List<Pregunta> findAll(int tipo) {
+    private List<Pregunta> findAllIdTipo(int tipo) {
         
          Query query = em.createNamedQuery("Pregunta.findByIdTipo");
         query.setParameter("idTipo", tipo);
+        List<Pregunta> preguntas = query.getResultList();
+        if (preguntas != null) {
+            return preguntas;
+        }
+        return null;
+    }
+    private List<Pregunta> buscarPorTipo(String tipo) {
+         Query query = em.createNamedQuery("Pregunta.findByTipo");
+        query.setParameter("tipo", tipo);
         List<Pregunta> preguntas = query.getResultList();
         if (preguntas != null) {
             return preguntas;

@@ -158,7 +158,7 @@ public class PreguntaPersonalidadController implements Serializable {
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaController respuestaController = (RespuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaController");
         preguntasPersonalidad = getPreguntasPersonalidad();
-        respuestaController.prepararRespuestasPersonalidad(preguntasPersonalidad, encuesta); 
+        respuestaController.prepararRespuestas(preguntasPersonalidad, encuesta); 
     }
 
     public void create() {
@@ -182,7 +182,7 @@ public class PreguntaPersonalidadController implements Serializable {
 
     public List<Pregunta> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().findAllPersonalidad();
         }
         return items;
     }
@@ -192,13 +192,6 @@ public class PreguntaPersonalidadController implements Serializable {
             preguntasPersonalidad = getFacade().findAllPersonalidad();
         }
         return preguntasPersonalidad;
-    }
-
-    public List<Pregunta> getPreguntasAmbientes() {
-        if (items == null) {
-            items = getFacade().findAllAmbiente();
-        }
-        return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

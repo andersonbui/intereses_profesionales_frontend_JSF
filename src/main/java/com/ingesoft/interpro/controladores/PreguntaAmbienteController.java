@@ -30,20 +30,17 @@ public class PreguntaAmbienteController implements Serializable {
     
     private static final long serialVersionUID = 1L;
    
-    private int tamGrupo;
+    private final int tamGrupo;
     public boolean skip;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
     private List<Pregunta> items = null;
-    private List<Pregunta> preguntasPersonalidad = null;
     private Pregunta selected;
     private int pasoActual;
     private int numGrupos;
     
-    
-    
     public PreguntaAmbienteController() {
-        tamGrupo = 4;
+        tamGrupo = 6;
         pasoActual = 0;
         numGrupos=1;
     }
@@ -80,8 +77,8 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
     public int siguientePaso(ActionEvent actionEvent) {
-        System.out.println("siguientes paso");
         pasoActual += 1;
+        System.out.println("siguientes paso: "+pasoActual);
         return pasoActual;
     }
 
@@ -108,12 +105,11 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
     public List<Integer> getGrupos() {
-        //System.out.println("Hola mundo");
         List<Integer> gruposPreguntas = new ArrayList<>();
         items = getItems();
-//        System.out.println("items: " + items);
         numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+//        numGrupos=2; 
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
@@ -131,7 +127,6 @@ public class PreguntaAmbienteController implements Serializable {
                 break;
             }
         }
-       // System.out.println("gruposPreguntas: "+listaPreguntas);
         return listaPreguntas;
     }
     
@@ -147,12 +142,13 @@ public class PreguntaAmbienteController implements Serializable {
         return null;
     }
     
-    public void preparePreguntasPersonalidad(Usuario usuario, Encuesta encuesta) { 
+    public void preparePreguntas(Usuario usuario, Encuesta encuesta) { 
+        pasoActual=0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaController respuestaController = (RespuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaController");
-        preguntasPersonalidad = getPreguntasPersonalidad();
-        respuestaController.prepararRespuestasPersonalidad(preguntasPersonalidad, encuesta); 
+        items = getItems();
+        respuestaController.prepararRespuestas(items, encuesta); 
     }
 
     public void create() {
@@ -176,25 +172,11 @@ public class PreguntaAmbienteController implements Serializable {
 
     public List<Pregunta> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
-    }
-    
-    public List<Pregunta> getPreguntasPersonalidad() {
-        if (preguntasPersonalidad == null) {
-            preguntasPersonalidad = getFacade().findAllPersonalidad();
-        }
-        return preguntasPersonalidad;
-    }
-
-    public List<Pregunta> getPreguntasAmbientes() {
-        if (items == null) {
             items = getFacade().findAllAmbiente();
         }
         return items;
     }
-
+    
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();

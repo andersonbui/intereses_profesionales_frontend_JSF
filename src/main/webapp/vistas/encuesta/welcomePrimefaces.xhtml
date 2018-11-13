@@ -12,6 +12,7 @@
             esta es una bienvenida a la encuesta
                             <p:commandButton value="Siguiente encuesta" ajax="true"
                                              action="#{encuestaController.pasoPreguntasAmbiente()}"
+                                             actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual, encuestaController.selected)}"
                                              > 
                             </p:commandButton>
             </h:form>

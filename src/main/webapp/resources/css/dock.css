@@ -14,6 +14,7 @@ p { margin-top:-18px }
 }
 
 .dock {
+  height: 80px;
   position: relative;
   bottom: 0;
   z-index: 10;
@@ -65,7 +66,7 @@ p { margin-top:-18px }
 }
 
 .dock li:target a {
-  animation: bounce .3s 6 alternate ease-out
+  animation: bounce .7s 6 alternate ease-out
 }
 
 .dock li:after {

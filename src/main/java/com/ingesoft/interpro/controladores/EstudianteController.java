@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
 @SessionScoped
@@ -29,6 +31,7 @@ public class EstudianteController implements Serializable {
     private List<Estudiante> items = null;
     private Estudiante selected;
     private int pasoActual;
+    private boolean skip;
 
     public EstudianteController() {
         pasoActual = 0;
@@ -80,14 +83,23 @@ public class EstudianteController implements Serializable {
         return ejbFacade;
     }
 
+    public boolean isSkip() {
+        return skip;
+    }
+ 
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+    
     public Estudiante prepareCreate() {
         selected = new Estudiante();
         FacesContext facesContext = FacesContext.getCurrentInstance();
         PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "personaController");
-        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "institucionController");
-        initializeEmbeddableKey();
+        controllerPersona.prepareCreate();
+//        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
+//                getValue(facesContext.getELContext(), null, "institucionController");
+//        initializeEmbeddableKey();
         return selected;
     }
 
@@ -108,6 +120,17 @@ public class EstudianteController implements Serializable {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
+    }
+    
+    public void estudianteSeleccionado(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        LoginController loginController= (LoginController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "loginController");
+        PersonaController personaController = (PersonaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "personaController");
+        Persona persona = loginController.getActual().getPersonaList().get(0);
+        personaController.setSelected(persona);
+        selected = persona.getEstudianteList().get(0);
     }
 
     public List<Estudiante> getItems() {
@@ -144,7 +167,16 @@ public class EstudianteController implements Serializable {
             }
         }
     }
-
+    public String onFlowProcess(FlowEvent event) {
+        if(skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        }
+        else {
+            return event.getNewStep();
+        }
+    }
+    
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);
     }

@@ -41,7 +41,7 @@ public class PreguntaController implements Serializable {
     private Pregunta selected;
     private int pasoActual;
     private int numGrupos;
-
+    private int numPuntos;
     public PreguntaController() {
         tamGrupoPersonalidad = 4;
         tamGrupoAmbiente = 6;
@@ -110,6 +110,11 @@ public class PreguntaController implements Serializable {
         return ejbFacade;
     }
 
+    public int puntuacion() {
+        numPuntos = 30;
+        return numPuntos;
+    }
+
     public List<Integer> getGrupos() {
         //System.out.println("Hola mundo");
         List<Integer> gruposPreguntas = new ArrayList<>();
@@ -123,7 +128,6 @@ public class PreguntaController implements Serializable {
         //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
-
     public List<Pregunta> getGrupoItems(int grupo) {
         getItems();
         List<Pregunta> listaPreguntas = new ArrayList<>();

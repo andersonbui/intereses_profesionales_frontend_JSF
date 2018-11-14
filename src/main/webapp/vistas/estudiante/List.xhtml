@@ -85,6 +85,7 @@
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{estudianteController.prepareCreate}" update=":EstudianteCreateForm" oncomplete="PF('EstudianteCreateDialog').show()"/>
+                            <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil" actionListener="#{estudianteController.estudianteSeleccionado}" update=":EstudianteEditarPerfilForm" oncomplete="PF('EstudianteEditarPerfilDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EstudianteViewForm" oncomplete="PF('EstudianteViewDialog').show()" disabled="#{empty estudianteController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{estudianteController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}"/>
@@ -94,6 +95,7 @@
             </h:form>
 
             <ui:include src="Create.xhtml"/>
+            <ui:include src="EditarPerfil.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
         </ui:define>

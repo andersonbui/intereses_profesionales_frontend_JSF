@@ -162,7 +162,6 @@ public class PreguntaAmbienteController implements Serializable {
             number = 0;
             puntos--;
         }
-//        System.out.println(puntos);
     }
     private List<Integer> gruposPreguntas = null;
 

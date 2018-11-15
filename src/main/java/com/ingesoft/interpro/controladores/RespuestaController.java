@@ -72,7 +72,7 @@ public class RespuestaController implements Serializable {
             selected.setPregunta(pregunta);
             selected.setEncuesta(encuesta);
             respuestas.add(selected);
-            create();
+//            create();
         }
         return respuestas;
     }

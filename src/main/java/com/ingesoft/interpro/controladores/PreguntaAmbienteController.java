@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "preguntaAmbienteController")
 @SessionScoped
@@ -38,11 +39,30 @@ public class PreguntaAmbienteController implements Serializable {
     private Pregunta selected;
     private int pasoActual;
     private int numGrupos;
+    private int number;
+    private int puntos;
     
     public PreguntaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
         numGrupos=1;
+        puntos = 0;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
     }
     
     public int getPasoActual() {
@@ -102,6 +122,17 @@ public class PreguntaAmbienteController implements Serializable {
 
     private PreguntaFacade getFacade() {
         return ejbFacade;
+    }
+    
+    public void increment() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        number++;
+        requestContext.execute("PF('knob').setValue("+ number +")");
+        if(number > 15){
+            number=0;
+            puntos--;
+        }
+        System.out.println(puntos);
     }
 
     public List<Integer> getGrupos() {

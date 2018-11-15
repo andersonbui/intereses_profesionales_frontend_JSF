@@ -32,9 +32,12 @@ public class EstudianteController implements Serializable {
     private Estudiante selected;
     private int pasoActual;
     private boolean skip;
+    private int number;
+    private int puntos;
 
     public EstudianteController() {
         pasoActual = 0;
+        puntos = 0;
     }
 
     public int getPasoActual() {
@@ -43,8 +46,7 @@ public class EstudianteController implements Serializable {
 
     public void setPasoActual(int pasoActual) {
         this.pasoActual = pasoActual;
-    }    
-    
+    }
 
     public Estudiante getSelected() {
         return selected;
@@ -53,13 +55,13 @@ public class EstudianteController implements Serializable {
     public void setSelected(Estudiante selected) {
         this.selected = selected;
     }
-    
+
     public boolean puedeAnteriorPaso() {
         return pasoActual > 0;
     }
 
     public boolean puedeSiguientePaso() {
-        return pasoActual < (10 );
+        return pasoActual < (10);
     }
 
     public int anteriorPaso() {
@@ -86,11 +88,11 @@ public class EstudianteController implements Serializable {
     public boolean isSkip() {
         return skip;
     }
- 
+
     public void setSkip(boolean skip) {
         this.skip = skip;
     }
-    
+
     public Estudiante prepareCreate() {
         selected = new Estudiante();
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -121,10 +123,10 @@ public class EstudianteController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-    
-    public void estudianteSeleccionado(){
+
+    public void estudianteSeleccionado() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        LoginController loginController= (LoginController) facesContext.getApplication().getELResolver().
+        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "loginController");
         PersonaController personaController = (PersonaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "personaController");
@@ -167,19 +169,20 @@ public class EstudianteController implements Serializable {
             }
         }
     }
+
     public String onFlowProcess(FlowEvent event) {
-        if(skip) {
+        if (skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
-        }
-        else {
+        } else {
             return event.getNewStep();
         }
     }
-    
+
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);
     }
+
     public Estudiante getEstudiantePorIdUsuario(java.lang.Integer idUsuario) {
         return getFacade().findPorIdUsuario(idUsuario);
     }

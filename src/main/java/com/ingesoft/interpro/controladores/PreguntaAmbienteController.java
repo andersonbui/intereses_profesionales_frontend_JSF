@@ -23,13 +23,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "preguntaAmbienteController")
 @SessionScoped
 public class PreguntaAmbienteController implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-   
+
     private final int tamGrupo;
     public boolean skip;
     @EJB
@@ -38,37 +39,58 @@ public class PreguntaAmbienteController implements Serializable {
     private Pregunta selected;
     private int pasoActual;
     private int numGrupos;
-    
+    private int number;
+    private int puntos;
+
     public PreguntaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
-        numGrupos=1;
+        numGrupos = 1;
+        puntos = 0;
     }
-    
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
     public int getPasoActual() {
         return pasoActual;
     }
+
     public int getUltimoPaso() {
         return (numGrupos);
     }
+
     public void setPasoActual(int pasoActual) {
         this.pasoActual = pasoActual;
     }
-    
+
     public int getStep() {
         return pasoActual;
     }
 
     public int getnombrePaso(int i) {
-        return (i*100/numGrupos);
+        return (i * 100 / numGrupos);
     }
-    
+
     public boolean puedeAnteriorPaso() {
         return pasoActual > 0;
     }
 
     public boolean puedeSiguientePaso() {
-        return pasoActual < (numGrupos );
+        return pasoActual < (numGrupos);
     }
 
     public int anteriorPaso() {
@@ -78,7 +100,7 @@ public class PreguntaAmbienteController implements Serializable {
 
     public int siguientePaso(ActionEvent actionEvent) {
         pasoActual += 1;
-        System.out.println("siguientes paso: "+pasoActual);
+        System.out.println("siguientes paso: " + pasoActual);
         return pasoActual;
     }
 
@@ -103,6 +125,17 @@ public class PreguntaAmbienteController implements Serializable {
     private PreguntaFacade getFacade() {
         return ejbFacade;
     }
+
+    public void increment() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        number++;
+        requestContext.execute("PF('knob').setValue(" + number + ")");
+        if (number > 15) {
+            number = 0;
+            puntos--;
+        }
+        System.out.println(puntos);
+    }
     private List<Integer> gruposPreguntas = null;
 
     public List<Integer> getGrupos() {
@@ -119,29 +152,29 @@ public class PreguntaAmbienteController implements Serializable {
         //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
-    
+
     public List<Pregunta> getGrupoItems(int grupo) {
         getItems();
         List<Pregunta> listaPreguntas = new ArrayList<>();
         for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
             if (i < items.size()) {
                 listaPreguntas.add(items.get(i));
-            }else{
+            } else {
                 break;
             }
         }
         return listaPreguntas;
     }
-    
+
     public Pregunta prepareCreate() {
         selected = new Pregunta();
         initializeEmbeddableKey();
         pasoActual = 0;
         return selected;
     }
-    
+
     public Pregunta preparePreguntas() {
-        pasoActual= 0;
+        pasoActual = 0;
         return null;
     }
 
@@ -180,7 +213,7 @@ public class PreguntaAmbienteController implements Serializable {
         }
         return items;
     }
-    
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();

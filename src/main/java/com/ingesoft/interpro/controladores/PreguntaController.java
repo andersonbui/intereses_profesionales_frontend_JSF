@@ -42,6 +42,7 @@ public class PreguntaController implements Serializable {
     private int pasoActual;
     private int numGrupos;
     private int numPuntos;
+
     public PreguntaController() {
         tamGrupoPersonalidad = 4;
         tamGrupoAmbiente = 6;
@@ -128,6 +129,7 @@ public class PreguntaController implements Serializable {
         //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
+
     public List<Pregunta> getGrupoItems(int grupo) {
         getItems();
         List<Pregunta> listaPreguntas = new ArrayList<>();
@@ -161,8 +163,6 @@ public class PreguntaController implements Serializable {
         preguntasPersonalidad = getPreguntasPersonalidad();
         respuestaController.prepararRespuestas(preguntasPersonalidad, encuesta);
     }
-
-    
 
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaCreated"));

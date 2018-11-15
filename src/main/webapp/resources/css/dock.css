@@ -15,7 +15,7 @@ p { margin-top:-18px }
 
 .dock {
   height: 80px;
-  position: relative;
+  position: static;
   bottom: 0;
   z-index: 10;
   width: 100%;
@@ -23,7 +23,7 @@ p { margin-top:-18px }
   font-size: normal 14px/1;
   font-family: Arial, sans-serif;
 }
-
+/*
 .dock ul {
 	position: relative;
 	display: inline-block;
@@ -48,7 +48,7 @@ p { margin-top:-18px }
 .dock ul:after {
   right: -31px;
   background: url("https://bit.ly/12uo9l4") no-repeat right bottom;
-}
+}*/
 
 .dock li {
   display: inline-block;
@@ -138,9 +138,14 @@ p { margin-top:-18px }
   transition: width .2s, height .2s;
 }
 
+.seleccionado img {
+    /*background-color: red;*/
+    width: 50px !important;
+}
+
 .dock li:hover img, .dock li a:focus img {
     /*Tamaño cuando se pasa el puntero*/
-	width: 70px;
+	width: 50px;
 }
 
 .dock li:active img {

@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Pregunta.findBySuma", query = "SELECT p FROM Pregunta p WHERE p.suma = :suma")
     , @NamedQuery(name = "Pregunta.findByOrden", query = "SELECT p FROM Pregunta p WHERE p.orden = :orden")
     , @NamedQuery(name = "Pregunta.findByIdTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.idTipo = :idTipo")
-    , @NamedQuery(name = "Pregunta.findByTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.tipo = :tipo")
+    , @NamedQuery(name = "Pregunta.findByTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.tipo = :tipo ORDER BY p.orden")
     , @NamedQuery(name = "Pregunta.findByUrlImagen", query = "SELECT p FROM Pregunta p WHERE p.urlImagen = :urlImagen")})
 
 public class Pregunta implements Serializable {
@@ -148,7 +148,7 @@ public class Pregunta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Pregunta[ idPregunta=" + idPregunta + " ]";
+        return "com.ingesoft.interpro.entidades.Pregunta[ idPregunta=" + idPregunta +";"+enunciado+ " ]";
     }
     
 }

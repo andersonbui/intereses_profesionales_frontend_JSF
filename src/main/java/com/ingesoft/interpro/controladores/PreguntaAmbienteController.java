@@ -4,11 +4,13 @@ import com.ingesoft.interpro.entidades.Pregunta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Respuesta;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PreguntaFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,6 +43,7 @@ public class PreguntaAmbienteController implements Serializable {
     private int numGrupos;
     private int number;
     private int puntos;
+    private int[] cantidadRespuestas;
 
     public PreguntaAmbienteController() {
         tamGrupo = 6;
@@ -101,6 +104,7 @@ public class PreguntaAmbienteController implements Serializable {
     public int siguientePaso(ActionEvent actionEvent) {
         pasoActual += 1;
         System.out.println("siguientes paso: " + pasoActual);
+        number = 0;
         return pasoActual;
     }
 
@@ -126,6 +130,30 @@ public class PreguntaAmbienteController implements Serializable {
         return ejbFacade;
     }
 
+    public void meGusta(Respuesta respuesta) {
+        respuesta.setRespuesta(1);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void indiferente(Respuesta respuesta) {
+        respuesta.setRespuesta((float) .5);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void noMeGusta(Respuesta respuesta) {
+        respuesta.setRespuesta(0);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void reinicioUnicoPorPregunta(Respuesta respuesta){
+        
+        int indice = (respuesta.getPregunta().getOrden() - 1);
+        cantidadRespuestas[indice]++;
+        if (cantidadRespuestas[indice] == 1) {
+            number = 0;
+            puntos++;
+        }
+    }
     public void increment() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
@@ -134,7 +162,7 @@ public class PreguntaAmbienteController implements Serializable {
             number = 0;
             puntos--;
         }
-        System.out.println(puntos);
+//        System.out.println(puntos);
     }
     private List<Integer> gruposPreguntas = null;
 
@@ -144,7 +172,7 @@ public class PreguntaAmbienteController implements Serializable {
             items = getItems();
             numGrupos = items.size() / tamGrupo;
             numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-            numGrupos = 2;
+
             for (int i = 1; i <= numGrupos; i++) {
                 gruposPreguntas.add(i);
             }
@@ -186,6 +214,7 @@ public class PreguntaAmbienteController implements Serializable {
         RespuestaController respuestaController = (RespuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaController");
         getItems();
         respuestaController.prepararRespuestas(items, encuesta);
+        cantidadRespuestas = new int[items.size()];
     }
 
     public void create() {

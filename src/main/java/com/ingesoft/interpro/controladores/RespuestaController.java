@@ -125,7 +125,7 @@ public class RespuestaController implements Serializable {
         String url = "img/ambiente/" + respuesta.getPregunta().getUrlImagen();
         return url;
     }
-
+    
     public List<Respuesta> getRespuestasPersonalidad(Encuesta encuesta) {
 
         if (encuesta != null && respuestas == null) {

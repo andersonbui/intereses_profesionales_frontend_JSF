@@ -41,30 +41,29 @@
                                             <p:graphicImage name="#{respuestaController.obtenerImagen(item)}" style=" height: 200px; width: 300px;" />
                                             <div class="dock">
                                                 <ul>
-                                                    <li id="megusta1">
-                                                        <a  href="#MeGusta">
-                                                            <!--                                            <p:commandButton action=""/>-->
+                                                    <li id="megusta1#{item.pregunta.idPregunta}">
+                                                        <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
                                                             <em>
                                                                 <span>Me gusta</span>
                                                             </em>
                                                             <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Smiling_Emoji_with_Eyes_Opened.png?9898922749706957214" />
-                                                        </a>
+                                                        </p:commandLink>
                                                     </li>
-                                                    <li id="indiferente1">
-                                                        <a href="#Indiferente">
+                                                    <li id="indiferente1#{item.pregunta.idPregunta}">
+                                                        <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
                                                             <em>
                                                                 <span>Indiferente</span>
                                                             </em>
                                                             <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214" />
-                                                        </a>
+                                                        </p:commandLink>
                                                     </li>
-                                                    <li id="nomegusta1">
-                                                        <a href="#NoMeGusta">
+                                                    <li id="nomegusta1#{item.pregunta.idPregunta}">
+                                                        <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
                                                             <em>
                                                                 <span>No me gusta</span>
                                                             </em>
                                                             <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Mad_Emoji.png?9898922749706957214"/>
-                                                        </a>
+                                                        </p:commandLink>
                                                     </li>
                                                 </ul>
                                             </div>

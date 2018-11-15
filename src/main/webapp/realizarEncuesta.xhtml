@@ -71,43 +71,19 @@
                 }
             </style>
         </f:facet>
-        <div  class="top-bar js-top-bar _fixed top-bar__network">
-            <div class="-container">
-                <div id="top" class="top layout-topbar">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <a class="navbar-brand" href="#">Intereses profesionales</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
-                                <h:form>
-                                    <li class="nav-item active">
-                                        <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
-                                    </li>
-                                </h:form>
-                            </ul>
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <div class="content completo" >
+
+        <div class="content completo">
             <p:growl id="growl" life="3000" />
             <h:form>
-                <!--<p:steps activeIndex="#{encuestaController.pasoActivo}" styleClass="custom" readonly="false">-->
-                <p:steps activeIndex="#{encuestaController.pasoActivo}"  readonly="false">
+                <p:steps activeIndex="#{encuestaController.pasoActivo}" styleClass="custom"   readonly="false">
                     <p:menuitem value="Informacion Personal" outcome="/vistas/encuesta/preguntasPersonalidad.xhtml" url="#"/>
                     <p:menuitem value="Preguntas de ambiente" url="#"/>
                     <p:menuitem value="Preguntas de Personalidad" url="#"/>
                     <p:menuitem value="Resumen" url="#"/>
                 </p:steps> 
             </h:form>
-            <ui:insert name="content">Content</ui:insert>
+            <br/>
+            <ui:insert name="content" >Content</ui:insert>
         </div>
     </h:body>
 </html>

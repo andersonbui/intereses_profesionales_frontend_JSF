@@ -72,9 +72,24 @@ public class RespuestaController implements Serializable {
             selected.setPregunta(pregunta);
             selected.setEncuesta(encuesta);
             respuestas.add(selected);
-            create();
         }
+        (new HiloGuardado()).start();
         return respuestas;
+    }
+
+    public class HiloGuardado extends Thread {
+
+        public HiloGuardado() {
+        }
+
+        @Override
+        public void run() {
+            for (Respuesta respuesta : respuestas) {
+                getFacade().edit(respuesta);
+            }
+            System.out.println("----Termino de guardar Respuestas");
+        }
+
     }
 
     public List<Respuesta> getItems(int idEncuesta, int idTipo) {
@@ -105,11 +120,12 @@ public class RespuestaController implements Serializable {
         }
         return listaRespuestas;
     }
-    
+
     public String obtenerImagen(Respuesta respuesta) {
-        String url = "img/ambiente/"+respuesta.getPregunta().getUrlImagen();
+        String url = "img/ambiente/" + respuesta.getPregunta().getUrlImagen();
         return url;
     }
+
     public List<Respuesta> getRespuestasPersonalidad(Encuesta encuesta) {
 
         if (encuesta != null && respuestas == null) {

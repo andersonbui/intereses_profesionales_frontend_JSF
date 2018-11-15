@@ -103,15 +103,18 @@ public class PreguntaAmbienteController implements Serializable {
     private PreguntaFacade getFacade() {
         return ejbFacade;
     }
+    private List<Integer> gruposPreguntas = null;
 
     public List<Integer> getGrupos() {
-        List<Integer> gruposPreguntas = new ArrayList<>();
-        items = getItems();
-        numGrupos = items.size() / tamGrupo;
-        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-//        numGrupos=2; 
-        for (int i = 1; i <= numGrupos; i++) {
-            gruposPreguntas.add(i);
+        if (gruposPreguntas == null) {
+            gruposPreguntas = new ArrayList<>();
+            items = getItems();
+            numGrupos = items.size() / tamGrupo;
+            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+            numGrupos = 2;
+            for (int i = 1; i <= numGrupos; i++) {
+                gruposPreguntas.add(i);
+            }
         }
         //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
@@ -141,14 +144,15 @@ public class PreguntaAmbienteController implements Serializable {
         pasoActual= 0;
         return null;
     }
-    
-    public void preparePreguntas(Usuario usuario, Encuesta encuesta) { 
-        pasoActual=0;
+
+    public void preparePreguntas(Usuario usuario, Encuesta encuesta) {
+        gruposPreguntas = null;
+        pasoActual = 0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaController respuestaController = (RespuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaController");
-        items = getItems();
-        respuestaController.prepararRespuestas(items, encuesta); 
+        getItems();
+        respuestaController.prepararRespuestas(items, encuesta);
     }
 
     public void create() {

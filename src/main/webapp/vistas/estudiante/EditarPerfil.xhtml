@@ -11,7 +11,7 @@
             <h:form id="EstudianteEditarPerfilForm">
                 <h:panelGroup class="panel-editarPerfil-estuduante" id="display">
                     <p:wizard flowListener="#{estudianteController.onFlowProcess}" widgetVar="perfilEstudianteWizard" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
-                        <p:tab id="personal" title="Información de personal ">
+                        <center><p:tab id="personal" title="Información de personal ">
                             <p:panel header="Información de personal">
                                 <p:panelGrid columns="2" id="panelInformacionPersonal" styleClass="panelgrid" rendered="#{personaController.selected != null}">
                                     <p:outputLabel value="Nombres: " for="nombres" />
@@ -30,8 +30,8 @@
                                     </p:selectOneRadio>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
-                        <p:tab id="ubicacion" title="Información de ubicación">
+                        </p:tab></center>
+                        <center><p:tab id="ubicacion" title="Información de ubicación">
                             <p:panel header="Información de ubicación">
                                 <p:panelGrid columns="2" id="panelInformacionUbicacion" styleClass="panelgrid" rendered="#{personaController.selected != null}">
                                     <p:outputLabel value="País " for="pais" />
@@ -69,8 +69,8 @@
                                     <p:inputText id="direccion" value="#{personaController.selected.direccion}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
-                        <p:tab id="familiar" title="Información familiar">
+                        </p:tab></center>
+                        <center><p:tab id="familiar" title="Información familiar">
                             <p:panel header="Información familiar">
                                 <p:panelGrid columns="2" id="panelInformacionFamiliar" styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
                                     <p:outputLabel value="¿Eres desplazado(a)?" for="desplazados" />
@@ -124,8 +124,8 @@
                                     </p:selectOneMenu>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
-                        <p:tab id="preferida" title="Materias de preferencia">
+                        </p:tab></center>
+                        <center><p:tab id="preferida" title="Materias de preferencia">
                             <p:panel header="Materias de preferencia">
                                 <p:panelGrid columns="2" id="panelInformacionPreferencia" styleClass="panelgrid">
                                     <p:outputLabel value="Materia 1 " for="materia1_mas" />
@@ -159,8 +159,8 @@
                                     </p:selectOneMenu>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
-                        <p:tab id="noPreferida" title="Materias de menos preferencia">
+                        </p:tab></center>
+                        <center><p:tab id="noPreferida" title="Materias de menos preferencia">
                             <p:panel header="Materias de menos preferencia">
                                 <p:panelGrid columns="2" id="panelInformacionMenosPreferencia" styleClass="panelgrid">
                                     <p:outputLabel value="Materia 1 " for="materia1_menos" />
@@ -194,8 +194,8 @@
                                     </p:selectOneMenu>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
-                        <p:tab id="mejorNota" title="Materias con mejor nota">
+                        </p:tab></center>
+                        <center><p:tab id="mejorNota" title="Materias con mejor nota">
                             <p:panel header="Materias con mejor nota">
                                 <p:panelGrid columns="2" id="panelInformacionMejorNota" styleClass="panelgrid">
                                     <p:outputLabel value="Materia 1 " for="materia1_mejorNota" />
@@ -229,7 +229,7 @@
                                     </p:selectOneMenu>
                                 </p:panelGrid>
                             </p:panel>
-                        </p:tab>
+                        </p:tab></center>
                     </p:wizard>
                     <p:commandButton actionListener="#{estudianteController.create()}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteEditarPerfilDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>

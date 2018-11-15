@@ -25,11 +25,12 @@
             <h:form id="PreguntaCreateAmbienteForm">         
                 <center><div id="display">
 
+                        <div>
+                            <p:outputLabel value="Tu puntuación: " style=" font-size: 30px; font-weight:bold; color: blue"/>
+                            <h:outputText id="puntos_id" value="#{preguntaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                        </div>
                         <p:poll interval="1" listener="#{preguntaAmbienteController.increment}" update="puntos_id"/>
-                        <p:knob min="0" max="15" widgetVar="knob" disabled="true" value="0" height="10 px"/>
-
-                        <p:outputLabel value="Tu puntuación: "/>
-                        <h:outputText id="puntos_id" value="#{preguntaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                        <p:knob min="0" max="15" widgetVar="knob" disabled="true" value="0" height="7 px"/>
 
                         <ui:repeat value="#{preguntaAmbienteController.getGrupos()}" var="grupo">
                             <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{preguntaAmbienteController.pasoActual == (grupo-1)}">

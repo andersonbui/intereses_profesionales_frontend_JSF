@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -27,7 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Usuario", catalog = "interpro")
+@Table(name = "Usuario", catalog = "interpro", schema = "")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario")
@@ -35,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave")
     , @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")})
 public class Usuario implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+    private List<Persona> personaList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario1")
+    private List<GrupoUsuario> grupoUsuarioList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,8 +63,6 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<Persona> personaList;
 
     public Usuario() {
     }
@@ -103,15 +109,6 @@ public class Usuario implements Serializable {
         this.estado = estado;
     }
 
-    @XmlTransient
-    public List<Persona> getPersonaList() {
-        return personaList;
-    }
-
-    public void setPersonaList(List<Persona> personaList) {
-        this.personaList = personaList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -135,6 +132,24 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "com.ingesoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + " ]";
+    }
+
+    @XmlTransient
+    public List<GrupoUsuario> getGrupoUsuarioList() {
+        return grupoUsuarioList;
+    }
+
+    public void setGrupoUsuarioList(List<GrupoUsuario> grupoUsuarioList) {
+        this.grupoUsuarioList = grupoUsuarioList;
+    }
+
+    @XmlTransient
+    public List<Persona> getPersonaList() {
+        return personaList;
+    }
+
+    public void setPersonaList(List<Persona> personaList) {
+        this.personaList = personaList;
     }
     
 }

@@ -6,7 +6,9 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,6 +38,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Grado.findByCurso", query = "SELECT g FROM Grado g WHERE g.curso = :curso")
     , @NamedQuery(name = "Grado.findByGrado", query = "SELECT g FROM Grado g WHERE g.grado = :grado")})
 public class Grado implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
+    private List<Nota> notaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
+    private List<EstudianteGrado> estudianteGradoList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -120,6 +129,24 @@ public class Grado implements Serializable {
     @Override
     public String toString() {
         return "com.ingesoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
+    }
+
+    @XmlTransient
+    public List<Nota> getNotaList() {
+        return notaList;
+    }
+
+    public void setNotaList(List<Nota> notaList) {
+        this.notaList = notaList;
+    }
+
+    @XmlTransient
+    public List<EstudianteGrado> getEstudianteGradoList() {
+        return estudianteGradoList;
+    }
+
+    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
+        this.estudianteGradoList = estudianteGradoList;
     }
     
 }

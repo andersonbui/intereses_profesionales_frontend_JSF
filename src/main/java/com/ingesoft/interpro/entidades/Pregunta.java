@@ -6,7 +6,9 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +18,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,6 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Pregunta.findByUrlImagen", query = "SELECT p FROM Pregunta p WHERE p.urlImagen = :urlImagen")})
 
 public class Pregunta implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pregunta")
+    private List<Respuesta> respuestaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -149,6 +156,15 @@ public class Pregunta implements Serializable {
     @Override
     public String toString() {
         return "com.ingesoft.interpro.entidades.Pregunta[ idPregunta=" + idPregunta +";"+enunciado+ " ]";
+    }
+
+    @XmlTransient
+    public List<Respuesta> getRespuestaList() {
+        return respuestaList;
+    }
+
+    public void setRespuestaList(List<Respuesta> respuestaList) {
+        this.respuestaList = respuestaList;
     }
     
 }

@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.GrupoUsuarioPK;
 import com.ingesoft.interpro.facades.GrupoUsuarioFacade;
 
 import java.io.Serializable;
@@ -40,9 +41,11 @@ public class GrupoUsuarioController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
+        selected.getGrupoUsuarioPK().setIdUsuario(selected.getUsuario1().getIdUsuario());
     }
 
     protected void initializeEmbeddableKey() {
+        selected.setGrupoUsuarioPK(new GrupoUsuarioPK());
     }
 
     private GrupoUsuarioFacade getFacade() {
@@ -109,7 +112,7 @@ public class GrupoUsuarioController implements Serializable {
         }
     }
 
-    public GrupoUsuario getGrupoUsuario(java.lang.Integer id) {
+    public GrupoUsuario getGrupoUsuario(GrupoUsuarioPK id) {
         return getFacade().find(id);
     }
 
@@ -124,6 +127,9 @@ public class GrupoUsuarioController implements Serializable {
     @FacesConverter(forClass = GrupoUsuario.class)
     public static class GrupoUsuarioControllerConverter implements Converter {
 
+        private static final String SEPARATOR = "#";
+        private static final String SEPARATOR_ESCAPED = "\\#";
+
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
@@ -134,15 +140,20 @@ public class GrupoUsuarioController implements Serializable {
             return controller.getGrupoUsuario(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
+        GrupoUsuarioPK getKey(String value) {
+            GrupoUsuarioPK key;
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            key = new GrupoUsuarioPK();
+            key.setIdGrupoUsuario(Integer.parseInt(values[0]));
+            key.setIdUsuario(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(GrupoUsuarioPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value);
+            sb.append(value.getIdGrupoUsuario());
+            sb.append(SEPARATOR);
+            sb.append(value.getIdUsuario());
             return sb.toString();
         }
 
@@ -153,7 +164,7 @@ public class GrupoUsuarioController implements Serializable {
             }
             if (object instanceof GrupoUsuario) {
                 GrupoUsuario o = (GrupoUsuario) object;
-                return getStringKey(o.getIdGrupoUsuario());
+                return getStringKey(o.getGrupoUsuarioPK());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), GrupoUsuario.class.getName()});
                 return null;

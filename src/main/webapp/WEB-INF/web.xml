@@ -23,6 +23,22 @@
             30
         </session-timeout>
     </session-config>
+    <login-config> 
+        <auth-method>BASIC</auth-method>
+        <realm-name>interproJDBCRealm</realm-name>
+    </login-config>
+    <security-role>
+        <description>Usuario Profesor</description>
+        <role-name>Profesor</role-name>
+    </security-role>
+    <security-role>
+        <description>Usuario Estudiante</description>
+        <role-name>Estudiante</role-name>
+    </security-role>
+    <security-role>
+        <description>Usuario Administrador</description>
+        <role-name>Administrador</role-name>
+    </security-role>
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>
     </welcome-file-list>

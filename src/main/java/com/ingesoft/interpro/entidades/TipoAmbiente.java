@@ -123,7 +123,7 @@ public class TipoAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.TipoAmbiente[ idTipoAmbiente=" + idTipoAmbiente + " ]";
+        return "com.ingesoft.interpro.entidades.TipoAmbiente[ idTipoAmbiente=" + idTipoAmbiente + " ]";
     }
     
 }

@@ -42,7 +42,7 @@ public class RespuestaPersonalidad implements Serializable {
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta encuesta;
-    @JoinColumn(name = "idPreguntaPersonalidad", referencedColumnName = "idPregunta", insertable = false, updatable = false)
+    @JoinColumn(name = "idPreguntaPersonalidad", referencedColumnName = "idPreguntaPersonalidad", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PreguntaPersonalidad preguntaPersonalidad;
 
@@ -116,7 +116,7 @@ public class RespuestaPersonalidad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.RespuestaPersonalidad[ respuestaPersonalidadPK=" + respuestaPersonalidadPK + " ]";
+        return "com.ingesoft.interpro.entidades.RespuestaPersonalidad[ respuestaPersonalidadPK=" + respuestaPersonalidadPK + " ]";
     }
     
 }

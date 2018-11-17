@@ -136,7 +136,7 @@ public class PreguntaAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.PreguntaAmbiente[ idPreguntaAmbiente=" + idPreguntaAmbiente + " ]";
+        return "com.ingesoft.interpro.entidades.PreguntaAmbiente[ idPreguntaAmbiente=" + idPreguntaAmbiente + " ]";
     }
     
 }

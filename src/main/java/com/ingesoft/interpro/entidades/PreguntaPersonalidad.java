@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PreguntaPersonalidad.findAll", query = "SELECT p FROM PreguntaPersonalidad p")
-    , @NamedQuery(name = "PreguntaPersonalidad.findByIdPregunta", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.idPregunta = :idPregunta")
+    , @NamedQuery(name = "PreguntaPersonalidad.findByIdPreguntaPersonalidad", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.idPreguntaPersonalidad = :idPreguntaPersonalidad")
     , @NamedQuery(name = "PreguntaPersonalidad.findByEnunciado1", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.enunciado1 = :enunciado1")
     , @NamedQuery(name = "PreguntaPersonalidad.findBySuma", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.suma = :suma")
     , @NamedQuery(name = "PreguntaPersonalidad.findByOrden", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.orden = :orden")
@@ -44,8 +44,8 @@ public class PreguntaPersonalidad implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idPregunta")
-    private Integer idPregunta;
+    @Column(name = "idPreguntaPersonalidad")
+    private Integer idPreguntaPersonalidad;
     @Size(max = 50)
     @Column(name = "enunciado1")
     private String enunciado1;
@@ -56,25 +56,25 @@ public class PreguntaPersonalidad implements Serializable {
     @Size(max = 50)
     @Column(name = "enunciado2")
     private String enunciado2;
-    @JoinColumn(name = "idTipo", referencedColumnName = "idTipo")
+    @JoinColumn(name = "idTipoPersonalidad", referencedColumnName = "idTipoPersonalidad")
     @ManyToOne(optional = false)
-    private Tipo idTipo;
+    private TipoPersonalidad idTipoPersonalidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "preguntaPersonalidad")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
 
     public PreguntaPersonalidad() {
     }
 
-    public PreguntaPersonalidad(Integer idPregunta) {
-        this.idPregunta = idPregunta;
+    public PreguntaPersonalidad(Integer idPreguntaPersonalidad) {
+        this.idPreguntaPersonalidad = idPreguntaPersonalidad;
     }
 
-    public Integer getIdPregunta() {
-        return idPregunta;
+    public Integer getIdPreguntaPersonalidad() {
+        return idPreguntaPersonalidad;
     }
 
-    public void setIdPregunta(Integer idPregunta) {
-        this.idPregunta = idPregunta;
+    public void setIdPreguntaPersonalidad(Integer idPreguntaPersonalidad) {
+        this.idPreguntaPersonalidad = idPreguntaPersonalidad;
     }
 
     public String getEnunciado1() {
@@ -109,12 +109,12 @@ public class PreguntaPersonalidad implements Serializable {
         this.enunciado2 = enunciado2;
     }
 
-    public Tipo getIdTipo() {
-        return idTipo;
+    public TipoPersonalidad getIdTipoPersonalidad() {
+        return idTipoPersonalidad;
     }
 
-    public void setIdTipo(Tipo idTipo) {
-        this.idTipo = idTipo;
+    public void setIdTipoPersonalidad(TipoPersonalidad idTipoPersonalidad) {
+        this.idTipoPersonalidad = idTipoPersonalidad;
     }
 
     @XmlTransient
@@ -129,7 +129,7 @@ public class PreguntaPersonalidad implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idPregunta != null ? idPregunta.hashCode() : 0);
+        hash += (idPreguntaPersonalidad != null ? idPreguntaPersonalidad.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +140,7 @@ public class PreguntaPersonalidad implements Serializable {
             return false;
         }
         PreguntaPersonalidad other = (PreguntaPersonalidad) object;
-        if ((this.idPregunta == null && other.idPregunta != null) || (this.idPregunta != null && !this.idPregunta.equals(other.idPregunta))) {
+        if ((this.idPreguntaPersonalidad == null && other.idPreguntaPersonalidad != null) || (this.idPreguntaPersonalidad != null && !this.idPreguntaPersonalidad.equals(other.idPreguntaPersonalidad))) {
             return false;
         }
         return true;
@@ -148,7 +148,7 @@ public class PreguntaPersonalidad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.PreguntaPersonalidad[ idPregunta=" + idPregunta + " ]";
+        return "com.ingesoft.interpro.entidades.PreguntaPersonalidad[ idPreguntaPersonalidad=" + idPreguntaPersonalidad + " ]";
     }
     
 }

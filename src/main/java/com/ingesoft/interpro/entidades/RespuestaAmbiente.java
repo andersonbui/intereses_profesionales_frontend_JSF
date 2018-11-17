@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,8 +35,10 @@ public class RespuestaAmbiente implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected RespuestaAmbientePK respuestaAmbientePK;
+    @Max(value=2)  
+    @Min(value=1)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "respuesta")
-    private Integer respuesta;
+    private Float respuesta;
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta encuesta;
@@ -61,11 +65,11 @@ public class RespuestaAmbiente implements Serializable {
         this.respuestaAmbientePK = respuestaAmbientePK;
     }
 
-    public Integer getRespuesta() {
+    public Float getRespuesta() {
         return respuesta;
     }
 
-    public void setRespuesta(Integer respuesta) {
+    public void setRespuesta(Float respuesta) {
         this.respuesta = respuesta;
     }
 
@@ -107,7 +111,7 @@ public class RespuestaAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.RespuestaAmbiente[ respuestaAmbientePK=" + respuestaAmbientePK + " ]";
+        return "com.ingesoft.interpro.entidades.RespuestaAmbiente[ respuestaAmbientePK=" + respuestaAmbientePK + " ]";
     }
     
 }

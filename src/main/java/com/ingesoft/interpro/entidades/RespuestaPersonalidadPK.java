@@ -79,5 +79,5 @@ public class RespuestaPersonalidadPK implements Serializable {
     public String toString() {
         return "com.ingeniosoft.interpro.entidades.RespuestaPersonalidadPK[ idPreguntaPersonalidad=" + idPreguntaPersonalidad + ", idEncuesta=" + idEncuesta + " ]";
     }
-    
+
 }

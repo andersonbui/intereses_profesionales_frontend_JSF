@@ -32,9 +32,9 @@ import org.primefaces.context.RequestContext;
  *
  * @author debian
  */
-@ManagedBean(name = "loginController")
+@ManagedBean(name = "registroController")
 @SessionScoped
-public class LoginController implements Serializable {
+public class RegistroController implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 
@@ -44,6 +44,7 @@ public class LoginController implements Serializable {
     private Usuario actual;
     private SocialAuthManager socialManager;
     private Profile profile;
+    String codigo;
     String usuario;
     String password;
     boolean logueado;
@@ -53,7 +54,7 @@ public class LoginController implements Serializable {
     //private final String redirectURL = "http://www.codewebpro.com/blog";
     private final String provider = "facebook";
 
-    public LoginController() {
+    public RegistroController() {
         logueado = false;
     }
 
@@ -114,6 +115,14 @@ public class LoginController implements Serializable {
         this.password = password;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     public Usuario getActual() {
         return actual;
     }
@@ -130,60 +139,10 @@ public class LoginController implements Serializable {
         return ejbFacade;
     }
     
-    public void login() throws IOException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
-        FacesMessage msg;
-        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/List.xhtml";
-        if (req.getUserPrincipal() == null) {
-            try {
-                req.login(this.usuario, this.password);
-                System.out.println("inicio de sesion con usuario: " + usuario + "; clave: " + password);
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
-                logueado = true;
-            } catch (ServletException e) {
-                e.printStackTrace();
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
-                logueado = false;
-                context.addMessage(null, msg);
-                return;
-            }
-            Principal principal = req.getUserPrincipal();
-            actual = ejbFacade.buscarPorUsuario(principal.getName());
-            ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
-            Map<String, Object> sessionMap = external.getSessionMap();
-            sessionMap.put("usuario", actual);
-            context.addMessage(null, msg);
-        } else {
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
-            context.addMessage(null, msg);
-            logueado = true;
-            String nombreUsuario = req.getUserPrincipal().getName();
-            actual = ejbFacade.buscarPorUsuario(nombreUsuario);
-        }
-        GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
-        if (gtu != null) {
-//            int grupo = gtu.getGrupoUsuarioPK().getIdGrupoUsuario();
-            RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);
-            RequestContext.getCurrentInstance().addCallbackParam("view", ruta);
-        }
-    }
-
-    public String salir() throws IOException {
-
-        FacesContext fc = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
-        logueado = false;
-        try {
-            req.logout();
-            req.getSession().invalidate();
-            fc.getExternalContext().invalidateSession();
-
-        } catch (ServletException e) {
-            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Cerrar Sesion"));
-        }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
-        return "";
+    public void registrarse(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "personaController");
     }
 
     public boolean logueado() {

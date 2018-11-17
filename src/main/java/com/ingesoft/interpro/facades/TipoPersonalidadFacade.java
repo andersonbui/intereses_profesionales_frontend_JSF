@@ -5,7 +5,7 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.Tipo;
+import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author debian
  */
 @Stateless
-public class TipoFacade extends AbstractFacade<Tipo> {
+public class TipoPersonalidadFacade extends AbstractFacade<TipoPersonalidad> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class TipoFacade extends AbstractFacade<Tipo> {
         return em;
     }
 
-    public TipoFacade() {
-        super(Tipo.class);
+    public TipoPersonalidadFacade() {
+        super(TipoPersonalidad.class);
     }
     
 }

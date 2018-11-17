@@ -22,13 +22,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "Nota", catalog = "interpro", schema = "")
+@Table(name = "Nota", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n")
-    , @NamedQuery(name = "Nota.findByMateriaidMateria", query = "SELECT n FROM Nota n WHERE n.notaPK.materiaidMateria = :materiaidMateria")
-    , @NamedQuery(name = "Nota.findByEstudianteidEstudiante", query = "SELECT n FROM Nota n WHERE n.notaPK.estudianteidEstudiante = :estudianteidEstudiante")
-    , @NamedQuery(name = "Nota.findByGradoidGrado", query = "SELECT n FROM Nota n WHERE n.notaPK.gradoidGrado = :gradoidGrado")
+    , @NamedQuery(name = "Nota.findByIdMateria", query = "SELECT n FROM Nota n WHERE n.notaPK.idMateria = :idMateria")
+    , @NamedQuery(name = "Nota.findByIdEstudiante", query = "SELECT n FROM Nota n WHERE n.notaPK.idEstudiante = :idEstudiante")
+    , @NamedQuery(name = "Nota.findByIdGrado", query = "SELECT n FROM Nota n WHERE n.notaPK.idGrado = :idGrado")
     , @NamedQuery(name = "Nota.findByNota", query = "SELECT n FROM Nota n WHERE n.nota = :nota")})
 public class Nota implements Serializable {
 
@@ -38,13 +38,13 @@ public class Nota implements Serializable {
     @Size(max = 45)
     @Column(name = "nota")
     private String nota;
-    @JoinColumn(name = "Estudiante_idEstudiante", referencedColumnName = "idEstudiante", insertable = false, updatable = false)
+    @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Estudiante estudiante;
-    @JoinColumn(name = "Grado_idGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
+    @JoinColumn(name = "idGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Grado grado;
-    @JoinColumn(name = "Materia_idMateria", referencedColumnName = "idMateria", insertable = false, updatable = false)
+    @JoinColumn(name = "idMateria", referencedColumnName = "idMateria", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Materia materia;
 
@@ -55,8 +55,8 @@ public class Nota implements Serializable {
         this.notaPK = notaPK;
     }
 
-    public Nota(int materiaidMateria, int estudianteidEstudiante, int gradoidGrado) {
-        this.notaPK = new NotaPK(materiaidMateria, estudianteidEstudiante, gradoidGrado);
+    public Nota(int idMateria, int idEstudiante, int idGrado) {
+        this.notaPK = new NotaPK(idMateria, idEstudiante, idGrado);
     }
 
     public NotaPK getNotaPK() {
@@ -121,7 +121,7 @@ public class Nota implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
+        return "com.ingeniosoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
     }
     
 }

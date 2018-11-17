@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Estudiante", catalog = "interpro", schema = "")
+@Table(name = "Estudiante", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Estudiante.findAll", query = "SELECT e FROM Estudiante e")
@@ -72,8 +71,6 @@ public class Estudiante implements Serializable {
     private String personalidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
     private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
-    private List<EstudianteGrado> estudianteGradoList;
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona")
     @ManyToOne(optional = false)
     private Persona idPersona;
@@ -160,15 +157,6 @@ public class Estudiante implements Serializable {
         this.notaList = notaList;
     }
 
-    @XmlTransient
-    public List<EstudianteGrado> getEstudianteGradoList() {
-        return estudianteGradoList;
-    }
-
-    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
-        this.estudianteGradoList = estudianteGradoList;
-    }
-
     public Persona getIdPersona() {
         return idPersona;
     }
@@ -208,7 +196,7 @@ public class Estudiante implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
+        return "com.ingeniosoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
     }
     
 }

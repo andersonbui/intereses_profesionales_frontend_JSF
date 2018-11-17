@@ -20,56 +20,56 @@ public class NotaPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Materia_idMateria")
-    private int materiaidMateria;
+    @Column(name = "idMateria")
+    private int idMateria;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Estudiante_idEstudiante")
-    private int estudianteidEstudiante;
+    @Column(name = "idEstudiante")
+    private int idEstudiante;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Grado_idGrado")
-    private int gradoidGrado;
+    @Column(name = "idGrado")
+    private int idGrado;
 
     public NotaPK() {
     }
 
-    public NotaPK(int materiaidMateria, int estudianteidEstudiante, int gradoidGrado) {
-        this.materiaidMateria = materiaidMateria;
-        this.estudianteidEstudiante = estudianteidEstudiante;
-        this.gradoidGrado = gradoidGrado;
+    public NotaPK(int idMateria, int idEstudiante, int idGrado) {
+        this.idMateria = idMateria;
+        this.idEstudiante = idEstudiante;
+        this.idGrado = idGrado;
     }
 
-    public int getMateriaidMateria() {
-        return materiaidMateria;
+    public int getIdMateria() {
+        return idMateria;
     }
 
-    public void setMateriaidMateria(int materiaidMateria) {
-        this.materiaidMateria = materiaidMateria;
+    public void setIdMateria(int idMateria) {
+        this.idMateria = idMateria;
     }
 
-    public int getEstudianteidEstudiante() {
-        return estudianteidEstudiante;
+    public int getIdEstudiante() {
+        return idEstudiante;
     }
 
-    public void setEstudianteidEstudiante(int estudianteidEstudiante) {
-        this.estudianteidEstudiante = estudianteidEstudiante;
+    public void setIdEstudiante(int idEstudiante) {
+        this.idEstudiante = idEstudiante;
     }
 
-    public int getGradoidGrado() {
-        return gradoidGrado;
+    public int getIdGrado() {
+        return idGrado;
     }
 
-    public void setGradoidGrado(int gradoidGrado) {
-        this.gradoidGrado = gradoidGrado;
+    public void setIdGrado(int idGrado) {
+        this.idGrado = idGrado;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) materiaidMateria;
-        hash += (int) estudianteidEstudiante;
-        hash += (int) gradoidGrado;
+        hash += (int) idMateria;
+        hash += (int) idEstudiante;
+        hash += (int) idGrado;
         return hash;
     }
 
@@ -80,13 +80,13 @@ public class NotaPK implements Serializable {
             return false;
         }
         NotaPK other = (NotaPK) object;
-        if (this.materiaidMateria != other.materiaidMateria) {
+        if (this.idMateria != other.idMateria) {
             return false;
         }
-        if (this.estudianteidEstudiante != other.estudianteidEstudiante) {
+        if (this.idEstudiante != other.idEstudiante) {
             return false;
         }
-        if (this.gradoidGrado != other.gradoidGrado) {
+        if (this.idGrado != other.idGrado) {
             return false;
         }
         return true;
@@ -94,7 +94,7 @@ public class NotaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.NotaPK[ materiaidMateria=" + materiaidMateria + ", estudianteidEstudiante=" + estudianteidEstudiante + ", gradoidGrado=" + gradoidGrado + " ]";
+        return "com.ingeniosoft.interpro.entidades.NotaPK[ idMateria=" + idMateria + ", idEstudiante=" + idEstudiante + ", idGrado=" + idGrado + " ]";
     }
     
 }

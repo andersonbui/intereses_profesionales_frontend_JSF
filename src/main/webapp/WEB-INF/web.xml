@@ -25,7 +25,7 @@
     </session-config>
     <login-config> 
         <auth-method>BASIC</auth-method>
-        <realm-name>interproJDBCRealm</realm-name>
+        <realm-name>interpro2JDBCRealm</realm-name>
     </login-config>
     <security-role>
         <description>Usuario Profesor</description>

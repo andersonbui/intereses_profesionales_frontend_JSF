@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Grado", catalog = "interpro", schema = "")
+@Table(name = "Grado", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Grado.findAll", query = "SELECT g FROM Grado g")
@@ -38,11 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Grado.findByCurso", query = "SELECT g FROM Grado g WHERE g.curso = :curso")
     , @NamedQuery(name = "Grado.findByGrado", query = "SELECT g FROM Grado g WHERE g.grado = :grado")})
 public class Grado implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
-    private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
-    private List<EstudianteGrado> estudianteGradoList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +53,10 @@ public class Grado implements Serializable {
     @Size(max = 45)
     @Column(name = "grado")
     private String grado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
+    private List<Nota> notaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGrado")
+    private List<Encuesta> encuestaList;
     @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
     @ManyToOne(optional = false)
     private Institucion idInstitucion;
@@ -98,6 +97,24 @@ public class Grado implements Serializable {
         this.grado = grado;
     }
 
+    @XmlTransient
+    public List<Nota> getNotaList() {
+        return notaList;
+    }
+
+    public void setNotaList(List<Nota> notaList) {
+        this.notaList = notaList;
+    }
+
+    @XmlTransient
+    public List<Encuesta> getEncuestaList() {
+        return encuestaList;
+    }
+
+    public void setEncuestaList(List<Encuesta> encuestaList) {
+        this.encuestaList = encuestaList;
+    }
+
     public Institucion getIdInstitucion() {
         return idInstitucion;
     }
@@ -128,25 +145,7 @@ public class Grado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
-    }
-
-    @XmlTransient
-    public List<Nota> getNotaList() {
-        return notaList;
-    }
-
-    public void setNotaList(List<Nota> notaList) {
-        this.notaList = notaList;
-    }
-
-    @XmlTransient
-    public List<EstudianteGrado> getEstudianteGradoList() {
-        return estudianteGradoList;
-    }
-
-    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
-        this.estudianteGradoList = estudianteGradoList;
+        return "com.ingeniosoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
     }
     
 }

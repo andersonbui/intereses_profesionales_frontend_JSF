@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Persona", catalog = "interpro", schema = "")
+@Table(name = "Persona", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p")
@@ -103,7 +102,7 @@ public class Persona implements Serializable {
     @ManyToOne(optional = false)
     private Usuario idUsuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
-    private List<PersonahasInstitucion> personahasInstitucionList;
+    private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<Estudiante> estudianteList;
 
@@ -235,12 +234,12 @@ public class Persona implements Serializable {
     }
 
     @XmlTransient
-    public List<PersonahasInstitucion> getPersonahasInstitucionList() {
-        return personahasInstitucionList;
+    public List<PersonaCodigoInstitucion> getPersonaCodigoInstitucionList() {
+        return personaCodigoInstitucionList;
     }
 
-    public void setPersonahasInstitucionList(List<PersonahasInstitucion> personahasInstitucionList) {
-        this.personahasInstitucionList = personahasInstitucionList;
+    public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
+        this.personaCodigoInstitucionList = personaCodigoInstitucionList;
     }
 
     @XmlTransient
@@ -274,7 +273,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Persona[ idPersona=" + idPersona + " ]";
+        return "com.ingeniosoft.interpro.entidades.Persona[ idPersona=" + idPersona + " ]";
     }
     
 }

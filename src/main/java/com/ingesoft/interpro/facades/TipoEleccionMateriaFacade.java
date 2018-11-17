@@ -5,18 +5,17 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.Usuario;
+import com.ingesoft.interpro.entidades.TipoEleccionMateria;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 /**
  *
  * @author debian
  */
 @Stateless
-public class UsuarioFacade extends AbstractFacade<Usuario> {
+public class TipoEleccionMateriaFacade extends AbstractFacade<TipoEleccionMateria> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -26,18 +25,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return em;
     }
 
-    public UsuarioFacade() {
-        super(Usuario.class);
+    public TipoEleccionMateriaFacade() {
+        super(TipoEleccionMateria.class);
     }
     
-    public Usuario buscarPorUsuario(String name) {
-        Query query = em.createNamedQuery("Usuario.findByUsuario");
-        query.setParameter("usuario", name);
-        Usuario findUsuario = (Usuario) query.getResultList().get(0);
-        if (findUsuario != null) {
-            return findUsuario;
-}
-        return null;
-
-    }
 }

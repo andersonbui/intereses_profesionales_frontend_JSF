@@ -6,13 +6,9 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -26,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "GrupoUsuario", catalog = "interpro", schema = "")
+@Table(name = "GrupoUsuario", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
@@ -35,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")})
 public class GrupoUsuario implements Serializable {
 
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GrupoUsuarioPK grupoUsuarioPK;
     @Size(max = 45)
@@ -52,7 +48,7 @@ public class GrupoUsuario implements Serializable {
         this.grupoUsuarioPK = grupoUsuarioPK;
     }
 
-    public GrupoUsuario(int idGrupoUsuario, int idUsuario) {
+    public GrupoUsuario(String idGrupoUsuario, int idUsuario) {
         this.grupoUsuarioPK = new GrupoUsuarioPK(idGrupoUsuario, idUsuario);
     }
 
@@ -102,7 +98,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
+        return "com.ingeniosoft.interpro.entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
     }
     
 }

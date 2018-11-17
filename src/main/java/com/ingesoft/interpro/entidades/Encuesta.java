@@ -32,17 +32,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Encuesta", catalog = "interpro", schema = "")
+@Table(name = "Encuesta", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Encuesta.findAll", query = "SELECT e FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
+    , @NamedQuery(name = "Encuesta.findByPuntaje", query = "SELECT e FROM Encuesta e WHERE e.puntaje = :puntaje")
     , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")})
 public class Encuesta implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<Respuesta> respuestaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,9 +53,23 @@ public class Encuesta implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @Column(name = "puntaje")
+    private Integer puntaje;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<AreaEncuesta> areaEncuestaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<RespuestaAmbiente> respuestaAmbienteList;
+    @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
+    @ManyToOne(optional = true)
+    private AreaProfesional idAreaProfesional;
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")
     @ManyToOne(optional = false)
     private Estudiante idEstudiante;
+    @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
+    @ManyToOne(optional = true)
+    private Grado idGrado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<RespuestaPersonalidad> respuestaPersonalidadList;
 
     public Encuesta() {
     }
@@ -87,12 +99,63 @@ public class Encuesta implements Serializable {
         this.fecha = fecha;
     }
 
+    public Integer getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(Integer puntaje) {
+        this.puntaje = puntaje;
+    }
+
+    @XmlTransient
+    public List<AreaEncuesta> getAreaEncuestaList() {
+        return areaEncuestaList;
+    }
+
+    public void setAreaEncuestaList(List<AreaEncuesta> areaEncuestaList) {
+        this.areaEncuestaList = areaEncuestaList;
+    }
+
+    @XmlTransient
+    public List<RespuestaAmbiente> getRespuestaAmbienteList() {
+        return respuestaAmbienteList;
+    }
+
+    public void setRespuestaAmbienteList(List<RespuestaAmbiente> respuestaAmbienteList) {
+        this.respuestaAmbienteList = respuestaAmbienteList;
+    }
+
+    public AreaProfesional getIdAreaProfesional() {
+        return idAreaProfesional;
+    }
+
+    public void setIdAreaProfesional(AreaProfesional idAreaProfesional) {
+        this.idAreaProfesional = idAreaProfesional;
+    }
+
     public Estudiante getIdEstudiante() {
         return idEstudiante;
     }
 
     public void setIdEstudiante(Estudiante idEstudiante) {
         this.idEstudiante = idEstudiante;
+    }
+
+    public Grado getIdGrado() {
+        return idGrado;
+    }
+
+    public void setIdGrado(Grado idGrado) {
+        this.idGrado = idGrado;
+    }
+
+    @XmlTransient
+    public List<RespuestaPersonalidad> getRespuestaPersonalidadList() {
+        return respuestaPersonalidadList;
+    }
+
+    public void setRespuestaPersonalidadList(List<RespuestaPersonalidad> respuestaPersonalidadList) {
+        this.respuestaPersonalidadList = respuestaPersonalidadList;
     }
 
     @Override
@@ -117,16 +180,7 @@ public class Encuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Encuesta[ idEncuesta=" + idEncuesta + " ]";
-    }
-
-    @XmlTransient
-    public List<Respuesta> getRespuestaList() {
-        return respuestaList;
-    }
-
-    public void setRespuestaList(List<Respuesta> respuestaList) {
-        this.respuestaList = respuestaList;
+        return "com.ingeniosoft.interpro.entidades.Encuesta[ idEncuesta=" + idEncuesta + " ]";
     }
     
 }

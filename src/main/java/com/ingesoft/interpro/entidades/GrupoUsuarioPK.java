@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -19,8 +20,10 @@ import javax.validation.constraints.NotNull;
 public class GrupoUsuarioPK implements Serializable {
 
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "idGrupoUsuario")
-    private int idGrupoUsuario;
+    private String idGrupoUsuario;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idUsuario")
@@ -29,16 +32,16 @@ public class GrupoUsuarioPK implements Serializable {
     public GrupoUsuarioPK() {
     }
 
-    public GrupoUsuarioPK(int idGrupoUsuario, int idUsuario) {
+    public GrupoUsuarioPK(String idGrupoUsuario, int idUsuario) {
         this.idGrupoUsuario = idGrupoUsuario;
         this.idUsuario = idUsuario;
     }
 
-    public int getIdGrupoUsuario() {
+    public String getIdGrupoUsuario() {
         return idGrupoUsuario;
     }
 
-    public void setIdGrupoUsuario(int idGrupoUsuario) {
+    public void setIdGrupoUsuario(String idGrupoUsuario) {
         this.idGrupoUsuario = idGrupoUsuario;
     }
 
@@ -53,7 +56,7 @@ public class GrupoUsuarioPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idGrupoUsuario;
+        hash += (idGrupoUsuario != null ? idGrupoUsuario.hashCode() : 0);
         hash += (int) idUsuario;
         return hash;
     }
@@ -65,7 +68,7 @@ public class GrupoUsuarioPK implements Serializable {
             return false;
         }
         GrupoUsuarioPK other = (GrupoUsuarioPK) object;
-        if (this.idGrupoUsuario != other.idGrupoUsuario) {
+        if ((this.idGrupoUsuario == null && other.idGrupoUsuario != null) || (this.idGrupoUsuario != null && !this.idGrupoUsuario.equals(other.idGrupoUsuario))) {
             return false;
         }
         if (this.idUsuario != other.idUsuario) {
@@ -76,7 +79,7 @@ public class GrupoUsuarioPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.GrupoUsuarioPK[ idGrupoUsuario=" + idGrupoUsuario + ", idUsuario=" + idUsuario + " ]";
+        return "com.ingeniosoft.interpro.entidades.GrupoUsuarioPK[ idGrupoUsuario=" + idGrupoUsuario + ", idUsuario=" + idUsuario + " ]";
     }
     
 }

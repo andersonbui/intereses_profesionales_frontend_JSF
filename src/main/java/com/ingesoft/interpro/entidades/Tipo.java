@@ -27,17 +27,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Tipo", catalog = "interpro", schema = "")
+@Table(name = "Tipo", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tipo.findAll", query = "SELECT t FROM Tipo t")
     , @NamedQuery(name = "Tipo.findByIdTipo", query = "SELECT t FROM Tipo t WHERE t.idTipo = :idTipo")
-    , @NamedQuery(name = "Tipo.findByTipo", query = "SELECT t FROM Tipo t WHERE t.tipo = :tipo")
-    , @NamedQuery(name = "Tipo.findBySubtipo", query = "SELECT t FROM Tipo t WHERE t.subtipo = :subtipo")})
+    , @NamedQuery(name = "Tipo.findByTipo", query = "SELECT t FROM Tipo t WHERE t.tipo = :tipo")})
 public class Tipo implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo")
-    private List<Pregunta> preguntaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,9 +44,8 @@ public class Tipo implements Serializable {
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
-    @Size(max = 45)
-    @Column(name = "subtipo")
-    private String subtipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo")
+    private List<PreguntaPersonalidad> preguntaPersonalidadList;
 
     public Tipo() {
     }
@@ -75,12 +70,13 @@ public class Tipo implements Serializable {
         this.tipo = tipo;
     }
 
-    public String getSubtipo() {
-        return subtipo;
+    @XmlTransient
+    public List<PreguntaPersonalidad> getPreguntaPersonalidadList() {
+        return preguntaPersonalidadList;
     }
 
-    public void setSubtipo(String subtipo) {
-        this.subtipo = subtipo;
+    public void setPreguntaPersonalidadList(List<PreguntaPersonalidad> preguntaPersonalidadList) {
+        this.preguntaPersonalidadList = preguntaPersonalidadList;
     }
 
     @Override
@@ -105,16 +101,7 @@ public class Tipo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Tipo[ idTipo=" + idTipo + " ]";
-    }
-
-    @XmlTransient
-    public List<Pregunta> getPreguntaList() {
-        return preguntaList;
-    }
-
-    public void setPreguntaList(List<Pregunta> preguntaList) {
-        this.preguntaList = preguntaList;
+        return "com.ingeniosoft.interpro.entidades.Tipo[ idTipo=" + idTipo + " ]";
     }
     
 }

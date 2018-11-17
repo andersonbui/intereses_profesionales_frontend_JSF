@@ -20,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Materia", catalog = "interpro", schema = "")
+@Table(name = "Materia", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll", query = "SELECT m FROM Materia m")
@@ -115,7 +114,7 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Materia[ idMateria=" + idMateria + " ]";
+        return "com.ingeniosoft.interpro.entidades.Materia[ idMateria=" + idMateria + " ]";
     }
     
 }

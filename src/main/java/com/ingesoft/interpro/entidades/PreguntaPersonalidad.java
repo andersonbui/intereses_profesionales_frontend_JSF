@@ -29,23 +29,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Pregunta", catalog = "interpro", schema = "")
+@Table(name = "PreguntaPersonalidad", catalog = "interpro2", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pregunta.findAll", query = "SELECT p FROM Pregunta p")
-    , @NamedQuery(name = "Pregunta.findByIdPregunta", query = "SELECT p FROM Pregunta p WHERE p.idPregunta = :idPregunta")
-    , @NamedQuery(name = "Pregunta.findByEnunciado", query = "SELECT p FROM Pregunta p WHERE p.enunciado = :enunciado")
-    , @NamedQuery(name = "Pregunta.findBySegundoEnunciado", query = "SELECT p FROM Pregunta p WHERE p.segundoEnunciado = :segundoEnunciado")
-    , @NamedQuery(name = "Pregunta.findBySuma", query = "SELECT p FROM Pregunta p WHERE p.suma = :suma")
-    , @NamedQuery(name = "Pregunta.findByOrden", query = "SELECT p FROM Pregunta p WHERE p.orden = :orden")
-    , @NamedQuery(name = "Pregunta.findByIdTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.idTipo = :idTipo")
-    , @NamedQuery(name = "Pregunta.findByTipo", query = "SELECT p FROM Pregunta p WHERE p.idTipo.tipo = :tipo ORDER BY p.orden")
-    , @NamedQuery(name = "Pregunta.findByUrlImagen", query = "SELECT p FROM Pregunta p WHERE p.urlImagen = :urlImagen")})
-
-public class Pregunta implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pregunta")
-    private List<Respuesta> respuestaList;
+    @NamedQuery(name = "PreguntaPersonalidad.findAll", query = "SELECT p FROM PreguntaPersonalidad p")
+    , @NamedQuery(name = "PreguntaPersonalidad.findByIdPregunta", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.idPregunta = :idPregunta")
+    , @NamedQuery(name = "PreguntaPersonalidad.findByEnunciado1", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.enunciado1 = :enunciado1")
+    , @NamedQuery(name = "PreguntaPersonalidad.findBySuma", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.suma = :suma")
+    , @NamedQuery(name = "PreguntaPersonalidad.findByOrden", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.orden = :orden")
+    , @NamedQuery(name = "PreguntaPersonalidad.findByEnunciado2", query = "SELECT p FROM PreguntaPersonalidad p WHERE p.enunciado2 = :enunciado2")})
+public class PreguntaPersonalidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,27 +46,26 @@ public class Pregunta implements Serializable {
     @Basic(optional = false)
     @Column(name = "idPregunta")
     private Integer idPregunta;
-    @Size(max = 100)
-    @Column(name = "enunciado")
-    private String enunciado;
-    @Size(max = 100)
-    @Column(name = "segundo_enunciado")
-    private String segundoEnunciado;
+    @Size(max = 50)
+    @Column(name = "enunciado1")
+    private String enunciado1;
     @Column(name = "suma")
     private Boolean suma;
     @Column(name = "orden")
     private Integer orden;
-    @Size(max = 100)
-    @Column(name = "urlImagen")
-    private String urlImagen;
+    @Size(max = 50)
+    @Column(name = "enunciado2")
+    private String enunciado2;
     @JoinColumn(name = "idTipo", referencedColumnName = "idTipo")
     @ManyToOne(optional = false)
     private Tipo idTipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preguntaPersonalidad")
+    private List<RespuestaPersonalidad> respuestaPersonalidadList;
 
-    public Pregunta() {
+    public PreguntaPersonalidad() {
     }
 
-    public Pregunta(Integer idPregunta) {
+    public PreguntaPersonalidad(Integer idPregunta) {
         this.idPregunta = idPregunta;
     }
 
@@ -85,20 +77,12 @@ public class Pregunta implements Serializable {
         this.idPregunta = idPregunta;
     }
 
-    public String getEnunciado() {
-        return enunciado;
+    public String getEnunciado1() {
+        return enunciado1;
     }
 
-    public void setEnunciado(String enunciado) {
-        this.enunciado = enunciado;
-    }
-
-    public String getSegundoEnunciado() {
-        return segundoEnunciado;
-    }
-
-    public void setSegundoEnunciado(String segundoEnunciado) {
-        this.segundoEnunciado = segundoEnunciado;
+    public void setEnunciado1(String enunciado1) {
+        this.enunciado1 = enunciado1;
     }
 
     public Boolean getSuma() {
@@ -117,12 +101,12 @@ public class Pregunta implements Serializable {
         this.orden = orden;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getEnunciado2() {
+        return enunciado2;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setEnunciado2(String enunciado2) {
+        this.enunciado2 = enunciado2;
     }
 
     public Tipo getIdTipo() {
@@ -131,6 +115,15 @@ public class Pregunta implements Serializable {
 
     public void setIdTipo(Tipo idTipo) {
         this.idTipo = idTipo;
+    }
+
+    @XmlTransient
+    public List<RespuestaPersonalidad> getRespuestaPersonalidadList() {
+        return respuestaPersonalidadList;
+    }
+
+    public void setRespuestaPersonalidadList(List<RespuestaPersonalidad> respuestaPersonalidadList) {
+        this.respuestaPersonalidadList = respuestaPersonalidadList;
     }
 
     @Override
@@ -143,10 +136,10 @@ public class Pregunta implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pregunta)) {
+        if (!(object instanceof PreguntaPersonalidad)) {
             return false;
         }
-        Pregunta other = (Pregunta) object;
+        PreguntaPersonalidad other = (PreguntaPersonalidad) object;
         if ((this.idPregunta == null && other.idPregunta != null) || (this.idPregunta != null && !this.idPregunta.equals(other.idPregunta))) {
             return false;
         }
@@ -155,16 +148,7 @@ public class Pregunta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Pregunta[ idPregunta=" + idPregunta +";"+enunciado+ " ]";
-    }
-
-    @XmlTransient
-    public List<Respuesta> getRespuestaList() {
-        return respuestaList;
-    }
-
-    public void setRespuestaList(List<Respuesta> respuestaList) {
-        this.respuestaList = respuestaList;
+        return "com.ingeniosoft.interpro.entidades.PreguntaPersonalidad[ idPregunta=" + idPregunta + " ]";
     }
     
 }

@@ -16,31 +16,31 @@ import javax.validation.constraints.NotNull;
  * @author debian
  */
 @Embeddable
-public class RespuestaPK implements Serializable {
+public class RespuestaAmbientePK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idPregunta")
-    private int idPregunta;
+    @Column(name = "idPreguntasAmbiente")
+    private int idPreguntasAmbiente;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idEncuesta")
     private int idEncuesta;
 
-    public RespuestaPK() {
+    public RespuestaAmbientePK() {
     }
 
-    public RespuestaPK(int idPregunta, int idEncuesta) {
-        this.idPregunta = idPregunta;
+    public RespuestaAmbientePK(int idPreguntasAmbiente, int idEncuesta) {
+        this.idPreguntasAmbiente = idPreguntasAmbiente;
         this.idEncuesta = idEncuesta;
     }
 
-    public int getIdPregunta() {
-        return idPregunta;
+    public int getIdPreguntasAmbiente() {
+        return idPreguntasAmbiente;
     }
 
-    public void setIdPregunta(int idPregunta) {
-        this.idPregunta = idPregunta;
+    public void setIdPreguntasAmbiente(int idPreguntasAmbiente) {
+        this.idPreguntasAmbiente = idPreguntasAmbiente;
     }
 
     public int getIdEncuesta() {
@@ -54,7 +54,7 @@ public class RespuestaPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idPregunta;
+        hash += (int) idPreguntasAmbiente;
         hash += (int) idEncuesta;
         return hash;
     }
@@ -62,11 +62,11 @@ public class RespuestaPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RespuestaPK)) {
+        if (!(object instanceof RespuestaAmbientePK)) {
             return false;
         }
-        RespuestaPK other = (RespuestaPK) object;
-        if (this.idPregunta != other.idPregunta) {
+        RespuestaAmbientePK other = (RespuestaAmbientePK) object;
+        if (this.idPreguntasAmbiente != other.idPreguntasAmbiente) {
             return false;
         }
         if (this.idEncuesta != other.idEncuesta) {
@@ -77,7 +77,7 @@ public class RespuestaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaPK[ idPregunta=" + idPregunta + ", idEncuesta=" + idEncuesta + " ]";
+        return "com.ingeniosoft.interpro.entidades.RespuestaAmbientePK[ idPreguntasAmbiente=" + idPreguntasAmbiente + ", idEncuesta=" + idEncuesta + " ]";
     }
     
 }

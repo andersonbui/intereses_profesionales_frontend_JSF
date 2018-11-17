@@ -5,7 +5,7 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.AreaEncuesta;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author debian
  */
 @Stateless
-public class EstudianteGradoFacade extends AbstractFacade<EstudianteGrado> {
+public class AreaEncuestaFacade extends AbstractFacade<AreaEncuesta> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class EstudianteGradoFacade extends AbstractFacade<EstudianteGrado> {
         return em;
     }
 
-    public EstudianteGradoFacade() {
-        super(EstudianteGrado.class);
+    public AreaEncuestaFacade() {
+        super(AreaEncuesta.class);
     }
     
 }

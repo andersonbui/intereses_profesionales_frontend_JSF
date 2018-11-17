@@ -89,6 +89,12 @@ public class EncuestaController implements Serializable {
         return valor == null ? 1 : valor;
     }
 
+//    public Encuesta prepareCreate() {
+//        selected = new Encuesta();
+//        initializeEmbeddableKey();
+//        return selected;
+//    }
+
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
@@ -119,7 +125,7 @@ public class EncuestaController implements Serializable {
         }
 
     }
-
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -147,7 +153,6 @@ public class EncuestaController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
-        System.out.println("encuesta seleccionada:  " + selected);
         if (selected != null) {
             setEmbeddableKeys();
             try {

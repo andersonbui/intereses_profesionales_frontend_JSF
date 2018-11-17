@@ -1,10 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.AreaEncuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.entidades.GrupoUsuarioPK;
-import com.ingesoft.interpro.facades.GrupoUsuarioFacade;
+import com.ingesoft.interpro.facades.AreaEncuestaFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,64 +19,65 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "grupoUsuarioController")
+@ManagedBean(name = "areaEncuestaController")
 @SessionScoped
-public class GrupoUsuarioController implements Serializable {
+public class AreaEncuestaController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.GrupoUsuarioFacade ejbFacade;
-    private List<GrupoUsuario> items = null;
-    private GrupoUsuario selected;
+    private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;
+    private List<AreaEncuesta> items = null;
+    private AreaEncuesta selected;
 
-    public GrupoUsuarioController() {
+    public AreaEncuestaController() {
     }
 
-    public GrupoUsuario getSelected() {
+    public AreaEncuesta getSelected() {
         return selected;
     }
 
-    public void setSelected(GrupoUsuario selected) {
+    public void setSelected(AreaEncuesta selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getGrupoUsuarioPK().setIdUsuario(selected.getUsuario1().getIdUsuario());
+        selected.getAreaEncuestaPK().setIdArea(selected.getArea().getIdArea());
+        selected.getAreaEncuestaPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setGrupoUsuarioPK(new GrupoUsuarioPK());
+        selected.setAreaEncuestaPK(new com.ingesoft.interpro.entidades.AreaEncuestaPK());
     }
 
-    private GrupoUsuarioFacade getFacade() {
+    private AreaEncuestaFacade getFacade() {
         return ejbFacade;
     }
 
-    public GrupoUsuario prepareCreate() {
-        selected = new GrupoUsuario();
+    public AreaEncuesta prepareCreate() {
+        selected = new AreaEncuesta();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<GrupoUsuario> getItems() {
+    public List<AreaEncuesta> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,20 +112,20 @@ public class GrupoUsuarioController implements Serializable {
         }
     }
 
-    public GrupoUsuario getGrupoUsuario(GrupoUsuarioPK id) {
+    public AreaEncuesta getAreaEncuesta(com.ingesoft.interpro.entidades.AreaEncuestaPK id) {
         return getFacade().find(id);
     }
 
-    public List<GrupoUsuario> getItemsAvailableSelectMany() {
+    public List<AreaEncuesta> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<GrupoUsuario> getItemsAvailableSelectOne() {
+    public List<AreaEncuesta> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = GrupoUsuario.class)
-    public static class GrupoUsuarioControllerConverter implements Converter {
+    @FacesConverter(forClass = AreaEncuesta.class)
+    public static class AreaEncuestaControllerConverter implements Converter {
 
         private static final String SEPARATOR = "#";
         private static final String SEPARATOR_ESCAPED = "\\#";
@@ -135,25 +135,25 @@ public class GrupoUsuarioController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GrupoUsuarioController controller = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "grupoUsuarioController");
-            return controller.getGrupoUsuario(getKey(value));
+            AreaEncuestaController controller = (AreaEncuestaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "areaEncuestaController");
+            return controller.getAreaEncuesta(getKey(value));
         }
 
-        GrupoUsuarioPK getKey(String value) {
-            GrupoUsuarioPK key;
+        com.ingesoft.interpro.entidades.AreaEncuestaPK getKey(String value) {
+            com.ingesoft.interpro.entidades.AreaEncuestaPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new GrupoUsuarioPK();
-            key.setIdGrupoUsuario(values[0]);
-            key.setIdUsuario(Integer.parseInt(values[1]));
+            key = new com.ingesoft.interpro.entidades.AreaEncuestaPK();
+            key.setIdArea(Integer.parseInt(values[0]));
+            key.setIdEncuesta(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(GrupoUsuarioPK value) {
+        String getStringKey(com.ingesoft.interpro.entidades.AreaEncuestaPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdGrupoUsuario());
+            sb.append(value.getIdArea());
             sb.append(SEPARATOR);
-            sb.append(value.getIdUsuario());
+            sb.append(value.getIdEncuesta());
             return sb.toString();
         }
 
@@ -162,11 +162,11 @@ public class GrupoUsuarioController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof GrupoUsuario) {
-                GrupoUsuario o = (GrupoUsuario) object;
-                return getStringKey(o.getGrupoUsuarioPK());
+            if (object instanceof AreaEncuesta) {
+                AreaEncuesta o = (AreaEncuesta) object;
+                return getStringKey(o.getAreaEncuestaPK());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), GrupoUsuario.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), AreaEncuesta.class.getName()});
                 return null;
             }
         }

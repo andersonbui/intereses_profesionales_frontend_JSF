@@ -1,16 +1,15 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.Pregunta;
+import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.Respuesta;
+import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.entidades.Usuario;
-import com.ingesoft.interpro.facades.PreguntaFacade;
+import com.ingesoft.interpro.facades.PreguntaAmbienteFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -36,15 +35,15 @@ public class PreguntaAmbienteController implements Serializable {
     private final int tamGrupo;
     public boolean skip;
     @EJB
-    private com.ingesoft.interpro.facades.PreguntaFacade ejbFacade;
-    private List<Pregunta> items = null;
-    private Pregunta selected;
+    private com.ingesoft.interpro.facades.PreguntaAmbienteFacade ejbFacade;
+    private List<PreguntaAmbiente> items = null;
+    private PreguntaAmbiente selected;
     private int pasoActual;
     private int numGrupos;
     private int number;
     private int puntos;
     private int[] cantidadRespuestas;
-
+    
     public PreguntaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
@@ -112,11 +111,11 @@ public class PreguntaAmbienteController implements Serializable {
         return tamGrupo;
     }
 
-    public Pregunta getSelected() {
+    public PreguntaAmbiente getSelected() {
         return selected;
     }
 
-    public void setSelected(Pregunta selected) {
+    public void setSelected(PreguntaAmbiente selected) {
         this.selected = selected;
     }
 
@@ -126,28 +125,28 @@ public class PreguntaAmbienteController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private PreguntaFacade getFacade() {
+    private PreguntaAmbienteFacade getFacade() {
         return ejbFacade;
     }
 
-    public void meGusta(Respuesta respuesta) {
+    public void meGusta(RespuestaAmbiente respuesta) {
         respuesta.setRespuesta(1);
         reinicioUnicoPorPregunta(respuesta);
     }
 
-    public void indiferente(Respuesta respuesta) {
-        respuesta.setRespuesta((float) .5);
+    public void indiferente(RespuestaAmbiente respuesta) {
+        respuesta.setRespuesta(2);
         reinicioUnicoPorPregunta(respuesta);
     }
 
-    public void noMeGusta(Respuesta respuesta) {
+    public void noMeGusta(RespuestaAmbiente respuesta) {
         respuesta.setRespuesta(0);
         reinicioUnicoPorPregunta(respuesta);
     }
 
-    public void reinicioUnicoPorPregunta(Respuesta respuesta){
+    public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta){
         
-        int indice = (respuesta.getPregunta().getOrden() - 1);
+        int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
         cantidadRespuestas[indice]++;
         if (cantidadRespuestas[indice] == 1) {
             number = 0;
@@ -180,9 +179,9 @@ public class PreguntaAmbienteController implements Serializable {
         return gruposPreguntas;
     }
 
-    public List<Pregunta> getGrupoItems(int grupo) {
+    public List<PreguntaAmbiente> getGrupoItems(int grupo) {
         getItems();
-        List<Pregunta> listaPreguntas = new ArrayList<>();
+        List<PreguntaAmbiente> listaPreguntas = new ArrayList<>();
         for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
             if (i < items.size()) {
                 listaPreguntas.add(items.get(i));
@@ -193,14 +192,14 @@ public class PreguntaAmbienteController implements Serializable {
         return listaPreguntas;
     }
 
-    public Pregunta prepareCreate() {
-        selected = new Pregunta();
+    public PreguntaAmbiente prepareCreate() {
+        selected = new PreguntaAmbiente();
         initializeEmbeddableKey();
         pasoActual = 0;
         return selected;
     }
 
-    public Pregunta preparePreguntas() {
+    public PreguntaAmbiente preparePreguntas() {
         pasoActual = 0;
         return null;
     }
@@ -210,34 +209,34 @@ public class PreguntaAmbienteController implements Serializable {
         pasoActual = 0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        RespuestaController respuestaController = (RespuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaController");
+        RespuestaAmbienteController respuestaController = (RespuestaAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
         getItems();
         respuestaController.prepararRespuestas(items, encuesta);
         cantidadRespuestas = new int[items.size()];
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Pregunta> getItems() {
+    public List<PreguntaAmbiente> getItems() {
         if (items == null) {
-            items = getFacade().findAllAmbiente();
+            items = getFacade().findAll();
         }
         return items;
     }
@@ -270,20 +269,20 @@ public class PreguntaAmbienteController implements Serializable {
         }
     }
 
-    public Pregunta getPregunta(java.lang.Integer id) {
+    public PreguntaAmbiente getPreguntaAmbiente(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Pregunta> getItemsAvailableSelectMany() {
+    public List<PreguntaAmbiente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Pregunta> getItemsAvailableSelectOne() {
+    public List<PreguntaAmbiente> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Pregunta.class)
-    public static class PreguntaControllerConverter implements Converter {
+    @FacesConverter(forClass = PreguntaAmbiente.class)
+    public static class PreguntaAmbienteControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
@@ -291,8 +290,8 @@ public class PreguntaAmbienteController implements Serializable {
                 return null;
             }
             PreguntaAmbienteController controller = (PreguntaAmbienteController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "preguntaController");
-            return controller.getPregunta(getKey(value));
+                    getValue(facesContext.getELContext(), null, "preguntaAmbienteController");
+            return controller.getPreguntaAmbiente(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -312,11 +311,11 @@ public class PreguntaAmbienteController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Pregunta) {
-                Pregunta o = (Pregunta) object;
-                return getStringKey(o.getIdPregunta());
+            if (object instanceof PreguntaAmbiente) {
+                PreguntaAmbiente o = (PreguntaAmbiente) object;
+                return getStringKey(o.getIdPreguntaAmbiente());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Pregunta.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), PreguntaAmbiente.class.getName()});
                 return null;
             }
         }

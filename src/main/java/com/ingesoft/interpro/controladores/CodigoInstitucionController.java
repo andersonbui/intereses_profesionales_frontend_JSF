@@ -1,10 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.entidades.GrupoUsuarioPK;
-import com.ingesoft.interpro.facades.GrupoUsuarioFacade;
+import com.ingesoft.interpro.facades.CodigoInstitucionFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,64 +19,62 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "grupoUsuarioController")
+@ManagedBean(name = "areaController")
 @SessionScoped
-public class GrupoUsuarioController implements Serializable {
+public class CodigoInstitucionController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.GrupoUsuarioFacade ejbFacade;
-    private List<GrupoUsuario> items = null;
-    private GrupoUsuario selected;
+    private com.ingesoft.interpro.facades.CodigoInstitucionFacade ejbFacade;
+    private List<CodigoInstitucion> items = null;
+    private CodigoInstitucion selected;
 
-    public GrupoUsuarioController() {
+    public CodigoInstitucionController() {
     }
 
-    public GrupoUsuario getSelected() {
+    public CodigoInstitucion getSelected() {
         return selected;
     }
 
-    public void setSelected(GrupoUsuario selected) {
+    public void setSelected(CodigoInstitucion selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getGrupoUsuarioPK().setIdUsuario(selected.getUsuario1().getIdUsuario());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setGrupoUsuarioPK(new GrupoUsuarioPK());
     }
 
-    private GrupoUsuarioFacade getFacade() {
+    private CodigoInstitucionFacade getFacade() {
         return ejbFacade;
     }
 
-    public GrupoUsuario prepareCreate() {
-        selected = new GrupoUsuario();
+    public CodigoInstitucion prepareCreate() {
+        selected = new CodigoInstitucion();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<GrupoUsuario> getItems() {
+    public List<CodigoInstitucion> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,48 +109,40 @@ public class GrupoUsuarioController implements Serializable {
         }
     }
 
-    public GrupoUsuario getGrupoUsuario(GrupoUsuarioPK id) {
+    public CodigoInstitucion getCodigoInstitucion(java.lang.String id) {
         return getFacade().find(id);
     }
 
-    public List<GrupoUsuario> getItemsAvailableSelectMany() {
+    public List<CodigoInstitucion> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<GrupoUsuario> getItemsAvailableSelectOne() {
+    public List<CodigoInstitucion> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = GrupoUsuario.class)
-    public static class GrupoUsuarioControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = CodigoInstitucion.class)
+    public static class CodigoInstitucionControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GrupoUsuarioController controller = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "grupoUsuarioController");
-            return controller.getGrupoUsuario(getKey(value));
+            CodigoInstitucionController controller = (CodigoInstitucionController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "codigoInstitucionController");
+            return controller.getCodigoInstitucion(getKey(value));
         }
 
-        GrupoUsuarioPK getKey(String value) {
-            GrupoUsuarioPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new GrupoUsuarioPK();
-            key.setIdGrupoUsuario(values[0]);
-            key.setIdUsuario(Integer.parseInt(values[1]));
+        java.lang.String getKey(String value) {
+            java.lang.String key;
+            key = value;
             return key;
         }
 
-        String getStringKey(GrupoUsuarioPK value) {
+        String getStringKey(java.lang.String value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdGrupoUsuario());
-            sb.append(SEPARATOR);
-            sb.append(value.getIdUsuario());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -162,11 +151,11 @@ public class GrupoUsuarioController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof GrupoUsuario) {
-                GrupoUsuario o = (GrupoUsuario) object;
-                return getStringKey(o.getGrupoUsuarioPK());
+            if (object instanceof CodigoInstitucion) {
+                CodigoInstitucion o = (CodigoInstitucion) object;
+                return getStringKey(o.getIdPersonaInstitucion());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), GrupoUsuario.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), CodigoInstitucion.class.getName()});
                 return null;
             }
         }

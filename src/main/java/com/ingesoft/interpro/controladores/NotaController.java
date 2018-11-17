@@ -40,9 +40,9 @@ public class NotaController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
-        selected.getNotaPK().setEstudianteidEstudiante(selected.getEstudiante().getIdEstudiante());
-        selected.getNotaPK().setMateriaidMateria(selected.getMateria().getIdMateria());
-        selected.getNotaPK().setGradoidGrado(selected.getGrado().getIdGrado());
+        selected.getNotaPK().setIdEstudiante(selected.getEstudiante().getIdEstudiante());
+        selected.getNotaPK().setIdGrado(selected.getGrado().getIdGrado());
+        selected.getNotaPK().setIdMateria(selected.getMateria().getIdMateria());
     }
 
     protected void initializeEmbeddableKey() {
@@ -145,19 +145,19 @@ public class NotaController implements Serializable {
             com.ingesoft.interpro.entidades.NotaPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
             key = new com.ingesoft.interpro.entidades.NotaPK();
-            key.setMateriaidMateria(Integer.parseInt(values[0]));
-            key.setEstudianteidEstudiante(Integer.parseInt(values[1]));
-            key.setGradoidGrado(Integer.parseInt(values[2]));
+            key.setIdMateria(Integer.parseInt(values[0]));
+            key.setIdEstudiante(Integer.parseInt(values[1]));
+            key.setIdGrado(Integer.parseInt(values[2]));
             return key;
         }
 
         String getStringKey(com.ingesoft.interpro.entidades.NotaPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getMateriaidMateria());
+            sb.append(value.getIdMateria());
             sb.append(SEPARATOR);
-            sb.append(value.getEstudianteidEstudiante());
+            sb.append(value.getIdEstudiante());
             sb.append(SEPARATOR);
-            sb.append(value.getGradoidGrado());
+            sb.append(value.getIdGrado());
             return sb.toString();
         }
 

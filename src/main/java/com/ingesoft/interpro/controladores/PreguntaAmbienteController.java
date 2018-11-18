@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.el.ELResolver;
@@ -44,6 +45,7 @@ public class PreguntaAmbienteController implements Serializable {
     private int puntos;
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
+    private List<String> images;
 
     public PreguntaAmbienteController() {
         tamGrupo = 6;
@@ -51,6 +53,18 @@ public class PreguntaAmbienteController implements Serializable {
         numGrupos = 1;
         puntos = 0;
         gruposPreguntas = null;
+    }
+    
+    @PostConstruct
+    public void init() {
+        images = new ArrayList<String>();
+        for (int i = 1; i <= 6; i++) {
+            images.add("1-Construir-gabinetes-de-cosina.png");
+        }
+    }
+
+    public List<String> getImages() {
+        return images;
     }
 
     public int getNumber() {

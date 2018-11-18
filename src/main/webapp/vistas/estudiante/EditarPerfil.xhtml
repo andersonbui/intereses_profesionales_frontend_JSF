@@ -76,16 +76,16 @@
                                         <p:outputLabel style="font-weight:bold; color: black;" value="¿Eres desplazado(a)?" for="desplazados" />
                                         <p:selectOneRadio  id="desplazados" value="#{estudianteController.selected.desplazados}" 
                                                            >
-                                            <f:selectItem itemLabel="SI" itemValue='SI' />
-                                            <f:selectItem itemLabel="NO" itemValue='NO' />    
+                                            <f:selectItem itemLabel="SI" itemValue='true' />
+                                            <f:selectItem itemLabel="NO" itemValue='false' />    
 
                                         </p:selectOneRadio>
 
                                         <p:outputLabel style="font-weight:bold; color: black;" value="¿Vives con tus padres?" for="viveConPadres" />
                                         <p:selectOneRadio  id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" 
                                                            >
-                                            <f:selectItem itemLabel="SI" itemValue='SI' />
-                                            <f:selectItem itemLabel="NO" itemValue='NO' />    
+                                            <f:selectItem itemLabel="SI" itemValue='true' />
+                                            <f:selectItem itemLabel="NO" itemValue='false' />    
 
                                         </p:selectOneRadio>
 
@@ -125,8 +125,11 @@
                                     </p:panelGrid>
                                 </p:panel></center>
                         </p:tab>
-                        <p:tab id="preferida" title="Materias de preferencia">
-                            <center><p:panel header="Materias de preferencia">
+                        <p:tab id="preferida" title="Área de preferencia">
+                            <center><p:panel header="Área de preferencia">
+                                    <h4>Ordene de manera descendenta las áreas de conocimineto de mayor preferencia</h4><br/>
+                                    <p:outputLabel style="font-weight:bold; color: black;" value="* Siento 1 el área de mayor preferencia"/><br/>
+
                                     <p:panelGrid columns="2" id="panelInformacionPreferencia" styleClass="panelgrid">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mas" />
                                         <p:selectOneMenu filter="true" id="materia1_mas" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
@@ -160,8 +163,10 @@
                                     </p:panelGrid>
                                 </p:panel></center>
                         </p:tab>
-                        <p:tab id="noPreferida" title="Materias de menos preferencia">
-                            <center><p:panel header="Materias de menos preferencia">
+                        <p:tab id="noPreferida" title="Área de menos preferencia">
+                            <center><p:panel header="Área de menos preferencia">
+                                    <h4>Ordene de manera descendenta las áreas de conocimineto de menor preferencia</h4><br/>
+                                    <p:outputLabel style="font-weight:bold; color: black;" value="* Siento 1 el área de menor preferencia"/><br/>
                                     <p:panelGrid columns="2" id="panelInformacionMenosPreferencia" styleClass="panelgrid">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_menos" />
                                         <p:selectOneMenu filter="true" id="materia1_menos" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
@@ -197,6 +202,8 @@
                         </p:tab>
                         <p:tab id="mejorNota" title="Materias con mejor nota">
                             <center><p:panel header="Materias con mejor nota">
+                                    <h4>Ordene de manera descendenta las áreas de conocimineto en las que ha obtenido mejor nota</h4><br/>
+                                    <p:outputLabel style="font-weight:bold; color: black;" value="* Siento 1 el área de mejor nota"/><br/>
                                     <p:panelGrid columns="2" id="panelInformacionMejorNota" styleClass="panelgrid">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mejorNota" />
                                         <p:selectOneMenu filter="true" id="materia1_mejorNota" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">

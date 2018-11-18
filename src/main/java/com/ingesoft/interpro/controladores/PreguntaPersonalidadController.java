@@ -253,7 +253,7 @@ public class PreguntaPersonalidadController implements Serializable {
             }
             if (object instanceof PreguntaPersonalidad) {
                 PreguntaPersonalidad o = (PreguntaPersonalidad) object;
-                return getStringKey(o.getIdPregunta());
+                return getStringKey(o.getIdPreguntaPersonalidad());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), PreguntaPersonalidad.class.getName()});
                 return null;

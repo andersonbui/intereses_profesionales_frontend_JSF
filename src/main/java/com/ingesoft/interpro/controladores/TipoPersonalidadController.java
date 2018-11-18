@@ -1,9 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.Tipo;
+import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.facades.TipoFacade;
+import com.ingesoft.interpro.facades.TipoPersonalidadFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,30 +12,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "ambientePersonalidadController")
+@ManagedBean(name = "tipoPersonalidadController")
 @SessionScoped
-public class AmbientePersonalidadController implements Serializable {
+public class TipoPersonalidadController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.TipoFacade ejbFacade;
-    private List<Tipo> items = null;
-    private Tipo selected;
+    private com.ingesoft.interpro.facades.TipoPersonalidadFacade ejbFacade;
+    private List<TipoPersonalidad> items = null;
+    private TipoPersonalidad selected;
 
-    public AmbientePersonalidadController() {
+    public TipoPersonalidadController() {
     }
 
-    public Tipo getSelected() {
+    public TipoPersonalidad getSelected() {
         return selected;
     }
 
-    public void setSelected(Tipo selected) {
+    public void setSelected(TipoPersonalidad selected) {
         this.selected = selected;
     }
 
@@ -45,36 +45,36 @@ public class AmbientePersonalidadController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private TipoFacade getFacade() {
+    private TipoPersonalidadFacade getFacade() {
         return ejbFacade;
     }
 
-    public Tipo prepareCreate() {
-        selected = new Tipo();
+    public TipoPersonalidad prepareCreate() {
+        selected = new TipoPersonalidad();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AmbientePersonalidadCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("TipoCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AmbientePersonalidadUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TipoUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("AmbientePersonalidadDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TipoDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Tipo> getItems() {
+    public List<TipoPersonalidad> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -109,29 +109,29 @@ public class AmbientePersonalidadController implements Serializable {
         }
     }
 
-    public Tipo getAmbientePersonalidad(java.lang.Integer id) {
+    public TipoPersonalidad getTipo(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Tipo> getItemsAvailableSelectMany() {
+    public List<TipoPersonalidad> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Tipo> getItemsAvailableSelectOne() {
+    public List<TipoPersonalidad> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Tipo.class)
-    public static class AmbientePersonalidadControllerConverter implements Converter {
+    @FacesConverter(forClass = TipoPersonalidad.class)
+    public static class TipoControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            AmbientePersonalidadController controller = (AmbientePersonalidadController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "ambientePersonalidadController");
-            return controller.getAmbientePersonalidad(getKey(value));
+            TipoPersonalidadController controller = (TipoPersonalidadController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "tipoController");
+            return controller.getTipo(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -151,11 +151,11 @@ public class AmbientePersonalidadController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Tipo) {
-                Tipo o = (Tipo) object;
-                return getStringKey(o.getIdTipo());
+            if (object instanceof TipoPersonalidad) {
+                TipoPersonalidad o = (TipoPersonalidad) object;
+                return getStringKey(o.getIdTipoPersonalidad());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Tipo.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), TipoPersonalidad.class.getName()});
                 return null;
             }
         }

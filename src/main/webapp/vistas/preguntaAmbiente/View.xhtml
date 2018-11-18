@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PreguntaAmbienteViewDlg" widgetVar="PreguntaAmbienteViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewPreguntaAmbienteTitle}">
+            <h:form id="PreguntaAmbienteViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{preguntaAmbienteController.selected != null}">
+                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_idPreguntaAmbiente}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.idPreguntaAmbiente}" title="#{bundle.ViewPreguntaAmbienteTitle_idPreguntaAmbiente}"/>
+                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_enunciado}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.enunciado}" title="#{bundle.ViewPreguntaAmbienteTitle_enunciado}"/>
+                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_urlImagen}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.urlImagen}" title="#{bundle.ViewPreguntaAmbienteTitle_urlImagen}"/>
+                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_orden}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.orden}" title="#{bundle.ViewPreguntaAmbienteTitle_orden}"/>
+                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_idTipoAmbiente}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.idTipoAmbiente}" title="#{bundle.ViewPreguntaAmbienteTitle_idTipoAmbiente}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="PreguntaAmbienteViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

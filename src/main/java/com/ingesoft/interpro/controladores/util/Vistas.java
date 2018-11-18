@@ -26,7 +26,7 @@ public class Vistas implements Serializable {
     }
 
     public static String verPaginaPrincipal() {
-        ruta = rutaGeneral + "/vistas/pregunta/List.xhtml";
+        ruta = rutaGeneral + "/vistas/preguntaAmbiente/List.xhtml";
         return ruta;
     }
 

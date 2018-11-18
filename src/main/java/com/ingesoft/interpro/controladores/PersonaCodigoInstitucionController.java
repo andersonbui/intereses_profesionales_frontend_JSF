@@ -1,9 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.PersonahasInstitucion;
+import com.ingesoft.interpro.entidades.PersonaCodigoInstitucion;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.facades.PersonahasInstitucionFacade;
+import com.ingesoft.interpro.facades.PersonaCodigoInstitucionFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,65 +19,65 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "personahasInstitucionController")
+@ManagedBean(name = "personaCodigoInstitucionController")
 @SessionScoped
-public class PersonahasInstitucionController implements Serializable {
+public class PersonaCodigoInstitucionController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.PersonahasInstitucionFacade ejbFacade;
-    private List<PersonahasInstitucion> items = null;
-    private PersonahasInstitucion selected;
+    private com.ingesoft.interpro.facades.PersonaCodigoInstitucionFacade ejbFacade;
+    private List<PersonaCodigoInstitucion> items = null;
+    private PersonaCodigoInstitucion selected;
 
-    public PersonahasInstitucionController() {
+    public PersonaCodigoInstitucionController() {
     }
 
-    public PersonahasInstitucion getSelected() {
+    public PersonaCodigoInstitucion getSelected() {
         return selected;
     }
 
-    public void setSelected(PersonahasInstitucion selected) {
+    public void setSelected(PersonaCodigoInstitucion selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getPersonahasInstitucionPK().setIdInstitucion(selected.getInstitucion().getIdInstitucion());
-        selected.getPersonahasInstitucionPK().setIdPersona(selected.getPersona().getIdPersona());
+        selected.getPersonaCodigoInstitucionPK().setIdCodigoInstitucion(selected.getCodigoInstitucion().getIdPersonaInstitucion());
+        selected.getPersonaCodigoInstitucionPK().setPersonaidPersona(selected.getPersona().getIdPersona());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setPersonahasInstitucionPK(new com.ingesoft.interpro.entidades.PersonahasInstitucionPK());
+        selected.setPersonaCodigoInstitucionPK(new com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK());
     }
 
-    private PersonahasInstitucionFacade getFacade() {
+    private PersonaCodigoInstitucionFacade getFacade() {
         return ejbFacade;
     }
 
-    public PersonahasInstitucion prepareCreate() {
-        selected = new PersonahasInstitucion();
+    public PersonaCodigoInstitucion prepareCreate() {
+        selected = new PersonaCodigoInstitucion();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonahasInstitucionCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCodigoInstitucionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonahasInstitucionUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCodigoInstitucionUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonahasInstitucionDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonaCodigoInstitucionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<PersonahasInstitucion> getItems() {
+    public List<PersonaCodigoInstitucion> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,20 +112,20 @@ public class PersonahasInstitucionController implements Serializable {
         }
     }
 
-    public PersonahasInstitucion getPersonahasInstitucion(com.ingesoft.interpro.entidades.PersonahasInstitucionPK id) {
+    public PersonaCodigoInstitucion getPersonaCodigoInstitucion(com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK id) {
         return getFacade().find(id);
     }
 
-    public List<PersonahasInstitucion> getItemsAvailableSelectMany() {
+    public List<PersonaCodigoInstitucion> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<PersonahasInstitucion> getItemsAvailableSelectOne() {
+    public List<PersonaCodigoInstitucion> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = PersonahasInstitucion.class)
-    public static class PersonahasInstitucionControllerConverter implements Converter {
+    @FacesConverter(forClass = PersonaCodigoInstitucion.class)
+    public static class PersonaCodigoInstitucionControllerConverter implements Converter {
 
         private static final String SEPARATOR = "#";
         private static final String SEPARATOR_ESCAPED = "\\#";
@@ -135,25 +135,25 @@ public class PersonahasInstitucionController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            PersonahasInstitucionController controller = (PersonahasInstitucionController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "personahasInstitucionController");
-            return controller.getPersonahasInstitucion(getKey(value));
+            PersonaCodigoInstitucionController controller = (PersonaCodigoInstitucionController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "personaCodigoInstitucionController");
+            return controller.getPersonaCodigoInstitucion(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.PersonahasInstitucionPK getKey(String value) {
-            com.ingesoft.interpro.entidades.PersonahasInstitucionPK key;
+        com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK getKey(String value) {
+            com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.PersonahasInstitucionPK();
-            key.setIdPersona(Integer.parseInt(values[0]));
-            key.setIdInstitucion(Integer.parseInt(values[1]));
+            key = new com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK();
+            key.setIdCodigoInstitucion(values[0]);
+            key.setPersonaidPersona(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.PersonahasInstitucionPK value) {
+        String getStringKey(com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdPersona());
+            sb.append(value.getIdCodigoInstitucion());
             sb.append(SEPARATOR);
-            sb.append(value.getIdInstitucion());
+            sb.append(value.getPersonaidPersona());
             return sb.toString();
         }
 
@@ -162,11 +162,11 @@ public class PersonahasInstitucionController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof PersonahasInstitucion) {
-                PersonahasInstitucion o = (PersonahasInstitucion) object;
-                return getStringKey(o.getPersonahasInstitucionPK());
+            if (object instanceof PersonaCodigoInstitucion) {
+                PersonaCodigoInstitucion o = (PersonaCodigoInstitucion) object;
+                return getStringKey(o.getPersonaCodigoInstitucionPK());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), PersonahasInstitucion.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), PersonaCodigoInstitucion.class.getName()});
                 return null;
             }
         }

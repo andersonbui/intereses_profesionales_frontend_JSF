@@ -10,6 +10,7 @@ import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -66,12 +67,12 @@ public class EncuestaController implements Serializable {
 
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasAmbiente.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 
     public void pasoPreguntasPersonalidad() throws IOException {
         this.pasoActivo = 2;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/preguntasPersonalidad.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
     }
 
     public void pasoResumen() throws IOException {
@@ -94,7 +95,6 @@ public class EncuestaController implements Serializable {
 //        initializeEmbeddableKey();
 //        return selected;
 //    }
-
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
@@ -107,6 +107,7 @@ public class EncuestaController implements Serializable {
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
         Usuario usu = loginController.getActual();
+        System.out.println("usuario: " + usu);
         try {
             Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
             selected = new Encuesta();
@@ -114,7 +115,7 @@ public class EncuestaController implements Serializable {
             selected.setFecha(new Date());
             selected.setIdEstudiante(estud);
             selected.setIdEncuesta(getIdEncuesta());
-            
+
             System.out.println("antes encuesta creada: " + selected);
             create();
 //            selected = getEncuesta(selected.toString());
@@ -126,7 +127,7 @@ public class EncuestaController implements Serializable {
         }
 
     }
-    
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {

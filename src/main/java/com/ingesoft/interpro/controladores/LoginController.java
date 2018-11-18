@@ -134,7 +134,7 @@ public class LoginController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         FacesMessage msg;
-        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/pregunta/List.xhtml";
+        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/List.xhtml";
         if (req.getUserPrincipal() == null) {
             try {
                 req.login(this.usuario, this.password);

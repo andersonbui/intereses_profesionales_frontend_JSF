@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class RespuestaPersonalidadController implements Serializable {
 
     protected void setEmbeddableKeys() {
         selected.getRespuestaPersonalidadPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
-        selected.getRespuestaPersonalidadPK().setIdPreguntaPersonalidad(selected.getPreguntaPersonalidad().getIdPregunta());
+        selected.getRespuestaPersonalidadPK().setIdPreguntaPersonalidad(selected.getPreguntaPersonalidad().getIdPreguntaPersonalidad());
     }
 
     protected void initializeEmbeddableKey() {
@@ -86,6 +87,42 @@ public class RespuestaPersonalidadController implements Serializable {
         }
         return items;
     }
+//  public List<RespuestaPersonalidad> getRespuestasPersonalidad(Encuesta encuesta) {
+//
+//        if (encuesta != null && items == null) {
+//            items = getFacade().findAll(encuesta.getIdEncuesta());
+//        }
+//        return items;
+//    }
+  
+    /**
+     * obtiene las respuestas de un determinado grupo
+     *
+     * @param grupo
+     * @param tamGrupo
+     * @return
+     */
+    public List<RespuestaPersonalidad> getGrupoItems(int grupo, int tamGrupo) {
+        List<RespuestaPersonalidad> listaRespuestas = null;
+        if (items != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
+                if (i >= 0 && i < items.size()) {
+                    listaRespuestas.add(items.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        return listaRespuestas;
+    }
+
+    public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        return items;
+    }
+
+  
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
@@ -114,12 +151,13 @@ public class RespuestaPersonalidadController implements Serializable {
             }
         }
     }
+
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
         items = new ArrayList<>(preguntas.size());
         for (PreguntaPersonalidad pregunta : preguntas) {
-            selected = new RespuestaPersonalidad(pregunta.getIdPregunta(), encuesta.getIdEncuesta());
+            selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
             selected.setPreguntaPersonalidad(pregunta);
             selected.setEncuesta(encuesta);
             items.add(selected);
@@ -142,6 +180,7 @@ public class RespuestaPersonalidadController implements Serializable {
         }
 
     }
+
     public RespuestaPersonalidad getRespuestaPersonalidad(com.ingesoft.interpro.entidades.RespuestaPersonalidadPK id) {
         return getFacade().find(id);
     }

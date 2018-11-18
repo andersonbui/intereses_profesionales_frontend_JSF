@@ -1,9 +1,9 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.AreaProfesional;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.facades.EstudianteGradoFacade;
+import com.ingesoft.interpro.facades.AreaProfesionalFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,65 +19,62 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "estudianteGradoController")
+@ManagedBean(name = "areaController")
 @SessionScoped
-public class EstudianteGradoController implements Serializable {
+public class AreaProfesionalController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.EstudianteGradoFacade ejbFacade;
-    private List<EstudianteGrado> items = null;
-    private EstudianteGrado selected;
+    private com.ingesoft.interpro.facades.AreaProfesionalFacade ejbFacade;
+    private List<AreaProfesional> items = null;
+    private AreaProfesional selected;
 
-    public EstudianteGradoController() {
+    public AreaProfesionalController() {
     }
 
-    public EstudianteGrado getSelected() {
+    public AreaProfesional getSelected() {
         return selected;
     }
 
-    public void setSelected(EstudianteGrado selected) {
+    public void setSelected(AreaProfesional selected) {
         this.selected = selected;
     }
 
     protected void setEmbeddableKeys() {
-        selected.getEstudianteGradoPK().setIdGrado(selected.getGrado().getIdGrado());
-        selected.getEstudianteGradoPK().setIdEstudiante(selected.getEstudiante().getIdEstudiante());
     }
 
     protected void initializeEmbeddableKey() {
-        selected.setEstudianteGradoPK(new com.ingesoft.interpro.entidades.EstudianteGradoPK());
     }
 
-    private EstudianteGradoFacade getFacade() {
+    private AreaProfesionalFacade getFacade() {
         return ejbFacade;
     }
 
-    public EstudianteGrado prepareCreate() {
-        selected = new EstudianteGrado();
+    public AreaProfesional prepareCreate() {
+        selected = new AreaProfesional();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteGradoCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AreaProfesionalCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteGradoUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaProfesionalUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EstudianteGradoDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("AreaProfesionalDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<EstudianteGrado> getItems() {
+    public List<AreaProfesional> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -112,51 +109,40 @@ public class EstudianteGradoController implements Serializable {
         }
     }
 
-    public EstudianteGrado getEstudianteGrado(com.ingesoft.interpro.entidades.EstudianteGradoPK id) {
+    public AreaProfesional getAreaProfesional(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<EstudianteGrado> getItemsAvailableSelectMany() {
+    public List<AreaProfesional> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<EstudianteGrado> getItemsAvailableSelectOne() {
+    public List<AreaProfesional> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = EstudianteGrado.class)
-    public static class EstudianteGradoControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
+    @FacesConverter(forClass = AreaProfesional.class)
+    public static class AreaProfesionalControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            EstudianteGradoController controller = (EstudianteGradoController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "estudianteGradoController");
-            return controller.getEstudianteGrado(getKey(value));
+            AreaProfesionalController controller = (AreaProfesionalController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "areaProfesionalController");
+            return controller.getAreaProfesional(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.EstudianteGradoPK getKey(String value) {
-            com.ingesoft.interpro.entidades.EstudianteGradoPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.EstudianteGradoPK();
-            key.setIdEstudiante(Integer.parseInt(values[0]));
-            key.setIdGrado(Integer.parseInt(values[1]));
-            key.setDate(java.sql.Date.valueOf(values[2]));
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.EstudianteGradoPK value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdEstudiante());
-            sb.append(SEPARATOR);
-            sb.append(value.getIdGrado());
-            sb.append(SEPARATOR);
-            sb.append(value.getDate());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -165,11 +151,11 @@ public class EstudianteGradoController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof EstudianteGrado) {
-                EstudianteGrado o = (EstudianteGrado) object;
-                return getStringKey(o.getEstudianteGradoPK());
+            if (object instanceof AreaProfesional) {
+                AreaProfesional o = (AreaProfesional) object;
+                return getStringKey(o.getIdAreaProfesional());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), EstudianteGrado.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), AreaProfesional.class.getName()});
                 return null;
             }
         }

@@ -43,12 +43,14 @@ public class PreguntaAmbienteController implements Serializable {
     private int number;
     private int puntos;
     private int[] cantidadRespuestas;
-    
+    private List<Integer> gruposPreguntas;
+
     public PreguntaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
         numGrupos = 1;
         puntos = 0;
+        gruposPreguntas = null;
     }
 
     public int getNumber() {
@@ -130,22 +132,21 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
     public void meGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta(1);
+        respuesta.setRespuesta((float) 1.0);
         reinicioUnicoPorPregunta(respuesta);
     }
 
     public void indiferente(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta(2);
+        respuesta.setRespuesta((float) 0.5);
         reinicioUnicoPorPregunta(respuesta);
     }
 
     public void noMeGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta(0);
+        respuesta.setRespuesta((float) 0);
         reinicioUnicoPorPregunta(respuesta);
     }
 
-    public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta){
-        
+    public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta) {
         int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
         cantidadRespuestas[indice]++;
         if (cantidadRespuestas[indice] == 1) {
@@ -153,6 +154,7 @@ public class PreguntaAmbienteController implements Serializable {
             puntos++;
         }
     }
+
     public void increment() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
@@ -162,7 +164,6 @@ public class PreguntaAmbienteController implements Serializable {
             puntos--;
         }
     }
-    private List<Integer> gruposPreguntas = null;
 
     public List<Integer> getGrupos() {
         if (gruposPreguntas == null) {
@@ -174,8 +175,8 @@ public class PreguntaAmbienteController implements Serializable {
             for (int i = 1; i <= numGrupos; i++) {
                 gruposPreguntas.add(i);
             }
+            System.out.println("gruposPreguntas: " + gruposPreguntas);
         }
-        //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
 

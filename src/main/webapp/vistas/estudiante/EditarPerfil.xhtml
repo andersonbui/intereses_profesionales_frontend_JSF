@@ -37,7 +37,7 @@
                                         <p:outputLabel style="font-weight:bold; color: black;" value="País " for="pais" />
                                         <p:selectOneMenu filter="true" id="pais" value="#{personaController.selected.pais}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
                                             <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
+                                            <f:selectItems value="#{personaController.items}"
                                                            var="personaItem"
                                                            itemValue="#{personaItem.pais}"
                                                            itemLabel="#{personaItem.pais}"

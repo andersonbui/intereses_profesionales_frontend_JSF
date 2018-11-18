@@ -7,6 +7,7 @@ import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -193,6 +194,7 @@ public class EstudianteController implements Serializable {
 
     public List<Estudiante> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+
     }
 
     @FacesConverter(forClass = Estudiante.class)

@@ -7,8 +7,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:form>
-        <p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>
-        <h5>Según la afirmación anterior, cual de las siguientes opciones no describe ocupaciones del ambiente de tipo Realista: </h5><br/>
+        <ui:repeat value="#{preguntaController.getItemPreguntaEvaluacion()}" var="itemPreguntaEvaluacion">
+            <h:outputText value="#{itemPreguntaEvaluacion.definicion}" escape="false"  ></h:outputText>
+        </ui:repeat>
         <p:panelGrid columns="1" layout="grid">
             <p:commandButton class="tamano-boton-pregunta" value="Trabajar con plantas y animales" id="opcionA" update="growl"  />
             <p:commandButton class="tamano-boton-pregunta" value="Materiales reales, tales como madera, herramientas y maquinaria" id="opcionB" update="growl"/>

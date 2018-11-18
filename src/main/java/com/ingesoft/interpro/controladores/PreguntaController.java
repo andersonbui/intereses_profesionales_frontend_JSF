@@ -156,6 +156,118 @@ public class PreguntaController implements Serializable {
         return null;
     }
 
+    public List<Definicion> getItemDefinicion() {
+
+        ArrayList<Definicion> itemsDefinicion;
+        itemsDefinicion = new ArrayList();
+        itemsDefinicion.add(new Definicion(
+                "<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>Según la afirmación anterior, cual de las siguientes opciones no describe ocupaciones del ambiente de tipo Realista: </h4>"
+                + "<p> A las personas con intereses realistas les gustan actividades que incluyan problemas y soluciones prácticas y directas. Con frecuencia, a las personas con intereses realistas no les gustan las carreras que requieren trabajo de oficina o trabajar junto a otras personas.\n"
+                + "                Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Trabajar con plantas y animales</li>\n"
+                + "                    <li>Materiales reales, tales como madera, herramientas y maquinaria</li>\n"
+                + "                    <li>Trabajo al aire libres</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion("<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>El Ambiente de profesiones u ocupaciones de tipo Artístico se define así: </h4>"
+                + "<p> A las personas con intereses artísticos, les gustan trabajos relacionados con el lado artístico de las cosas, tales como actuar, música, arte y diseño. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Creatividad en su trabajo</li>\n"
+                + "                    <li>Trabajo que puede hacerse sin seguir una serie de reglas</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion("<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>El Ambiente de profesiones u ocupaciones de tipo de investigación se define así: </h4>"
+                + "<p> A las personas con intereses de investigación, le gustan trabajos relacionados con ideas y razonamiento en lugar de actividades fisicas o liderazgo de personal. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Búsqueda de hechos</li>\n"
+                + "                    <li>Resolución de problemas</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+
+        itemsDefinicion.add(new Definicion("<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>El Ambiente de profesiones u ocupaciones de tipo Social se define así: </h4>"
+                + "<p> A las personas con intereses sociales les gusta trabajar con otros para ayudarlos a aprender y a desarrollar su conocimiento. Les gusta trabajar con personas más que trabajar con objetos, maquinaria o información. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Enseñanza</li>\n"
+                + "                    <li>Dar consejos</li>\n"
+                + "                    <li>Ayudar y dar consejos a otros</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion("<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>El Ambiente de profesiones u ocupaciones de tipo Emprendedor se define así: </h4>"
+                + "<p> A las personas con intereses empresariales les gustan trabajos que tengan que ver con el comienzo y continuación de proyectos de negocios. A estas personas les gusta tomar acciones en lugar de pensar sobre las cosas. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Persuadir y dirigir personal</li>\n"
+                + "                    <li>Tomar decisiones</li>\n"
+                + "                    <li>Tomar riesgos para obtener ganancias</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion("<h6> Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6></br>"
+                + "<h4>El Ambiente de profesiones u ocupaciones de tipo Convencional se define así: </h4>"
+                + "<p>A las personas con intereses convencionales les gustan trabajos que siguen procedimientos y rutinas. Prefieren trabajar con información y poner atención a detalles en lugar de trabajar con ideas."
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Trabajar con reglas claras</li>\n"
+                + "                    <li>Seguir a un líder influyente</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+
+        return itemsDefinicion;
+    }
+
+    public List<Definicion> getItemPreguntaEvaluacion() {
+
+        ArrayList<Definicion> itemsPreguntaEvaluacion;
+        itemsPreguntaEvaluacion = new ArrayList();
+        itemsPreguntaEvaluacion.add(new Definicion(
+                "<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>\n"
+                + "     <h5>Según la afirmación anterior, cual de las siguientes opciones no describe ocupaciones del ambiente de tipo Realista: </h5><br/>"));
+        itemsPreguntaEvaluacion.add(new Definicion("<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo investigativo: </h5><br/>"));
+        itemsPreguntaEvaluacion.add(new Definicion("<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Artístico: </h5><br/>"));
+        itemsPreguntaEvaluacion.add(new Definicion("<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que no describe ocupaciones del Ambiente de tipo Social: </h5><br/>"));
+        itemsPreguntaEvaluacion.add(new Definicion("<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Emprendedor: </h5>"));
+        itemsPreguntaEvaluacion.add(new Definicion("<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Convencional </h5>"));
+
+        return itemsPreguntaEvaluacion;
+    }
+
+    public class Definicion {
+
+        String definicion;
+
+        public Definicion(String definicion) {
+            this.definicion = definicion;
+        }
+
+        public String getDefinicion() {
+            return definicion;
+        }
+
+        public void setDefinicion(String definicion) {
+            this.definicion = definicion;
+        }
+
+    }
+
     public void preparePreguntasPersonalidad(Usuario usuario, Encuesta encuesta) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();

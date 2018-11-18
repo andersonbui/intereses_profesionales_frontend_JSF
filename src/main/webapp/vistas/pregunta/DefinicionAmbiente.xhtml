@@ -7,17 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:form>
-        <p:outputPanel deferred="true">
-            <h6>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </h6>
-            <h4>Según la afirmación anterior, cual de las siguientes opciones no describe ocupaciones del ambiente de tipo Realista: </h4>
-            <p> A las personas con intereses artísticos, les gustan trabajos relacionados con el lado artístico de las cosas, tales como actuar, música, arte y diseño.
-                Les gusta: </p>
-            <p>
-                <ul>
-                    <li>Creatividad en su trabajo</li>
-                    <li>Trabajo que puede hacerse sin seguir una serie de reglas</li>
-                </ul>
-            </p>
-        </p:outputPanel>
+        <ui:repeat value="#{preguntaController.getItemDefinicion()}" var="itemDefinicion">
+            <h:outputText value="#{itemDefinicion.definicion}" escape="false"  ></h:outputText>
+        </ui:repeat>
     </h:form>
 </html>

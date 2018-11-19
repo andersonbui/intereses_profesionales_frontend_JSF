@@ -83,7 +83,9 @@ public class AreaEncuestaController implements Serializable {
 //            getFacade().edit(item);
 //        }
     }
-
+    public AreaEncuesta obtenerItem(int index){
+        return items.get(index);
+    }
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaCreated"));
         if (!JsfUtil.isValidationFailed()) {

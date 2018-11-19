@@ -19,7 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "areaController")
+@ManagedBean(name = "codigoInstitucionController")
 @SessionScoped
 public class CodigoInstitucionController implements Serializable {
 

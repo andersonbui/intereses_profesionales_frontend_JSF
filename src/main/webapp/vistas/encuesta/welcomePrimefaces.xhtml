@@ -8,18 +8,19 @@
     <ui:composition template="/realizarEncuesta.xhtml">
         <ui:define name="content">
             <h:form>
+                 <!--value="{areaEncuestaController.obtenerItem(0).area}"-->
                 <p:wizard  widgetVar="perfilEstudianteWizard" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
                     <p:tab id="preferida" title="Materias de preferencia">
                         <center><p:panel header="Materias de preferencia">
                                 <br/><p><b>Selecciona en orden descendente las materias que mas te gustan.</b></p><br/>
                                 <p:panelGrid columns="2" id="panelInformacionPreferencia" styleClass="panelgrid">
                                     <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mas" />
-                                    <p:selectOneMenu filter="true" id="materia1_mas" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                    <p:selectOneMenu filter="true" id="materia1_mas"  required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -29,7 +30,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -39,7 +40,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
                                 </p:panelGrid>
@@ -54,7 +55,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -64,7 +65,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -74,7 +75,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
                                 </p:panelGrid>
@@ -89,7 +90,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -99,7 +100,7 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
 
@@ -109,14 +110,13 @@
                                         <f:selectItems value="#{areaController.items}"
                                                        var="area"
                                                        itemValue="#{area}"
-                                                       itemLabel="#{area.areal}"
+                                                       itemLabel="#{area.nombre}"
                                                        />
                                     </p:selectOneMenu>
                                 </p:panelGrid>
                             </p:panel></center>
                     </p:tab>
                 </p:wizard>
-                esta es una bienvenida a la encuesta
                 <p:commandButton value="Siguiente encuesta" ajax="true"
                                  action="#{encuestaController.pasoPreguntasAmbiente()}"
                                  actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual, encuestaController.selected)}"

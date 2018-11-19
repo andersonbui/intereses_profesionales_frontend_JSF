@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -51,7 +52,37 @@ public class AreaEncuesta implements Serializable {
     @ManyToOne(optional = false)
     private TipoEleccionMateria idTipoEleccionMateria;
 
+    @XmlTransient
+    private String mensajeEnunciado;
+    @XmlTransient
+    private String tituloEnunciado;
+
+    @XmlTransient
+    public String getMensajeEnunciado() {
+        return mensajeEnunciado;
+    }
+
+    @XmlTransient
+    public void setMensajeEnunciado(String mensajeEnunciado) {
+        this.mensajeEnunciado = mensajeEnunciado;
+    }
+
+    @XmlTransient
+    public String getTituloEnunciado() {
+        return tituloEnunciado;
+    }
+
+    @XmlTransient
+    public void setTituloEnunciado(String tituloEnunciado) {
+        this.tituloEnunciado = tituloEnunciado;
+    }
+
     public AreaEncuesta() {
+    }
+
+    public AreaEncuesta(String tituloEnunciado, String mensajeEnunciado) {
+        this.tituloEnunciado = tituloEnunciado;
+        this.mensajeEnunciado = mensajeEnunciado;
     }
 
     public AreaEncuesta(AreaEncuestaPK areaEncuestaPK) {
@@ -134,5 +165,5 @@ public class AreaEncuesta implements Serializable {
     public String toString() {
         return "com.ingeniosoft.interpro.entidades.AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
     }
-    
+
 }

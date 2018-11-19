@@ -10,9 +10,10 @@
         <p:dialog id="EstudianteEditarPerfilDlg" closable="true" widgetVar="EstudianteEditarPerfilDialog" modal="true" resizable="false" appendTo="@(body)">
             <h:form id="EstudianteEditarPerfilForm">
                 <h:panelGroup class="panel-editarPerfil-estuduante" id="display">
-                    <p:wizard flowListener="#{estudianteController.onFlowProcess}" widgetVar="perfilEstudianteWizard" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
+                    <p:wizard flowListener="#{estudianteController.onFlowProcess}"  widgetVar="perfilEstudianteWizard" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
                         <p:tab id="personal" title="Información de personal ">
-                            <center><p:panel header="Información de personal">
+                            <center>
+                                <p:panel header="Información de personal">
                                     <p:panelGrid columns="2" id="panelInformacionPersonal" styleClass="panelgrid" rendered="#{personaController.selected != null}">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Nombres: " for="nombres" />
                                         <p:inputText id="nombres" value="#{personaController.selected.nombre}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
@@ -28,40 +29,45 @@
                                             <f:selectItem itemLabel="M" itemValue='M' />
                                             <f:selectItem itemLabel="F" itemValue='F' />    
                                         </p:selectOneRadio>
+
                                     </p:panelGrid>
-                                </p:panel></center>
+                                </p:panel>
+                            </center>
                         </p:tab>
                         <p:tab id="ubicacion" title="Información de ubicación">
                             <center><p:panel header="Información de ubicación">
                                     <p:panelGrid columns="2" id="panelInformacionUbicacion" styleClass="panelgrid" rendered="#{personaController.selected != null}">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="País " for="pais" />
-                                        <p:selectOneMenu filter="true" id="pais" value="#{personaController.selected.pais}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                            <f:selectItems value="#{personaController.items}"
-                                                           var="personaItem"
-                                                           itemValue="#{personaItem.pais}"
-                                                           itemLabel="#{personaItem.pais}"
-                                                           />
+                                        <p:selectOneMenu filter="true" id="pais" value="#{paisController.selected}" required="true"  requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." noSelectionOption="true"/>
+                                            <f:selectItems value="#{paisController.items}"
+                                                           var="pais"
+                                                           itemValue="#{pais}"
+                                                           itemLabel="#{pais.nombre}"
+                                                           />                                                                          
+                                            <f:ajax render="@form" />
                                         </p:selectOneMenu>
 
 
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Departamento: " for="depto" />
-                                        <p:selectOneMenu filter="true" id="depto" value="#{personaController.selected.departamento}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
-                                                           var="personaItem"
-                                                           itemValue="#{personaItem.departamento}"
-                                                           itemLabel="#{personaItem.departamento}"
-                                                           />
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Departamento: " for="departamento" />
+                                        <p:selectOneMenu id="departamento" immediate="true" filter="true" value="#{departamentoController.selected}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                            <!--<f:selectItems value="{departamentoController.items}"--> 
+                                            <f:selectItems value="#{paisController.selected.departamentoList}"
+                                                           var="depto"
+                                                           itemValue="#{depto}"
+                                                           itemLabel="#{depto.nombre}"
+                                                           />                                                                                              
+                                            <f:ajax render="@form" />
                                         </p:selectOneMenu>
 
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Ciudad: " for="ciudad" />
-                                        <p:selectOneMenu filter="true" id="ciudad" value="#{personaController.selected.ciudad}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
-                                                           var="personaItem"
-                                                           itemValue="#{personaItem.ciudad}"
-                                                           itemLabel="#{personaItem.ciudad}"
+                                        <p:selectOneMenu widgetVar="wid-ciudad" filter="true" id="ciudad"  value="#{personaController.selected.idCiudad}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{departamentoController.selected.ciudadList}"
+                                                           var="ciudad"
+                                                           itemValue="#{ciudad}"
+                                                           itemLabel="#{ciudad.nombre}"
                                                            />
                                         </p:selectOneMenu>
 
@@ -76,16 +82,16 @@
                                         <p:outputLabel style="font-weight:bold; color: black;" value="¿Eres desplazado(a)?" for="desplazados" />
                                         <p:selectOneRadio  id="desplazados" value="#{estudianteController.selected.desplazados}" 
                                                            >
-                                            <f:selectItem itemLabel="SI" itemValue='SI' />
-                                            <f:selectItem itemLabel="NO" itemValue='NO' />    
+                                            <f:selectItem itemLabel="SI" itemValue='#{true}' />
+                                            <f:selectItem itemLabel="NO" itemValue='#{false}' />    
 
                                         </p:selectOneRadio>
 
                                         <p:outputLabel style="font-weight:bold; color: black;" value="¿Vives con tus padres?" for="viveConPadres" />
                                         <p:selectOneRadio  id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" 
                                                            >
-                                            <f:selectItem itemLabel="SI" itemValue='SI' />
-                                            <f:selectItem itemLabel="NO" itemValue='NO' />    
+                                            <f:selectItem itemLabel="SI" itemValue='#{true}' />
+                                            <f:selectItem itemLabel="NO" itemValue='#{false}' />    
 
                                         </p:selectOneRadio>
 
@@ -125,111 +131,7 @@
                                     </p:panelGrid>
                                 </p:panel></center>
                         </p:tab>
-                        <p:tab id="preferida" title="Materias de preferencia">
-                            <center><p:panel header="Materias de preferencia">
-                                    <p:panelGrid columns="2" id="panelInformacionPreferencia" styleClass="panelgrid">
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mas" />
-                                        <p:selectOneMenu filter="true" id="materia1_mas" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia1Item"
-                                                           itemValue="#{materia1Item}"
-                                                           itemLabel="#{materia1Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 2 " for="materia2_mas" />
-                                        <p:selectOneMenu filter="true" id="materia2_mas" value="#{materiaController.materia2}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia2Item"
-                                                           itemValue="#{materia2Item}"
-                                                           itemLabel="#{materia2Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 3 " for="materia3_mas" />
-                                        <p:selectOneMenu filter="true" id="materia3_mas" value="#{materiaController.materia3}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia3Item"
-                                                           itemValue="#{materia3Item}"
-                                                           itemLabel="#{materia3Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-                                    </p:panelGrid>
-                                </p:panel></center>
-                        </p:tab>
-                        <p:tab id="noPreferida" title="Materias de menos preferencia">
-                            <center><p:panel header="Materias de menos preferencia">
-                                    <p:panelGrid columns="2" id="panelInformacionMenosPreferencia" styleClass="panelgrid">
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_menos" />
-                                        <p:selectOneMenu filter="true" id="materia1_menos" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia1Item"
-                                                           itemValue="#{materia1Item}"
-                                                           itemLabel="#{materia1Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 2 " for="materia2_menos" />
-                                        <p:selectOneMenu filter="true" id="materia2_menos" value="#{materiaController.materia2}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia2Item"
-                                                           itemValue="#{materia2Item}"
-                                                           itemLabel="#{materia2Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 3 " for="materia3_menos" />
-                                        <p:selectOneMenu filter="true" id="materia3_menos" value="#{materiaController.materia3}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia3Item"
-                                                           itemValue="#{materia3Item}"
-                                                           itemLabel="#{materia3Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-                                    </p:panelGrid>
-                                </p:panel></center>
-                        </p:tab>
-                        <p:tab id="mejorNota" title="Materias con mejor nota">
-                            <center><p:panel header="Materias con mejor nota">
-                                    <p:panelGrid columns="2" id="panelInformacionMejorNota" styleClass="panelgrid">
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mejorNota" />
-                                        <p:selectOneMenu filter="true" id="materia1_mejorNota" value="#{materiaController.materia1}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia1Item"
-                                                           itemValue="#{materia1Item}"
-                                                           itemLabel="#{materia1Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 2 " for="materia2_mejorNota" />
-                                        <p:selectOneMenu filter="true" id="materia2_mejorNota" value="#{materiaController.materia2}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia2Item"
-                                                           itemValue="#{materia2Item}"
-                                                           itemLabel="#{materia2Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-
-                                        <p:outputLabel style="font-weight:bold; color: black;" value="Materia 3 " for="materia3_mejorNota" />
-                                        <p:selectOneMenu filter="true" id="materia3_mejorNota" value="#{materiaController.materia3}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{materiaController.itemsAvailableSelectOne}"
-                                                           var="materia3Item"
-                                                           itemValue="#{materia3Item}"
-                                                           itemLabel="#{materia3Item.nombre}"
-                                                           />
-                                        </p:selectOneMenu>
-                                    </p:panelGrid>
-                                </p:panel></center>
-                        </p:tab>
+                       
                     </p:wizard>
                     <p:commandButton actionListener="#{estudianteController.create()}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args,'EstudianteEditarPerfilDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteCreateDialog.hide()"/>

@@ -106,6 +106,8 @@ public class EncuestaController implements Serializable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
+        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
+        areaEncuestaController.prepararParaEncuesta();
         Usuario usu = loginController.getActual();
         System.out.println("usuario: " + usu);
         try {

@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.facades.AreaEncuestaFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ public class AreaEncuestaController implements Serializable {
     private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;
     private List<AreaEncuesta> items = null;
     private AreaEncuesta selected;
+    private List<String> mensajes;
 
     public AreaEncuestaController() {
     }
@@ -37,6 +39,14 @@ public class AreaEncuestaController implements Serializable {
 
     public void setSelected(AreaEncuesta selected) {
         this.selected = selected;
+    }
+
+    public List<String> getMensajes() {
+        return mensajes;
+    }
+
+    public void setMensajes(List<String> mensajes) {
+        this.mensajes = mensajes;
     }
 
     protected void setEmbeddableKeys() {
@@ -56,6 +66,22 @@ public class AreaEncuestaController implements Serializable {
         selected = new AreaEncuesta();
         initializeEmbeddableKey();
         return selected;
+    }
+
+    public AreaEncuesta prepararParaEncuesta() {
+        mensajes = new ArrayList<>();
+        items = new ArrayList<>();
+        items.add(new AreaEncuesta("Materias de mayor preferencia", "Selecciona en orden descendente las areas que mas te gustan."));
+        items.add(new AreaEncuesta("Materias de menor preferencia", "Selecciona como Area #1 la que menos le gusta, como #2 la siguiente que menos le gusta, asi susecivamente."));
+        items.add(new AreaEncuesta("Materias de mayor nota", "Escoja como Area #1 el area de las materias en las cuales saca mejor nota, como #2 la siguiente area, asi sucesivamente. "));
+
+        return selected;
+    }
+
+    public void actualizar() {
+//        for (AreaEncuesta item : items) {
+//            getFacade().edit(item);
+//        }
     }
 
     public void create() {

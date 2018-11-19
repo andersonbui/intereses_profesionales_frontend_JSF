@@ -125,6 +125,7 @@ public class EstudianteController implements Serializable {
     }
 
     public void estudianteSeleccionado() {
+        
         FacesContext facesContext = FacesContext.getCurrentInstance();
         LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "loginController");

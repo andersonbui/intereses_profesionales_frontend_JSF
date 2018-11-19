@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Persona", catalog = "interpro2", schema = "")
+@Table(name = "Persona")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p")
@@ -43,12 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Persona.findByDireccion", query = "SELECT p FROM Persona p WHERE p.direccion = :direccion")
     , @NamedQuery(name = "Persona.findByIdentificacion", query = "SELECT p FROM Persona p WHERE p.identificacion = :identificacion")
     , @NamedQuery(name = "Persona.findByTipoIdentificacion", query = "SELECT p FROM Persona p WHERE p.tipoIdentificacion = :tipoIdentificacion")
-    , @NamedQuery(name = "Persona.findByPais", query = "SELECT p FROM Persona p WHERE p.pais = :pais")
-    , @NamedQuery(name = "Persona.findByCiudad", query = "SELECT p FROM Persona p WHERE p.ciudad = :ciudad")
     , @NamedQuery(name = "Persona.findByFechaNacimiento", query = "SELECT p FROM Persona p WHERE p.fechaNacimiento = :fechaNacimiento")
     , @NamedQuery(name = "Persona.findBySexo", query = "SELECT p FROM Persona p WHERE p.sexo = :sexo")
     , @NamedQuery(name = "Persona.findByCelular", query = "SELECT p FROM Persona p WHERE p.celular = :celular")
-    , @NamedQuery(name = "Persona.findByDepartamento", query = "SELECT p FROM Persona p WHERE p.departamento = :departamento")
     , @NamedQuery(name = "Persona.findByTipo", query = "SELECT p FROM Persona p WHERE p.tipo = :tipo")})
 public class Persona implements Serializable {
 
@@ -77,12 +74,6 @@ public class Persona implements Serializable {
     @Size(max = 45)
     @Column(name = "tipoIdentificacion")
     private String tipoIdentificacion;
-    @Size(max = 45)
-    @Column(name = "pais")
-    private String pais;
-    @Size(max = 45)
-    @Column(name = "ciudad")
-    private String ciudad;
     @Column(name = "fechaNacimiento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
@@ -93,11 +84,11 @@ public class Persona implements Serializable {
     @Column(name = "celular")
     private String celular;
     @Size(max = 45)
-    @Column(name = "departamento")
-    private String departamento;
-    @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
+    @JoinColumn(name = "idCiudad", referencedColumnName = "idCiudad")
+    @ManyToOne
+    private Ciudad idCiudad;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
@@ -169,22 +160,6 @@ public class Persona implements Serializable {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -209,20 +184,20 @@ public class Persona implements Serializable {
         this.celular = celular;
     }
 
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
-    }
-
     public String getTipo() {
         return tipo;
     }
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Ciudad getIdCiudad() {
+        return idCiudad;
+    }
+
+    public void setIdCiudad(Ciudad idCiudad) {
+        this.idCiudad = idCiudad;
     }
 
     public Usuario getIdUsuario() {
@@ -273,7 +248,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Persona[ idPersona=" + idPersona + " ]";
+        return "com.ingesoft.interpro.entidades.Persona[ idPersona=" + idPersona + "; nombre: "+nombre+" ]";
     }
     
 }

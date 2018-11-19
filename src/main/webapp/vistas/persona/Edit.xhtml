@@ -26,20 +26,21 @@
                         <p:inputText id="identificacion" value="#{personaController.selected.identificacion}" title="#{bundle.EditPersonaTitle_identificacion}" />
                         <p:outputLabel value="#{bundle.EditPersonaLabel_tipoIdentificacion}" for="tipoIdentificacion" />
                         <p:inputText id="tipoIdentificacion" value="#{personaController.selected.tipoIdentificacion}" title="#{bundle.EditPersonaTitle_tipoIdentificacion}" />
-                        <p:outputLabel value="#{bundle.EditPersonaLabel_pais}" for="pais" />
-                        <p:inputText id="pais" value="#{personaController.selected.pais}" title="#{bundle.EditPersonaTitle_pais}" />
-                        <p:outputLabel value="#{bundle.EditPersonaLabel_ciudad}" for="ciudad" />
-                        <p:inputText id="ciudad" value="#{personaController.selected.ciudad}" title="#{bundle.EditPersonaTitle_ciudad}" />
                         <p:outputLabel value="#{bundle.EditPersonaLabel_fechaNacimiento}" for="fechaNacimiento" />
                         <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy HH:mm:ss" value="#{personaController.selected.fechaNacimiento}" title="#{bundle.EditPersonaTitle_fechaNacimiento}"  showOn="button"/>
                         <p:outputLabel value="#{bundle.EditPersonaLabel_sexo}" for="sexo" />
                         <p:inputText id="sexo" value="#{personaController.selected.sexo}" title="#{bundle.EditPersonaTitle_sexo}" />
                         <p:outputLabel value="#{bundle.EditPersonaLabel_celular}" for="celular" />
                         <p:inputText id="celular" value="#{personaController.selected.celular}" title="#{bundle.EditPersonaTitle_celular}" />
-                        <p:outputLabel value="#{bundle.EditPersonaLabel_departamento}" for="departamento" />
-                        <p:inputText id="departamento" value="#{personaController.selected.departamento}" title="#{bundle.EditPersonaTitle_departamento}" />
                         <p:outputLabel value="#{bundle.EditPersonaLabel_tipo}" for="tipo" />
                         <p:inputText id="tipo" value="#{personaController.selected.tipo}" title="#{bundle.EditPersonaTitle_tipo}" />
+                        <p:outputLabel value="#{bundle.EditPersonaLabel_idCiudad}" for="idCiudad" />
+                        <p:selectOneMenu id="idCiudad" value="#{personaController.selected.idCiudad}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{ciudadController.itemsAvailableSelectOne}"
+                                           var="idCiudadItem"
+                                           itemValue="#{idCiudadItem}"/>
+                        </p:selectOneMenu>
                         <p:outputLabel value="#{bundle.EditPersonaLabel_idUsuario}" for="idUsuario" />
                         <p:selectOneMenu id="idUsuario" value="#{personaController.selected.idUsuario}" required="true" requiredMessage="#{bundle.EditPersonaRequiredMessage_idUsuario}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>

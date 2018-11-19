@@ -43,35 +43,37 @@
                                     <h1><p:progressBar value="#{preguntaAmbienteController.getnombrePaso(grupo-1)}" labelTemplate="{value}%" displayOnly="true"/></h1>
 
                                     <p:dataGrid value="#{respuestaAmbienteController.getGrupoItems(grupo, preguntaAmbienteController.getTamGrupo())}" var="item" columns="3" styleClass="panelgrid">
-                                        <p:column class="value" style="background-color:rgba(255, 99, 71, 0.2); height: 100px; ">
-                                            <p:graphicImage name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 140px; width: 210px;" />
-                                            <div class="dock">
-                                                <ul>
-                                                    <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                        <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
-                                                            <em>
-                                                                <span>Me gusta</span>
-                                                            </em>
-                                                            <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Smiling_Emoji_with_Eyes_Opened.png?9898922749706957214" />
-                                                        </p:commandLink>
-                                                    </li>
-                                                    <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                        <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
-                                                            <em>
-                                                                <span>Indiferente</span>
-                                                            </em>
-                                                            <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214" />
-                                                        </p:commandLink>
-                                                    </li>
-                                                    <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                        <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
-                                                            <em>
-                                                                <span>No me gusta</span>
-                                                            </em>
-                                                            <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Mad_Emoji.png?9898922749706957214"/>
-                                                        </p:commandLink>
-                                                    </li>
-                                                </ul>
+                                        <p:column class="">
+                                            <div  style=" background-color:rgba(255, 99, 71, 0.2); height: 200px; width: 100%">
+                                                <p:graphicImage name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 70%; width: 270px;" />
+                                                <div class="dock">
+                                                    <ul>
+                                                        <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
+                                                            <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                                <em>
+                                                                    <span>Me gusta</span>
+                                                                </em>
+                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Smiling_Emoji_with_Eyes_Opened.png?9898922749706957214" />
+                                                            </p:commandLink>
+                                                        </li>
+                                                        <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
+                                                            <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                                <em>
+                                                                    <span>Indiferente</span>
+                                                                </em>
+                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214" />
+                                                            </p:commandLink>
+                                                        </li>
+                                                        <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
+                                                            <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                                <em>
+                                                                    <span>No me gusta</span>
+                                                                </em>
+                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Mad_Emoji.png?9898922749706957214"/>
+                                                            </p:commandLink>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </p:column>
                                     </p:dataGrid>

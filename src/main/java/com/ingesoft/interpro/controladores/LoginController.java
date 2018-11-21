@@ -47,6 +47,7 @@ public class LoginController implements Serializable {
     String usuario;
     String password;
     boolean logueado;
+    private GrupoUsuario grupo;
 
     private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
     private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
@@ -73,6 +74,20 @@ public class LoginController implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isAdmin() {
+        return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals("administrador");
+    }
+
+    public boolean isEstudiante() {
+        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        return nombreGrupo.equals("estudiante") || nombreGrupo.equals("administrador") || nombreGrupo.equals("docente");
+    }
+
+    public boolean isDocente() {
+        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        return nombreGrupo.equals("docente") || nombreGrupo.equals("administrador");
     }
 
     public void getPerfilUsuario() throws Exception {
@@ -129,12 +144,12 @@ public class LoginController implements Serializable {
     public UsuarioFacade getFacade() {
         return ejbFacade;
     }
-    
+
     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         FacesMessage msg;
-        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/List.xhtml";
+        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/inicio.xhtml";
         if (req.getUserPrincipal() == null) {
             try {
                 req.login(this.usuario, this.password);
@@ -154,6 +169,9 @@ public class LoginController implements Serializable {
             Map<String, Object> sessionMap = external.getSessionMap();
             sessionMap.put("usuario", actual);
             context.addMessage(null, msg);
+
+            grupo = actual.getGrupoUsuarioList().get(0);
+
         } else {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
             context.addMessage(null, msg);

@@ -33,18 +33,15 @@
             <div class="-container">
                 <div id="top" class="top layout-topbar">
                     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <a class="navbar-brand" href="#">Intereses profesionales</a>
+                        <h:link outcome="/vistas/inicio.xhtml" class="navbar-brand" >Intereses profesionales</h:link>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
+                            <ul class="navbar-nav mr-auto float-r"  style=" background-color: blue">
                                 <h:form>
-
-                                    <li class="nav-item active">
-                                        <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
-                                    </li><!--
+                                    <!--
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">Link</a>
                                     </li>
@@ -62,13 +59,23 @@
                                     <li class="nav-item">
                                         <a class="nav-link disabled" href="#">Disabled</a>
                                     </li>-->
-                                </h:form>
+                                    <!--                                    <li class="nav-item active">
+                                                                            <p:commandLink class="nav-link" actionListener="{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
+                                                                        </li>-->
+                                </h:form> 
                             </ul>
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            <h:form class="form-inline my-2 my-lg-0">
+                                <!--                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+                                <ul class="navbar-nav mr-auto float-r"  style="">
+                                    <h:form class="float-r " >
+                                        <li class="nav-item active">
+                                            <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
+                                        </li>
+                                    </h:form>
+                                </ul>
+                            </h:form>
 
-                            </form>
 
                         </div>
                     </nav>
@@ -81,7 +88,20 @@
                 <h:form>
                     <p:growl id="messages" showDetail="false"/>
                     <p:menu style="width: 185px;">
-                        <p:submenu label="Opciones">
+                        <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                        </p:submenu>
+                        <p:submenu label="Estudiante" rendered="#{loginController.isEstudiante()}">
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                        </p:submenu>
+                        <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
+                            <p:menuitem value="Por Institucion"  icon="ui-icon-home"/>
+                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home"/>
+                            <p:menuitem value="Por Grado"  icon="ui-icon-home"/>
+                        </p:submenu>
+                        <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
                             <p:menuitem value="Preguntas ambiente" outcome="/vistas/preguntaAmbiente/List.xhtml"  /> 
                             <p:menuitem value="Preguntas personalidad" outcome="/vistas/preguntaPersonalidad/List.xhtml"  /> 
                             <p:menuitem value="AmbientePersonalidad" outcome="/vistas/ambientePersonalidad/List.xhtml" />
@@ -104,16 +124,6 @@
                             <p:menuitem value="Pregunta page" outcome="/vistas/preguntas-page/List.xhtml" />
                             <p:menuitem value="Respuesta" outcome="/vistas/respuesta/List.xhtml" />
                             <p:menuitem value="Usuario" outcome="/vistas/usuario/List.xhtml" />
-                        </p:submenu>
-                        <p:submenu label="Admministracion">
-                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
-                        </p:submenu>
-                        <p:submenu label="Estadisticas">
-                            <p:menuitem value="External"  icon="ui-icon-home"/>
-                            <p:menuitem value="Internal" icon="ui-icon-star"/>
-                            <p:menuitem value="Internal" icon="ui-icon-star"/>
                         </p:submenu>
                     </p:menu>
                 </h:form> 

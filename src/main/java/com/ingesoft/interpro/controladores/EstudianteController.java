@@ -124,17 +124,6 @@ public class EstudianteController implements Serializable {
         }
     }
 
-    public void estudianteSeleccionado() {
-        
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "loginController");
-        PersonaController personaController = (PersonaController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "personaController");
-        Persona persona = loginController.getActual().getPersonaList().get(0);
-        personaController.setSelected(persona);
-        selected = persona.getEstudianteList().get(0);
-    }
 
     public List<Estudiante> getItems() {
         if (items == null) {

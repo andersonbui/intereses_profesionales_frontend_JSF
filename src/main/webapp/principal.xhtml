@@ -88,18 +88,21 @@
                 <h:form>
                     <p:growl id="messages" showDetail="false"/>
                     <p:menu style="width: 185px;">
-                        <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
-                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
-                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                        <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
+                            <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Estudiante" rendered="#{loginController.isEstudiante()}">
+                        <p:submenu label="Encuesta" rendered="#{loginController.permisoEstudiante()}">
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
                         <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
-                            <p:menuitem value="Por Institucion"  icon="ui-icon-home"/>
-                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home"/>
-                            <p:menuitem value="Por Grado"  icon="ui-icon-home"/>
+                            <p:menuitem value="Por Institucion"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Grado"  icon="ui-icon-home" />
+                        </p:submenu>
+                        <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
                         <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
                             <p:menuitem value="Preguntas ambiente" outcome="/vistas/preguntaAmbiente/List.xhtml"  /> 

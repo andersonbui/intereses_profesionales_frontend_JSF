@@ -39,6 +39,23 @@ public class PersonaController implements Serializable {
         this.selected = selected;
     }
 
+    public void estudianteSeleccionado(Persona persona) {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        DepartamentoController departamentoController = (DepartamentoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "departamentoController");
+        CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "ciudadController");
+        
+        if (persona.getIdCiudad() != null) {
+            ciudadController.setSelected(persona.getIdCiudad());
+            if (persona.getIdCiudad().getIdDepartamento() != null) {
+                departamentoController.setSelected(persona.getIdCiudad().getIdDepartamento());
+            }
+
+        }
+    }
+
     protected void setEmbeddableKeys() {
     }
 

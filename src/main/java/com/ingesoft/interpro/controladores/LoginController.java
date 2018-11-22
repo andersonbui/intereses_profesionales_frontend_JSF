@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class LoginController implements Serializable {
     UsuarioFacade ejbFacade;
 
     private Usuario actual;
+    private Persona personaActual;
     private SocialAuthManager socialManager;
     private Profile profile;
     String usuario;
@@ -76,11 +78,24 @@ public class LoginController implements Serializable {
         }
     }
 
+    public Persona getPersonaActual() {
+        return personaActual;
+    }
+
+    public void setPersonaActual(Persona personaActual) {
+        this.personaActual = personaActual;
+    }
+
     public boolean isAdmin() {
         return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals("administrador");
     }
-
-    public boolean isEstudiante() {
+    
+    public boolean isEstudiante(){
+        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        return nombreGrupo.equals("estudiante") ;
+    }
+    
+    public boolean permisoEstudiante() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
         return nombreGrupo.equals("estudiante") || nombreGrupo.equals("administrador") || nombreGrupo.equals("docente");
     }
@@ -181,6 +196,7 @@ public class LoginController implements Serializable {
         }
         GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
         if (gtu != null) {
+            personaActual = actual.getPersonaList().get(0);
 //            int grupo = gtu.getGrupoUsuarioPK().getIdGrupoUsuario();
             RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);
             RequestContext.getCurrentInstance().addCallbackParam("view", ruta);

@@ -55,4 +55,9 @@ public class Vistas implements Serializable {
         return ruta;
     }
 
+    public static String verMiPerfil() {
+        ruta = rutaGeneral + "/vistas/miperfil/VerPerfil.xhtml";
+        return ruta;
+    }
+
 }

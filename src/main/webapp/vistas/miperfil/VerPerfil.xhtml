@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/principal.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListPersonaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="PerfilViewForm">
+                <h:panelGroup id="datalist">
+                    <p:panelGrid columns="2" rendered="#{loginController.personaActual != null}">
+                        <h:outputText value="#{bundle.ViewPersonaLabel_nombre}"/>
+                        <h:outputText value="#{loginController.personaActual.nombre}" title="#{bundle.ViewPersonaTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_apellido}"/>
+                        <h:outputText value="#{loginController.personaActual.apellido}" title="#{bundle.ViewPersonaTitle_apellido}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_email}"/>
+                        <h:outputText value="#{loginController.personaActual.email}" title="#{bundle.ViewPersonaTitle_email}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_direccion}"/>
+                        <h:outputText value="#{loginController.personaActual.direccion}" title="#{bundle.ViewPersonaTitle_direccion}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_identificacion}"/>
+                        <h:outputText value="#{loginController.personaActual.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
+                        <h:outputText value="#{loginController.personaActual.tipoIdentificacion}" title="#{bundle.ViewPersonaTitle_tipoIdentificacion}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_fechaNacimiento}"/>
+                        <h:outputText value="#{loginController.personaActual.fechaNacimiento}" title="#{bundle.ViewPersonaTitle_fechaNacimiento}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_sexo}"/>
+                        <h:outputText value="#{loginController.personaActual.sexo}" title="#{bundle.ViewPersonaTitle_sexo}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_celular}"/>
+                        <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.ViewPersonaTitle_celular}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_tipo}"/>
+                        <h:outputText value="#{loginController.personaActual.tipo}" title="#{bundle.ViewPersonaTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_idCiudad}"/>
+                        <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" title="#{bundle.ViewPersonaTitle_idCiudad}"/>
+                        <h:outputText value="#{bundle.ViewPersonaLabel_idUsuario}"/>
+                        <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                    </p:panelGrid>
+                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil" actionListener="#{personaController.setSelected(loginController.personaActual)}" update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
+                </h:panelGroup>
+            </h:form>
+            <ui:include src="EditarPerfil.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

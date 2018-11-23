@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -166,6 +167,14 @@ public class RespuestaAmbienteController implements Serializable {
             System.out.println("----Termino de guardar Respuestas");
         }
 
+    }
+
+    public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        for (RespuestaAmbiente item : items) {
+            this.getFacade().edit(item);
+        }
+        return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

@@ -22,7 +22,7 @@
         </style>
 
         <ui:define name="content">
-            <h:form id="PreguntaCreateAmbienteForm">         
+            <h:form id="PreguntaAmbienteForm"  style="display: block;">         
                 <center>
                     <div id="display">
 
@@ -49,7 +49,7 @@
                                                 <div class="dock">
                                                     <ul>
                                                         <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>Me gusta</span>
                                                                 </em>
@@ -57,7 +57,7 @@
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>Indiferente</span>
                                                                 </em>
@@ -65,7 +65,7 @@
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>No me gusta</span>
                                                                 </em>
@@ -78,17 +78,37 @@
                                         </p:column>
                                     </p:dataGrid>
                                     <h:panelGroup  style="background-color: black;" >
-                                        <p:commandButton style="float: right" value="siguiente" ajax="true" actionListener="#{preguntaAmbienteController.siguientePaso}"
-                                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeSiguientePaso()}" >
+                                        <p:commandButton class="float-l"  value="anterior" ajax="true" actionListener="#{preguntaAmbienteController.anteriorPaso}"
+                                                         update=":PreguntaAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeAnteriorPaso()}" >
                                         </p:commandButton>
-                                        <p:commandButton style="float: left;"  value="anterior" ajax="true" actionListener="#{preguntaAmbienteController.anteriorPaso}"
-                                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeAnteriorPaso()}" >
+                                        <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{preguntaAmbienteController.siguientePaso}"
+                                                         update=":PreguntaAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeSiguientePaso()}" >
                                         </p:commandButton>
                                     </h:panelGroup>
                                 </p:panel>
                             </h:panelGrid>
                         </ui:repeat>
-
+                        <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{preguntaAmbienteController.pasoActual == preguntaAmbienteController.getUltimoPaso()}" >
+                            <p:panel header="Preguntas de Ambiente">
+                                <h1><p:progressBar value="#{preguntaAmbienteController.getnombrePaso(preguntaAmbienteController.pasoActual)}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                                <p:panelGrid styleClass="panelgrid">
+                                    <h1>Felicidades</h1>
+                                    <p>Has completado las preguntas de Ambiente</p>
+                                </p:panelGrid>
+                            </p:panel>
+                            <h:panelGroup  style="background-color: black;" >
+                                <p:commandButton class="float-l" value="anterior" ajax="true" 
+                                                 actionListener="#{preguntaAmbienteController.anteriorPaso}"
+                                                 update=":PreguntaAmbienteForm, @form" 
+                                                 >
+                                </p:commandButton>
+                                <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
+                                                 actionListener="#{respuestaAmbienteController.actualizarRespuestas()}"
+                                                 update=":PreguntaAmbienteForm, @form"  
+                                                 >
+                                </p:commandButton>
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </div>
                 </center>
             </h:form>

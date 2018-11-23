@@ -36,12 +36,14 @@
                                     </ui:repeat>
                                 </p:panelGrid>
                             </p:panel>
-                            <p:commandButton value="siguiente" ajax="true" actionListener="#{preguntaPersonalidadController.siguientePaso}"
-                                             update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeSiguientePaso()}" >
-                            </p:commandButton>
-                            <p:commandButton value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
-                                             update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeAnteriorPaso()}" >
-                            </p:commandButton>
+                            <h:panelGroup  style="background-color: black;" >
+                                <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
+                                                  update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeAnteriorPaso()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{preguntaPersonalidadController.siguientePaso}"
+                                                  update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeSiguientePaso()}" >
+                                </p:commandButton>
+                            </h:panelGroup>
                         </h:panelGroup>
                     </ui:repeat>
                     <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{preguntaPersonalidadController.pasoActual == preguntaPersonalidadController.getUltimoPaso()}" >
@@ -52,26 +54,24 @@
                                 <p>Has completado las preguntas de personalidad</p>
                             </p:panelGrid>
                         </p:panel>
-                        <p:commandButton value="siguiente" ajax="true" actionListener="#{preguntaPersonalidadController.siguientePaso}"
-                                         update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeSiguientePaso()}" >
-                        </p:commandButton>
-                        <p:commandButton value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
-                                         update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeAnteriorPaso()}" >
-                        </p:commandButton>
-                        <p:commandButton value="Guardar respuestas" ajax="true" 
-                                         actionListener="#{respuestaPersonalidadController.actualizarRespuestas()}"
-                                         update=":PreguntaCreatePersonalidadForm, @form"  onclick="PreguntaPersonalidadCreateDialog.hide()" 
-                                         rendered="{preguntaPersonalidadController.puedeAnteriorPaso()}" >
-                        </p:commandButton>
+                        <h:panelGroup  style="background-color: black; display: block;" >
+                            <p:commandButton class="float-l" value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
+                                             update=":PreguntaCreatePersonalidadForm, @form" >
+                            </p:commandButton>
+                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
+                                             actionListener="#{respuestaPersonalidadController.actualizarRespuestas()}"
+                                             update=":PreguntaCreatePersonalidadForm, @form" >
+                            </p:commandButton>
+                        </h:panelGroup>
                     </h:panelGroup>
 
                 </div>
             </h:form>
             <h:form>
-                    <p:commandButton value="Ver resumen de encuesta" ajax="true"
-                                     action="#{encuestaController.pasoResumen()}"
-                                     > 
-                    </p:commandButton>
+                <p:commandButton value="Ver resumen de encuesta" ajax="true"
+                                 action="#{encuestaController.pasoResumen()}"
+                                 > 
+                </p:commandButton>
             </h:form>
         </ui:define>
     </ui:composition>

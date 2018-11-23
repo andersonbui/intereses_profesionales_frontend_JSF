@@ -144,7 +144,7 @@ public class CodigoInstitucionController implements Serializable {
             return key;
         }
 
-        String getStringKey(java.lang.String value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -157,7 +157,7 @@ public class CodigoInstitucionController implements Serializable {
             }
             if (object instanceof CodigoInstitucion) {
                 CodigoInstitucion o = (CodigoInstitucion) object;
-                return getStringKey(o.getIdPersonaInstitucion());
+                return getStringKey(o.getIdCodigoInstitucion());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), CodigoInstitucion.class.getName()});
                 return null;

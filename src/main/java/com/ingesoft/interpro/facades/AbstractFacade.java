@@ -33,7 +33,7 @@ public abstract class AbstractFacade<T> {
     public void edit(T entity) {
         //        getEntityManager().merge(entity);
         try {
-        getEntityManager().merge(entity);
+            getEntityManager().merge(entity);
 
         } catch (EJBException e) {
             @SuppressWarnings("ThrowableResultIgnored")
@@ -46,7 +46,7 @@ public abstract class AbstractFacade<T> {
                     ConstraintViolation<? extends Object> v = it.next();
                     System.err.println(v);
                     System.err.println("==>>" + v.getMessage());
-    }
+                }
             }
 //            Assert.fail("ejb exception");
         }
@@ -82,5 +82,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }

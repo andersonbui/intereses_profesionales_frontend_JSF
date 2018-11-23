@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,4 +30,15 @@ public class CodigoInstitucionFacade extends AbstractFacade<CodigoInstitucion> {
         super(CodigoInstitucion.class);
     }
     
+     
+    public CodigoInstitucion buscarPorCodigoActivacion(String codigo) {
+        Query query = em.createNamedQuery("CodigoInstitucion.findByCodigoActivacion");
+        query.setParameter("codigoActivacion", codigo);
+        CodigoInstitucion codigoActiv = (CodigoInstitucion) query.getResultList().get(0);
+        if (codigoActiv != null) {
+            return codigoActiv;
+        }
+        return null;
+
+    }
 }

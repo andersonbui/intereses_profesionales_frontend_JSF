@@ -14,6 +14,7 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.Properties;
 import javax.ejb.EJB;
+import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -141,8 +142,12 @@ public class RegistroController implements Serializable {
     
     public void registrarse(){
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "personaController");
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PersonaController controllerPersona = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
+        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "personaCodigoInstitucionController");
+        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "codigoInstitucionController");
+        personaCodigoInstitucionController.getItems();
+        
     }
 
     public boolean logueado() {

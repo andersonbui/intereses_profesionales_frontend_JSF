@@ -81,6 +81,10 @@ public class CodigoInstitucionController implements Serializable {
         return items;
     }
 
+    public CodigoInstitucion getItem(String codigoInstitucion) {
+        return getFacade().buscarPorCodigoActivacion(codigoInstitucion);
+    }
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();

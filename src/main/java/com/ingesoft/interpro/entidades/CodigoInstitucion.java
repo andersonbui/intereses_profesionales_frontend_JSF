@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,9 +45,9 @@ public class CodigoInstitucion implements Serializable {
     @Size(max = 45)
     @Column(name = "codigoActivacion")
     private String codigoActivacion;
-    @Size(max = 45)
     @Column(name = "fechaCaducidad")
-    private String fechaCaducidad;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCaducidad;
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
@@ -52,8 +55,8 @@ public class CodigoInstitucion implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "idPersonaInstitucion")
-    private String idPersonaInstitucion;
+    @Column(name = "idCodigoInstitucion")
+    private String idCodigoInstitucion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoInstitucion")
     private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
     @JoinColumn(name = "Institucion_idInstitucion", referencedColumnName = "idInstitucion")
@@ -64,7 +67,7 @@ public class CodigoInstitucion implements Serializable {
     }
 
     public CodigoInstitucion(String idPersonaInstitucion) {
-        this.idPersonaInstitucion = idPersonaInstitucion;
+        this.idCodigoInstitucion = idPersonaInstitucion;
     }
 
     public String getCodigoActivacion() {
@@ -75,11 +78,11 @@ public class CodigoInstitucion implements Serializable {
         this.codigoActivacion = codigoActivacion;
     }
 
-    public String getFechaCaducidad() {
+    public Date getFechaCaducidad() {
         return fechaCaducidad;
     }
 
-    public void setFechaCaducidad(String fechaCaducidad) {
+    public void setFechaCaducidad(Date fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
 
@@ -92,11 +95,11 @@ public class CodigoInstitucion implements Serializable {
     }
 
     public String getIdPersonaInstitucion() {
-        return idPersonaInstitucion;
+        return idCodigoInstitucion;
     }
 
     public void setIdPersonaInstitucion(String idPersonaInstitucion) {
-        this.idPersonaInstitucion = idPersonaInstitucion;
+        this.idCodigoInstitucion = idPersonaInstitucion;
     }
 
     @XmlTransient
@@ -119,7 +122,7 @@ public class CodigoInstitucion implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idPersonaInstitucion != null ? idPersonaInstitucion.hashCode() : 0);
+        hash += (idCodigoInstitucion != null ? idCodigoInstitucion.hashCode() : 0);
         return hash;
     }
 
@@ -130,7 +133,7 @@ public class CodigoInstitucion implements Serializable {
             return false;
         }
         CodigoInstitucion other = (CodigoInstitucion) object;
-        if ((this.idPersonaInstitucion == null && other.idPersonaInstitucion != null) || (this.idPersonaInstitucion != null && !this.idPersonaInstitucion.equals(other.idPersonaInstitucion))) {
+        if ((this.idCodigoInstitucion == null && other.idCodigoInstitucion != null) || (this.idCodigoInstitucion != null && !this.idCodigoInstitucion.equals(other.idCodigoInstitucion))) {
             return false;
         }
         return true;
@@ -138,7 +141,7 @@ public class CodigoInstitucion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.CodigoInstitucion[ idPersonaInstitucion=" + idPersonaInstitucion + " ]";
+        return "com.ingeniosoft.interpro.entidades.CodigoInstitucion[ idPersonaInstitucion=" + idCodigoInstitucion + " ]";
     }
     
 }

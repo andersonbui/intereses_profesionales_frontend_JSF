@@ -68,6 +68,31 @@ public class RespuestaAmbienteController implements Serializable {
         }
     }
 
+    public String obtenerColor(String tipo) {
+        String color = "#000000";
+        switch(tipo){
+            case "REALISTA":
+                color="#008000";
+                break;
+            case "INVESTIGATIVO":
+                color="#FF0000";
+                break;
+            case "ARTISTICO":
+                color="#FFD42A";
+                break;
+            case "SOCIAL":
+                color="#0000FF";
+                break;
+            case "EMPRENDEDOR":
+                color="#FFFF00";
+                break;
+            case "CONVENCIONAL":
+                color="#00FFFF";
+                break;
+        }
+        return color;
+    }
+
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"));
     }
@@ -108,7 +133,7 @@ public class RespuestaAmbienteController implements Serializable {
         }
         return listaRespuestas;
     }
-    
+
     public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
@@ -122,12 +147,12 @@ public class RespuestaAmbienteController implements Serializable {
         (new HiloGuardado()).start();
         return items;
     }
-    
+
     public String obtenerImagen(RespuestaAmbiente respuesta) {
         String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
-    
+
     public class HiloGuardado extends Thread {
 
         public HiloGuardado() {

@@ -21,18 +21,26 @@
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Apellidos: " for="apellidos" />
                                         <p:inputText id="apellidos" value="#{personaController.selected.apellido}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
 
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
+                                        <p:selectOneMenu id="idTipoIdentificacion" value="#{loginController.personaActual.tipoIdentificacion}">
+                                            <f:selectItem itemLabel="Cedula de ciudadania" itemValue='Cedula de ciudadania' />
+                                            <f:selectItem itemLabel="DNI" itemValue='DNI' />
+                                            <f:selectItem itemLabel="NUIP" itemValue='NUIP' />
+                                            <f:selectItem itemLabel="Tarjeta de identidad" itemValue='Tarjeta de identidad' />    
+                                            <f:selectItem itemLabel="Cedula de extrangeria" itemValue='Cedula de extrangeria' />    
+                                            <f:selectItem itemLabel="Otro" itemValue='Otro' />
+                                        </p:selectOneMenu>
+                                        
                                         <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_identificacion}"/>
                                         <p:inputText value="#{loginController.personaActual.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
-                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
-                                        <p:inputText value="#{loginController.personaActual.tipoIdentificacion}" title="#{bundle.ViewPersonaTitle_tipoIdentificacion}"/>
                                         
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Fecha nacimiento: " for="fechaNacimiento" />
-                                        <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
+                                        <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" placeholder="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
 
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Sexo: " for="sexo" />
                                         <p:selectOneRadio id="sexo" value="#{personaController.selected.sexo}">
                                             <f:selectItem itemLabel="M" itemValue='M' />
-                                            <f:selectItem itemLabel="F" itemValue='F' />    
+                                            <f:selectItem itemLabel="F" itemValue='F' />
                                         </p:selectOneRadio>
                                         <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_idUsuario}"/>
                                         <p:inputText value="#{loginController.personaActual.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>

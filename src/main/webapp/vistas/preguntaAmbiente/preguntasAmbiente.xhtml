@@ -44,7 +44,7 @@
 
                                     <p:dataGrid value="#{respuestaAmbienteController.getGrupoItems(grupo, preguntaAmbienteController.getTamGrupo())}" var="item" columns="3" styleClass="panelgrid">
                                         <p:column class="">
-                                            <div  style=" background-color:rgba(255, 99, 71, 0.2); height: 200px; width: 100%">
+                                            <div  style="background-color:#{respuestaAmbienteController.obtenerColor(item.preguntaAmbiente.idTipoAmbiente.tipo)}; height: 200px; width: 100%">
                                                 <p:graphicImage name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 70%; width: 270px;" />
                                                 <div class="dock">
                                                     <ul>
@@ -53,7 +53,7 @@
                                                                 <em>
                                                                     <span>Me gusta</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Smiling_Emoji_with_Eyes_Opened.png?9898922749706957214" />
+                                                                <p:graphicImage name="img/emoji_feliz.png" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -61,7 +61,7 @@
                                                                 <em>
                                                                     <span>Indiferente</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214" />
+                                                                <p:graphicImage name="img/emoji_neutral.png" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -69,7 +69,7 @@
                                                                 <em>
                                                                     <span>No me gusta</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Mad_Emoji.png?9898922749706957214"/>
+                                                                <p:graphicImage name="img/emoji_disgustado.png" />
                                                             </p:commandLink>
                                                         </li>
                                                     </ul>

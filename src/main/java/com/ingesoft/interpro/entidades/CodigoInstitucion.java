@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -31,14 +32,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "CodigoInstitucion", catalog = "interpro2", schema = "")
+@Table(name = "CodigoInstitucion")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CodigoInstitucion.findAll", query = "SELECT c FROM CodigoInstitucion c")
     , @NamedQuery(name = "CodigoInstitucion.findByCodigoActivacion", query = "SELECT c FROM CodigoInstitucion c WHERE c.codigoActivacion = :codigoActivacion")
     , @NamedQuery(name = "CodigoInstitucion.findByFechaCaducidad", query = "SELECT c FROM CodigoInstitucion c WHERE c.fechaCaducidad = :fechaCaducidad")
     , @NamedQuery(name = "CodigoInstitucion.findByEstado", query = "SELECT c FROM CodigoInstitucion c WHERE c.estado = :estado")
-    , @NamedQuery(name = "CodigoInstitucion.findByIdPersonaInstitucion", query = "SELECT c FROM CodigoInstitucion c WHERE c.idPersonaInstitucion = :idPersonaInstitucion")})
+    , @NamedQuery(name = "CodigoInstitucion.findByIdCodigoInstitucion", query = "SELECT c FROM CodigoInstitucion c WHERE c.idCodigoInstitucion = :idCodigoInstitucion")})
 public class CodigoInstitucion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,22 +53,21 @@ public class CodigoInstitucion implements Serializable {
     @Column(name = "estado")
     private String estado;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
     @Column(name = "idCodigoInstitucion")
-    private String idCodigoInstitucion;
+    private Integer idCodigoInstitucion;
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
+    @ManyToOne(optional = false)
+    private Institucion idInstitucion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoInstitucion")
     private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
-    @JoinColumn(name = "Institucion_idInstitucion", referencedColumnName = "idInstitucion")
-    @ManyToOne(optional = false)
-    private Institucion institucionidInstitucion;
 
     public CodigoInstitucion() {
     }
 
-    public CodigoInstitucion(String idPersonaInstitucion) {
-        this.idCodigoInstitucion = idPersonaInstitucion;
+    public CodigoInstitucion(Integer idCodigoInstitucion) {
+        this.idCodigoInstitucion = idCodigoInstitucion;
     }
 
     public String getCodigoActivacion() {
@@ -94,12 +94,20 @@ public class CodigoInstitucion implements Serializable {
         this.estado = estado;
     }
 
-    public String getIdPersonaInstitucion() {
+    public Integer getIdCodigoInstitucion() {
         return idCodigoInstitucion;
     }
 
-    public void setIdPersonaInstitucion(String idPersonaInstitucion) {
-        this.idCodigoInstitucion = idPersonaInstitucion;
+    public void setIdCodigoInstitucion(Integer idCodigoInstitucion) {
+        this.idCodigoInstitucion = idCodigoInstitucion;
+    }
+
+    public Institucion getIdInstitucion() {
+        return idInstitucion;
+    }
+
+    public void setIdInstitucion(Institucion idInstitucion) {
+        this.idInstitucion = idInstitucion;
     }
 
     @XmlTransient
@@ -109,14 +117,6 @@ public class CodigoInstitucion implements Serializable {
 
     public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
         this.personaCodigoInstitucionList = personaCodigoInstitucionList;
-    }
-
-    public Institucion getInstitucionidInstitucion() {
-        return institucionidInstitucion;
-    }
-
-    public void setInstitucionidInstitucion(Institucion institucionidInstitucion) {
-        this.institucionidInstitucion = institucionidInstitucion;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class CodigoInstitucion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.CodigoInstitucion[ idPersonaInstitucion=" + idCodigoInstitucion + " ]";
+        return "com.ingesoft.interpro.entidades.CodigoInstitucion[ idCodigoInstitucion=" + idCodigoInstitucion + " ]";
     }
     
 }

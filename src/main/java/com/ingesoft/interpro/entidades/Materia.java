@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Materia", catalog = "interpro2", schema = "")
+@Table(name = "Materia")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll", query = "SELECT m FROM Materia m")
@@ -75,6 +75,14 @@ public class Materia implements Serializable {
         this.nombre = nombre;
     }
 
+    public Area getAreaidArea() {
+        return areaidArea;
+    }
+
+    public void setAreaidArea(Area areaidArea) {
+        this.areaidArea = areaidArea;
+    }
+
     @XmlTransient
     public List<Nota> getNotaList() {
         return notaList;
@@ -82,14 +90,6 @@ public class Materia implements Serializable {
 
     public void setNotaList(List<Nota> notaList) {
         this.notaList = notaList;
-    }
-
-    public Area getAreaidArea() {
-        return areaidArea;
-    }
-
-    public void setAreaidArea(Area areaidArea) {
-        this.areaidArea = areaidArea;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Materia[ idMateria=" + idMateria + " ]";
+        return "com.ingesoft.interpro.entidades.Materia[ idMateria=" + idMateria + " ]";
     }
     
 }

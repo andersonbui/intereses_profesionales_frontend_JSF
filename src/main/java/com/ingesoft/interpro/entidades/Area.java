@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Area", catalog = "interpro2", schema = "")
+@Table(name = "Area")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a")
@@ -41,7 +41,7 @@ public class Area implements Serializable {
     @Basic(optional = false)
     @Column(name = "idArea")
     private Integer idArea;
-    @Size(max = 45)
+    @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "area")
@@ -112,7 +112,7 @@ public class Area implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Area[ idArea=" + idArea + " ]";
+        return "com.ingesoft.interpro.entidades.Area[ idArea=" + idArea + " ]";
     }
     
 }

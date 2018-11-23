@@ -24,13 +24,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "Persona_CodigoInstitucion", catalog = "interpro2", schema = "")
+@Table(name = "Persona_CodigoInstitucion")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PersonaCodigoInstitucion.findAll", query = "SELECT p FROM PersonaCodigoInstitucion p")
-    , @NamedQuery(name = "PersonaCodigoInstitucion.findByIdCodigoInstitucion", query = "SELECT p FROM PersonaCodigoInstitucion p WHERE p.personaCodigoInstitucionPK.idCodigoInstitucion = :idCodigoInstitucion")
     , @NamedQuery(name = "PersonaCodigoInstitucion.findByFechaIngreso", query = "SELECT p FROM PersonaCodigoInstitucion p WHERE p.fechaIngreso = :fechaIngreso")
-    , @NamedQuery(name = "PersonaCodigoInstitucion.findByPersonaidPersona", query = "SELECT p FROM PersonaCodigoInstitucion p WHERE p.personaCodigoInstitucionPK.personaidPersona = :personaidPersona")})
+    , @NamedQuery(name = "PersonaCodigoInstitucion.findByIdPersona", query = "SELECT p FROM PersonaCodigoInstitucion p WHERE p.personaCodigoInstitucionPK.idPersona = :idPersona")
+    , @NamedQuery(name = "PersonaCodigoInstitucion.findByIdCodigoInstitucion", query = "SELECT p FROM PersonaCodigoInstitucion p WHERE p.personaCodigoInstitucionPK.idCodigoInstitucion = :idCodigoInstitucion")})
 public class PersonaCodigoInstitucion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,12 +39,12 @@ public class PersonaCodigoInstitucion implements Serializable {
     @Column(name = "fechaIngreso")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaIngreso;
-    @JoinColumn(name = "Persona_idPersona", referencedColumnName = "idPersona", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Persona persona;
-    @JoinColumn(name = "idCodigoInstitucion", referencedColumnName = "idPersonaInstitucion", insertable = false, updatable = false)
+    @JoinColumn(name = "idCodigoInstitucion", referencedColumnName = "idCodigoInstitucion", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CodigoInstitucion codigoInstitucion;
+    @JoinColumn(name = "idPersona", referencedColumnName = "idPersona", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Persona persona;
 
     public PersonaCodigoInstitucion() {
     }
@@ -53,8 +53,8 @@ public class PersonaCodigoInstitucion implements Serializable {
         this.personaCodigoInstitucionPK = personaCodigoInstitucionPK;
     }
 
-    public PersonaCodigoInstitucion(String idCodigoInstitucion, int personaidPersona) {
-        this.personaCodigoInstitucionPK = new PersonaCodigoInstitucionPK(idCodigoInstitucion, personaidPersona);
+    public PersonaCodigoInstitucion(int idPersona, int idCodigoInstitucion) {
+        this.personaCodigoInstitucionPK = new PersonaCodigoInstitucionPK(idPersona, idCodigoInstitucion);
     }
 
     public PersonaCodigoInstitucionPK getPersonaCodigoInstitucionPK() {
@@ -73,20 +73,20 @@ public class PersonaCodigoInstitucion implements Serializable {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-
     public CodigoInstitucion getCodigoInstitucion() {
         return codigoInstitucion;
     }
 
     public void setCodigoInstitucion(CodigoInstitucion codigoInstitucion) {
         this.codigoInstitucion = codigoInstitucion;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class PersonaCodigoInstitucion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.PersonaCodigoInstitucion[ personaCodigoInstitucionPK=" + personaCodigoInstitucionPK + " ]";
+        return "com.ingesoft.interpro.entidades.PersonaCodigoInstitucion[ personaCodigoInstitucionPK=" + personaCodigoInstitucionPK + " ]";
     }
     
 }

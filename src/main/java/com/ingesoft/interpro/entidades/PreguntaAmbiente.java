@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "PreguntaAmbiente", catalog = "interpro2", schema = "")
+@Table(name = "PreguntaAmbiente")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PreguntaAmbiente.findAll", query = "SELECT p FROM PreguntaAmbiente p")
@@ -104,7 +104,7 @@ public class PreguntaAmbiente implements Serializable {
     public void setIdTipoAmbiente(TipoAmbiente idTipoAmbiente) {
         this.idTipoAmbiente = idTipoAmbiente;
     }
-
+    
     @XmlTransient
     public List<RespuestaAmbiente> getRespuestaAmbienteList() {
         return respuestaAmbienteList;

@@ -28,10 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
+ *
  * @author debian
  */
 @Entity
-@Table(name = "Encuesta", catalog = "interpro2", schema = "")
+@Table(name = "Encuesta")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Encuesta.findAll", query = "SELECT e FROM Encuesta e")
@@ -59,13 +60,13 @@ public class Encuesta implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaAmbiente> respuestaAmbienteList;
     @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
-    @ManyToOne(optional = true)
+    @ManyToOne
     private AreaProfesional idAreaProfesional;
     @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")
     @ManyToOne(optional = false)
     private Estudiante idEstudiante;
     @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
-    @ManyToOne(optional = true)
+    @ManyToOne
     private Grado idGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
@@ -179,7 +180,7 @@ public class Encuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Encuesta[ idEncuesta=" + idEncuesta + " ]";
+        return "com.ingesoft.interpro.entidades.Encuesta[ idEncuesta=" + idEncuesta + " ]";
     }
     
 }

@@ -77,7 +77,7 @@ public class AreaEncuestaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.AreaEncuestaPK[ idArea=" + idArea + ", idEncuesta=" + idEncuesta + " ]";
+        return "com.ingesoft.interpro.entidades.AreaEncuestaPK[ idArea=" + idArea + ", idEncuesta=" + idEncuesta + " ]";
     }
     
 }

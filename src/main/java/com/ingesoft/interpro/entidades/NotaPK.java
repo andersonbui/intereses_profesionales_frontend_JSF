@@ -94,7 +94,7 @@ public class NotaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.NotaPK[ idMateria=" + idMateria + ", idEstudiante=" + idEstudiante + ", idGrado=" + idGrado + " ]";
+        return "com.ingesoft.interpro.entidades.NotaPK[ idMateria=" + idMateria + ", idEstudiante=" + idEstudiante + ", idGrado=" + idGrado + " ]";
     }
     
 }

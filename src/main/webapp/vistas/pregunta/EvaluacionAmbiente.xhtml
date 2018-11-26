@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+        
+    <p:panelGrid>
+        <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la ssiguiente secciones </h3>
+    <p:row>
+            <p:column>
+                <div>
+                    <p:imageSwitch effect="shuffle">
+                        <ui:repeat value="#{preguntaAmbienteController.images}" var="image">
+                            <p:graphicImage name="img/ambiente/#{image}" />
+                        </ui:repeat>
+                    </p:imageSwitch>
+                </div>
+            </p:column>
+            <p:column>
+                <p:commandButton class="tamano-boton-pregunta" value="Realista" id="realista" update="growl"  /><br/>
+                <p:commandButton class="tamano-boton-pregunta" value="Investigativo" id="investigativo" update="growl"/><br/>
+                <p:commandButton class="tamano-boton-pregunta" value="Artístico" id="artistico" update="growl" /><br/>
+                <p:commandButton class="tamano-boton-pregunta" value="Social" id="social" update="growl"/><br/>
+                <p:commandButton class="tamano-boton-pregunta" value="Emprendedor" id="emprendedor" update="growl"/><br/> 
+                <p:commandButton class="tamano-boton-pregunta" value="Convencional" id="convencional" update="growl"/>
+            </p:column>
+        </p:row>
+    </p:panelGrid>
+</html>

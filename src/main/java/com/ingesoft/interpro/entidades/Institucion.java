@@ -18,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Institucion", catalog = "interpro", schema = "")
+@Table(name = "Institucion")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Institucion.findAll", query = "SELECT i FROM Institucion i")
@@ -42,7 +41,6 @@ public class Institucion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idInstitucion")
     private Integer idInstitucion;
     @Size(max = 45)
@@ -54,8 +52,8 @@ public class Institucion implements Serializable {
     @Size(max = 45)
     @Column(name = "dane")
     private String dane;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "institucion")
-    private List<PersonahasInstitucion> personahasInstitucionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
+    private List<CodigoInstitucion> codigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
     private List<Grado> gradoList;
 
@@ -99,12 +97,12 @@ public class Institucion implements Serializable {
     }
 
     @XmlTransient
-    public List<PersonahasInstitucion> getPersonahasInstitucionList() {
-        return personahasInstitucionList;
+    public List<CodigoInstitucion> getCodigoInstitucionList() {
+        return codigoInstitucionList;
     }
 
-    public void setPersonahasInstitucionList(List<PersonahasInstitucion> personahasInstitucionList) {
-        this.personahasInstitucionList = personahasInstitucionList;
+    public void setCodigoInstitucionList(List<CodigoInstitucion> codigoInstitucionList) {
+        this.codigoInstitucionList = codigoInstitucionList;
     }
 
     @XmlTransient

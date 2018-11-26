@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/principal.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListPreguntaAmbienteTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="PreguntaAmbienteListForm">
+                <p:panel header="#{bundle.ListPreguntaAmbienteTitle}">
+                    <p:dataTable id="datalist" value="#{preguntaAmbienteController.items}" var="item"
+                                 selectionMode="single" selection="#{preguntaAmbienteController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.idPreguntaAmbiente}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPreguntaAmbienteTitle_idPreguntaAmbiente}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idPreguntaAmbiente}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPreguntaAmbienteTitle_enunciado}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.enunciado}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPreguntaAmbienteTitle_urlImagen}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.urlImagen}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPreguntaAmbienteTitle_orden}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.orden}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPreguntaAmbienteTitle_idTipoAmbiente}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTipoAmbiente}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{preguntaAmbienteController.prepareCreate}" update=":PreguntaAmbienteCreateForm" oncomplete="PF('PreguntaAmbienteCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":PreguntaAmbienteViewForm" oncomplete="PF('PreguntaAmbienteViewDialog').show()" disabled="#{empty preguntaAmbienteController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":PreguntaAmbienteEditForm" oncomplete="PF('PreguntaAmbienteEditDialog').show()" disabled="#{empty preguntaAmbienteController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{preguntaAmbienteController.destroy}" update=":growl,datalist" disabled="#{empty preguntaAmbienteController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

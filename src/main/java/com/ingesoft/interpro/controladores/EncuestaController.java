@@ -3,15 +3,22 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -27,6 +34,7 @@ public class EncuestaController implements Serializable {
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
     private List<Encuesta> items = null;
     private Encuesta selected;
+    private int pasoActivo;
 
     public EncuestaController() {
     }
@@ -49,11 +57,77 @@ public class EncuestaController implements Serializable {
         return ejbFacade;
     }
 
-    public Encuesta prepareCreate() {
-        selected = new Encuesta();
-        initializeEmbeddableKey();
-        System.out.println(" Encuesta Preparada");
-        return selected;
+    public int getPasoActivo() {
+        return pasoActivo;
+    }
+
+    public void setPasoActivo(int pasoActivo) {
+        this.pasoActivo = pasoActivo;
+    }
+
+    public void pasoPreguntasAmbiente() throws IOException {
+        this.pasoActivo = 1;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
+    }
+
+    public void pasoPreguntasPersonalidad() throws IOException {
+        this.pasoActivo = 2;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
+    }
+
+    public void pasoResumen() throws IOException {
+        this.pasoActivo = 3;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+    }
+
+    public void finalizar() throws IOException {
+        this.pasoActivo = 0;
+        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
+    }
+
+    public int getIdEncuesta() {
+        Integer valor = ejbFacade.autogenerarIdEncuesta();
+        return valor == null ? 1 : valor;
+    }
+
+//    public Encuesta prepareCreate() {
+//        selected = new Encuesta();
+//        initializeEmbeddableKey();
+//        return selected;
+//    }
+    /**
+     * Prepara y crea una encuesta con fecha y esudiante
+     *
+     * @throws java.io.IOException
+     */
+    public void prepararYCrear() throws IOException {
+        pasoActivo = 0;
+        // @TODO : Falta obtener el usuario
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+        LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
+        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
+        areaEncuestaController.prepararParaEncuesta();
+        Usuario usu = loginController.getActual();
+        System.out.println("usuario: " + usu);
+        try {
+            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+            selected = new Encuesta();
+            initializeEmbeddableKey();
+            selected.setFecha(new Date());
+            selected.setIdEstudiante(estud);
+            selected.setIdEncuesta(getIdEncuesta());
+
+            System.out.println("antes encuesta creada: " + selected);
+            create();
+//            selected = getEncuesta(selected.toString());
+            System.out.println("despues encuesta creada: " + selected);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+        } catch (Exception e) {
+            System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
+            e.printStackTrace();
+        }
+
     }
 
     public void create() {

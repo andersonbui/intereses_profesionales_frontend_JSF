@@ -20,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Materia", catalog = "interpro", schema = "")
+@Table(name = "Materia")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll", query = "SELECT m FROM Materia m")
@@ -42,7 +41,6 @@ public class Materia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idMateria")
     private Integer idMateria;
     @Size(max = 45)
@@ -77,6 +75,14 @@ public class Materia implements Serializable {
         this.nombre = nombre;
     }
 
+    public Area getAreaidArea() {
+        return areaidArea;
+    }
+
+    public void setAreaidArea(Area areaidArea) {
+        this.areaidArea = areaidArea;
+    }
+
     @XmlTransient
     public List<Nota> getNotaList() {
         return notaList;
@@ -84,14 +90,6 @@ public class Materia implements Serializable {
 
     public void setNotaList(List<Nota> notaList) {
         this.notaList = notaList;
-    }
-
-    public Area getAreaidArea() {
-        return areaidArea;
-    }
-
-    public void setAreaidArea(Area areaidArea) {
-        this.areaidArea = areaidArea;
     }
 
     @Override

@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Usuario", catalog = "interpro")
+@Table(name = "Usuario")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario")
@@ -41,7 +42,6 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idUsuario")
     private Integer idUsuario;
     @Basic(optional = false)
@@ -59,6 +59,8 @@ public class Usuario implements Serializable {
     private String estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<Persona> personaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario1")
+    private List<GrupoUsuario> grupoUsuarioList;
 
     public Usuario() {
     }
@@ -114,6 +116,15 @@ public class Usuario implements Serializable {
         this.personaList = personaList;
     }
 
+    @XmlTransient
+    public List<GrupoUsuario> getGrupoUsuarioList() {
+        return grupoUsuarioList;
+    }
+
+    public void setGrupoUsuarioList(List<GrupoUsuario> grupoUsuarioList) {
+        this.grupoUsuarioList = grupoUsuarioList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -136,7 +147,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + " ]";
+        return "com.ingeniosoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + "; usuario: "+usuario+" ]";
     }
     
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PreguntaAmbienteCreateDlg" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePreguntaAmbienteTitle}">
+            <h:form id="PreguntaAmbienteCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{preguntaAmbienteController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_idPreguntaAmbiente}" for="idPreguntaAmbiente" />
+                        <p:inputText id="idPreguntaAmbiente" value="#{preguntaAmbienteController.selected.idPreguntaAmbiente}" title="#{bundle.CreatePreguntaAmbienteTitle_idPreguntaAmbiente}" required="true" requiredMessage="#{bundle.CreatePreguntaAmbienteRequiredMessage_idPreguntaAmbiente}"/>
+                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_enunciado}" for="enunciado" />
+                        <p:inputText id="enunciado" value="#{preguntaAmbienteController.selected.enunciado}" title="#{bundle.CreatePreguntaAmbienteTitle_enunciado}" />
+                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_urlImagen}" for="urlImagen" />
+                        <p:inputText id="urlImagen" value="#{preguntaAmbienteController.selected.urlImagen}" title="#{bundle.CreatePreguntaAmbienteTitle_urlImagen}" />
+                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_orden}" for="orden" />
+                        <p:inputText id="orden" value="#{preguntaAmbienteController.selected.orden}" title="#{bundle.CreatePreguntaAmbienteTitle_orden}" />
+                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_idTipoAmbiente}" for="idTipoAmbiente" />
+                        <p:selectOneMenu id="idTipoAmbiente" value="#{preguntaAmbienteController.selected.idTipoAmbiente}" required="true" requiredMessage="#{bundle.EditPreguntaAmbienteRequiredMessage_idTipoAmbiente}">
+                            <f:selectItems value="#{tipoAmbienteController.itemsAvailableSelectOne}"
+                                           var="idTipoAmbienteItem"
+                                           itemValue="#{idTipoAmbienteItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{preguntaAmbienteController.create}" value="#{bundle.Save}" update="display,:PreguntaAmbienteListForm:datalist,:growl" oncomplete="handleSubmit(args,'PreguntaAmbienteCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PreguntaAmbienteCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -59,7 +59,6 @@ public class UsuarioController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
-            System.out.println("fallor algo");
         }
     }
 
@@ -83,20 +82,16 @@ public class UsuarioController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
-                System.out.println("selected: "+selected);
         if (selected != null) {
             setEmbeddableKeys();
             try {
-                System.out.println("dentro de try ");
                 if (persistAction != PersistAction.DELETE) {
-                    System.out.println("dentro de edit ");
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
-                System.out.println("exception: " + ex);
                 String msg = "";
                 Throwable cause = ex.getCause();
                 if (cause != null) {
@@ -108,7 +103,6 @@ public class UsuarioController implements Serializable {
                     JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
-                System.out.println("exception 2: " + ex);
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }

@@ -27,10 +27,10 @@ public class MateriaController implements Serializable {
     private com.ingesoft.interpro.facades.MateriaFacade ejbFacade;
     private List<Materia> items = null;
     private Materia selected;
-
+    
     public MateriaController() {
     }
-
+ 
     public Materia getSelected() {
         return selected;
     }
@@ -118,7 +118,9 @@ public class MateriaController implements Serializable {
     }
 
     public List<Materia> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        List<Materia> materias = getFacade().findAll();
+        System.out.println("materias: " + materias);
+        return materias;
     }
 
     @FacesConverter(forClass = Materia.class)

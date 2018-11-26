@@ -18,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Area", catalog = "interpro", schema = "")
+@Table(name = "Area")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a")
@@ -40,12 +39,13 @@ public class Area implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idArea")
     private Integer idArea;
-    @Size(max = 45)
+    @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "area")
+    private List<AreaEncuesta> areaEncuestaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "areaidArea")
     private List<Materia> materiaList;
 
@@ -70,6 +70,15 @@ public class Area implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @XmlTransient
+    public List<AreaEncuesta> getAreaEncuestaList() {
+        return areaEncuestaList;
+    }
+
+    public void setAreaEncuestaList(List<AreaEncuesta> areaEncuestaList) {
+        this.areaEncuestaList = areaEncuestaList;
     }
 
     @XmlTransient

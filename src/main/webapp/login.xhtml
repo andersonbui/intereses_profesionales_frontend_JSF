@@ -18,29 +18,31 @@
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
                 <h:form class="login100-form validate-form">
-                    
-                    <p:growl id="growl" />
+
+                    <p:growl id="growl" showDetail="true"/>
                     <span class="login100-form-title p-b-37" >
                         Iniciar sesion
                     </span>
+
                     <div rendered="#{empty loginController.profile}">
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su usuario o correo">
-                            <input id="login-username" type="text" class="form-control"
-                                   name="username"  placeholder="usuario o correo" value="#{loginController.usuario}" />
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electronico">
+                            <p:inputText id="login-username"  class="form-control"
+                                   label="username"  value="#{loginController.usuario}" />
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" >
-                            <input id="login-password" type="password" class="form-control"
-                                   name="password" placeholder="contraseña" value="#{loginController.password}" />
+                            <p:password id="login-password" class="form-control"
+                                   label="password" value="#{loginController.password}" />
                         </div>
                         <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
                         </label>
-                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" oncomplete="handleLoginRequest(xhr, status, args)" 
-                                          actionListener="#{loginController.login()}"  update="growl " value="Entrar">
+                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
+                                          actionListener="#{loginController.login()}"  update="growl " value="Entrar"
+                                          oncomplete="manejarLogin(xhr, status, args)" 
+                                          >
                         </p:commandButton>
+                        
                         <div class="text-center p-t-57 p-b-20" >
-                            <span class="txt1" >
-                                O iniciar sesion con
-                            </span>
+                            <b>O inicia sesion con</b><br/>
                         </div>
                         <div class="flex-c p-b-20" >
                             <h:commandLink class="login100-social-item bg1" action="#{loginController.conectar()}">
@@ -55,7 +57,8 @@
                         </div>
 
                         <dir class="text-center">
-                            <a href="#" class="txt2 hov1" >Crear cuenta</a>
+                            <b>No tienes una cuenta? </b><br/>
+                            <p:link outcome="/registro.xhtml" class="txt2 hov1" >Crea cuenta</p:link>
                         </dir>
                     </div>
                     <h:panelGrid rendered="#{not empty loginController.profile}">
@@ -65,17 +68,17 @@
                         <h3 class="media-heading" style="margin-left: 10px;">#{loginController.profile.fullName}</h3>
                         <h:commandLink action="#{loginController.salir()}" styleClass="btn btn-primary" value="Salir" />			
                     </h:panelGrid>
-
                 </h:form>
                 <script type="text/javascript">
-                    function handleLoginRequest(xhr, status, args) {
-                        if (args.validationFailed || !args.loggedIn) {
-                            PF('dialoglogin').jq.effect("shake", {times: 5}, 100);
-                        } else {
-                            PF('dialoglogin').hide();
-                            $('#loginLink').fadeOut();
+                    //<![CDATA[
+                    function manejarLogin(xhr, status, args) {
+                        if (!args.validationFailed && args.estaLogeado) {
+                            setTimeout(function () {
+                                window.location = args.view;
+                            }, 1000);
                         }
                     }
+                    //]]>
                 </script>
             </div>
         </div>

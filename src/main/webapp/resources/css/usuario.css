@@ -1,6 +1,6 @@
-
+/*
 body {
-    /*background: url(../img/body-bkg.png) ;*/
+    background: url(../img/body-bkg.png) ;
     background: #28c2f1;    
     background: -webkit-linear-gradient(bottom, #28c2f1, #58d6ff);
     background: -o-linear-gradient(bottom, #28c2f1, #58d6ff);
@@ -50,12 +50,12 @@ body {
     height: 110px;
     display: block;
     background: url(../img/logo-unicauca.png) no-repeat;
-}
+}*/
 
-#header .bottom{
+/*#header .bottom{
     height: 85px;
     background: black;
-    /*background: linear-gradient(to right,rgb(119,0,0)0%,rgb(203,0,0)51%,rgb(119,0,0)100%);*/
+    background: linear-gradient(to right,rgb(119,0,0)0%,rgb(203,0,0)51%,rgb(119,0,0)100%);
 }
 
 #menu {
@@ -81,14 +81,14 @@ body {
 
 .ui-widget .ui-widget{
     font-size: 14px !important;
-}
+}*/
 
 .ui-datatable th{
     font-size: 14px !important;
 }
-.ui-menu{
+/*.ui-menu{
     min-width: 100px !important;
-}
+}*/
 
 .recaudoTable td{
     text-align: center !important;
@@ -96,9 +96,9 @@ body {
     color: #000000;
 }
 
-.ui-button-text{
+/*.ui-button-text{
     font-size: 14px !important;
-}
+}*/
 
 .fechaRed{
     background-color: rgba(255,0,0,0.35) !important;
@@ -124,7 +124,7 @@ body {
 
 }
 
-.BotonesSesion
+/*.BotonesSesion
 {
     position: absolute;
     padding: 5px;
@@ -135,35 +135,35 @@ body {
     right: 30px;
     top: 10px;
     border-radius: 10px;    
-}
+}*/
 
-.ui-progressbar.ui-widget-content {
+/*.ui-progressbar.ui-widget-content {
     background-color:#dddddd;
     background-image:none;    
-}
+}*/
 
-.ui-progressbar.ui-widget.ui-widget-content.ui-corner-all{
+/*.ui-progressbar.ui-widget.ui-widget-content.ui-corner-all{
     width: 60px;
     height: 20px;
     margin: -3px;
     padding: 0px;
-}
+}*/
 
-.cursor{
+/*.cursor{
     cursor:pointer
-}
+}*/
 
-.ui-tabs {
+/*.ui-tabs {
     font-size:0.5em;
-} 
+} */
 
 .ui-panelgrid .ui-panelgrid-cell{
     vertical-align: top;
 
 }
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+/*.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     font-size: 14px;
-}
+}*/
 
 
 .ui-datatable .ui-paginator {
@@ -171,13 +171,13 @@ body {
     border:0;
 }
 
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+/*.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 1px solid #1b00ff !important;
     background: #12045d 50% 50% repeat-x !important;
     color: #FFFFFF !important;
-}
+}*/
 
-#floater {
+/*#floater {
     position: absolute;
     top: 100px;
     right: 1px;
@@ -192,7 +192,7 @@ body {
     color: white;
     text-align: center;
     box-sizing: border-box;
-}
+}*/
 
 .ui-datagrid-content {
     border: none !important;

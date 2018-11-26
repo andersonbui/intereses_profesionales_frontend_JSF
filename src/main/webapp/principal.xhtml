@@ -10,6 +10,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="/css/default.css"/>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="dock.css"/>
+        <h:outputStylesheet library="css" name="usuario.css"/>
+        <h:outputStylesheet library="css" name="steps.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
         <h:outputStylesheet name="/css/cssLayout.css"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"></link>
@@ -18,7 +21,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"></link>
         <script  src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
-        
+
         <title><ui:insert name="title">Default Title</ui:insert></title>
     </h:head>
 
@@ -30,56 +33,80 @@
             <div class="-container">
                 <div id="top" class="top layout-topbar">
                     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <a class="navbar-brand" href="#">Intereses profesionales</a>
+                        <h:link outcome="/vistas/inicio.xhtml" class="navbar-brand" >Intereses profesionales</h:link>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
+                            <ul class="navbar-nav mr-auto float-r"  style=" background-color: blue">
                                 <h:form>
-                                    
-                                <li class="nav-item active">
-                                    <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
-                                </li><!--
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Link</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Dropdown
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled" href="#">Disabled</a>
-                                </li>-->
-                                </h:form>
+                                    <!--
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Link</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Dropdown
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link disabled" href="#">Disabled</a>
+                                    </li>-->
+                                    <!--                                    <li class="nav-item active">
+                                                                            <p:commandLink class="nav-link" actionListener="{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
+                                                                        </li>-->
+                                </h:form> 
                             </ul>
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            <h:form class="form-inline my-2 my-lg-0">
+                                <!--                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+                                <ul class="navbar-nav mr-auto float-r"  style="">
+                                    <h:form class="float-r " >
+                                        <li class="nav-item active">
+                                            <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
+                                        </li>
+                                    </h:form>
+                                </ul>
+                            </h:form>
 
-                            </form>
 
                         </div>
                     </nav>
                 </div>
             </div>
         </div>
-        
+
         <div class="container">
             <div id="left-sidebar" class="left-sidebar js-pinned-left-sidebar">
                 <h:form>
                     <p:growl id="messages" showDetail="false"/>
                     <p:menu style="width: 185px;">
-                        <p:submenu label="Opciones">
-                            <p:menuitem value="Preguntas" outcome="/vistas/pregunta/List.xhtml"  /> 
+                        <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
+                            <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label="Encuesta" rendered="#{loginController.permisoEstudiante()}">
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                        </p:submenu>
+                        <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
+                            <p:menuitem value="Por Institucion"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Grado"  icon="ui-icon-home" />
+                        </p:submenu>
+                        <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
+                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                        </p:submenu>
+                        <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
+                            <p:menuitem value="Preguntas ambiente" outcome="/vistas/preguntaAmbiente/List.xhtml"  /> 
+                            <p:menuitem value="Preguntas personalidad" outcome="/vistas/preguntaPersonalidad/List.xhtml"  /> 
                             <p:menuitem value="AmbientePersonalidad" outcome="/vistas/ambientePersonalidad/List.xhtml" />
                             <p:menuitem value="Area" outcome="/vistas/area/List.xhtml" />
                             <p:menuitem value="Encuesta" outcome="/vistas/encuesta/List.xhtml" />
@@ -91,22 +118,15 @@
                             <p:menuitem value="Materia" outcome="/vistas/materia/List.xhtml" />
                             <p:menuitem value="Gusto Materia" outcome="/vistas/materiaGusto/List.xhtml" />
                             <p:menuitem value="Nota" outcome="/vistas/nota/List.xhtml" />
+                            <p:menuitem value="ciudad" outcome="/vistas/ciudad/List.xhtml" />
+                            <p:menuitem value="departamento" outcome="/vistas/departamento/List.xhtml" />
+                            <p:menuitem value="pais" outcome="/vistas/pais/List.xhtml" />
                             <p:menuitem value="Persona" outcome="/vistas/persona/List.xhtml" />
                             <p:menuitem value="PersonahasInstitucion" outcome="/vistas/personahasInstitucion/List.xhtml" />
-                            <p:menuitem value="Pregunta" outcome="/vistas/pregunta/List.xhtml" />
+                            <p:menuitem value="Pregunta"  action="#{encuestaController.prepararYCrear}"/>
                             <p:menuitem value="Pregunta page" outcome="/vistas/preguntas-page/List.xhtml" />
                             <p:menuitem value="Respuesta" outcome="/vistas/respuesta/List.xhtml" />
                             <p:menuitem value="Usuario" outcome="/vistas/usuario/List.xhtml" />
-                        </p:submenu>
-                        <p:submenu label="Admministracion">
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
-                            <p:menuitem value="Delete" actionListener="#{menuView.delete}" update="messages"  icon="ui-icon-close"/>
-                        </p:submenu>
-                        <p:submenu label="Estadisticas">
-                            <p:menuitem value="External"  icon="ui-icon-home"/>
-                            <p:menuitem value="Internal" icon="ui-icon-star"/>
-                            <p:menuitem value="Internal" icon="ui-icon-star"/>
                         </p:submenu>
                     </p:menu>
                 </h:form> 

@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
 import java.io.Serializable;
@@ -18,6 +19,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
+import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
 @SessionScoped
@@ -27,8 +30,22 @@ public class EstudianteController implements Serializable {
     private com.ingesoft.interpro.facades.EstudianteFacade ejbFacade;
     private List<Estudiante> items = null;
     private Estudiante selected;
+    private int pasoActual;
+    private boolean skip;
+    private int number;
+    private int puntos;
 
     public EstudianteController() {
+        pasoActual = 0;
+        puntos = 0;
+    }
+
+    public int getPasoActual() {
+        return pasoActual;
+    }
+
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
     }
 
     public Estudiante getSelected() {
@@ -37,6 +54,25 @@ public class EstudianteController implements Serializable {
 
     public void setSelected(Estudiante selected) {
         this.selected = selected;
+    }
+
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePaso() {
+        return pasoActual < (10);
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso");
+        pasoActual += 1;
+        return pasoActual;
     }
 
     protected void setEmbeddableKeys() {
@@ -49,9 +85,23 @@ public class EstudianteController implements Serializable {
         return ejbFacade;
     }
 
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
     public Estudiante prepareCreate() {
         selected = new Estudiante();
-        initializeEmbeddableKey();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "personaController");
+        controllerPersona.prepareCreate();
+//        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
+//                getValue(facesContext.getELContext(), null, "institucionController");
+//        initializeEmbeddableKey();
         return selected;
     }
 
@@ -73,6 +123,7 @@ public class EstudianteController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
+
 
     public List<Estudiante> getItems() {
         if (items == null) {
@@ -109,8 +160,21 @@ public class EstudianteController implements Serializable {
         }
     }
 
+    public String onFlowProcess(FlowEvent event) {
+        if (skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        } else {
+            return event.getNewStep();
+        }
+    }
+
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public Estudiante getEstudiantePorIdUsuario(java.lang.Integer idUsuario) {
+        return getFacade().findPorIdUsuario(idUsuario);
     }
 
     public List<Estudiante> getItemsAvailableSelectMany() {

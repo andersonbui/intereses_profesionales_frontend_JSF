@@ -45,7 +45,7 @@
                                     <p:dataGrid value="#{respuestaAmbienteController.getGrupoItems(grupo, preguntaAmbienteController.getTamGrupo())}" var="item" columns="3" styleClass="panelgrid">
                                         <p:column class="">
                                             <div  style="background-color:#{respuestaAmbienteController.obtenerColor(item.preguntaAmbiente.idTipoAmbiente.tipo)}; height: 200px; width: 100%">
-                                                <p:graphicImage name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 70%; width: 270px;" />
+                                                <p:graphicImage title="#{respuestaAmbienteController.obtenerEnunciado(item)}" name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 70%; width: 270px;" />
                                                 <div class="dock">
                                                     <ul>
                                                         <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">

@@ -37,9 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Encuesta.findAll", query = "SELECT e FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
+    , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
-    , @NamedQuery(name = "Encuesta.findByPuntaje", query = "SELECT e FROM Encuesta e WHERE e.puntaje = :puntaje")
-    , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")})
+    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")})
 public class Encuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,12 +53,16 @@ public class Encuesta implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @Column(name = "puntaje")
-    private Integer puntaje;
+    @Column(name = "personalidad")
+    private Character personalidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<AreaEncuesta> areaEncuestaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaAmbiente> respuestaAmbienteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<ResultadoPorAmbiente> resultadoPorAmbienteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<RespuestaPorPersonalidad> respuestaPorPersonalidadList;
     @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
     @ManyToOne
     private AreaProfesional idAreaProfesional;
@@ -99,12 +103,12 @@ public class Encuesta implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getPuntaje() {
-        return puntaje;
+    public Character getPersonalidad() {
+        return personalidad;
     }
 
-    public void setPuntaje(Integer puntaje) {
-        this.puntaje = puntaje;
+    public void setPersonalidad(Character personalidad) {
+        this.personalidad = personalidad;
     }
 
     @XmlTransient
@@ -123,6 +127,24 @@ public class Encuesta implements Serializable {
 
     public void setRespuestaAmbienteList(List<RespuestaAmbiente> respuestaAmbienteList) {
         this.respuestaAmbienteList = respuestaAmbienteList;
+    }
+
+    @XmlTransient
+    public List<ResultadoPorAmbiente> getResultadoPorAmbienteList() {
+        return resultadoPorAmbienteList;
+    }
+
+    public void setResultadoPorAmbienteList(List<ResultadoPorAmbiente> resultadoPorAmbienteList) {
+        this.resultadoPorAmbienteList = resultadoPorAmbienteList;
+    }
+
+    @XmlTransient
+    public List<RespuestaPorPersonalidad> getRespuestaPorPersonalidadList() {
+        return respuestaPorPersonalidadList;
+    }
+
+    public void setRespuestaPorPersonalidadList(List<RespuestaPorPersonalidad> respuestaPorPersonalidadList) {
+        this.respuestaPorPersonalidadList = respuestaPorPersonalidadList;
     }
 
     public AreaProfesional getIdAreaProfesional() {

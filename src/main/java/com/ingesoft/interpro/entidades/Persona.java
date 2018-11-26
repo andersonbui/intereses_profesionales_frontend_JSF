@@ -209,21 +209,21 @@ public class Persona implements Serializable {
     }
 
     @XmlTransient
-    public List<PersonaCodigoInstitucion> getPersonaCodigoInstitucionList() {
-        return personaCodigoInstitucionList;
-    }
-
-    public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
-        this.personaCodigoInstitucionList = personaCodigoInstitucionList;
-    }
-
-    @XmlTransient
     public List<Estudiante> getEstudianteList() {
         return estudianteList;
     }
 
     public void setEstudianteList(List<Estudiante> estudianteList) {
         this.estudianteList = estudianteList;
+    }
+
+    @XmlTransient
+    public List<PersonaCodigoInstitucion> getPersonaCodigoInstitucionList() {
+        return personaCodigoInstitucionList;
+    }
+
+    public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
+        this.personaCodigoInstitucionList = personaCodigoInstitucionList;
     }
 
     @Override

@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "AreaEncuesta", catalog = "interpro2", schema = "")
+@Table(name = "AreaEncuesta")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AreaEncuesta.findAll", query = "SELECT a FROM AreaEncuesta a")
@@ -163,7 +163,7 @@ public class AreaEncuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
+        return "com.ingesoft.interpro.entidades.AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
     }
-
+    
 }

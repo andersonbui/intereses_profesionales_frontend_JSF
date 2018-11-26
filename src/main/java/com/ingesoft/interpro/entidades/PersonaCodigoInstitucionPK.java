@@ -10,7 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -21,43 +20,42 @@ public class PersonaCodigoInstitucionPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "idCodigoInstitucion")
-    private String idCodigoInstitucion;
+    @Column(name = "idPersona")
+    private int idPersona;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Persona_idPersona")
-    private int personaidPersona;
+    @Column(name = "idCodigoInstitucion")
+    private int idCodigoInstitucion;
 
     public PersonaCodigoInstitucionPK() {
     }
 
-    public PersonaCodigoInstitucionPK(String idCodigoInstitucion, int personaidPersona) {
+    public PersonaCodigoInstitucionPK(int idPersona, int idCodigoInstitucion) {
+        this.idPersona = idPersona;
         this.idCodigoInstitucion = idCodigoInstitucion;
-        this.personaidPersona = personaidPersona;
     }
 
-    public String getIdCodigoInstitucion() {
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(int idPersona) {
+        this.idPersona = idPersona;
+    }
+
+    public int getIdCodigoInstitucion() {
         return idCodigoInstitucion;
     }
 
-    public void setIdCodigoInstitucion(String idCodigoInstitucion) {
+    public void setIdCodigoInstitucion(int idCodigoInstitucion) {
         this.idCodigoInstitucion = idCodigoInstitucion;
-    }
-
-    public int getPersonaidPersona() {
-        return personaidPersona;
-    }
-
-    public void setPersonaidPersona(int personaidPersona) {
-        this.personaidPersona = personaidPersona;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idCodigoInstitucion != null ? idCodigoInstitucion.hashCode() : 0);
-        hash += (int) personaidPersona;
+        hash += (int) idPersona;
+        hash += (int) idCodigoInstitucion;
         return hash;
     }
 
@@ -68,10 +66,10 @@ public class PersonaCodigoInstitucionPK implements Serializable {
             return false;
         }
         PersonaCodigoInstitucionPK other = (PersonaCodigoInstitucionPK) object;
-        if ((this.idCodigoInstitucion == null && other.idCodigoInstitucion != null) || (this.idCodigoInstitucion != null && !this.idCodigoInstitucion.equals(other.idCodigoInstitucion))) {
+        if (this.idPersona != other.idPersona) {
             return false;
         }
-        if (this.personaidPersona != other.personaidPersona) {
+        if (this.idCodigoInstitucion != other.idCodigoInstitucion) {
             return false;
         }
         return true;
@@ -79,7 +77,7 @@ public class PersonaCodigoInstitucionPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.PersonaCodigoInstitucionPK[ idCodigoInstitucion=" + idCodigoInstitucion + ", personaidPersona=" + personaidPersona + " ]";
+        return "com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK[ idPersona=" + idPersona + ", idCodigoInstitucion=" + idCodigoInstitucion + " ]";
     }
     
 }

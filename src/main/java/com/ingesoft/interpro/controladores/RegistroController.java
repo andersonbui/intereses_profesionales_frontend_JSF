@@ -5,15 +5,19 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
+import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 import javax.ejb.EJB;
+import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -47,7 +51,8 @@ public class RegistroController implements Serializable {
     String codigo;
     String usuario;
     String password;
-    boolean logueado;
+    boolean verificado;
+    CodigoInstitucion codInstitucion;
 
     private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
     private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
@@ -55,7 +60,7 @@ public class RegistroController implements Serializable {
     private final String provider = "facebook";
 
     public RegistroController() {
-        logueado = false;
+        verificado = false;
     }
 
     public void conectar() {
@@ -138,14 +143,34 @@ public class RegistroController implements Serializable {
     public UsuarioFacade getFacade() {
         return ejbFacade;
     }
-    
-    public void registrarse(){
+
+    public void verificarCodigo() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "personaController");
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "codigoInstitucionController");
+        codInstitucion = codigoInstitucionController.getCodigoInstitucion(codigo);
+        if (codInstitucion != null) {
+            verificado = true;
+        }
     }
 
-    public boolean logueado() {
-        return logueado;
+    public void registrarse() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PersonaController controllerPersona = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
+        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "personaCodigoInstitucionController");
+        if (codInstitucion != null) {
+            personaCodigoInstitucionController.create();
+            personaCodigoInstitucionController.getSelected().setCodigoInstitucion(codInstitucion);
+            personaCodigoInstitucionController.getSelected().setFechaIngreso(new Date());
+            personaCodigoInstitucionController.getSelected().setPersona(controllerPersona.getSelected());
+            personaCodigoInstitucionController.getSelected().setPersonaCodigoInstitucionPK(new PersonaCodigoInstitucionPK());
+        }
+
     }
+
+    public boolean isVerificado() {
+        return verificado;
+    }
+
 }

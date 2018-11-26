@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "Nota", catalog = "interpro2", schema = "")
+@Table(name = "Nota")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n")
@@ -121,7 +121,7 @@ public class Nota implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
+        return "com.ingesoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
     }
     
 }

@@ -8,7 +8,6 @@ package com.ingesoft.interpro.entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "AreaProfesional", catalog = "interpro2", schema = "")
+@Table(name = "AreaProfesional")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AreaProfesional.findAll", query = "SELECT a FROM AreaProfesional a")
@@ -43,7 +42,7 @@ public class AreaProfesional implements Serializable {
     @Size(max = 45)
     @Column(name = "areal")
     private String areal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAreaProfesional")
+    @OneToMany(mappedBy = "idAreaProfesional")
     private List<Encuesta> encuestaList;
 
     public AreaProfesional() {
@@ -100,7 +99,7 @@ public class AreaProfesional implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.AreaProfesional[ idAreaProfesional=" + idAreaProfesional + " ]";
+        return "com.ingesoft.interpro.entidades.AreaProfesional[ idAreaProfesional=" + idAreaProfesional + " ]";
     }
     
 }

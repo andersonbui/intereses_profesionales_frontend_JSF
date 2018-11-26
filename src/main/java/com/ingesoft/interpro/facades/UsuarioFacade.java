@@ -29,14 +29,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
+
     public Usuario buscarPorUsuario(String name) {
         Query query = em.createNamedQuery("Usuario.findByUsuario");
         query.setParameter("usuario", name);
         Usuario findUsuario = (Usuario) query.getResultList().get(0);
         if (findUsuario != null) {
             return findUsuario;
-}
+        }
         return null;
 
     }

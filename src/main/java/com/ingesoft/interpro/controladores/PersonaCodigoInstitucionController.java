@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.PersonaCodigoInstitucion;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK;
 import com.ingesoft.interpro.facades.PersonaCodigoInstitucionFacade;
 
 import java.io.Serializable;
@@ -40,8 +41,8 @@ public class PersonaCodigoInstitucionController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
-        selected.getPersonaCodigoInstitucionPK().setIdCodigoInstitucion(selected.getCodigoInstitucion().getIdPersonaInstitucion());
-        selected.getPersonaCodigoInstitucionPK().setPersonaidPersona(selected.getPersona().getIdPersona());
+        selected.getPersonaCodigoInstitucionPK().setIdCodigoInstitucion(selected.getCodigoInstitucion().getIdCodigoInstitucion());
+        selected.getPersonaCodigoInstitucionPK().setIdPersona(selected.getPersona().getIdPersona());
     }
 
     protected void initializeEmbeddableKey() {
@@ -83,7 +84,7 @@ public class PersonaCodigoInstitucionController implements Serializable {
         }
         return items;
     }
-
+    
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -112,7 +113,7 @@ public class PersonaCodigoInstitucionController implements Serializable {
         }
     }
 
-    public PersonaCodigoInstitucion getPersonaCodigoInstitucion(com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK id) {
+    public PersonaCodigoInstitucion getPersonaCodigoInstitucion(PersonaCodigoInstitucionPK id) {
         return getFacade().find(id);
     }
 
@@ -140,20 +141,20 @@ public class PersonaCodigoInstitucionController implements Serializable {
             return controller.getPersonaCodigoInstitucion(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK getKey(String value) {
-            com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK key;
+        PersonaCodigoInstitucionPK getKey(String value) {
+            PersonaCodigoInstitucionPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK();
-            key.setIdCodigoInstitucion(values[0]);
-            key.setPersonaidPersona(Integer.parseInt(values[1]));
+            key = new PersonaCodigoInstitucionPK();
+            key.setIdPersona(Integer.parseInt(values[0]));
+            key.setIdCodigoInstitucion(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK value) {
+        String getStringKey(PersonaCodigoInstitucionPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdCodigoInstitucion());
+            sb.append(value.getIdPersona());
             sb.append(SEPARATOR);
-            sb.append(value.getPersonaidPersona());
+            sb.append(value.getIdCodigoInstitucion());
             return sb.toString();
         }
 

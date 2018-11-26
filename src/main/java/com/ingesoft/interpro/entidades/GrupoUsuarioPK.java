@@ -79,7 +79,7 @@ public class GrupoUsuarioPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.GrupoUsuarioPK[ idGrupoUsuario=" + idGrupoUsuario + ", idUsuario=" + idUsuario + " ]";
+        return "com.ingesoft.interpro.entidades.GrupoUsuarioPK[ idGrupoUsuario=" + idGrupoUsuario + ", idUsuario=" + idUsuario + " ]";
     }
     
 }

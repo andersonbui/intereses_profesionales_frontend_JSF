@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Grado", catalog = "interpro2", schema = "")
+@Table(name = "Grado")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Grado.findAll", query = "SELECT g FROM Grado g")
@@ -55,7 +55,7 @@ public class Grado implements Serializable {
     private String grado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGrado")
+    @OneToMany(mappedBy = "idGrado")
     private List<Encuesta> encuestaList;
     @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
     @ManyToOne(optional = false)
@@ -97,6 +97,14 @@ public class Grado implements Serializable {
         this.grado = grado;
     }
 
+    public Institucion getIdInstitucion() {
+        return idInstitucion;
+    }
+
+    public void setIdInstitucion(Institucion idInstitucion) {
+        this.idInstitucion = idInstitucion;
+    }
+
     @XmlTransient
     public List<Nota> getNotaList() {
         return notaList;
@@ -113,14 +121,6 @@ public class Grado implements Serializable {
 
     public void setEncuestaList(List<Encuesta> encuestaList) {
         this.encuestaList = encuestaList;
-    }
-
-    public Institucion getIdInstitucion() {
-        return idInstitucion;
-    }
-
-    public void setIdInstitucion(Institucion idInstitucion) {
-        this.idInstitucion = idInstitucion;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class Grado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
+        return "com.ingesoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
     }
     
 }

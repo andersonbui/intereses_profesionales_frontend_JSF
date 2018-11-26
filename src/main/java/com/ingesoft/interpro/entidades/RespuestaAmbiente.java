@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "RespuestaAmbiente", catalog = "interpro2", schema = "")
+@Table(name = "RespuestaAmbiente")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RespuestaAmbiente.findAll", query = "SELECT r FROM RespuestaAmbiente r")
@@ -35,8 +33,7 @@ public class RespuestaAmbiente implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected RespuestaAmbientePK respuestaAmbientePK;
-    @Max(value=2)  
-    @Min(value=1)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "respuesta")
     private Float respuesta;
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)

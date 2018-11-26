@@ -54,7 +54,7 @@ public class PreguntaAmbienteController implements Serializable {
         puntos = 0;
         gruposPreguntas = null;
     }
-    
+
     @PostConstruct
     public void init() {
         images = new ArrayList<String>();
@@ -180,12 +180,13 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
     public List<Integer> getGrupos() {
+        gruposPreguntas=null;
         if (gruposPreguntas == null) {
             gruposPreguntas = new ArrayList<>();
             items = getItems();
             numGrupos = items.size() / tamGrupo;
             numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-
+            numGrupos = 2;
             for (int i = 1; i <= numGrupos; i++) {
                 gruposPreguntas.add(i);
             }
@@ -449,6 +450,4 @@ public class PreguntaAmbienteController implements Serializable {
 
     }
 
-    
-    
 }

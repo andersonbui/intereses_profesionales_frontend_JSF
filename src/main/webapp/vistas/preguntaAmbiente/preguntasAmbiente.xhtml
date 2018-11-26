@@ -22,7 +22,7 @@
         </style>
 
         <ui:define name="content">
-            <h:form id="PreguntaCreateAmbienteForm">         
+            <h:form id="PreguntaAmbienteForm"  style="display: block;">         
                 <center>
                     <div id="display">
 
@@ -44,32 +44,32 @@
 
                                     <p:dataGrid value="#{respuestaAmbienteController.getGrupoItems(grupo, preguntaAmbienteController.getTamGrupo())}" var="item" columns="3" styleClass="panelgrid">
                                         <p:column class="">
-                                            <div  style=" background-color:rgba(255, 99, 71, 0.2); height: 200px; width: 100%">
+                                            <div  style="background-color:#{respuestaAmbienteController.obtenerColor(item.preguntaAmbiente.idTipoAmbiente.tipo)}; height: 200px; width: 100%">
                                                 <p:graphicImage name="#{respuestaAmbienteController.obtenerImagen(item)}" style=" height: 70%; width: 270px;" />
                                                 <div class="dock">
                                                     <ul>
                                                         <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.meGusta(item)}" styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>Me gusta</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Smiling_Emoji_with_Eyes_Opened.png?9898922749706957214" />
+                                                                <p:graphicImage name="img/emoji_feliz.png" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.indiferente(item)}"  styleClass="#{item.respuesta==0.5? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>Indiferente</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214" />
+                                                                <p:graphicImage name="img/emoji_neutral.png" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaCreateAmbienteForm">
+                                                            <p:commandLink action="#{preguntaAmbienteController.noMeGusta(item)}" styleClass="#{item.respuesta==0.0? 'seleccionado' : ''}"  update=":PreguntaAmbienteForm">
                                                                 <em>
                                                                     <span>No me gusta</span>
                                                                 </em>
-                                                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Mad_Emoji.png?9898922749706957214"/>
+                                                                <p:graphicImage name="img/emoji_disgustado.png" />
                                                             </p:commandLink>
                                                         </li>
                                                     </ul>
@@ -78,17 +78,37 @@
                                         </p:column>
                                     </p:dataGrid>
                                     <h:panelGroup  style="background-color: black;" >
-                                        <p:commandButton style="float: right" value="siguiente" ajax="true" actionListener="#{preguntaAmbienteController.siguientePaso}"
-                                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeSiguientePaso()}" >
+                                        <p:commandButton class="float-l"  value="anterior" ajax="true" actionListener="#{preguntaAmbienteController.anteriorPaso}"
+                                                         update=":PreguntaAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeAnteriorPaso()}" >
                                         </p:commandButton>
-                                        <p:commandButton style="float: left;"  value="anterior" ajax="true" actionListener="#{preguntaAmbienteController.anteriorPaso}"
-                                                         update=":PreguntaCreateAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeAnteriorPaso()}" >
+                                        <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{preguntaAmbienteController.siguientePaso}"
+                                                         update=":PreguntaAmbienteForm, @form" rendered="#{preguntaAmbienteController.puedeSiguientePaso()}" >
                                         </p:commandButton>
                                     </h:panelGroup>
                                 </p:panel>
                             </h:panelGrid>
                         </ui:repeat>
-
+                        <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{preguntaAmbienteController.pasoActual == preguntaAmbienteController.getUltimoPaso()}" >
+                            <p:panel header="Preguntas de Ambiente">
+                                <h1><p:progressBar value="#{preguntaAmbienteController.getnombrePaso(preguntaAmbienteController.pasoActual)}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                                <p:panelGrid styleClass="panelgrid">
+                                    <h1>Felicidades</h1>
+                                    <p>Has completado las preguntas de Ambiente</p>
+                                </p:panelGrid>
+                            </p:panel>
+                            <h:panelGroup  style="background-color: black;" >
+                                <p:commandButton class="float-l" value="anterior" ajax="true" 
+                                                 actionListener="#{preguntaAmbienteController.anteriorPaso}"
+                                                 update=":PreguntaAmbienteForm, @form" 
+                                                 >
+                                </p:commandButton>
+                                <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
+                                                 actionListener="#{respuestaAmbienteController.actualizarRespuestas()}"
+                                                 update=":PreguntaAmbienteForm, @form"  
+                                                 >
+                                </p:commandButton>
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </div>
                 </center>
             </h:form>

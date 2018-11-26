@@ -32,7 +32,7 @@ import javax.faces.event.ActionEvent;
 public class PreguntaPersonalidadController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+
     private int tamGrupo;
     public boolean skip;
     @EJB
@@ -41,37 +41,39 @@ public class PreguntaPersonalidadController implements Serializable {
     private PreguntaPersonalidad selected;
     private int pasoActual;
     private int numGrupos;
-    
+
     public PreguntaPersonalidadController() {
         tamGrupo = 4;
         pasoActual = 0;
-        numGrupos=1;
+        numGrupos = 1;
     }
 
     public int getPasoActual() {
         return pasoActual;
     }
+
     public int getUltimoPaso() {
         return (numGrupos);
     }
+
     public void setPasoActual(int pasoActual) {
         this.pasoActual = pasoActual;
     }
-    
+
     public int getStep() {
         return pasoActual;
     }
 
     public int getnombrePaso(int i) {
-        return (i*100/numGrupos);
+        return (i * 100 / numGrupos);
     }
-    
+
     public boolean puedeAnteriorPaso() {
         return pasoActual > 0;
     }
 
     public boolean puedeSiguientePaso() {
-        return pasoActual < (numGrupos );
+        return pasoActual < (numGrupos);
     }
 
     public int anteriorPaso() {
@@ -114,27 +116,28 @@ public class PreguntaPersonalidadController implements Serializable {
 //        System.out.println("items: " + items);
         numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        numGrupos = 2;
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
         //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
-    
+
     public List<PreguntaPersonalidad> getGrupoItems(int grupo) {
         getItems();
         List<PreguntaPersonalidad> listaPreguntas = new ArrayList<>();
         for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
             if (i < items.size()) {
                 listaPreguntas.add(items.get(i));
-            }else{
+            } else {
                 break;
             }
         }
-       // System.out.println("gruposPreguntas: "+listaPreguntas);
+        // System.out.println("gruposPreguntas: "+listaPreguntas);
         return listaPreguntas;
     }
-    
+
     public PreguntaPersonalidad prepareCreate() {
         selected = new PreguntaPersonalidad();
         initializeEmbeddableKey();
@@ -143,16 +146,16 @@ public class PreguntaPersonalidadController implements Serializable {
     }
 
     public PreguntaPersonalidad preparePreguntas() {
-        pasoActual= 0;
+        pasoActual = 0;
         return null;
     }
-    
-    public void preparePreguntasPersonalidad(Usuario usuario, Encuesta encuesta) { 
+
+    public void preparePreguntasPersonalidad(Usuario usuario, Encuesta encuesta) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaPersonalidadController respuestaController = (RespuestaPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPersonalidadController");
         items = getItems();
-        respuestaController.prepararRespuestas(items, encuesta); 
+        respuestaController.prepararRespuestas(items, encuesta);
     }
 
     public void create() {

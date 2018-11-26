@@ -119,6 +119,9 @@ public class RespuestaPersonalidadController implements Serializable {
 
     public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        for (RespuestaPersonalidad item : items) {
+            this.getFacade().edit(item);
+        }
         return items;
     }
 

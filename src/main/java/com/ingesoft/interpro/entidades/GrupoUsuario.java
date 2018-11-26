@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "GrupoUsuario", catalog = "interpro2", schema = "")
+@Table(name = "GrupoUsuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
@@ -98,7 +98,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
+        return "com.ingesoft.interpro.entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
     }
     
 }

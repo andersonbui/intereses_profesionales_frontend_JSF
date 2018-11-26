@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "Estudiante", catalog = "interpro2", schema = "")
+@Table(name = "Estudiante")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Estudiante.findAll", query = "SELECT e FROM Estudiante e")
@@ -148,6 +148,14 @@ public class Estudiante implements Serializable {
         this.personalidad = personalidad;
     }
 
+    public Persona getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(Persona idPersona) {
+        this.idPersona = idPersona;
+    }
+
     @XmlTransient
     public List<Nota> getNotaList() {
         return notaList;
@@ -155,14 +163,6 @@ public class Estudiante implements Serializable {
 
     public void setNotaList(List<Nota> notaList) {
         this.notaList = notaList;
-    }
-
-    public Persona getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Persona idPersona) {
-        this.idPersona = idPersona;
     }
 
     @XmlTransient
@@ -196,7 +196,7 @@ public class Estudiante implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
+        return "com.ingesoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
     }
     
 }

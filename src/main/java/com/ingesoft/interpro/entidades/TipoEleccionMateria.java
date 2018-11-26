@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author debian
  */
 @Entity
-@Table(name = "TipoEleccionMateria", catalog = "interpro2", schema = "")
+@Table(name = "TipoEleccionMateria")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoEleccionMateria.findAll", query = "SELECT t FROM TipoEleccionMateria t")
@@ -100,7 +100,7 @@ public class TipoEleccionMateria implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.TipoEleccionMateria[ idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
+        return "com.ingesoft.interpro.entidades.TipoEleccionMateria[ idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
     }
     
 }

@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,6 +69,31 @@ public class RespuestaAmbienteController implements Serializable {
         }
     }
 
+    public String obtenerColor(String tipo) {
+        String color = "#000000";
+        switch(tipo){
+            case "REALISTA":
+                color="#008000";
+                break;
+            case "INVESTIGATIVO":
+                color="#FF0000";
+                break;
+            case "ARTISTICO":
+                color="#FFD42A";
+                break;
+            case "SOCIAL":
+                color="#0000FF";
+                break;
+            case "EMPRENDEDOR":
+                color="#FFFF00";
+                break;
+            case "CONVENCIONAL":
+                color="#00FFFF";
+                break;
+        }
+        return color;
+    }
+
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"));
     }
@@ -108,7 +134,7 @@ public class RespuestaAmbienteController implements Serializable {
         }
         return listaRespuestas;
     }
-    
+
     public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
@@ -122,12 +148,12 @@ public class RespuestaAmbienteController implements Serializable {
         (new HiloGuardado()).start();
         return items;
     }
-    
+
     public String obtenerImagen(RespuestaAmbiente respuesta) {
         String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
-    
+
     public class HiloGuardado extends Thread {
 
         public HiloGuardado() {
@@ -141,6 +167,14 @@ public class RespuestaAmbienteController implements Serializable {
             System.out.println("----Termino de guardar Respuestas");
         }
 
+    }
+
+    public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        for (RespuestaAmbiente item : items) {
+            this.getFacade().edit(item);
+        }
+        return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

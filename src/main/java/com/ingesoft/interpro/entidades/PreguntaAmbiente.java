@@ -52,11 +52,11 @@ public class PreguntaAmbiente implements Serializable {
     private String urlImagen;
     @Column(name = "orden")
     private Integer orden;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preguntaAmbiente")
+    private List<RespuestaAmbiente> respuestaAmbienteList;
     @JoinColumn(name = "idTipoAmbiente", referencedColumnName = "idTipoAmbiente")
     @ManyToOne(optional = false)
     private TipoAmbiente idTipoAmbiente;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preguntaAmbiente")
-    private List<RespuestaAmbiente> respuestaAmbienteList;
 
     public PreguntaAmbiente() {
     }
@@ -97,14 +97,6 @@ public class PreguntaAmbiente implements Serializable {
         this.orden = orden;
     }
 
-    public TipoAmbiente getIdTipoAmbiente() {
-        return idTipoAmbiente;
-    }
-
-    public void setIdTipoAmbiente(TipoAmbiente idTipoAmbiente) {
-        this.idTipoAmbiente = idTipoAmbiente;
-    }
-    
     @XmlTransient
     public List<RespuestaAmbiente> getRespuestaAmbienteList() {
         return respuestaAmbienteList;
@@ -112,6 +104,14 @@ public class PreguntaAmbiente implements Serializable {
 
     public void setRespuestaAmbienteList(List<RespuestaAmbiente> respuestaAmbienteList) {
         this.respuestaAmbienteList = respuestaAmbienteList;
+    }
+
+    public TipoAmbiente getIdTipoAmbiente() {
+        return idTipoAmbiente;
+    }
+
+    public void setIdTipoAmbiente(TipoAmbiente idTipoAmbiente) {
+        this.idTipoAmbiente = idTipoAmbiente;
     }
 
     @Override

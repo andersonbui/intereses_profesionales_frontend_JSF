@@ -46,11 +46,11 @@ public class Materia implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
-    private List<Nota> notaList;
     @JoinColumn(name = "Area_idArea", referencedColumnName = "idArea")
     @ManyToOne(optional = false)
     private Area areaidArea;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<Nota> notaList;
 
     public Materia() {
     }

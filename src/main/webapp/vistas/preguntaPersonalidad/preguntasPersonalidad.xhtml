@@ -40,7 +40,10 @@
                                               update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
                             </p:commandButton>
                             <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePaso()}" >
+                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
+                            </p:commandButton>
+                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaPersonalidadController.finalizarEncuesta}"
+                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
                     </h:panelGroup>
@@ -57,7 +60,6 @@
                                              update=":PreguntaCreatePersonalidadForm, @form" >
                             </p:commandButton>
                             <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                             actionListener="#{respuestaPersonalidadController.actualizarRespuestas()}"
                                              update=":PreguntaCreatePersonalidadForm, @form" >
                             </p:commandButton>
                         </h:panelGroup>

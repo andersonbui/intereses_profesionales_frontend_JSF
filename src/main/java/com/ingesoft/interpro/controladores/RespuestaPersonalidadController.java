@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
+import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -33,6 +35,7 @@ public class RespuestaPersonalidadController implements Serializable {
     private List<RespuestaPersonalidad> items = null;
     private RespuestaPersonalidad selected;
     private List<RespuestaPersonalidad> grupo = null;
+    Encuesta EncuestaAcutal;
 
     private final int tamGrupo;
     private int pasoActual;
@@ -110,8 +113,12 @@ public class RespuestaPersonalidadController implements Serializable {
         return pasoActual > 0;
     }
 
-    public boolean puedeSiguientePaso() {
-        return pasoActual < (numGrupos);
+    public boolean puedeSiguientePasoNoUltimo() {
+        return pasoActual < (numGrupos - 1);
+    }
+
+    public boolean esPenultimoPaso() {
+        return pasoActual == (numGrupos - 1);
     }
 
     public int anteriorPaso() {
@@ -127,6 +134,58 @@ public class RespuestaPersonalidadController implements Serializable {
         return pasoActual;
     }
 
+    public int finalizarEncuesta(ActionEvent actionEvent) {
+//        grupo = getGrupoItems(pasoActual + 1);
+        for (RespuestaPersonalidad respuesta : grupo) {
+            getFacade().edit(respuesta);
+        }
+        pasoActual += 1;
+
+        // realizar estadistica de respuestas
+        realizarEstadisticas();
+
+        return pasoActual;
+    }
+
+    private void realizarEstadisticas() {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
+
+        Elemento[] valores = new Elemento[4];
+
+        valores[0] = new Elemento();
+        valores[1] = new Elemento();
+        valores[2] = new Elemento();
+        valores[3] = new Elemento();
+
+        valores[0].valor = 18;
+        valores[1].valor = 30;
+        valores[2].valor = 30;
+        valores[3].valor = 12;
+        for (RespuestaPersonalidad respuestaPersonalidad : items) {
+            TipoPersonalidad tipopersonalidad = respuestaPersonalidad.getPreguntaPersonalidad().getIdTipoPersonalidad();
+            int indice = tipopersonalidad.getIdTipoPersonalidad() - 1;
+            valores[indice].tipoPer = tipopersonalidad;
+            int signo = respuestaPersonalidad.getPreguntaPersonalidad().getSuma() ? 1 : -1;
+            valores[indice].valor += signo * respuestaPersonalidad.getRespuesta();
+        }
+        for (int i = 0; i < valores.length; i++) {
+            respuestaPorPersonalidadController.prepareCreate();
+            respuestaPorPersonalidadController.getSelected().setPuntaje(valores[i].valor);
+            respuestaPorPersonalidadController.getSelected().setEncuesta(EncuestaAcutal);
+            respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
+            respuestaPorPersonalidadController.create();
+        }
+    }
+
+    private class Elemento {
+
+        public TipoPersonalidad tipoPer;
+        public int valor;
+    }
+
     public int getTamGrupo() {
         return tamGrupo;
     }
@@ -138,7 +197,7 @@ public class RespuestaPersonalidadController implements Serializable {
 //        System.out.println("items: " + items);
         numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-//        numGrupos = 2;
+//        numGrupos = 3;
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
@@ -154,6 +213,7 @@ public class RespuestaPersonalidadController implements Serializable {
      */
     public List<RespuestaPersonalidad> getGrupoItems(int numGrupo) {
         getItems();
+        // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
             HiloGuardado hilo = new HiloGuardado(grupo);
             hilo.start();
@@ -198,14 +258,13 @@ public class RespuestaPersonalidadController implements Serializable {
 //        }
 //        return items;
 //    }
-    public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
-        for (RespuestaPersonalidad item : items) {
-            this.getFacade().edit(item);
-        }
-        return items;
-    }
-
+//    public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
+//        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+//        for (RespuestaPersonalidad item : items) {
+//            this.getFacade().edit(item);
+//        }
+//        return items;
+//    }
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -237,14 +296,17 @@ public class RespuestaPersonalidadController implements Serializable {
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
+        EncuestaAcutal = encuesta;
         items = new ArrayList<>(preguntas.size());
         for (PreguntaPersonalidad pregunta : preguntas) {
             selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
             selected.setPreguntaPersonalidad(pregunta);
             selected.setEncuesta(encuesta);
+            selected.setRespuesta(2);
             items.add(selected);
         }
         getGrupos();
+        pasoActual = 0;
         grupo = getGrupoItems(pasoActual + 1);
 
         return items;

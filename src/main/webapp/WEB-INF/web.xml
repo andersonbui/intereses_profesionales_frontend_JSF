@@ -20,12 +20,23 @@
     </servlet-mapping>                         
     <session-config>
         <session-timeout>
-            300
+            30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>faces/login.xhtml</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <exception-type>javax.ejb.EJBException</exception-type>
+        <location>/faces/login.xhtml</location>
+    </error-page>
     <login-config> 
-        <auth-method>BASIC</auth-method>
+        <auth-method>FORM</auth-method>
         <realm-name>interpro2JDBCRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/faces/login.xhtml</form-login-page>
+            <form-error-page>/faces/login.xhtml</form-error-page>
+        </form-login-config>
     </login-config>
     <security-role>
         <description>Usuario Profesor</description>
@@ -39,7 +50,4 @@
         <description>Usuario Administrador</description>
         <role-name>Administrador</role-name>
     </security-role>
-    <welcome-file-list>
-        <welcome-file>faces/login.xhtml</welcome-file>
-    </welcome-file-list>
 </web-app>

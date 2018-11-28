@@ -22,6 +22,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaPersonalidadController")
 @SessionScoped
@@ -31,8 +32,24 @@ public class RespuestaPersonalidadController implements Serializable {
     private com.ingesoft.interpro.facades.RespuestaPersonalidadFacade ejbFacade;
     private List<RespuestaPersonalidad> items = null;
     private RespuestaPersonalidad selected;
+    private List<RespuestaPersonalidad> grupo = null;
+
+    private final int tamGrupo;
+    private int pasoActual;
+    private int numGrupos;
 
     public RespuestaPersonalidadController() {
+        tamGrupo = 4;
+        pasoActual = 0;
+        numGrupos = 1;
+    }
+
+    public List<RespuestaPersonalidad> getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(List<RespuestaPersonalidad> grupo) {
+        this.grupo = grupo;
     }
 
     public RespuestaPersonalidad getSelected() {
@@ -69,6 +86,92 @@ public class RespuestaPersonalidadController implements Serializable {
         }
     }
 
+    public int getPasoActual() {
+        return pasoActual;
+    }
+
+    public int getUltimoPaso() {
+        return (numGrupos);
+    }
+
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
+    }
+
+    public int getStep() {
+        return pasoActual;
+    }
+
+    public int getnombrePaso(int i) {
+        return (i * 100 / numGrupos);
+    }
+
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePaso() {
+        return pasoActual < (numGrupos);
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+        grupo = getGrupoItems(pasoActual + 1);
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso");
+        pasoActual += 1;
+        grupo = getGrupoItems(pasoActual + 1);
+        return pasoActual;
+    }
+
+    public int getTamGrupo() {
+        return tamGrupo;
+    }
+
+    public List<Integer> getGrupos() {
+        //System.out.println("Hola mundo");
+        List<Integer> gruposPreguntas = new ArrayList<>();
+        items = getItems();
+//        System.out.println("items: " + items);
+        numGrupos = items.size() / tamGrupo;
+        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+//        numGrupos = 2;
+        for (int i = 1; i <= numGrupos; i++) {
+            gruposPreguntas.add(i);
+        }
+        //System.out.println("gruposPreguntas: " + gruposPreguntas);
+        return gruposPreguntas;
+    }
+
+    /**
+     * obtiene las respuestas de un determinado grupo
+     *
+     * @param numGrupo
+     * @return
+     */
+    public List<RespuestaPersonalidad> getGrupoItems(int numGrupo) {
+        getItems();
+        if (grupo != null && !grupo.isEmpty()) {
+            HiloGuardado hilo = new HiloGuardado(grupo);
+            hilo.start();
+        }
+        List<RespuestaPersonalidad> listaRespuestas = null;
+        if (items != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
+                if (i >= 0 && i < items.size()) {
+                    listaRespuestas.add(items.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        return listaRespuestas;
+    }
+
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaPersonalidadUpdated"));
     }
@@ -87,6 +190,7 @@ public class RespuestaPersonalidadController implements Serializable {
         }
         return items;
     }
+
 //  public List<RespuestaPersonalidad> getRespuestasPersonalidad(Encuesta encuesta) {
 //
 //        if (encuesta != null && items == null) {
@@ -94,29 +198,6 @@ public class RespuestaPersonalidadController implements Serializable {
 //        }
 //        return items;
 //    }
-  
-    /**
-     * obtiene las respuestas de un determinado grupo
-     *
-     * @param grupo
-     * @param tamGrupo
-     * @return
-     */
-    public List<RespuestaPersonalidad> getGrupoItems(int grupo, int tamGrupo) {
-        List<RespuestaPersonalidad> listaRespuestas = null;
-        if (items != null) {
-            listaRespuestas = new ArrayList<>();
-            for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
-                if (i >= 0 && i < items.size()) {
-                    listaRespuestas.add(items.get(i));
-                } else {
-                    break;
-                }
-            }
-        }
-        return listaRespuestas;
-    }
-
     public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
         for (RespuestaPersonalidad item : items) {
@@ -124,8 +205,6 @@ public class RespuestaPersonalidadController implements Serializable {
         }
         return items;
     }
-
-  
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
@@ -165,18 +244,23 @@ public class RespuestaPersonalidadController implements Serializable {
             selected.setEncuesta(encuesta);
             items.add(selected);
         }
-        (new HiloGuardado()).start();
+        getGrupos();
+        grupo = getGrupoItems(pasoActual + 1);
+
         return items;
     }
 
     public class HiloGuardado extends Thread {
 
-        public HiloGuardado() {
+        private final List<RespuestaPersonalidad> itemsRespuestas;
+
+        public HiloGuardado(List<RespuestaPersonalidad> itemsRespuestas) {
+            this.itemsRespuestas = itemsRespuestas;
         }
 
         @Override
         public void run() {
-            for (RespuestaPersonalidad respuesta : items) {
+            for (RespuestaPersonalidad respuesta : itemsRespuestas) {
                 getFacade().edit(respuesta);
             }
             System.out.println("----Termino de guardar Respuestas");

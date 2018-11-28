@@ -10,52 +10,50 @@
         <ui:define name="content">
             <h:form id="PreguntaCreatePersonalidadForm" >
                 <div id="display">
-                    <ui:repeat value="#{preguntaPersonalidadController. getGrupos()}" var="grupo">
-                        <h:panelGroup class="panel-preguntas-personalidad" rendered="#{preguntaPersonalidadController.pasoActual == (grupo-1)}" >
-                            <p:panel header="Preguntas de personalidad uno">
-                                <h1><p:progressBar value="#{preguntaPersonalidadController.getnombrePaso(grupo-1)}" labelTemplate="{value}%" displayOnly="true"/></h1>
-                                <p:panelGrid id="panel" styleClass="panelgrid">
-                                    <ui:repeat value="#{respuestaPersonalidadController.getGrupoItems(grupo, preguntaPersonalidadController.getTamGrupo())}" var="item">
-                                        <p:row>
-                                            <p:column style=" font-size: 18px; font-weight:bold; color: black">
-                                                <p:outputLabel value="#{item.preguntaPersonalidad.enunciado1}"/>
-                                            </p:column>
-                                            <p:column style=" font-size: 18px; font-weight:bold; color: black">
-                                                <p:selectOneRadio  id="pregunta1" value="#{item.respuesta}"  required="false">
-                                                    <f:selectItem itemLabel="1" itemValue='1.0' />
-                                                    <f:selectItem itemLabel="2" itemValue='2.0' />
-                                                    <f:selectItem itemLabel="3" itemValue='3.0' />
-                                                    <f:selectItem itemLabel="4" itemValue='4.0' />    
-                                                    <f:selectItem itemLabel="5" itemValue='5.0' />
-                                                </p:selectOneRadio>
-                                            </p:column>
-                                            <p:column style=" font-size: 18px; font-weight:bold; color: black">
-                                                <p:outputLabel value="#{item.preguntaPersonalidad.enunciado1}"/>
-                                            </p:column>
-                                        </p:row>
-                                    </ui:repeat>
-                                </p:panelGrid>
-                            </p:panel>
-                            <h:panelGroup  style="background-color: black;" >
-                                <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
-                                                  update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeAnteriorPaso()}" >
-                                </p:commandButton>
-                                <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{preguntaPersonalidadController.siguientePaso}"
-                                                  update=":PreguntaCreatePersonalidadForm, @form" rendered="#{preguntaPersonalidadController.puedeSiguientePaso()}" >
-                                </p:commandButton>
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </ui:repeat>
-                    <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{preguntaPersonalidadController.pasoActual == preguntaPersonalidadController.getUltimoPaso()}" >
+                    <h:panelGroup class="panel-preguntas-personalidad" rendered="#{respuestaPersonalidadController.pasoActual != respuestaPersonalidadController.getUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
-                            <h1><p:progressBar value="#{preguntaPersonalidadController.getnombrePaso(preguntaPersonalidadController.pasoActual)}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h1><p:progressBar value="#{respuestaPersonalidadController.getnombrePaso(respuestaPersonalidadController.pasoActual)}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <p:panelGrid id="panel" styleClass="panelgrid">
+                                <ui:repeat value="#{respuestaPersonalidadController.grupo}" var="item">
+                                    <p:row>
+                                        <p:column style=" font-size: 18px; font-weight:bold; color: black">
+                                            <p:outputLabel value="#{item.preguntaPersonalidad.enunciado1}"/>
+                                        </p:column>
+                                        <p:column style=" font-size: 18px; font-weight:bold; color: black">
+                                            <p:selectOneRadio  id="pregunta1" value="#{item.respuesta}" >
+                                                <f:selectItem itemLabel="1" itemValue='1' />
+                                                <f:selectItem itemLabel="2" itemValue='2' />
+                                                <f:selectItem itemLabel="3" itemValue='3' />
+                                                <f:selectItem itemLabel="4" itemValue='4' />    
+                                                <f:selectItem itemLabel="5" itemValue='5' />
+                                            </p:selectOneRadio>
+                                        </p:column>
+                                        <p:column style=" font-size: 18px; font-weight:bold; color: black">
+                                            <p:outputLabel value="#{item.preguntaPersonalidad.enunciado1}"/>
+                                        </p:column>
+                                    </p:row>
+                                </ui:repeat>
+                            </p:panelGrid>
+                        </p:panel>
+                        <h:panelGroup  style="background-color: black;" >
+                            <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
+                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
+                            </p:commandButton>
+                            <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
+                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePaso()}" >
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{respuestaPersonalidadController.pasoActual == respuestaPersonalidadController.getUltimoPaso()}" >
+                        <p:panel header="Preguntas de personalidad uno">
+                            <h1><p:progressBar value="#{respuestaPersonalidadController.getnombrePaso(respuestaPersonalidadController.pasoActual)}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             <p:panelGrid styleClass="panelgrid">
                                 <h1>Felicidades</h1>
                                 <p>Has completado las preguntas de personalidad</p>
                             </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black; display: block;" >
-                            <p:commandButton class="float-l" value="anterior" ajax="true" actionListener="#{preguntaPersonalidadController.anteriorPaso}"
+                            <p:commandButton class="float-l" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                              update=":PreguntaCreatePersonalidadForm, @form" >
                             </p:commandButton>
                             <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 

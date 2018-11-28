@@ -27,11 +27,11 @@
                     <div rendered="#{empty loginController.profile}">
                         <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electronico">
                             <p:inputText id="login-username"  class="form-control"
-                                   label="username"  value="#{loginController.usuario}" />
+                                         label="username"  value="#{loginController.usuario}" />
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" >
                             <p:password id="login-password" class="form-control"
-                                   label="password" value="#{loginController.password}" />
+                                        label="password" value="#{loginController.password}" />
                         </div>
                         <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
                         </label>
@@ -40,7 +40,7 @@
                                           oncomplete="manejarLogin(xhr, status, args)" 
                                           >
                         </p:commandButton>
-                        
+
                         <div class="text-center p-t-57 p-b-20" >
                             <b>O inicia sesion con</b><br/>
                         </div>

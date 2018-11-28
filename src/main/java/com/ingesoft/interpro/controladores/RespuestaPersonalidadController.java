@@ -147,8 +147,11 @@ public class RespuestaPersonalidadController implements Serializable {
         return pasoActual;
     }
 
+    /**
+     *
+     */
     private void realizarEstadisticas() {
-
+        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");

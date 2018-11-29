@@ -147,7 +147,7 @@ public class RespuestaPersonalidadController implements Serializable {
     }
 
     /**
-     * Realiza los calculos para la estadistica de personalidad, de acuerdo a las respuestas
+     *
      */
     private void realizarEstadisticas() {
         // TODO falta esperar los hilos de guardado para despues realizar la estadistica

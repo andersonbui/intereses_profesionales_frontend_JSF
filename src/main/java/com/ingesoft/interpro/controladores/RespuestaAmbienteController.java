@@ -22,6 +22,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "respuestaAmbienteController")
 @SessionScoped
@@ -31,9 +33,164 @@ public class RespuestaAmbienteController implements Serializable {
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
     private List<RespuestaAmbiente> items = null;
     private RespuestaAmbiente selected;
-    private String color;
+
+    private final int tamGrupo;
+    private int pasoActual;
+    private int numGrupos;
+    private int number;
+    private int puntos;
+    private int[] cantidadRespuestas;
+    private List<Integer> gruposPreguntas;
+    private List<String> images;
+    private List<RespuestaAmbiente> grupo = null;
+    Encuesta EncuestaAcutal;
 
     public RespuestaAmbienteController() {
+        tamGrupo = 6;
+        pasoActual = 0;
+        numGrupos = 1;
+        puntos = 0;
+        gruposPreguntas = null;
+    }
+
+    public List<RespuestaAmbiente> getGrupo() {
+        return grupo;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    public int getPasoActual() {
+        return pasoActual;
+    }
+
+    public int getUltimoPaso() {
+        return (numGrupos);
+    }
+
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
+    }
+
+    public int getStep() {
+        return pasoActual;
+    }
+
+    public int getnombrePaso() {
+        return (pasoActual * 100 / numGrupos);
+    }
+
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePasoNoUltimo() {
+        return pasoActual < (numGrupos - 1);
+    }
+
+    public boolean esPenultimoPaso() {
+        return pasoActual == (numGrupos - 1);
+    }
+
+    public boolean esUltimoPaso() {
+        return pasoActual == numGrupos;
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+        grupo = getGrupoItems(pasoActual + 1);
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso: " + pasoActual);
+        pasoActual += 1;
+        grupo = getGrupoItems(pasoActual + 1);
+        number = 0;
+        return pasoActual;
+    }
+
+    public int getTamGrupo() {
+        return tamGrupo;
+    }
+
+    public void meGusta(RespuestaAmbiente respuesta) {
+        respuesta.setRespuesta((float) 1.0);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void indiferente(RespuestaAmbiente respuesta) {
+        respuesta.setRespuesta((float) 0.5);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void noMeGusta(RespuestaAmbiente respuesta) {
+        respuesta.setRespuesta((float) 0);
+        reinicioUnicoPorPregunta(respuesta);
+    }
+
+    public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta) {
+        int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
+        cantidadRespuestas[indice]++;
+        if (cantidadRespuestas[indice] == 1) {
+            number = 0;
+            puntos++;
+        }
+    }
+
+    public void increment() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        number++;
+        requestContext.execute("PF('knob').setValue(" + number + ")");
+        if (number > 15) {
+            number = 0;
+            puntos--;
+        }
+    }
+
+    public int finalizarEncuesta(ActionEvent actionEvent) {
+//        grupo = getGrupoItems(pasoActual + 1);
+        for (RespuestaAmbiente respuesta : grupo) {
+            getFacade().edit(respuesta);
+        }
+        pasoActual += 1;
+
+        // realizar estadistica de respuestas
+//        realizarEstadisticas();
+
+        return pasoActual;
+    }
+    public List<Integer> getGrupos() {
+        gruposPreguntas = null;
+        if (gruposPreguntas == null) {
+            gruposPreguntas = new ArrayList<>();
+            items = getItems();
+            numGrupos = items.size() / tamGrupo;
+            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+            numGrupos = 3;
+            for (int i = 1; i <= numGrupos; i++) {
+                gruposPreguntas.add(i);
+            }
+            System.out.println("gruposPreguntas: " + gruposPreguntas);
+        }
+        return gruposPreguntas;
     }
 
     public RespuestaAmbiente getSelected() {
@@ -72,24 +229,24 @@ public class RespuestaAmbienteController implements Serializable {
 
     public String obtenerColor(String tipo) {
         String color = "#000000";
-        switch(tipo){
+        switch (tipo) {
             case "REALISTA":
-                color="#008000";
+                color = "#008000";
                 break;
             case "INVESTIGATIVO":
-                color="#FF0000";
+                color = "#FF0000";
                 break;
             case "ARTISTICO":
-                color="#FFD42A";
+                color = "#FFD42A";
                 break;
             case "SOCIAL":
-                color="#0000FF";
+                color = "#0000FF";
                 break;
             case "EMPRENDEDOR":
-                color="#FFFF00";
+                color = "#FFFF00";
                 break;
             case "CONVENCIONAL":
-                color="#00FFFF";
+                color = "#00FFFF";
                 break;
         }
         return color;
@@ -117,15 +274,20 @@ public class RespuestaAmbienteController implements Serializable {
     /**
      * obtiene las respuestas de un determinado grupo
      *
-     * @param grupo
-     * @param tamGrupo
+     * @param numGrupo
      * @return
      */
-    public List<RespuestaAmbiente> getGrupoItems(int grupo, int tamGrupo) {
+    public List<RespuestaAmbiente> getGrupoItems(int numGrupo) {
+        getItems();
+        // guardar respuestas actuales
+//        if (grupo != null && !grupo.isEmpty()) {
+//            HiloGuardado hilo = new HiloGuardado(grupo);
+//            hilo.start();
+//        }
         List<RespuestaAmbiente> listaRespuestas = null;
         if (items != null) {
             listaRespuestas = new ArrayList<>();
-            for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
+            for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
                 if (i >= 0 && i < items.size()) {
                     listaRespuestas.add(items.get(i));
                 } else {
@@ -139,6 +301,9 @@ public class RespuestaAmbienteController implements Serializable {
     public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
+        gruposPreguntas = null;
+        EncuestaAcutal = encuesta;
+
         items = new ArrayList<>(preguntas.size());
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
@@ -146,31 +311,39 @@ public class RespuestaAmbienteController implements Serializable {
             selected.setEncuesta(encuesta);
             items.add(selected);
         }
-        (new HiloGuardado()).start();
+        cantidadRespuestas = new int[items.size()];
+        getGrupos();
+        pasoActual = 0;
+        grupo = getGrupoItems(pasoActual + 1);
         return items;
+    }
+
+    public class HiloGuardado extends Thread {
+
+        private final List<RespuestaAmbiente> itemsRespuestas;
+
+        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas) {
+            this.itemsRespuestas = itemsRespuestas;
+        }
+
+        @Override
+        public void run() {
+            for (RespuestaAmbiente respuesta : itemsRespuestas) {
+                getFacade().edit(respuesta);
+            }
+            System.out.println("----Termino de guardar Respuestas");
+        }
+
     }
 
     public String obtenerImagen(RespuestaAmbiente respuesta) {
         String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
+
     public String obtenerEnunciado(RespuestaAmbiente respuesta) {
         String enunciado = respuesta.getPreguntaAmbiente().getEnunciado();
         return enunciado;
-    }
-    public class HiloGuardado extends Thread {
-
-        public HiloGuardado() {
-        }
-
-        @Override
-        public void run() {
-            for (RespuestaAmbiente respuesta : items) {
-                getFacade().edit(respuesta);
-            }
-            System.out.println("----Termino de guardar Respuestas");
-        }
-
     }
 
     public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {

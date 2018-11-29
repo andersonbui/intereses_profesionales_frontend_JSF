@@ -31,6 +31,7 @@ public class RespuestaAmbienteController implements Serializable {
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
     private List<RespuestaAmbiente> items = null;
     private RespuestaAmbiente selected;
+    private String color;
 
     public RespuestaAmbienteController() {
     }
@@ -153,7 +154,10 @@ public class RespuestaAmbienteController implements Serializable {
         String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
-
+    public String obtenerEnunciado(RespuestaAmbiente respuesta) {
+        String enunciado = respuesta.getPreguntaAmbiente().getEnunciado();
+        return enunciado;
+    }
     public class HiloGuardado extends Thread {
 
         public HiloGuardado() {

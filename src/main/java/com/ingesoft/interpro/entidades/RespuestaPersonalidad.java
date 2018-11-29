@@ -38,7 +38,7 @@ public class RespuestaPersonalidad implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "respuesta")
-    private float respuesta;
+    private int respuesta;
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta encuesta;
@@ -53,7 +53,7 @@ public class RespuestaPersonalidad implements Serializable {
         this.respuestaPersonalidadPK = respuestaPersonalidadPK;
     }
 
-    public RespuestaPersonalidad(RespuestaPersonalidadPK respuestaPersonalidadPK, float respuesta) {
+    public RespuestaPersonalidad(RespuestaPersonalidadPK respuestaPersonalidadPK, int respuesta) {
         this.respuestaPersonalidadPK = respuestaPersonalidadPK;
         this.respuesta = respuesta;
     }
@@ -70,11 +70,11 @@ public class RespuestaPersonalidad implements Serializable {
         this.respuestaPersonalidadPK = respuestaPersonalidadPK;
     }
 
-    public float getRespuesta() {
+    public int getRespuesta() {
         return respuesta;
     }
 
-    public void setRespuesta(float respuesta) {
+    public void setRespuesta(int respuesta) {
         this.respuesta = respuesta;
     }
 

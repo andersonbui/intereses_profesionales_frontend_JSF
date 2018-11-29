@@ -69,11 +69,11 @@ public class Estudiante implements Serializable {
     @Size(max = 45)
     @Column(name = "personalidad")
     private String personalidad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
-    private List<Nota> notaList;
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona")
     @ManyToOne(optional = false)
     private Persona idPersona;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<Nota> notaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
     private List<Encuesta> encuestaList;
 

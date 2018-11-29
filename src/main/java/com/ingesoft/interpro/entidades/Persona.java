@@ -92,10 +92,10 @@ public class Persona implements Serializable {
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
-    private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<Estudiante> estudianteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
+    private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
 
     public Persona() {
     }

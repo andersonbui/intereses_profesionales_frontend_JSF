@@ -7,7 +7,6 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
 import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
-import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -148,7 +147,7 @@ public class RespuestaPersonalidadController implements Serializable {
     }
 
     /**
-     *
+     * Realiza los calculos para la estadistica de personalidad, de acuerdo a las respuestas
      */
     private void realizarEstadisticas() {
         // TODO falta esperar los hilos de guardado para despues realizar la estadistica
@@ -254,20 +253,6 @@ public class RespuestaPersonalidadController implements Serializable {
         return items;
     }
 
-//  public List<RespuestaPersonalidad> getRespuestasPersonalidad(Encuesta encuesta) {
-//
-//        if (encuesta != null && items == null) {
-//            items = getFacade().findAll(encuesta.getIdEncuesta());
-//        }
-//        return items;
-//    }
-//    public List<RespuestaPersonalidad> actualizarRespuestas() throws IOException {
-//        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
-//        for (RespuestaPersonalidad item : items) {
-//            this.getFacade().edit(item);
-//        }
-//        return items;
-//    }
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();

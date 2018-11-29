@@ -53,13 +53,13 @@ public class Grado implements Serializable {
     @Size(max = 45)
     @Column(name = "grado")
     private String grado;
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
+    @ManyToOne(optional = false)
+    private Institucion idInstitucion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<Nota> notaList;
     @OneToMany(mappedBy = "idGrado")
     private List<Encuesta> encuestaList;
-    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
-    @ManyToOne(optional = false)
-    private Institucion idInstitucion;
 
     public Grado() {
     }

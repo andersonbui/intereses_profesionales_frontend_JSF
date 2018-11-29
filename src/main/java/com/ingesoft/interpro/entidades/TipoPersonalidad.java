@@ -46,6 +46,8 @@ public class TipoPersonalidad implements Serializable {
     private String tipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersonalidad")
     private List<PreguntaPersonalidad> preguntaPersonalidadList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersonalidad")
+    private List<RespuestaPorPersonalidad> respuestaPorPersonalidadList;
 
     public TipoPersonalidad() {
     }
@@ -77,6 +79,15 @@ public class TipoPersonalidad implements Serializable {
 
     public void setPreguntaPersonalidadList(List<PreguntaPersonalidad> preguntaPersonalidadList) {
         this.preguntaPersonalidadList = preguntaPersonalidadList;
+    }
+
+    @XmlTransient
+    public List<RespuestaPorPersonalidad> getRespuestaPorPersonalidadList() {
+        return respuestaPorPersonalidadList;
+    }
+
+    public void setRespuestaPorPersonalidadList(List<RespuestaPorPersonalidad> respuestaPorPersonalidadList) {
+        this.respuestaPorPersonalidadList = respuestaPorPersonalidadList;
     }
 
     @Override

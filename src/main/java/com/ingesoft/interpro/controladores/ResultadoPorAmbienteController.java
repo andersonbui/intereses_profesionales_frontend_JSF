@@ -30,6 +30,7 @@ public class ResultadoPorAmbienteController implements Serializable {
     private ResultadoPorAmbiente selected;
 
     public ResultadoPorAmbienteController() {
+        
     }
 
     public ResultadoPorAmbiente getSelected() {

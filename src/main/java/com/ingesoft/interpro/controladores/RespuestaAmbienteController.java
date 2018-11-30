@@ -46,13 +46,22 @@ public class RespuestaAmbienteController implements Serializable {
     private List<String> images;
     private List<RespuestaAmbiente> grupo = null;
     Encuesta EncuestaAcutal;
-
+    private boolean finalizo;
+    
     public RespuestaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
         numGrupos = 1;
         puntos = 0;
         gruposPreguntas = null;
+    }
+
+    public boolean isFinalizo() {
+        return finalizo;
+    }
+
+    public void setFinalizo(boolean finalizo) {
+        this.finalizo = finalizo;
     }
 
     public List<RespuestaAmbiente> getGrupo() {
@@ -173,54 +182,60 @@ public class RespuestaAmbienteController implements Serializable {
             getFacade().edit(respuesta);
         }
         pasoActual += 1;
-
+        finalizo=true;
         // realizar estadistica de respuestas
         realizarEstadisticas();
 
         return pasoActual;
     }
-        /**
+
+    /**
      *
      */
     private void realizarEstadisticas() {
-//        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-//        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
-//
-//        Elemento[] valores = new Elemento[4];
-//
-//        valores[0] = new Elemento();
-//        valores[1] = new Elemento();
-//        valores[2] = new Elemento();
-//        valores[3] = new Elemento();
-//
-//        valores[0].valor = 18;
-//        valores[1].valor = 30;
-//        valores[2].valor = 30;
-//        valores[3].valor = 12;
-//        for (RespuestaAmbiente respuestaPersonalidad : items) {
-//            TipoAmbiente tipopersonalidad = respuestaPersonalidad.getPreguntaAmbiente().getIdTipoAmbiente();
-//            int indice = tipopersonalidad.getIdTipoAmbiente()- 1;
-//            valores[indice].tipoPer = tipopersonalidad;
-//            int signo = respuestaPersonalidad.getPreguntaAmbiente().getSuma() ? 1 : -1;
-//            valores[indice].valor += signo * respuestaPersonalidad.getRespuesta();
-//        }
-//        for (int i = 0; i < valores.length; i++) {
-//            respuestaPorPersonalidadController.prepareCreate();
-//            respuestaPorPersonalidadController.getSelected().setPuntaje(valores[i].valor);
-//            respuestaPorPersonalidadController.getSelected().setEncuesta(EncuestaAcutal);
-//            respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
-//            respuestaPorPersonalidadController.create();
-//        }
+        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
+
+        Elemento[] valores = new Elemento[6];
+
+        valores[0] = new Elemento();
+        valores[1] = new Elemento();
+        valores[2] = new Elemento();
+        valores[3] = new Elemento();
+        valores[4] = new Elemento();
+        valores[5] = new Elemento();
+
+        valores[0].valor = 0.0;
+        valores[1].valor = 0.0;
+        valores[2].valor = 0.0;
+        valores[3].valor = 0.0;
+        valores[4].valor = 0.0;
+        valores[5].valor = 0.0;
+
+        for (RespuestaAmbiente respuestaAmbiente : items) {
+            TipoAmbiente tipoAmb = respuestaAmbiente.getPreguntaAmbiente().getIdTipoAmbiente();
+            int indice = tipoAmb.getIdTipoAmbiente() - 1;
+            valores[indice].tipoPer = tipoAmb;
+            valores[indice].valor += respuestaAmbiente.getRespuesta();
+        }
+
+        for (int i = 0; i < valores.length; i++) {
+            resultadoPorAmbienteController.prepareCreate();
+            resultadoPorAmbienteController.getSelected().setValor((float)valores[i].valor);
+            resultadoPorAmbienteController.getSelected().setEncuesta(EncuestaAcutal);
+            resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
+            resultadoPorAmbienteController.create();
+        }
     }
-    
+
     private class Elemento {
 
         public TipoAmbiente tipoPer;
-        public int valor;
+        public double valor;
     }
-    
+
     public List<Integer> getGrupos() {
         gruposPreguntas = null;
         if (gruposPreguntas == null) {
@@ -353,6 +368,7 @@ public class RespuestaAmbienteController implements Serializable {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
+            selected.setRespuesta((float)1.0);
             items.add(selected);
         }
         cantidadRespuestas = new int[items.size()];

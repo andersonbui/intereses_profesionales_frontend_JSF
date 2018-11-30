@@ -31,10 +31,10 @@
                                 <p:outputLabel  value="Tu puntuación: " style=" font-size: 30px; font-weight:bold;"/>
                                 <h:outputText  id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                             </div>
-                            <div class="float-r" >
-                                <p:poll interval="1" listener="#{respuestaAmbienteController.increment}" update="puntos_id"/>
+                            <h:panelGroup class="float-r" rendered="#{!respuestaAmbienteController.finalizo}">
+                                <p:poll interval="1" listener="#{respuestaAmbienteController.increment}" update="puntos_id" stop="#{!respuestaAmbienteController.finalizo}" />
                                 <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
-                            </div>
+                            </h:panelGroup>
                         </div>
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
                             <p:panel header="Preguntas de ambiente">
@@ -96,15 +96,7 @@
                                 </p:panelGrid>
                             </p:panel>
                             <h:panelGroup  style="background-color: black;" >
-                                <p:commandButton class="float-l" value="anterior" ajax="true" 
-                                                 actionListener="#{respuestaAmbienteController.anteriorPaso}"
-                                                 update=":PreguntaAmbienteForm, @form" 
-                                                 >
-                                </p:commandButton>
-                                <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                                 update=":PreguntaAmbienteForm, @form"  
-                                                 >
-                                </p:commandButton>
+                              
                             </h:panelGroup>
                         </h:panelGroup>
                     </div>

@@ -81,7 +81,7 @@
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso}"
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
                                     </p:commandButton>
-                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
+                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso()}" >
                                     </p:commandButton>
                                 </h:panelGroup>

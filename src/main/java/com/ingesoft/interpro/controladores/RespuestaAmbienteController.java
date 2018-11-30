@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
+import com.ingesoft.interpro.entidades.TipoAmbiente;
 import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -173,10 +175,52 @@ public class RespuestaAmbienteController implements Serializable {
         pasoActual += 1;
 
         // realizar estadistica de respuestas
-//        realizarEstadisticas();
+        realizarEstadisticas();
 
         return pasoActual;
     }
+        /**
+     *
+     */
+    private void realizarEstadisticas() {
+//        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+//        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
+//
+//        Elemento[] valores = new Elemento[4];
+//
+//        valores[0] = new Elemento();
+//        valores[1] = new Elemento();
+//        valores[2] = new Elemento();
+//        valores[3] = new Elemento();
+//
+//        valores[0].valor = 18;
+//        valores[1].valor = 30;
+//        valores[2].valor = 30;
+//        valores[3].valor = 12;
+//        for (RespuestaAmbiente respuestaPersonalidad : items) {
+//            TipoAmbiente tipopersonalidad = respuestaPersonalidad.getPreguntaAmbiente().getIdTipoAmbiente();
+//            int indice = tipopersonalidad.getIdTipoAmbiente()- 1;
+//            valores[indice].tipoPer = tipopersonalidad;
+//            int signo = respuestaPersonalidad.getPreguntaAmbiente().getSuma() ? 1 : -1;
+//            valores[indice].valor += signo * respuestaPersonalidad.getRespuesta();
+//        }
+//        for (int i = 0; i < valores.length; i++) {
+//            respuestaPorPersonalidadController.prepareCreate();
+//            respuestaPorPersonalidadController.getSelected().setPuntaje(valores[i].valor);
+//            respuestaPorPersonalidadController.getSelected().setEncuesta(EncuestaAcutal);
+//            respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
+//            respuestaPorPersonalidadController.create();
+//        }
+    }
+    
+    private class Elemento {
+
+        public TipoAmbiente tipoPer;
+        public int valor;
+    }
+    
     public List<Integer> getGrupos() {
         gruposPreguntas = null;
         if (gruposPreguntas == null) {
@@ -280,10 +324,10 @@ public class RespuestaAmbienteController implements Serializable {
     public List<RespuestaAmbiente> getGrupoItems(int numGrupo) {
         getItems();
         // guardar respuestas actuales
-//        if (grupo != null && !grupo.isEmpty()) {
-//            HiloGuardado hilo = new HiloGuardado(grupo);
-//            hilo.start();
-//        }
+        if (grupo != null && !grupo.isEmpty()) {
+            HiloGuardado hilo = new HiloGuardado(grupo);
+            hilo.start();
+        }
         List<RespuestaAmbiente> listaRespuestas = null;
         if (items != null) {
             listaRespuestas = new ArrayList<>();

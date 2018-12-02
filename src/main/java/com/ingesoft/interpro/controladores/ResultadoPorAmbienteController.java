@@ -47,23 +47,27 @@ public class ResultadoPorAmbienteController implements Serializable {
         graficoModelo = new BarChartModel();
 //        pieModel1 = new PieChartModel();
         final ChartSeries barra1 = new ChartSeries("barra 1");
-        final ChartSeries barra2 = new ChartSeries("barra2");
-        final ChartSeries barra3 = new ChartSeries("barra2");
-        final ChartSeries barra4 = new ChartSeries("barra2");
+        final ChartSeries barra2 = new ChartSeries("barra 2");
+        final ChartSeries barra3 = new ChartSeries("barra 3");
+        final ChartSeries barra4 = new ChartSeries("barra 4");
+        final ChartSeries barra5 = new ChartSeries("barra 5");
+        final ChartSeries barra6 = new ChartSeries("barra 6");
         graficoModelo.setShowPointLabels(true);
 //        pieModel1.setShowPointLabels(true);
 
         barra1.set("Realista", 5);
         barra2.set("de Investigación", 7);
-        barra2.set("Artístico", 7);
-        barra3.set("Social", 3);
-        barra4.set("Empresariales", 1);
-        barra4.set("Convencionales", 1);
+        barra3.set("Artístico", 7);
+        barra4.set("Social", 3);
+        barra5.set("Empresariales", 1);
+        barra6.set("Convencionales", 1);
         
         graficoModelo.addSeries(barra1);
         graficoModelo.addSeries(barra2);
         graficoModelo.addSeries(barra3);
         graficoModelo.addSeries(barra4);
+        graficoModelo.addSeries(barra5);
+        graficoModelo.addSeries(barra6);
 
         graficoModelo.setShowPointLabels(true);
     }

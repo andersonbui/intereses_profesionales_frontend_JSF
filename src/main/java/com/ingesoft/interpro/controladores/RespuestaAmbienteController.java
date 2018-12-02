@@ -72,24 +72,24 @@ public class RespuestaAmbienteController implements Serializable {
 
     public String obtenerColor(String tipo) {
         String color = "#000000";
-        switch(tipo){
+        switch (tipo) {
             case "REALISTA":
-                color="#008000";
+                color = "#008000";
                 break;
             case "INVESTIGATIVO":
-                color="#FF0000";
+                color = "#FF0000";
                 break;
             case "ARTISTICO":
-                color="#FFD42A";
+                color = "#FFD42A";
                 break;
             case "SOCIAL":
-                color="#0000FF";
+                color = "#0000FF";
                 break;
             case "EMPRENDEDOR":
-                color="#FFFF00";
+                color = "#FFFF00";
                 break;
             case "CONVENCIONAL":
-                color="#00FFFF";
+                color = "#00FFFF";
                 break;
         }
         return color;
@@ -136,6 +136,19 @@ public class RespuestaAmbienteController implements Serializable {
         return listaRespuestas;
     }
 
+    public List<RespuestaAmbiente> getTodasImages() {
+        List<RespuestaAmbiente> listaRespuestas;
+        listaRespuestas = null;
+        if (items != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = 1; i < items.size(); i++) {
+                items.get(i).getPreguntaAmbiente().getOrden();
+                listaRespuestas.add(items.get(i));
+            }
+        }
+        return listaRespuestas;
+    }
+
     public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
@@ -154,10 +167,12 @@ public class RespuestaAmbienteController implements Serializable {
         String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
+
     public String obtenerEnunciado(RespuestaAmbiente respuesta) {
         String enunciado = respuesta.getPreguntaAmbiente().getEnunciado();
         return enunciado;
     }
+
     public class HiloGuardado extends Thread {
 
         public HiloGuardado() {

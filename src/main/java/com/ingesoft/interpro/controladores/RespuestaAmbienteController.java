@@ -419,16 +419,6 @@ public class RespuestaAmbienteController implements Serializable {
 
     }
 
-    public String obtenerImagen(RespuestaAmbiente respuesta) {
-        String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
-        return url;
-    }
-
-    public String obtenerEnunciado(RespuestaAmbiente respuesta) {
-        String enunciado = respuesta.getPreguntaAmbiente().getEnunciado();
-        return enunciado;
-    }
-
     public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
         for (RespuestaAmbiente item : items) {

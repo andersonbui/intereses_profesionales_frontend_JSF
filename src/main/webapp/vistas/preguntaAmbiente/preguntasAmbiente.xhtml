@@ -93,6 +93,10 @@
                                 <p:panelGrid styleClass="panelgrid">
                                     <h1>Felicidades</h1>
                                     <p>Has completado las preguntas de Ambiente</p>
+
+                                    <p:chart type="bar" model="#{resultadoPorAmbienteController.graficoModelo}"
+                                             style="height:300px;  text-align: center;"
+                                             />
                                 </p:panelGrid>
                             </p:panel>
                             <h:panelGroup  style="background-color: black;" >

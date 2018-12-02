@@ -357,6 +357,19 @@ public class RespuestaAmbienteController implements Serializable {
         return listaRespuestas;
     }
 
+    public List<RespuestaAmbiente> getTodasImages() {
+        List<RespuestaAmbiente> listaRespuestas;
+        listaRespuestas = null;
+        if (items != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = 1; i < items.size(); i++) {
+                items.get(i).getPreguntaAmbiente().getOrden();
+                listaRespuestas.add(items.get(i));
+            }
+        }
+        return listaRespuestas;
+    }
+
     public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
@@ -376,6 +389,16 @@ public class RespuestaAmbienteController implements Serializable {
         pasoActual = 0;
         grupo = getGrupoItems(pasoActual + 1);
         return items;
+    }
+
+    public String obtenerImagen(RespuestaAmbiente respuesta) {
+        String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
+        return url;
+    }
+
+    public String obtenerEnunciado(RespuestaAmbiente respuesta) {
+        String enunciado = respuesta.getPreguntaAmbiente().getEnunciado();
+        return enunciado;
     }
 
     public class HiloGuardado extends Thread {

@@ -185,7 +185,7 @@ public class RespuestaAmbienteController implements Serializable {
         finalizo=true;
         // realizar estadistica de respuestas
         realizarEstadisticas();
-
+        
         return pasoActual;
     }
 

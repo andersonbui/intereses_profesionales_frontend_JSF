@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
@@ -21,9 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.PieChartModel;
 
 @ManagedBean(name = "resultadoPorAmbienteController")
 @SessionScoped
@@ -41,21 +38,21 @@ public class ResultadoPorAmbienteController implements Serializable {
         graficoModelo = new BarChartModel();
     }
 
-    @PostConstruct
-    public void init() {
+ 
+    public BarChartModel getGraficoModelo() {
         graficoModelo = new BarChartModel();
 //        pieModel1 = new PieChartModel();
-        final ChartSeries barra1 = new ChartSeries("barra 1");
+        final ChartSeries barra1 = new ChartSeries("ambiente");
         final ChartSeries barra2 = new ChartSeries("barra 2");
         final ChartSeries barra3 = new ChartSeries("barra 3");
         final ChartSeries barra4 = new ChartSeries("barra 4");
         final ChartSeries barra5 = new ChartSeries("barra 5");
         final ChartSeries barra6 = new ChartSeries("barra 6");
-        graficoModelo.setShowPointLabels(true);
 //        pieModel1.setShowPointLabels(true);
+//        this.
 
         barra1.set("Realista", 5);
-        barra2.set("de Investigación", 7);
+        barra2.set("de Investigación", 9);
         barra3.set("Artístico", 7);
         barra4.set("Social", 3);
         barra5.set("Empresariales", 1);
@@ -69,14 +66,11 @@ public class ResultadoPorAmbienteController implements Serializable {
         graficoModelo.addSeries(barra6);
 
         graficoModelo.setShowPointLabels(true);
+        return graficoModelo;
     }
 
     public ResultadoPorAmbiente getSelected() {
         return selected;
-    }
-
-    public BarChartModel getGraficoModelo() {
-        return graficoModelo;
     }
 
     public void setGraficoModelo(BarChartModel graficoModelo) {

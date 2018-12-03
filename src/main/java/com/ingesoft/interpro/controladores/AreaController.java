@@ -3,9 +3,11 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Area;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Materia;
 import com.ingesoft.interpro.facades.AreaFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -18,6 +20,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ValueChangeEvent;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "areaController")
 @SessionScoped
@@ -26,9 +30,57 @@ public class AreaController implements Serializable {
     @EJB
     private com.ingesoft.interpro.facades.AreaFacade ejbFacade;
     private List<Area> items = null;
+    private Area[] itemsMenos = null;
+    private Area[] itemsMas = null;
+    private Area[] itemsNota = null;
     private Area selected;
+    private Area selected2;
+    private Area selected3;
 
     public AreaController() {
+        itemsMenos = new Area[3];  
+        itemsMas = new Area[3];  
+        itemsNota = new Area[3];  
+    }
+
+    public Area[] getItemsMenos() {
+        return itemsMenos;
+    }
+
+    public void setItemsMenos(Area[] itemsMenos) {
+        this.itemsMenos = itemsMenos;
+    }
+
+    public Area[] getItemsMas() {
+        return itemsMas;
+    }
+
+    public void setItemsMas(Area[] itemsMas) {
+        this.itemsMas = itemsMas;
+    }
+
+    public Area[] getItemsNota() {
+        return itemsNota;
+    }
+
+    public void setItemsNota(Area[] itemsNota) {
+        this.itemsNota = itemsNota;
+    }
+
+    public Area getSelected2() {
+        return selected2;
+    }
+
+    public void setSelected2(Area selected2) {
+        this.selected2 = selected2;
+    }
+
+    public Area getSelected3() {
+        return selected3;
+    }
+
+    public void setSelected3(Area selected3) {
+        this.selected3 = selected3;
     }
 
     public Area getSelected() {
@@ -53,6 +105,20 @@ public class AreaController implements Serializable {
         selected = new Area();
         initializeEmbeddableKey();
         return selected;
+    }
+
+    public boolean verificarSeleccion(Area area, Area areaActual, Area[] lista,  Area[] otraLista) {
+        if (area.equals(areaActual)) {
+            return false;
+        }
+        if(otraLista != null && (area.equals(otraLista[0]) || area.equals(otraLista[1]) || area.equals(otraLista[2]))){
+            return true;
+        }
+        if (area.equals(lista[0]) || area.equals(lista[1]) || area.equals(lista[2])) {
+            return true;
+        }
+        return false;
+
     }
 
     public void create() {

@@ -104,8 +104,8 @@ public class RespuestaPersonalidadController implements Serializable {
         return pasoActual;
     }
 
-    public int getnombrePaso(int i) {
-        return (i * 100 / numGrupos);
+    public int getnombrePaso() {
+        return (pasoActual * 100 / numGrupos);
     }
 
     public boolean puedeAnteriorPaso() {
@@ -118,6 +118,10 @@ public class RespuestaPersonalidadController implements Serializable {
 
     public boolean esPenultimoPaso() {
         return pasoActual == (numGrupos - 1);
+    }
+
+    public boolean esUltimoPaso() {
+        return pasoActual == numGrupos;
     }
 
     public int anteriorPaso() {
@@ -234,6 +238,43 @@ public class RespuestaPersonalidadController implements Serializable {
         return listaRespuestas;
     }
 
+    public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
+        System.out.println("encuesta: " + encuesta);
+        System.out.println("preguntas: " + preguntas);
+        EncuestaAcutal = encuesta;
+        items = new ArrayList<>(preguntas.size());
+        for (PreguntaPersonalidad pregunta : preguntas) {
+            selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
+            selected.setPreguntaPersonalidad(pregunta);
+            selected.setEncuesta(encuesta);
+            selected.setRespuesta(2);
+            items.add(selected);
+        }
+        getGrupos();
+        pasoActual = 0;
+        grupo = getGrupoItems(pasoActual + 1);
+
+        return items;
+    }
+
+    public class HiloGuardado extends Thread {
+
+        private final List<RespuestaPersonalidad> itemsRespuestas;
+
+        public HiloGuardado(List<RespuestaPersonalidad> itemsRespuestas) {
+            this.itemsRespuestas = itemsRespuestas;
+        }
+
+        @Override
+        public void run() {
+            for (RespuestaPersonalidad respuesta : itemsRespuestas) {
+                getFacade().edit(respuesta);
+            }
+            System.out.println("----Termino de guardar Respuestas");
+        }
+
+    }
+
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaPersonalidadUpdated"));
     }
@@ -279,43 +320,6 @@ public class RespuestaPersonalidadController implements Serializable {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
-    }
-
-    public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
-        System.out.println("encuesta: " + encuesta);
-        System.out.println("preguntas: " + preguntas);
-        EncuestaAcutal = encuesta;
-        items = new ArrayList<>(preguntas.size());
-        for (PreguntaPersonalidad pregunta : preguntas) {
-            selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
-            selected.setPreguntaPersonalidad(pregunta);
-            selected.setEncuesta(encuesta);
-            selected.setRespuesta(2);
-            items.add(selected);
-        }
-        getGrupos();
-        pasoActual = 0;
-        grupo = getGrupoItems(pasoActual + 1);
-
-        return items;
-    }
-
-    public class HiloGuardado extends Thread {
-
-        private final List<RespuestaPersonalidad> itemsRespuestas;
-
-        public HiloGuardado(List<RespuestaPersonalidad> itemsRespuestas) {
-            this.itemsRespuestas = itemsRespuestas;
-        }
-
-        @Override
-        public void run() {
-            for (RespuestaPersonalidad respuesta : itemsRespuestas) {
-                getFacade().edit(respuesta);
-            }
-            System.out.println("----Termino de guardar Respuestas");
-        }
-
     }
 
     public RespuestaPersonalidad getRespuestaPersonalidad(com.ingesoft.interpro.entidades.RespuestaPersonalidadPK id) {

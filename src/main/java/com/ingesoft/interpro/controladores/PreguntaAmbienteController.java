@@ -33,98 +33,14 @@ public class PreguntaAmbienteController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int tamGrupo;
-    public boolean skip;
+//    public boolean skip;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaAmbienteFacade ejbFacade;
     private List<PreguntaAmbiente> items = null;
     private PreguntaAmbiente selected;
-    private int pasoActual;
-    private int numGrupos;
-    private int number;
-    private int puntos;
-    private int[] cantidadRespuestas;
-    private List<Integer> gruposPreguntas;
-    private List<String> images;
 
     public PreguntaAmbienteController() {
-        tamGrupo = 6;
-        pasoActual = 0;
-        numGrupos = 1;
-        puntos = 0;
-        gruposPreguntas = null;
-    }
 
-    @PostConstruct
-    public void init() {
-        images = new ArrayList<String>();
-        for (int i = 1; i <= 6; i++) {
-            images.add("1-Construir-gabinetes-de-cosina.png");
-        }
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public int getPuntos() {
-        return puntos;
-    }
-
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
-    }
-
-    public int getPasoActual() {
-        return pasoActual;
-    }
-
-    public int getUltimoPaso() {
-        return (numGrupos);
-    }
-
-    public void setPasoActual(int pasoActual) {
-        this.pasoActual = pasoActual;
-    }
-
-    public int getStep() {
-        return pasoActual;
-    }
-
-    public int getnombrePaso(int i) {
-        return (i * 100 / numGrupos);
-    }
-
-    public boolean puedeAnteriorPaso() {
-        return pasoActual > 0;
-    }
-
-    public boolean puedeSiguientePaso() {
-        return pasoActual < (numGrupos);
-    }
-
-    public int anteriorPaso() {
-        pasoActual -= 1;
-        return pasoActual;
-    }
-
-    public int siguientePaso(ActionEvent actionEvent) {
-        pasoActual += 1;
-        System.out.println("siguientes paso: " + pasoActual);
-        number = 0;
-        return pasoActual;
-    }
-
-    public int getTamGrupo() {
-        return tamGrupo;
     }
 
     public PreguntaAmbiente getSelected() {
@@ -145,90 +61,18 @@ public class PreguntaAmbienteController implements Serializable {
         return ejbFacade;
     }
 
-    public void meGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 1.0);
-        reinicioUnicoPorPregunta(respuesta);
-    }
-
-    public void indiferente(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 0.5);
-        reinicioUnicoPorPregunta(respuesta);
-    }
-
-    public void noMeGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 0);
-        reinicioUnicoPorPregunta(respuesta);
-    }
-
-    public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta) {
-        int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
-        cantidadRespuestas[indice]++;
-        if (cantidadRespuestas[indice] == 1) {
-            number = 0;
-            puntos++;
-        }
-    }
-
-    public void increment() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        number++;
-        requestContext.execute("PF('knob').setValue(" + number + ")");
-        if (number > 15) {
-            number = 0;
-            puntos--;
-        }
-    }
-
-    public List<Integer> getGrupos() {
-        gruposPreguntas=null;
-        if (gruposPreguntas == null) {
-            gruposPreguntas = new ArrayList<>();
-            items = getItems();
-            numGrupos = items.size() / tamGrupo;
-            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-            numGrupos = 2;
-            for (int i = 1; i <= numGrupos; i++) {
-                gruposPreguntas.add(i);
-            }
-            System.out.println("gruposPreguntas: " + gruposPreguntas);
-        }
-        return gruposPreguntas;
-    }
-
-    public List<PreguntaAmbiente> getGrupoItems(int grupo) {
-        getItems();
-        List<PreguntaAmbiente> listaPreguntas = new ArrayList<>();
-        for (int i = tamGrupo * (grupo - 1); i < tamGrupo * grupo; i++) {
-            if (i < items.size()) {
-                listaPreguntas.add(items.get(i));
-            } else {
-                break;
-            }
-        }
-        return listaPreguntas;
-    }
-
     public PreguntaAmbiente prepareCreate() {
         selected = new PreguntaAmbiente();
         initializeEmbeddableKey();
-        pasoActual = 0;
         return selected;
     }
 
-    public PreguntaAmbiente preparePreguntas() {
-        pasoActual = 0;
-        return null;
-    }
-
     public void preparePreguntas(Usuario usuario, Encuesta encuesta) {
-        gruposPreguntas = null;
-        pasoActual = 0;
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaAmbienteController respuestaController = (RespuestaAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
         getItems();
         respuestaController.prepararRespuestas(items, encuesta);
-        cantidadRespuestas = new int[items.size()];
     }
 
     public void create() {

@@ -32,7 +32,7 @@
                                 <h:outputText  id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                             </div>
                             <h:panelGroup class="float-r" rendered="#{!respuestaAmbienteController.finalizo}">
-                                <p:poll interval="1" listener="#{respuestaAmbienteController.increment}" update="puntos_id" stop="#{!respuestaAmbienteController.finalizo}" />
+                                <p:poll interval="1" listener="#{respuestaAmbienteController.increment}" update="puntos_id" stop="#{respuestaAmbienteController.finalizo}" />
                                 <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
                             </h:panelGroup>
                         </div>
@@ -94,7 +94,7 @@
                                     <h1>Felicidades</h1>
                                     <p>Has completado las preguntas de Ambiente</p>
 
-                                    <p:chart type="bar" model="#{resultadoPorAmbienteController.graficoModelo}"
+                                    <p:chart type="bar" model="#{respuestaAmbienteController.graficoModelo}"
                                              style="height:300px;  text-align: center;"
                                              />
                                 </p:panelGrid>

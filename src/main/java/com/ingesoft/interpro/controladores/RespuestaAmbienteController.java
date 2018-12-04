@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
+import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import com.ingesoft.interpro.entidades.TipoAmbiente;
 import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
 import java.io.IOException;
@@ -26,6 +27,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 
 @ManagedBean(name = "respuestaAmbienteController")
 @SessionScoped
@@ -47,13 +50,42 @@ public class RespuestaAmbienteController implements Serializable {
     private List<RespuestaAmbiente> grupo = null;
     Encuesta EncuestaAcutal;
     private boolean finalizo;
-    
+    private BarChartModel graficoModelo;
+    List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
+
     public RespuestaAmbienteController() {
         tamGrupo = 6;
         pasoActual = 0;
         numGrupos = 1;
         puntos = 0;
         gruposPreguntas = null;
+        listaResultadosPorAmbiente = null;
+    }
+
+    public BarChartModel getGraficoModelo() {
+        graficoModelo = new BarChartModel();
+
+        EncuestaAcutal = grupo.get(0).getEncuesta();
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
+
+        if (listaResultadosPorAmbiente == null) {
+            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+        }
+        int i = 0;
+        ChartSeries barra = null;
+        System.out.println("lista:" + listaResultadosPorAmbiente);
+        for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
+            barra = new ChartSeries("ambiente:--" + i++);
+            barra.set("Realista" + i, result.getValor());
+            graficoModelo.addSeries(barra);
+            System.out.println("result:" + result.getValor());
+        }
+
+        graficoModelo.setShowPointLabels(true);
+        return graficoModelo;
     }
 
     public boolean isFinalizo() {
@@ -182,10 +214,9 @@ public class RespuestaAmbienteController implements Serializable {
             getFacade().edit(respuesta);
         }
         pasoActual += 1;
-        finalizo=true;
+        finalizo = true;
         // realizar estadistica de respuestas
         realizarEstadisticas();
-        
         return pasoActual;
     }
 
@@ -223,7 +254,7 @@ public class RespuestaAmbienteController implements Serializable {
 
         for (int i = 0; i < valores.length; i++) {
             resultadoPorAmbienteController.prepareCreate();
-            resultadoPorAmbienteController.getSelected().setValor((float)valores[i].valor);
+            resultadoPorAmbienteController.getSelected().setValor((float) valores[i].valor);
             resultadoPorAmbienteController.getSelected().setEncuesta(EncuestaAcutal);
             resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
             resultadoPorAmbienteController.create();
@@ -375,15 +406,16 @@ public class RespuestaAmbienteController implements Serializable {
         System.out.println("preguntas: " + preguntas);
         gruposPreguntas = null;
         EncuestaAcutal = encuesta;
-
+        finalizo = false;
         items = new ArrayList<>(preguntas.size());
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
-            selected.setRespuesta((float)1.0);
+            selected.setRespuesta((float) 1.0);
             items.add(selected);
         }
+        listaResultadosPorAmbiente = null;
         cantidadRespuestas = new int[items.size()];
         getGrupos();
         pasoActual = 0;

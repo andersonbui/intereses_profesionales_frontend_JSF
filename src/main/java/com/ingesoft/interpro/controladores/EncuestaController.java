@@ -89,7 +89,12 @@ public class EncuestaController implements Serializable {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
     }
-
+    
+    public Encuesta actualizarSelected(){
+        selected = getFacade().find(selected.getIdEncuesta());
+        return selected;
+    }
+    
 //    public Encuesta prepareCreate() {
 //        selected = new Encuesta();
 //        initializeEmbeddableKey();

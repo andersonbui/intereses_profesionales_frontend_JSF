@@ -31,50 +31,12 @@ public class ResultadoPorAmbienteController implements Serializable {
     private List<ResultadoPorAmbiente> items = null;
     private ResultadoPorAmbiente selected;
 
-    private BarChartModel graficoModelo;
 //    private PieChartModel pieModel1;
-
     public ResultadoPorAmbienteController() {
-        graficoModelo = new BarChartModel();
-    }
-
- 
-    public BarChartModel getGraficoModelo() {
-        graficoModelo = new BarChartModel();
-//        pieModel1 = new PieChartModel();
-        final ChartSeries barra1 = new ChartSeries("ambiente");
-        final ChartSeries barra2 = new ChartSeries("barra 2");
-        final ChartSeries barra3 = new ChartSeries("barra 3");
-        final ChartSeries barra4 = new ChartSeries("barra 4");
-        final ChartSeries barra5 = new ChartSeries("barra 5");
-        final ChartSeries barra6 = new ChartSeries("barra 6");
-//        pieModel1.setShowPointLabels(true);
-//        this.
-
-        barra1.set("Realista", 5);
-        barra2.set("de Investigación", 9);
-        barra3.set("Artístico", 7);
-        barra4.set("Social", 3);
-        barra5.set("Empresariales", 1);
-        barra6.set("Convencionales", 1);
-        
-        graficoModelo.addSeries(barra1);
-        graficoModelo.addSeries(barra2);
-        graficoModelo.addSeries(barra3);
-        graficoModelo.addSeries(barra4);
-        graficoModelo.addSeries(barra5);
-        graficoModelo.addSeries(barra6);
-
-        graficoModelo.setShowPointLabels(true);
-        return graficoModelo;
     }
 
     public ResultadoPorAmbiente getSelected() {
         return selected;
-    }
-
-    public void setGraficoModelo(BarChartModel graficoModelo) {
-        this.graficoModelo = graficoModelo;
     }
 
     public void setSelected(ResultadoPorAmbiente selected) {
@@ -98,10 +60,6 @@ public class ResultadoPorAmbienteController implements Serializable {
         selected = new ResultadoPorAmbiente();
         initializeEmbeddableKey();
         return selected;
-    }
-
-    public void cargarDatosGrafica() {
-
     }
 
     public void create() {
@@ -164,6 +122,9 @@ public class ResultadoPorAmbienteController implements Serializable {
 
     public List<ResultadoPorAmbiente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
+    }
+    public List<ResultadoPorAmbiente> getItemsPorEncuesta(int idEncuesta) {
+        return getFacade().obtenerResultadoPorAmbiente(idEncuesta);
     }
 
     public List<ResultadoPorAmbiente> getItemsAvailableSelectOne() {

@@ -6,9 +6,11 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,15 @@ public class ResultadoPorAmbienteFacade extends AbstractFacade<ResultadoPorAmbie
     public ResultadoPorAmbienteFacade() {
         super(ResultadoPorAmbiente.class);
     }
-    
+
+    public List<ResultadoPorAmbiente> obtenerResultadoPorAmbiente(int idEncuesta) {
+        Query query = em.createNamedQuery("ResultadoPorAmbiente.findByIdEncuesta");
+        query.setParameter("idEncuesta", idEncuesta);
+        List<ResultadoPorAmbiente> encuesta = query.getResultList();
+        if (encuesta != null) {
+            return encuesta;
+        }
+        return null;
+
+    }
 }

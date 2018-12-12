@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,12 +79,13 @@ public class RespuestaAmbienteController implements Serializable {
         ChartSeries barra = null;
         System.out.println("lista:" + listaResultadosPorAmbiente);
         for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-            barra = new ChartSeries("ambiente:--" + i++);
-            barra.set("Realista" + i, result.getValor());
-            graficoModelo.addSeries(barra);
+            barra = new ChartSeries("ambiente:--" );
+            barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
+            barra.setLabel(result.getTipoAmbiente().getTipo());
             System.out.println("result:" + result.getValor());
+            graficoModelo.addSeries(barra); 
         }
-
+        graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
         graficoModelo.setShowPointLabels(true);
         return graficoModelo;
     }
@@ -407,12 +409,16 @@ public class RespuestaAmbienteController implements Serializable {
         gruposPreguntas = null;
         EncuestaAcutal = encuesta;
         finalizo = false;
+        // PRUEBAS
+        double[] valores = {0.0,0.5,1.0};
+        Random rand = new Random(5);
+        //
         items = new ArrayList<>(preguntas.size());
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
-            selected.setRespuesta((float) 1.0);
+            selected.setRespuesta((float)valores[rand.nextInt(3)]);
             items.add(selected);
         }
         listaResultadosPorAmbiente = null;

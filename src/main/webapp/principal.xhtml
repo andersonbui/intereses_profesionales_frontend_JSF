@@ -102,6 +102,7 @@
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Generar mineria" action="#{mineriaController.sacarDatos}" />
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
                         <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >

@@ -94,13 +94,41 @@
                                     <h1>Felicidades</h1>
                                     <p>Has completado las preguntas de Ambiente</p>
 
-                                    <p:chart type="bar" model="#{respuestaAmbienteController.graficoModelo}"
-                                             style="height:300px;  text-align: center;"
-                                             />
+
+                                    <p:row style="border:red ridge thick">
+                                        <p:column width="50%">
+                                            <p:chart type="bar" model="#{respuestaAmbienteController.graficoModelo}" 
+                                                     style="height:250px;  text-align: center; "
+                                                     />
+                                        </p:column>
+                                        <p:column>
+                                            <h5>Los puntajes más altos para su perfil fueron: </h5>
+                                            <p:outputLabel value="Ambiente: "/><br/>
+                                            <p:outputLabel value="Ambiente: "/><br/>
+                                            <p:outputLabel value="Ambiente: "/><br/>
+                                            <h5>Las áreas de conocimiento más escogidas para su perfil son: </h5>
+                                            <p:outputLabel value="Ingeniería, Arquitectura y Urbanismo, Matemáticas y Ciencias Naturales "/><br/>
+
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column>
+                                            <p:graphicImage name="img/ambiente.png" style="height: 250px"/>
+                                        </p:column>
+
+                                        <p:column >
+                                            <h5>Su puntaje de juego y evaluación fue: </h5>
+                                            <p:outputLabel value="Juego: "/><br/>
+                                            <p:outputLabel value="Evaluación: "/><br/>
+                                        </p:column>
+
+                                    </p:row>
+
                                 </p:panelGrid>
                             </p:panel>
                             <h:panelGroup  style="background-color: black;" >
-                              
+
                             </h:panelGroup>
                         </h:panelGroup>
                     </div>

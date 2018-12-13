@@ -877,3 +877,8 @@ body {
   display: block;
   width: 30px;
   height: 27px; }
+
+.personalidad {
+    display: inline-block;
+}
+

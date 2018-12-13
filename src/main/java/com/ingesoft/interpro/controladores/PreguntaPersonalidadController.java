@@ -76,6 +76,7 @@ public class PreguntaPersonalidadController implements Serializable {
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaPersonalidadController respuestaPersonalidadController = (RespuestaPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPersonalidadController");
         items = getItems();
+//        encuesta.setPersonalidad("IIEJ");
         respuestaPersonalidadController.prepararRespuestas(items, encuesta);
     }
 

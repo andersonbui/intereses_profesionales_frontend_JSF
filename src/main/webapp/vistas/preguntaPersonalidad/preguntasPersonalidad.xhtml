@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/realizarEncuesta.xhtml">
         <ui:define name="content">
@@ -50,9 +51,22 @@
                     <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{respuestaPersonalidadController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
                             <h1><p:progressBar value="#{respuestaPersonalidadController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
-                            <p:panelGrid styleClass="panelgrid">
+                            <p:panelGrid styleClass="panelgrid" >
                                 <h1>Felicidades</h1>
                                 <p>Has completado las preguntas de personalidad</p>
+
+                                <h5>Su personalidad es:</h5>
+                                <p:outputLabel value="#{encuestaController.selected.personalidad}"/><br/> <br/>
+                                <center><c:forEach begin="0" end="3" var="index">
+                                        <div class="personalidad">
+                                            <div>
+                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" style=" height: 300px; width: 355px; padding: 20px 20px; border:red ridge thick " />   
+                                            </div>
+                                            <div>
+                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" style="padding: 20px 20px; font-weight: bold; "/>
+                                            </div>
+                                        </div>
+                                    </c:forEach></center>
                             </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black; display: block;" >

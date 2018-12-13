@@ -54,6 +54,7 @@ public class RespuestaAmbienteController implements Serializable {
     private boolean finalizo;
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
+    List<ResultadoPorAmbiente> listaResultadosPorValorAmbiente;
 
     public RespuestaAmbienteController() {
         tamGrupo = 6;
@@ -63,6 +64,7 @@ public class RespuestaAmbienteController implements Serializable {
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
         listaValoresAmbiente=null;
+        listaResultadosPorValorAmbiente = null;
     }
 
     public BarChartModel getGraficoModelo() {
@@ -76,6 +78,7 @@ public class RespuestaAmbienteController implements Serializable {
 
         if (listaResultadosPorAmbiente == null) {
             listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+            System.out.println("HOOOOOLLAAAAAA" + listaResultadosPorAmbiente.size() + listaResultadosPorValorAmbiente.get(0).getTipoAmbiente());
         }
         int i = 0;
         ChartSeries barra = null;
@@ -90,6 +93,17 @@ public class RespuestaAmbienteController implements Serializable {
         graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
         graficoModelo.setShowPointLabels(true);
         return graficoModelo;
+    }
+    
+    public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
+        if (listaResultadosPorValorAmbiente == null) {
+            listaResultadosPorValorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+        }
+        
+        return listaResultadosPorValorAmbiente;
     }
 
     public boolean isFinalizo() {

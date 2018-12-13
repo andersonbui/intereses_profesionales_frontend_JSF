@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <!--<p:dialog id="PreguntaCreateDlgAmbiente"  closable="true" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">-->
 
@@ -103,9 +104,9 @@
                                         </p:column>
                                         <p:column>
                                             <h5>Los puntajes más altos para su perfil fueron: </h5>
-                                            <p:outputLabel value="Ambiente: "/><br/>
-                                            <p:outputLabel value="Ambiente: "/><br/>
-                                            <p:outputLabel value="Ambiente: "/><br/>
+                                            <c:forEach begin="0" end="6" var="i">
+                                                <p:outputLabel value="Ambiente: "/><br/>
+                                            </c:forEach>
                                             <h5>Las áreas de conocimiento más escogidas para su perfil son: </h5>
                                             <p:outputLabel value="Ingeniería, Arquitectura y Urbanismo, Matemáticas y Ciencias Naturales "/><br/>
 

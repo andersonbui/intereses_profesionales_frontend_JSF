@@ -33,9 +33,9 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-@ManagedBean(name = "respuestaAmbienteController")
+@ManagedBean(name = "respuestaAmbienteEvaluacionController")
 @SessionScoped
-public class RespuestaAmbienteController implements Serializable {
+public class RespuestaAmbienteEvaluacionController implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
@@ -58,7 +58,7 @@ public class RespuestaAmbienteController implements Serializable {
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
     private boolean isEvaluacion;
 
-    public RespuestaAmbienteController() {
+    public RespuestaAmbienteEvaluacionController() {
         tamGrupo = 6;
         pasoActual = 0;
         numGrupos = 1;
@@ -181,6 +181,7 @@ public class RespuestaAmbienteController implements Serializable {
         return pasoActual == (numGrupos - 1);
     }
 
+
     public boolean esUltimoPaso() {
         return pasoActual == numGrupos;
     }
@@ -191,18 +192,14 @@ public class RespuestaAmbienteController implements Serializable {
         return pasoActual;
     }
 
-    public void volverAEncuesta() {
-        isEvaluacion = false;
-    }
-
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso: " + pasoActual);
-        if ((pasoActual + 1) % 3 == 0) {
-            isEvaluacion = true;
-        }
         pasoActual += 1;
         grupo = getGrupoItems(pasoActual + 1);
         number = 0;
+        if (pasoActual == 6) {
+            isEvaluacion = true;
+        }
         return pasoActual;
     }
 
@@ -242,10 +239,6 @@ public class RespuestaAmbienteController implements Serializable {
             number = 0;
             puntos--;
         }
-    }
-
-    public void casiFinaliza() {
-        isEvaluacion = true;
     }
 
     public int finalizarEncuesta(ActionEvent actionEvent) {
@@ -554,7 +547,7 @@ public class RespuestaAmbienteController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            RespuestaAmbienteController controller = (RespuestaAmbienteController) facesContext.getApplication().getELResolver().
+            RespuestaAmbienteEvaluacionController controller = (RespuestaAmbienteEvaluacionController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
             return controller.getRespuestaAmbiente(getKey(value));
         }

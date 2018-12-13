@@ -20,7 +20,7 @@
                                                      required="true" 
                                                      requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                        <f:selectItems value="#{areaController.items}"
+                                        <f:selectItems value="#{areaController.items}" 
                                                        var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[0], areaController.itemsMas, areaController.itemsMenos)}"
                                                        itemValue="#{area}"
                                                        itemLabel="#{area.nombre}"

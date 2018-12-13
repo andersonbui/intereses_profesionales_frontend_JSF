@@ -89,12 +89,12 @@ public class EncuestaController implements Serializable {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
     }
-    
-    public Encuesta actualizarSelected(){
+
+    public Encuesta actualizarSelected() {
         selected = getFacade().find(selected.getIdEncuesta());
         return selected;
     }
-    
+
 //    public Encuesta prepareCreate() {
 //        selected = new Encuesta();
 //        initializeEmbeddableKey();
@@ -131,6 +131,44 @@ public class EncuestaController implements Serializable {
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
+        }
+
+    }
+
+    public String resultado_personalidad(int i) {
+        String result_personalidad = "IIEJ";
+        //String result_personalidad=selected.getPersonalidad();
+        String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
+        System.out.println(url);
+
+        return url;
+
+    }
+
+    public String resultado_personalidad_descripcion(int i) {
+        String result_personalidad = "IIEJ";
+        //String result_personalidad=selected.getPersonalidad();
+        String codigo_personalidad = "" + i + result_personalidad.charAt(i);
+        if (null == codigo_personalidad) return null;
+        else switch (codigo_personalidad) {
+            case "0E":
+                return "Estrovertido";
+            case "0I":
+                return "Introvertido";
+            case "1I":
+                return "Intuitivo";
+            case "1S":
+                return "Sensato";
+            case "2E":
+                return "Emocional";
+            case "2R":
+                return "Racional";
+            case "3J":
+                return "Juzgador";
+            case "3P":
+                return "Perceptivo";
+            default:
+                return null;
         }
 
     }

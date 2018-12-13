@@ -47,6 +47,7 @@ public class RespuestaAmbienteController implements Serializable {
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
     private List<String> images;
+    private List<Character> listaValoresAmbiente;
     private List<RespuestaAmbiente> grupo = null;
     Encuesta EncuestaAcutal;
     private boolean finalizo;
@@ -60,13 +61,14 @@ public class RespuestaAmbienteController implements Serializable {
         puntos = 0;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
+        listaValoresAmbiente=null;
     }
 
     public BarChartModel getGraficoModelo() {
         graficoModelo = new BarChartModel();
 
         EncuestaAcutal = grupo.get(0).getEncuesta();
-        
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");

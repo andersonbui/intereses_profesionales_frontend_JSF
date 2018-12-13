@@ -89,14 +89,37 @@
                             </p:panel>
 
                             <p:panel header="Preguntas de ambiente" rendered="#{respuestaAmbienteController.isEvaluacion}">
-                                <h1><p:outputLabel value="#{respuestaAmbienteController.pasoActual}" ></p:outputLabel></h1>
-                                Hola luan
-                                <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
-                                                 update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso()}"  >
-                                </p:commandButton>
-                                <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
-                                                 update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso()}" >
-                                </p:commandButton>
+                                <p:panel header="Definicion del ambiente" rendered="#{respuestaAmbienteEvaluacionController.pasoActual == -1}">
+                                    <h:form>
+                                        <h:outputText value="#{respuestaAmbienteEvaluacionController.definicion}" escape="false"  ></h:outputText>
+                                    </h:form>
+                                </p:panel>
+                                <p:panel header="Pregunta ambiente"  rendered="#{respuestaAmbienteEvaluacionController.pasoActual != -1}">  
+                                    <h:form>
+                                        <p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>
+                                        <h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText>
+                                        <center>
+                                            <p:panelGrid columns="1" layout="grid">
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(0)}" id="opcionA" update="growl"  />
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(1)}" id="opcionB" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(2)}" id="opcionC" update="growl" />
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(3)}" id="opcionD" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(4)}" id="opcionE" update="growl"/>
+                                            </p:panelGrid>
+                                        </center>
+                                    </h:form>
+                                </p:panel>
+                                <h:panelGroup  style="background-color: black;" >
+                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
+                                                     update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
+                                    </p:commandButton>
+                                </h:panelGroup>
                             </p:panel>
 
                         </h:panelGrid>

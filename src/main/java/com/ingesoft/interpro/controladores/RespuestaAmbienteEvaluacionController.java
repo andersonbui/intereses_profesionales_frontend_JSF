@@ -50,22 +50,26 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
     private List<String> images;
-    private List<Character> listaValoresAmbiente;
     private List<RespuestaAmbiente> grupo = null;
     Encuesta EncuestaAcutal;
     private boolean finalizo;
-    private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
     private boolean isEvaluacion;
 
+    String definicion;
+    String enunciado;
+    List<String> opciones;
+    int correcta;
+
     public RespuestaAmbienteEvaluacionController() {
         tamGrupo = 6;
-        pasoActual = 0;
+        pasoActual = -1;
         numGrupos = 1;
         puntos = 0;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
-        listaValoresAmbiente = null;
+        getItemPreguntaEvaluacion();
+        definicion = getItemDefinicion().get(0).getDefinicion();
     }
 
     public boolean isIsEvaluacion() {
@@ -74,39 +78,6 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
 
     public void setIsEvaluacion(boolean isEvaluacion) {
         this.isEvaluacion = isEvaluacion;
-    }
-
-    public BarChartModel getGraficoModelo() {
-        graficoModelo = new BarChartModel();
-
-        EncuestaAcutal = grupo.get(0).getEncuesta();
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
-
-        if (listaResultadosPorAmbiente == null) {
-            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
-        }
-        int i = 0;
-        ChartSeries barra = null;
-//        System.out.println("lista:" + listaResultadosPorAmbiente);
-        Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
-            @Override
-            public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
-                return -r1.getValor().compareTo(r2.getValor());
-            }
-        });
-        for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-            barra = new ChartSeries("ambiente:--");
-            barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
-            barra.setLabel(result.getTipoAmbiente().getTipo());
-//            System.out.println("result:" + result.getValor());
-            graficoModelo.addSeries(barra);
-        }
-        graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
-        graficoModelo.setShowPointLabels(true);
-        return graficoModelo;
     }
 
     public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente() {
@@ -181,7 +152,6 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         return pasoActual == (numGrupos - 1);
     }
 
-
     public boolean esUltimoPaso() {
         return pasoActual == numGrupos;
     }
@@ -194,32 +164,18 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
 
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso: " + pasoActual);
-        pasoActual += 1;
-        grupo = getGrupoItems(pasoActual + 1);
-        number = 0;
-        if (pasoActual == 6) {
-            isEvaluacion = true;
+        int cont = 0;
+        if (pasoActual == -1) {
+            cont++;
+            definicion = getItemDefinicion().get(cont).getDefinicion();
         }
+        pasoActual += 1;
+        number = 0;
         return pasoActual;
     }
 
     public int getTamGrupo() {
         return tamGrupo;
-    }
-
-    public void meGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 1.0);
-        reinicioUnicoPorPregunta(respuesta);
-    }
-
-    public void indiferente(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 0.5);
-        reinicioUnicoPorPregunta(respuesta);
-    }
-
-    public void noMeGusta(RespuestaAmbiente respuesta) {
-        respuesta.setRespuesta((float) 0);
-        reinicioUnicoPorPregunta(respuesta);
     }
 
     public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta) {
@@ -249,49 +205,7 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         pasoActual += 1;
         finalizo = true;
         // realizar estadistica de respuestas
-        realizarEstadisticas();
         return pasoActual;
-    }
-
-    /**
-     *
-     */
-    private void realizarEstadisticas() {
-        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
-
-        Elemento[] valores = new Elemento[6];
-
-        valores[0] = new Elemento();
-        valores[1] = new Elemento();
-        valores[2] = new Elemento();
-        valores[3] = new Elemento();
-        valores[4] = new Elemento();
-        valores[5] = new Elemento();
-
-        valores[0].valor = 0.0;
-        valores[1].valor = 0.0;
-        valores[2].valor = 0.0;
-        valores[3].valor = 0.0;
-        valores[4].valor = 0.0;
-        valores[5].valor = 0.0;
-
-        for (RespuestaAmbiente respuestaAmbiente : items) {
-            TipoAmbiente tipoAmb = respuestaAmbiente.getPreguntaAmbiente().getIdTipoAmbiente();
-            int indice = tipoAmb.getIdTipoAmbiente() - 1;
-            valores[indice].tipoPer = tipoAmb;
-            valores[indice].valor += respuestaAmbiente.getRespuesta();
-        }
-
-        for (int i = 0; i < valores.length; i++) {
-            resultadoPorAmbienteController.prepareCreate();
-            resultadoPorAmbienteController.getSelected().setValor((float) valores[i].valor);
-            resultadoPorAmbienteController.getSelected().setEncuesta(EncuestaAcutal);
-            resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
-            resultadoPorAmbienteController.create();
-        }
     }
 
     private class Elemento {
@@ -348,31 +262,6 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
-    }
-
-    public String obtenerColor(String tipo) {
-        String color = "#000000";
-        switch (tipo) {
-            case "REALISTA":
-                color = "#008000";
-                break;
-            case "INVESTIGATIVO":
-                color = "#FF0000";
-                break;
-            case "ARTISTICO":
-                color = "#FFD42A";
-                break;
-            case "SOCIAL":
-                color = "#0000FF";
-                break;
-            case "EMPRENDEDOR":
-                color = "#FFFF00";
-                break;
-            case "CONVENCIONAL":
-                color = "#00FFFF";
-                break;
-        }
-        return color;
     }
 
     public void update() {
@@ -432,32 +321,6 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
             }
         }
         return listaRespuestas;
-    }
-
-    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
-        System.out.println("encuesta: " + encuesta);
-        System.out.println("preguntas: " + preguntas);
-        gruposPreguntas = null;
-        EncuestaAcutal = encuesta;
-        finalizo = false;
-        // PRUEBAS
-        double[] valores = {0.0, 0.5, 1.0};
-        Random rand = new Random(5);
-        //
-        items = new ArrayList<>(preguntas.size());
-        for (PreguntaAmbiente pregunta : preguntas) {
-            selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
-            selected.setPreguntaAmbiente(pregunta);
-            selected.setEncuesta(encuesta);
-            selected.setRespuesta((float) valores[rand.nextInt(3)]);
-            items.add(selected);
-        }
-        listaResultadosPorAmbiente = null;
-        cantidadRespuestas = new int[items.size()];
-        getGrupos();
-        pasoActual = 0;
-        grupo = getGrupoItems(pasoActual + 1);
-        return items;
     }
 
     public String obtenerImagen(RespuestaAmbiente respuesta) {
@@ -583,6 +446,151 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
             }
         }
 
+    }
+
+    public List<Definicion> getItemDefinicion() {
+
+        ArrayList<Definicion> itemsDefinicion;
+        itemsDefinicion = new ArrayList();
+        itemsDefinicion.add(new Definicion(
+                "<p> A las personas con intereses realistas les gustan actividades que incluyan problemas y soluciones prácticas y directas. Con frecuencia, a las personas con intereses realistas no les gustan las carreras que requieren trabajo de oficina o trabajar junto a otras personas.\n"
+                + "                Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Trabajar con plantas y animales</li>\n"
+                + "                    <li>Materiales reales, tales como madera, herramientas y maquinaria</li>\n"
+                + "                    <li>Trabajo al aire libres</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion(
+                "<h4>El Ambiente de profesiones u ocupaciones de tipo Artístico se define así: </h4>"
+                + "<p> A las personas con intereses artísticos, les gustan trabajos relacionados con el lado artístico de las cosas, tales como actuar, música, arte y diseño. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Creatividad en su trabajo</li>\n"
+                + "                    <li>Trabajo que puede hacerse sin seguir una serie de reglas</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion(
+                "<h4>El Ambiente de profesiones u ocupaciones de tipo de investigación se define así: </h4>"
+                + "<p> A las personas con intereses de investigación, le gustan trabajos relacionados con ideas y razonamiento en lugar de actividades fisicas o liderazgo de personal. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Búsqueda de hechos</li>\n"
+                + "                    <li>Resolución de problemas</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+
+        itemsDefinicion.add(new Definicion(
+                "<h4>El Ambiente de profesiones u ocupaciones de tipo Social se define así: </h4>"
+                + "<p> A las personas con intereses sociales les gusta trabajar con otros para ayudarlos a aprender y a desarrollar su conocimiento. Les gusta trabajar con personas más que trabajar con objetos, maquinaria o información. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Enseñanza</li>\n"
+                + "                    <li>Dar consejos</li>\n"
+                + "                    <li>Ayudar y dar consejos a otros</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion(
+                "<h4>El Ambiente de profesiones u ocupaciones de tipo Emprendedor se define así: </h4>"
+                + "<p> A las personas con intereses empresariales les gustan trabajos que tengan que ver con el comienzo y continuación de proyectos de negocios. A estas personas les gusta tomar acciones en lugar de pensar sobre las cosas. "
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Persuadir y dirigir personal</li>\n"
+                + "                    <li>Tomar decisiones</li>\n"
+                + "                    <li>Tomar riesgos para obtener ganancias</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+        itemsDefinicion.add(new Definicion(
+                "<h4>El Ambiente de profesiones u ocupaciones de tipo Convencional se define así: </h4>"
+                + "<p>A las personas con intereses convencionales les gustan trabajos que siguen procedimientos y rutinas. Prefieren trabajar con información y poner atención a detalles en lugar de trabajar con ideas."
+                + "Les gusta: </p>\n"
+                + "            <p>\n"
+                + "                <ul>\n"
+                + "                    <li>Trabajar con reglas claras</li>\n"
+                + "                    <li>Seguir a un líder influyente</li>\n"
+                + "                </ul>\n"
+                + "            </p>"));
+
+        return itemsDefinicion;
+    }
+
+    public void getItemPreguntaEvaluacion() {
+        ArrayList<String> listaOpciones;
+        listaOpciones = new ArrayList();
+        listaOpciones.add("Trabajar con plantas y animales");
+        listaOpciones.add("Materiales reales, tales como madera, herramientas y maquinaria");
+        listaOpciones.add("Trabajo al aire libres");
+        listaOpciones.add("Les gusta trabajar con teorías científicas");
+        listaOpciones.add("Les gusta la composición musical");
+        enunciado = "<h5>Según la afirmación anterior, cual de las siguientes opciones no describe ocupaciones del ambiente de tipo Realista: </h5><br/>";
+        opciones = listaOpciones;
+        correcta = 0;
+
+//        enunciado ="<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+//                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo investigativo: </h5><br/>";
+//        enunciado ="<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+//                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Artístico: </h5><br/>";
+//        enunciado ="<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+//                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que no describe ocupaciones del Ambiente de tipo Social: </h5><br/>";
+//        enunciado ="<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+//                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Emprendedor: </h5>";
+//        enunciado ="<p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correctacorrecta: </p><br/>"
+//                + "<h5>Según la afirmación anterior, seleccione la opción adecuada que describe ocupaciones del Ambiente de tipo Convencional </h5>";
+    }
+
+    public class Definicion {
+
+        String definicion;
+
+        public Definicion(String definicion) {
+            this.definicion = definicion;
+        }
+
+        public String getDefinicion() {
+            return definicion;
+        }
+
+        public void setDefinicion(String definicion) {
+            this.definicion = definicion;
+        }
+
+    }
+
+    public String getDefinicion() {
+        return definicion;
+    }
+
+    public void setDefinicion(String definicion) {
+        this.definicion = definicion;
+    }
+
+    public String getEnunciado() {
+        return enunciado;
+    }
+
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
+    }
+
+    public List<String> getOpciones() {
+        return opciones;
+    }
+
+    public void setOpciones(List<String> opciones) {
+        this.opciones = opciones;
+    }
+
+    public int getCorrecta() {
+        return correcta;
+    }
+
+    public void setCorrecta(int correcta) {
+        this.correcta = correcta;
     }
 
 }

@@ -30,6 +30,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
@@ -199,6 +200,7 @@ public class RespuestaAmbienteController implements Serializable {
         System.out.println("siguientes paso: " + pasoActual);
         if ((pasoActual + 1) % 3 == 0) {
             isEvaluacion = true;
+            reinicioPasoActualEvaluacion();
         }
         pasoActual += 1;
         grupo = getGrupoItems(pasoActual + 1);
@@ -246,6 +248,15 @@ public class RespuestaAmbienteController implements Serializable {
 
     public void casiFinaliza() {
         isEvaluacion = true;
+        reinicioPasoActualEvaluacion();
+    }
+    
+    public void reinicioPasoActualEvaluacion(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        RespuestaAmbienteEvaluacionController respuestaAmbienteEvaluacionController = (RespuestaAmbienteEvaluacionController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "respuestaAmbienteEvaluacionController");
+
+        respuestaAmbienteEvaluacionController.setPasoActual(-1);
     }
 
     public int finalizarEncuesta(ActionEvent actionEvent) {

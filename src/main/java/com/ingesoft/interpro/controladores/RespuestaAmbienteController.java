@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -54,7 +56,6 @@ public class RespuestaAmbienteController implements Serializable {
     private boolean finalizo;
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
-    List<ResultadoPorAmbiente> listaResultadosPorValorAmbiente;
 
     public RespuestaAmbienteController() {
         tamGrupo = 6;
@@ -63,8 +64,7 @@ public class RespuestaAmbienteController implements Serializable {
         puntos = 0;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
-        listaValoresAmbiente=null;
-        listaResultadosPorValorAmbiente = null;
+        listaValoresAmbiente = null;
     }
 
     public BarChartModel getGraficoModelo() {
@@ -78,31 +78,33 @@ public class RespuestaAmbienteController implements Serializable {
 
         if (listaResultadosPorAmbiente == null) {
             listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
-            System.out.println("HOOOOOLLAAAAAA" + listaResultadosPorAmbiente.size() + listaResultadosPorValorAmbiente.get(0).getTipoAmbiente());
         }
         int i = 0;
         ChartSeries barra = null;
         System.out.println("lista:" + listaResultadosPorAmbiente);
+        Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
+            @Override
+            public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
+                return -r1.getValor().compareTo(r2.getValor());
+            }
+        });
         for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-            barra = new ChartSeries("ambiente:--" );
+            barra = new ChartSeries("ambiente:--");
             barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
             barra.setLabel(result.getTipoAmbiente().getTipo());
             System.out.println("result:" + result.getValor());
-            graficoModelo.addSeries(barra); 
+            graficoModelo.addSeries(barra);
         }
         graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
         graficoModelo.setShowPointLabels(true);
         return graficoModelo;
     }
-    
-    public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente(){
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
-        if (listaResultadosPorValorAmbiente == null) {
-            listaResultadosPorValorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+
+    public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente() {
+        List<ResultadoPorAmbiente> listaResultadosPorValorAmbiente = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            listaResultadosPorValorAmbiente.add(listaResultadosPorAmbiente.get(i));
         }
-        
         return listaResultadosPorValorAmbiente;
     }
 
@@ -426,7 +428,7 @@ public class RespuestaAmbienteController implements Serializable {
         EncuestaAcutal = encuesta;
         finalizo = false;
         // PRUEBAS
-        double[] valores = {0.0,0.5,1.0};
+        double[] valores = {0.0, 0.5, 1.0};
         Random rand = new Random(5);
         //
         items = new ArrayList<>(preguntas.size());
@@ -434,7 +436,7 @@ public class RespuestaAmbienteController implements Serializable {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
-            selected.setRespuesta((float)valores[rand.nextInt(3)]);
+            selected.setRespuesta((float) valores[rand.nextInt(3)]);
             items.add(selected);
         }
         listaResultadosPorAmbiente = null;

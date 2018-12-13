@@ -104,9 +104,9 @@
                                         </p:column>
                                         <p:column>
                                             <h5>Los puntajes más altos para su perfil fueron: </h5>
-                                            <c:forEach begin="0" end="6" var="i">
-                                                <p:outputLabel value="Ambiente: "/><br/>
-                                            </c:forEach>
+                                            <ui:repeat value="#{respuestaAmbienteController.getListaResultadoPorAmbiente()}" var="item">
+                                                <p:outputLabel value="Ambiente aqui: #{item.valor}"/><br/>
+                                            </ui:repeat>
                                             <h5>Las áreas de conocimiento más escogidas para su perfil son: </h5>
                                             <p:outputLabel value="Ingeniería, Arquitectura y Urbanismo, Matemáticas y Ciencias Naturales "/><br/>
 
@@ -120,7 +120,7 @@
 
                                         <p:column >
                                             <h5>Su puntaje de juego y evaluación fue: </h5>
-                                            <p:outputLabel value="Juego: "/><br/>
+                                            <p:outputLabel value="Juegosss: #{respuestaAmbienteController.puntos}"/><br/>
                                             <p:outputLabel value="Evaluación: "/><br/>
                                         </p:column>
 

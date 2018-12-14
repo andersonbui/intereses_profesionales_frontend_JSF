@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -64,7 +65,7 @@ public class MineriaController implements Serializable {
         for (Encuesta encuesta : encuestas) {
             sb = new StringBuilder();
             String sexo = encuesta.getIdEstudiante().getIdPersona().getSexo().toUpperCase();
-            if (sexo == null || sexo == "" || !camposActivos.get("sexo")) {
+            if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
                 continue;
             }
 
@@ -94,6 +95,9 @@ public class MineriaController implements Serializable {
             ea.escribir(sb.toString());
         }
         ea.terminar();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage("hola", new FacesMessage("You can't delete it.","archivo: "));
+        context.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
 
     }
 

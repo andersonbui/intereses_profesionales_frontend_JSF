@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
 
-    <p:panelGrid>
+      <p:panelGrid>
         <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la ssiguiente secciones </h3>
         <p:row>
             <p:column>
@@ -34,4 +34,34 @@
             </p:column>
         </p:row>
     </p:panelGrid>
+    <center>
+        <p:panelGrid styleClass="panelgrid">
+            <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
+            <p:row>
+                <p:column>
+                    <div>
+                        <p:commandButton type="button" onclick="PF('switcher').previous();"
+                                         icon="pi pi-caret-left" id="prev" style="margin-bottom: 5px"/>
+                        <p:commandButton type="button" onclick="PF('switcher').next();"
+                                         icon="pi pi-caret-right" id="next" style="margin-bottom: 5px"/>
+
+                        <p:imageSwitch effect="wipe" widgetVar="switcher" id="manuelSwitcher"
+                                       slideshowAuto="false">
+                            <ui:repeat value="#{respuestaAmbienteEvauacionController.items}" var="image" id="manuelSwitcherImages">
+                                <p:graphicImage name="#{respuestaAmbienteEvauacionController.obtenerImagen(image)}" id="image" style="width:350px; height: 300px"/>
+                            </ui:repeat>
+                        </p:imageSwitch>
+                    </div>
+                </p:column>
+                <p:column style="padding: 100px 40px">
+                    <p:commandButton class="tamano-boton-pregunta" value="Realista" id="realista" update="growl"  /><br/>
+                    <p:commandButton class="tamano-boton-pregunta" value="Investigativo" id="investigativo" update="growl"/><br/>
+                    <p:commandButton class="tamano-boton-pregunta" value="Artístico" id="artistico" update="growl" /><br/>
+                    <p:commandButton class="tamano-boton-pregunta" value="Social" id="social" update="growl"/><br/>
+                    <p:commandButton class="tamano-boton-pregunta" value="Emprendedor" id="emprendedor" update="growl"/><br/> 
+                    <p:commandButton class="tamano-boton-pregunta" value="Convencional" id="convencional" update="growl"/>
+                </p:column>
+            </p:row>
+        </p:panelGrid>
+    </center>
 </html>

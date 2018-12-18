@@ -24,6 +24,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -53,8 +54,9 @@ public class Encuesta implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @Size(max=5)
     @Column(name = "personalidad")
-    private Character personalidad;
+    private String personalidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<AreaEncuesta> areaEncuestaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
@@ -103,11 +105,11 @@ public class Encuesta implements Serializable {
         this.fecha = fecha;
     }
 
-    public Character getPersonalidad() {
+    public String getPersonalidad() {
         return personalidad;
     }
 
-    public void setPersonalidad(Character personalidad) {
+    public void setPersonalidad(String personalidad) {
         this.personalidad = personalidad;
     }
 

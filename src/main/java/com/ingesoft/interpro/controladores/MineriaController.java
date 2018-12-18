@@ -6,8 +6,10 @@ import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -17,8 +19,17 @@ import javax.faces.context.FacesContext;
 public class MineriaController implements Serializable {
 
     public MineriaController() {
-
+        camposActivos = new HashMap<>();
+        camposActivos.put("sexo", true);
+        camposActivos.put("edad", true);
+        camposActivos.put("p_realista", true);
+        camposActivos.put("p_investigativo", true);
+        camposActivos.put("p_artistico", true);
+        camposActivos.put("p_social", true);
+        camposActivos.put("p_emprendedor", true);
+        camposActivos.put("p_convencional", true);
     }
+    Map<String, Boolean> camposActivos;
     String nombreArchivo = "mineria.arff";
     String cabecera = "@relation areasdeconocimiento\n"
             + "\n"
@@ -42,17 +53,30 @@ public class MineriaController implements Serializable {
         EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "encuestaController");
         List<Encuesta> encuestas = encuestaController.getItems();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = null;
         String ingenieria = "";
-        for (Encuesta encuesta : encuestas) {
-            String sexo = encuesta.getIdEstudiante().getIdPersona().getSexo().toUpperCase();
-            Random rand = new Random();
-            long anos = 13 + rand.nextInt(6);
-//            long result = encuesta.getFecha().getYear()- encuesta.getIdEstudiante().getIdPersona().getFechaNacimiento().getYear();
-//            Calendar fechaNac = Calendar.getInstance();
-//            fechaNac.setTimeInMillis(result);
+        // para indicar si algo salio mal en los campos obtenidos
+        boolean algoMal = false;
 
-            if (encuesta.getIdAreaProfesional() != null) {
+        System.out.println("Archivo generado: " + nombreArchivo);
+        EscribirArchivo ea = new EscribirArchivo();
+        ea.abrir(nombreArchivo);
+        ea.escribir(cabecera);
+        for (Encuesta encuesta : encuestas) {
+            sb = new StringBuilder();
+            String sexo = encuesta.getIdEstudiante().getIdPersona().getSexo().toUpperCase();
+            if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
+                continue;
+            }
+
+            long anos = obtenerEdad(encuesta);
+            if (anos == 0 || !camposActivos.get("edad")) {
+                continue;
+            }
+
+            if (encuesta.getIdAreaProfesional() == null) {
+//                continue;
+            } else {
                 ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
             }
 
@@ -61,19 +85,35 @@ public class MineriaController implements Serializable {
             sb.append(anos);
             sb.append(",");
             sb.append(ingenieria);
+            if (encuesta.getResultadoPorAmbienteList().isEmpty()) {
+                continue;
+            }
             for (ResultadoPorAmbiente resultAmbi : encuesta.getResultadoPorAmbienteList()) {
                 sb.append(",");
                 sb.append(resultAmbi.getValor());
             }
-            sb.append("\n");
+            ea.escribir(sb.toString());
         }
-        System.out.println("Archivo generado: " + nombreArchivo);
-        EscribirArchivo ea = new EscribirArchivo();
-        ea.abrir(nombreArchivo);
-        ea.escribir(cabecera);
-        ea.escribir(sb.toString());
         ea.terminar();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage("hola", new FacesMessage("You can't delete it.","archivo: "));
+        context.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
 
     }
 
+    private Integer obtenerEdad(Encuesta encuesta) {
+        Date fechaEnc = encuesta.getFecha();
+        Date fechaNac = encuesta.getIdEstudiante().getIdPersona().getFechaNacimiento();
+        if (fechaEnc == null || fechaNac == null) {
+            return 0;
+        }
+        long diferencia = fechaEnc.getTime() - fechaNac.getTime();
+        Date dateAnos = new Date(diferencia);
+        Calendar inicial = Calendar.getInstance();
+        inicial.setTime(new Date((long) 0));
+        
+        Calendar fechaNacim = Calendar.getInstance();
+        fechaNacim.setTime(dateAnos);
+        return fechaNacim.get(Calendar.YEAR)- inicial.get(Calendar.YEAR);
+    }
 }

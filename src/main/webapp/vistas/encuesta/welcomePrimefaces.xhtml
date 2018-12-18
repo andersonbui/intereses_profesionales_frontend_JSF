@@ -10,6 +10,26 @@
             <h:form>
                 <!--value="{areaEncuestaController.obtenerItem(0).area}"-->
                 <p:wizard  widgetVar="perfilEstudianteWizard" showNavBar="true"   nextLabel="Siguiente" backLabel="Anterior">
+                   <p:tab id="areaProfesionalTab" title="Area profesinal">
+                        <center><p:panel header="Profesion preferida">
+                                <br/><p><b>Selecciona el area profesional en la que le gustaria estudiar.</b></p><br/>
+                                <p:panelGrid columns="2" id="panelInformacionAreaProfesional" styleClass="panelgrid">
+                                    <p:outputLabel style="font-weight:bold; color: black;" value="Area profesional" for="areaProfesionalSelect" />
+                                    <p:selectOneMenu filter="true" id="areaProfesionalSelect"
+                                                     value="#{encuestaController.selected.idAreaProfesional}"
+                                                     requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                        <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                        <f:selectItems value="#{areaProfesionalController.items}"
+                                                       var="area"
+                                                       itemValue="#{area}"
+                                                       itemLabel="#{area.areal}"
+                                                       />
+                                        <p:ajax event="change" update="materia2_mas materia3_mas"/>
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+                            </p:panel></center>
+                    </p:tab>
                     <p:tab id="preferida" title="Materias de preferencia">
                         <center><p:panel header="Materias de preferencia">
                                 <br/><p><b>Selecciona en orden descendente las materias que mas te gustan.</b></p><br/>
@@ -20,7 +40,7 @@
                                                      required="true" 
                                                      requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                        <f:selectItems value="#{areaController.items}"
+                                        <f:selectItems value="#{areaController.items}" 
                                                        var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[0], areaController.itemsMas, areaController.itemsMenos)}"
                                                        itemValue="#{area}"
                                                        itemLabel="#{area.nombre}"
@@ -138,7 +158,6 @@
                                     <p:outputLabel style="font-weight:bold; color: black;" value="Materia 3 " for="materia3_mejorNota" />
                                     <p:selectOneMenu filter="true" id="materia3_mejorNota"  
                                                      value="#{areaController.itemsNota[2]}"
-                                                     required="true" 
                                                      requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
                                         <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
                                         <f:selectItems value="#{areaController.items}"
@@ -151,6 +170,7 @@
                                 </p:panelGrid>
                             </p:panel></center>
                     </p:tab>
+                    
                 </p:wizard>
                 <p:commandButton value="Siguiente encuesta" ajax="true"
                                  action="#{encuestaController.pasoPreguntasAmbiente()}"

@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores.util;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,10 +16,12 @@ public class EscribirArchivo {
 
     private FileWriter fw;
     private PrintWriter pw;
+    private File archivo;
 
     public void abrir(String nombreArchivo) {
         try {
-            fw = new FileWriter(nombreArchivo, false);
+            archivo = new File(nombreArchivo);
+            fw = new FileWriter(archivo, false);
             pw = new PrintWriter(fw);
         } catch (IOException ex) {
             Logger.getLogger(EscribirArchivo.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,5 +42,9 @@ public class EscribirArchivo {
         if (pw != null) {
             pw.close();
         }
+    }
+
+    public String getNombre() {
+        return archivo.getAbsolutePath();
     }
 }

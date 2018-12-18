@@ -28,7 +28,7 @@
     <h:body class="question-page unified-theme new-topbar">
 
         <p:growl id="growl" life="3000" />
-
+        
         <div  class="top-bar js-top-bar _fixed top-bar__network">
             <div class="-container">
                 <div id="top" class="top layout-topbar">
@@ -86,7 +86,8 @@
         <div class="container">
             <div id="left-sidebar" class="left-sidebar js-pinned-left-sidebar">
                 <h:form>
-                    <p:growl id="messages" showDetail="false"/>
+                    <h:messages globalOnly="true" />
+                    <p:growl id="messages" showDetail="true"/>
                     <p:menu style="width: 185px;">
                         <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
                             <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>

@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.facades.EvaluacionFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -79,6 +80,15 @@ public class EvaluacionController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
+    }
+
+    public List<String> getItemsEnunciado() {
+        List<String> enunciado = new ArrayList();
+//            String enunciado=null;
+        for (int i = 0; i < items.size(); i++) {
+            enunciado.add(items.get(i).getEnunciado());
+        }
+        return enunciado;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

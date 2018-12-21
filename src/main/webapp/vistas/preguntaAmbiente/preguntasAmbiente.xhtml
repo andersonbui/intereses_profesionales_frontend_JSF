@@ -100,15 +100,16 @@
                                         <h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText>
                                         <center>
                                             <p:panelGrid columns="1" layout="grid">
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(0)}" id="opcionA" update="growl"  />
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(0)}" id="opcionA" update="growl"/>
                                                 <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(1)}" id="opcionB" update="growl"/>
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(2)}" id="opcionC" update="growl" />
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(2)}" id="opcionC" update="growl"/>
                                                 <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(3)}" id="opcionD" update="growl"/>
                                                 <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.opciones.get(4)}" id="opcionE" update="growl"/>
                                             </p:panelGrid>
                                         </center>
                                     </h:form>
                                 </p:panel>
+                                
                                 <h:panelGroup  style="background-color: black;" >
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
@@ -120,7 +121,7 @@
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
                                     </p:commandButton>
                                 </h:panelGroup>
-                            </p:panel>
+                            </p:panel> 
 
                         </h:panelGrid>
                         <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{respuestaAmbienteController.esUltimoPaso()}" >
@@ -155,7 +156,7 @@
 
                                         <p:column >
                                             <h5>Su puntaje de juego y evaluación fue: </h5>
-                                            <p:outputLabel value="Juegosss: #{respuestaAmbienteController.puntos}"/><br/>
+                                            <p:outputLabel value="Juegos: #{respuestaAmbienteController.puntos}"/><br/>
                                             <p:outputLabel value="Evaluación: "/><br/>
                                         </p:column>
 

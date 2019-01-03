@@ -35,8 +35,19 @@ public class DepartamentoController implements Serializable {
         return selected;
     }
 
+    public PaisController getPaisController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PaisController paisController = (PaisController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "paisController");
+        return paisController;
+    }
+
     public void setSelected(Departamento selected) {
         this.selected = selected;
+        if(selected.getIdPais() != null){
+            getPaisController().setSelected(selected.getIdPais());
+        }
+
     }
 
     protected void setEmbeddableKeys() {

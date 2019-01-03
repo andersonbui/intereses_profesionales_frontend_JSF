@@ -13,6 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "mineriaController")
 @SessionScoped
@@ -95,10 +96,16 @@ public class MineriaController implements Serializable {
             ea.escribir(sb.toString());
         }
         ea.terminar();
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage("hola", new FacesMessage("You can't delete it.","archivo: "));
-        context.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
-
+//        facesContext.addMessage(null, new FacesMessage("You can't delete it.","archivo: "));
+//        facesContext.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
+//facesContext.getApplication().getELResolver()
+        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");  
+        RequestContext requestContext  = RequestContext.getCurrentInstance();
+        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>"+ea.getNombre()));
+//        requestContext.openDialog("este es otro mensaje");
+//        requestContext.execute("PF('#molestia').setvalue('carambas');");
+//        requestContext.execute("PF('dlg1').show();");
+        System.out.println("llego hasta aqui");
     }
 
     private Integer obtenerEdad(Encuesta encuesta) {

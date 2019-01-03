@@ -43,7 +43,8 @@
                         <h:outputText value="#{bundle.ViewPersonaLabel_idUsuario}"/>
                         <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
                     </p:panelGrid>
-                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil" actionListener="#{personaController.setSelected(loginController.personaActual)}" update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
+                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil"
+                                     actionListener="#{personaController.prepareUpdate(loginController.personaActual)}" update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
                 </h:panelGroup>
             </h:form>
             <ui:include src="EditarPerfil.xhtml"/>

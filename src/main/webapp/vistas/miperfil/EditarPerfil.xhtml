@@ -22,7 +22,7 @@
                                         <p:inputText id="apellidos" value="#{personaController.selected.apellido}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
 
                                         <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
-                                        <p:selectOneMenu id="idTipoIdentificacion" value="#{loginController.personaActual.tipoIdentificacion}">
+                                        <p:selectOneMenu id="idTipoIdentificacion" value="#{personaController.selected.tipoIdentificacion}">
                                             <f:selectItem itemLabel="Cedula de ciudadania" itemValue='Cedula de ciudadania' />
                                             <f:selectItem itemLabel="DNI" itemValue='DNI' />
                                             <f:selectItem itemLabel="NUIP" itemValue='NUIP' />
@@ -32,7 +32,7 @@
                                         </p:selectOneMenu>
                                         
                                         <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_identificacion}"/>
-                                        <p:inputText value="#{loginController.personaActual.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
+                                        <p:inputText value="#{personaController.selected.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
                                         
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Fecha nacimiento: " for="fechaNacimiento" />
                                         <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" placeholder="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
@@ -43,7 +43,7 @@
                                             <f:selectItem itemLabel="F" itemValue='F' />
                                         </p:selectOneRadio>
                                         <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_idUsuario}"/>
-                                        <p:inputText value="#{loginController.personaActual.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
                                     </p:panelGrid>
                                 </p:panel>
                             </center>

@@ -28,7 +28,7 @@
     <h:body class="question-page unified-theme new-topbar">
 
         <p:growl id="growl" life="3000" />
-        
+
         <div  class="top-bar js-top-bar _fixed top-bar__network">
             <div class="-container">
                 <div id="top" class="top layout-topbar">
@@ -106,13 +106,17 @@
                             <p:menuitem value="Generar mineria" action="#{mineriaController.sacarDatos}" />
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
+                        
+                        <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
+                            <p:menuitem value="Area" outcome="/vistas/area/List.xhtml" />
+                            <p:menuitem value="Estudiante"  url="/estudiantes/"  outcome="/vistas/estudiante/List.xhtml" />
+                        </p:submenu>
+                        
                         <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
                             <p:menuitem value="Preguntas ambiente" outcome="/vistas/preguntaAmbiente/List.xhtml"  /> 
                             <p:menuitem value="Preguntas personalidad" outcome="/vistas/preguntaPersonalidad/List.xhtml"  /> 
                             <p:menuitem value="AmbientePersonalidad" outcome="/vistas/ambientePersonalidad/List.xhtml" />
-                            <p:menuitem value="Area" outcome="/vistas/area/List.xhtml" />
                             <p:menuitem value="Encuesta" outcome="/vistas/encuesta/List.xhtml" />
-                            <p:menuitem value="Estudiante"  url="/estudiantes/"  outcome="/vistas/estudiante/List.xhtml" />
                             <p:menuitem value="EstudianteGrado" outcome="/vistas/estudianteGrado/List.xhtml" />
                             <p:menuitem value="Grado" outcome="/vistas/grado/List.xhtml" />
                             <p:menuitem value="GrupoUsuario" outcome="/vistas/grupoUsuario/List.xhtml" />
@@ -133,6 +137,9 @@
                     </p:menu>
                 </h:form> 
             </div>
+            <p:dialog header="Basic Dialog" widgetVar="dlg1" minHeight="40">
+                <p:outputLabel id="molestia"   value="Resistance to PrimeFaces is futile!" />
+            </p:dialog>
             <div id="content" class="snippet-hidden">
                 <ui:insert name="content">Content</ui:insert>
             </div>

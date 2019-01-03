@@ -35,58 +35,35 @@
                         </p:column>
                         <p:column>
                             <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonaTitle_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idPersona.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonaTitle_apellido}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idPersona.apellido}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonaTitle_identificacion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idPersona.identificacion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
                                 <h:outputText value="#{bundle.ListEstudianteTitle_fechaIngreso}"/>
                             </f:facet>
                             <h:outputText value="#{item.fechaIngreso}">
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_estrato}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.estrato}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_cuantosViven}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.cuantosViven}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_cuantosTrabajan}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.cuantosTrabajan}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_viveConPadres}"/>
-                            </f:facet>
-                            <p:selectBooleanCheckbox value="#{item.viveConPadres}" disabled="true"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_desplazados}"/>
-                            </f:facet>
-                            <p:selectBooleanCheckbox value="#{item.desplazados}" disabled="true"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_personalidad}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.personalidad}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_idPersona}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idPersona}"/>
-                        </p:column>
+                        
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{estudianteController.prepareCreate}" update=":EstudianteCreateForm" oncomplete="PF('EstudianteCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EstudianteViewForm" oncomplete="PF('EstudianteViewDialog').show()" disabled="#{empty estudianteController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}"  actionListener="#{estudianteController.prepareUpdate()}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{estudianteController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}"/>
                         </f:facet>
                     </p:dataTable>

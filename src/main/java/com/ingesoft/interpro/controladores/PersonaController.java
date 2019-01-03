@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
 import java.io.Serializable;
@@ -46,7 +47,7 @@ public class PersonaController implements Serializable {
                 getValue(facesContext.getELContext(), null, "departamentoController");
         CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "ciudadController");
-        
+
         if (persona.getIdCiudad() != null) {
             ciudadController.setSelected(persona.getIdCiudad());
             if (persona.getIdCiudad().getIdDepartamento() != null) {
@@ -72,6 +73,48 @@ public class PersonaController implements Serializable {
         return selected;
     }
 
+    public EstudianteController getEstudianteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        EstudianteController estudianteController = (EstudianteController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "estudianteController");
+        return estudianteController;
+    }
+
+    public DepartamentoController getDepartamentoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        DepartamentoController controllerPersona = (DepartamentoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "departamentoController");
+        return controllerPersona;
+    }
+
+    public Persona prepareUpdate(Estudiante estudiante) {
+        if (estudiante != null) {
+            return prepareUpdate(estudiante.getIdPersona());
+        }
+        return null;
+    }
+
+    public Persona prepareUpdate(Persona persona) {
+        selected = persona;
+
+        if (selected != null) {
+            if (!selected.getEstudianteList().isEmpty()) {
+                EstudianteController estudianteController = getEstudianteController();
+                estudianteController.setSelected(selected.getEstudianteList().get(0));
+            }
+            if (selected.getIdCiudad() != null) {
+                DepartamentoController deptoController = getDepartamentoController();
+                deptoController.setSelected(selected.getIdCiudad().getIdDepartamento());
+            }
+        }
+
+        return selected;
+    }
+
+//    public Persona prepareUpdate() {
+//
+//        return prepareUpdate(null);
+//    }
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
         if (!JsfUtil.isValidationFailed()) {

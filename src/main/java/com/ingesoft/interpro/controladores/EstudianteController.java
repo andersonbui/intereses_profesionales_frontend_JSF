@@ -93,20 +93,31 @@ public class EstudianteController implements Serializable {
         this.skip = skip;
     }
 
-    public Estudiante prepareCreate() {
-        selected = new Estudiante();
+    public PersonaController getPersonaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "personaController");
-        controllerPersona.prepareCreate();
-//        InstitucionController controllerInstitucion = (InstitucionController) facesContext.getApplication().getELResolver().
-//                getValue(facesContext.getELContext(), null, "institucionController");
-//        initializeEmbeddableKey();
+        return controllerPersona;
+    }
+
+    public Estudiante prepareCreate() {
+        selected = new Estudiante();
+        PersonaController personaController = getPersonaController();
+        personaController.prepareCreate();
+
+        return selected;
+    }
+
+    public Estudiante prepareUpdate() {
+        PersonaController personaController = getPersonaController();
+        personaController.prepareUpdate(selected.getIdPersona());
         return selected;
     }
 
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteCreated"));
+        PersonaController controllerPersona = getPersonaController();
+        controllerPersona.create();
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
@@ -114,6 +125,8 @@ public class EstudianteController implements Serializable {
 
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteUpdated"));
+        PersonaController controllerPersona = getPersonaController();
+        controllerPersona.update();
     }
 
     public void destroy() {
@@ -123,7 +136,6 @@ public class EstudianteController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
 
     public List<Estudiante> getItems() {
         if (items == null) {

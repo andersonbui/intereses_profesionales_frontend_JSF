@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Variables;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
@@ -479,7 +480,7 @@ public class RespuestaAmbienteController implements Serializable {
     }
 
     public String obtenerImagen(RespuestaAmbiente respuesta) {
-        String url = "img/ambiente/" + respuesta.getPreguntaAmbiente().getUrlImagen();
+        String url = Variables.ubicacionImagenes + respuesta.getPreguntaAmbiente().getUrlImagen();
         return url;
     }
 

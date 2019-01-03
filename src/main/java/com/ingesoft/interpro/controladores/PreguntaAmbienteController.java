@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Variables;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -24,14 +25,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.event.ActionEvent;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "preguntaAmbienteController")
 @SessionScoped
 public class PreguntaAmbienteController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    int idActual;
 
 //    public boolean skip;
     @EJB
@@ -40,7 +40,20 @@ public class PreguntaAmbienteController implements Serializable {
     private PreguntaAmbiente selected;
 
     public PreguntaAmbienteController() {
+        idActual = 1;
+    }
 
+    @PostConstruct
+    public void init() {
+        selected = getPreguntaAmbiente(idActual);
+    }
+
+    public int getIdActual() {
+        return idActual;
+    }
+
+    public void setIdActual(int idActual) {
+        this.idActual = idActual;
     }
 
     public PreguntaAmbiente getSelected() {
@@ -65,6 +78,25 @@ public class PreguntaAmbienteController implements Serializable {
         selected = new PreguntaAmbiente();
         initializeEmbeddableKey();
         return selected;
+    }
+
+    public String obtenerImagenActual() {
+        String url = Variables.ubicacionImagenes + getSelected().getUrlImagen();
+        return url;
+    }
+
+    public void nextImagen() {
+        idActual++;
+        selected = getPreguntaAmbiente(idActual);
+        System.out.println("next");
+    }
+
+    public void previousImagen() {
+        if (idActual > 1) {
+            idActual--;
+        }
+        selected = getPreguntaAmbiente(idActual);
+        System.out.println("previo");
     }
 
     public void preparePreguntas(Usuario usuario, Encuesta encuesta) {

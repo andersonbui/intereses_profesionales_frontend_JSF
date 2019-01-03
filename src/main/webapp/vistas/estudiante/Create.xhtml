@@ -28,9 +28,12 @@
                         <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
                         <p:outputLabel value="#{bundle.CreateEstudianteLabel_personalidad}" for="personalidad" />
                         <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.CreateEstudianteTitle_personalidad}" />
+                        
                         <p:outputLabel value="#{bundle.CreateEstudianteLabel_idPersona}" for="idPersona" />
-                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
-                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
+                        <p:selectOneMenu id="idPersona" 
+                                         rendered="#{estudianteController.selected.idPersona != null}"
+                                         value="#{estudianteController.selected.idPersona.idCiudad}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_Ciudad}">
+                            <f:selectItems value="#{ciudadController.itemsAvailableSelectOne}"
                                            var="idPersonaItem"
                                            itemValue="#{idPersonaItem}"/>
                         </p:selectOneMenu>

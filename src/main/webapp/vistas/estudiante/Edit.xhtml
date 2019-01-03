@@ -11,33 +11,151 @@
         <p:dialog id="EstudianteEditDlg" widgetVar="EstudianteEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditEstudianteTitle}">
             <h:form id="EstudianteEditForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{estudianteController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_idEstudiante}" for="idEstudiante" />
-                        <p:inputText id="idEstudiante" value="#{estudianteController.selected.idEstudiante}" title="#{bundle.EditEstudianteTitle_idEstudiante}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idEstudiante}"/>
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_fechaIngreso}" for="fechaIngreso" />
-                        <p:calendar id="fechaIngreso" pattern="MM/dd/yyyy" value="#{estudianteController.selected.fechaIngreso}" title="#{bundle.EditEstudianteTitle_fechaIngreso}"  showOn="button"/>
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_estrato}" for="estrato" />
-                        <p:inputText id="estrato" value="#{estudianteController.selected.estrato}" title="#{bundle.EditEstudianteTitle_estrato}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_cuantosViven}" for="cuantosViven" />
-                        <p:inputText id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" title="#{bundle.EditEstudianteTitle_cuantosViven}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_cuantosTrabajan}" for="cuantosTrabajan" />
-                        <p:inputText id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" title="#{bundle.EditEstudianteTitle_cuantosTrabajan}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_viveConPadres}" for="viveConPadres" />
-                        <p:selectBooleanCheckbox id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_desplazados}" for="desplazados" />
-                        <p:selectBooleanCheckbox id="desplazados" value="#{estudianteController.selected.desplazados}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_personalidad}" for="personalidad" />
-                        <p:inputText id="personalidad" value="#{estudianteController.selected.personalidad}" title="#{bundle.EditEstudianteTitle_personalidad}" />
-                        <p:outputLabel value="#{bundle.EditEstudianteLabel_idPersona}" for="idPersona" />
-                        <p:selectOneMenu id="idPersona" value="#{estudianteController.selected.idPersona}" required="true" requiredMessage="#{bundle.EditEstudianteRequiredMessage_idPersona}">
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{personaController.itemsAvailableSelectOne}"
-                                           var="idPersonaItem"
-                                           itemValue="#{idPersonaItem}"/>
-                        </p:selectOneMenu>
-                    </p:panelGrid>
+                    
+                    <p:wizard flowListener="#{estudianteController.onFlowProcess}"  widgetVar="perfilEstudianteWizard" showNavBar="true" nextLabel="Siguiente" backLabel="Anterior">
+                        <p:tab id="personal" title="Información de personal ">
+                            <center>
+                                <p:panel header="Información de personal">
+                                    <p:panelGrid columns="2" id="panelInformacionPersonal" styleClass="panelgrid" rendered="#{personaController.selected != null}">
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Nombres: " for="nombres" />
+                                        <p:inputText id="nombres" value="#{personaController.selected.nombre}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Apellidos: " for="apellidos" />
+                                        <p:inputText id="apellidos" value="#{personaController.selected.apellido}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
+                                        <p:selectOneMenu id="idTipoIdentificacion" value="#{personaController.selected.tipoIdentificacion}">
+                                            <f:selectItem itemLabel="Cedula de ciudadania" itemValue='Cedula de ciudadania' />
+                                            <f:selectItem itemLabel="DNI" itemValue='DNI' />
+                                            <f:selectItem itemLabel="NUIP" itemValue='NUIP' />
+                                            <f:selectItem itemLabel="Tarjeta de identidad" itemValue='Tarjeta de identidad' />    
+                                            <f:selectItem itemLabel="Cedula de extrangeria" itemValue='Cedula de extrangeria' />    
+                                            <f:selectItem itemLabel="Otro" itemValue='Otro' />
+                                        </p:selectOneMenu>
+                                        
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_identificacion}"/>
+                                        <p:inputText value="#{personaController.selected.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
+                                        
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Fecha nacimiento: " for="fechaNacimiento" />
+                                        <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" placeholder="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Sexo: " for="sexo" />
+                                        <p:selectOneRadio id="sexo" value="#{personaController.selected.sexo}">
+                                            <f:selectItem itemLabel="M" itemValue='M' />
+                                            <f:selectItem itemLabel="F" itemValue='F' />
+                                        </p:selectOneRadio>
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_idUsuario}"/>
+                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                                    </p:panelGrid>
+                                </p:panel>
+                            </center>
+                        </p:tab>
+                        <p:tab id="ubicacion" title="Información de ubicación">
+                            <center><p:panel header="Información de ubicación">
+                                    <p:panelGrid columns="2" id="panelInformacionUbicacion" styleClass="panelgrid" rendered="#{personaController.selected != null}">
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="País " for="pais" />
+                                        <p:selectOneMenu filter="true" id="pais" value="#{paisController.selected}" required="true"  requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." noSelectionOption="true"/>
+                                            <f:selectItems value="#{paisController.items}"
+                                                           var="pais"
+                                                           itemValue="#{pais}"
+                                                           itemLabel="#{pais.nombre}"
+                                                           />                                                                          
+                                            <f:ajax render="@form" />
+                                        </p:selectOneMenu>
+
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Departamento: " for="departamento" />
+                                        <p:selectOneMenu id="departamento" immediate="true" filter="true" value="#{departamentoController.selected}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                            <!--<f:selectItems value="{departamentoController.items}"--> 
+                                            <f:selectItems value="#{paisController.selected.departamentoList}"
+                                                           var="depto"
+                                                           itemValue="#{depto}"
+                                                           itemLabel="#{depto.nombre}"
+                                                           />                                                                                              
+                                            <f:ajax render="@form" />
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Ciudad: " for="ciudad" />
+                                        <p:selectOneMenu widgetVar="wid-ciudad" 
+                                                         rendered="#{estudianteController.selected.idPersona.idCiudad != null}"
+                                                         filter="true" 
+                                                         id="ciudad"  value="#{personaController.selected.idCiudad}" 
+                                                         required="true" 
+                                                         requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{departamentoController.selected.ciudadList}"
+                                                           var="ciudad"
+                                                           itemValue="#{ciudad}"
+                                                           itemLabel="#{ciudad.nombre}"
+                                                           />
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Dirección: " for="direccion" />
+                                        <p:inputText id="direccion" value="#{personaController.selected.direccion}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
+                                    </p:panelGrid>
+                                </p:panel></center>
+                        </p:tab>
+                        <p:tab id="familiar" title="Información familiar" rendered="#{estudianteController.selected != null}">
+                            <center><p:panel header="Información familiar">
+                                    <p:panelGrid columns="2" id="panelInformacionFamiliar" styleClass="panelgrid" rendered="#{estudianteController.selected != null}">
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="¿Eres desplazado(a)?" for="desplazados" />
+                                        <p:selectOneRadio  id="desplazados" value="#{estudianteController.selected.desplazados}" 
+                                                           >
+                                            <f:selectItem itemLabel="SI" itemValue='#{true}' />
+                                            <f:selectItem itemLabel="NO" itemValue='#{false}' />    
+
+                                        </p:selectOneRadio>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="¿Vives con tus padres?" for="viveConPadres" />
+                                        <p:selectOneRadio  id="viveConPadres" value="#{estudianteController.selected.viveConPadres}" 
+                                                           >
+                                            <f:selectItem itemLabel="SI" itemValue='#{true}' />
+                                            <f:selectItem itemLabel="NO" itemValue='#{false}' />    
+
+                                        </p:selectOneRadio>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="Nivel de SISBEN o Estrato:" for="estrato" />
+                                        <p:selectOneMenu filter="false" id="estrato" value="#{estudianteController.selected.estrato}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_estrato}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                            <f:selectItem itemLabel="1" itemValue="1"/>
+                                            <f:selectItem itemLabel="2" itemValue="2"/>
+                                            <f:selectItem itemLabel="3" itemValue="3"/>
+                                            <f:selectItem itemLabel="4" itemValue="4"/>
+                                            <f:selectItem itemLabel="5" itemValue="5"/>
+                                            <f:selectItem itemLabel="6" itemValue="6"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="¿Cuantos viven con usted?" for="cuantosViven" />
+                                        <p:selectOneMenu filter="false" id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosViven}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                            <f:selectItem itemLabel="1" itemValue="1"/>
+                                            <f:selectItem itemLabel="2" itemValue="2"/>
+                                            <f:selectItem itemLabel="3" itemValue="3"/>
+                                            <f:selectItem itemLabel="4" itemValue="4"/>
+                                            <f:selectItem itemLabel="5" itemValue="5"/>
+                                            <f:selectItem itemLabel="6" itemValue="6"/>
+                                            <f:selectItem itemLabel="más de 6..." itemValue="7"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;" value="¿Cuántos trabajan?" for="cuantosTrabajan" />
+                                        <p:selectOneMenu filter="false" id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosTrabajan}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                            <f:selectItem itemLabel="1" itemValue="1"/>
+                                            <f:selectItem itemLabel="2" itemValue="2"/>
+                                            <f:selectItem itemLabel="3" itemValue="3"/>
+                                            <f:selectItem itemLabel="4" itemValue="4"/>
+                                            <f:selectItem itemLabel="5" itemValue="5"/>
+                                            <f:selectItem itemLabel="6" itemValue="6"/>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                </p:panel></center>
+                        </p:tab>
+                    </p:wizard>
                     <p:commandButton actionListener="#{estudianteController.update}" value="#{bundle.Save}" update="display,:EstudianteListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EstudianteEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteEditDialog.hide()"/>
+                    
                 </h:panelGroup>
             </h:form>
         </p:dialog>

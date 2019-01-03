@@ -8,7 +8,6 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>delta</param-value>
     </context-param>
-    
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -17,25 +16,31 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>                         
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>120</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>
     </welcome-file-list>
     <error-page>
         <exception-type>javax.ejb.EJBException</exception-type>
+        <location>/error.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
         <location>/faces/login.xhtml</location>
     </error-page>
-    <login-config> 
+<!--    <error-page>
+        <exception-type>java.lang.NullPointerException</exception-type>
+        <location>/faces/login.xhtml</location>
+    </error-page>-->
+    <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>interproJDBCRealm</realm-name>
         <form-login-config>
             <form-login-page>/faces/login.xhtml</form-login-page>
-            <form-error-page>/faces/login.xhtml</form-error-page>
+            <form-error-page>/faces/error.xhtml</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>

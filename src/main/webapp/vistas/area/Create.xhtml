@@ -12,8 +12,6 @@
             <h:form id="AreaCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{areaController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateAreaLabel_idArea}" for="idArea" />
-                        <p:inputText id="idArea" value="#{areaController.selected.idArea}" title="#{bundle.CreateAreaTitle_idArea}" required="true" requiredMessage="#{bundle.CreateAreaRequiredMessage_idArea}"/>
                         <p:outputLabel value="#{bundle.CreateAreaLabel_nombre}" for="nombre" />
                         <p:inputText id="nombre" value="#{areaController.selected.nombre}" title="#{bundle.CreateAreaTitle_nombre}" />
                     </p:panelGrid>

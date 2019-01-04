@@ -5,7 +5,10 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.facades.CodigoInstitucionFacade;
 
+import java.util.UUID;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -51,6 +54,12 @@ public class CodigoInstitucionController implements Serializable {
 
     public CodigoInstitucion prepareCreate() {
         selected = new CodigoInstitucion();
+        String codigo = UUID.randomUUID().toString().substring(0, 8); 
+        selected.setCodigoActivacion(codigo);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 5);
+        selected.setFechaCaducidad(calendar.getTime());
+        selected.setEstado("Activo");
         initializeEmbeddableKey();
         return selected;
     }

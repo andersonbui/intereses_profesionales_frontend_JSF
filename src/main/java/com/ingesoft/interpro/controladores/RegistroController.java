@@ -144,10 +144,17 @@ public class RegistroController implements Serializable {
         return ejbFacade;
     }
 
-    public void verificarCodigo() {
+    public CodigoInstitucionController getCodigoInstitucionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "codigoInstitucionController");
+
+        return codigoInstitucionController;
+
+    }
+
+    public void verificarCodigo() {
+        CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
         codInstitucion = codigoInstitucionController.getCodigoInstitucion(codigo);
         if (codInstitucion != null) {
             verificado = true;

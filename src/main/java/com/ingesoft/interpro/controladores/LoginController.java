@@ -89,12 +89,12 @@ public class LoginController implements Serializable {
     public boolean isAdmin() {
         return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals("administrador");
     }
-    
-    public boolean isEstudiante(){
+
+    public boolean isEstudiante() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("estudiante") ;
+        return nombreGrupo.equals("estudiante");
     }
-    
+
     public boolean permisoEstudiante() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
         return nombreGrupo.equals("estudiante") || nombreGrupo.equals("administrador") || nombreGrupo.equals("docente");
@@ -172,7 +172,7 @@ public class LoginController implements Serializable {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
                 logueado = true;
             } catch (ServletException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
                 logueado = false;
                 context.addMessage(null, msg);
@@ -180,13 +180,17 @@ public class LoginController implements Serializable {
             }
             Principal principal = req.getUserPrincipal();
             actual = ejbFacade.buscarPorUsuario(principal.getName());
-            ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
-            Map<String, Object> sessionMap = external.getSessionMap();
-            sessionMap.put("usuario", actual);
-            context.addMessage(null, msg);
+            if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
+                eliminarSesion();
+            } else {
+                ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
+                Map<String, Object> sessionMap = external.getSessionMap();
+                sessionMap.put("usuario", actual);
+                context.addMessage(null, msg);
 
-            grupo = actual.getGrupoUsuarioList().get(0);
-
+                grupo = actual.getGrupoUsuarioList().get(0);
+            }
         } else {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
             context.addMessage(null, msg);
@@ -203,8 +207,7 @@ public class LoginController implements Serializable {
         }
     }
 
-    public String salir() throws IOException {
-
+    public void eliminarSesion() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
         logueado = false;
@@ -214,8 +217,12 @@ public class LoginController implements Serializable {
             fc.getExternalContext().invalidateSession();
 
         } catch (ServletException e) {
-            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Cerrar Sesion"));
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Error al Cerrar Sesion"));
         }
+    }
+
+    public String salir() throws IOException {
+        eliminarSesion();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
         return "";
     }

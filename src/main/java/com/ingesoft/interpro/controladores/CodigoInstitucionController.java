@@ -30,8 +30,14 @@ public class CodigoInstitucionController implements Serializable {
     private com.ingesoft.interpro.facades.CodigoInstitucionFacade ejbFacade;
     private List<CodigoInstitucion> items = null;
     private CodigoInstitucion selected;
+    private final String[] tiposCodigoInstitucion;
 
     public CodigoInstitucionController() {
+        this.tiposCodigoInstitucion = new String[]{UsuarioController.TIPO_DOCENTE, UsuarioController.TIPO_ESTUDIANTE};
+    }
+
+    public String[] getTiposCodigoInstitucion() {
+        return tiposCodigoInstitucion;
     }
 
     public CodigoInstitucion getSelected() {
@@ -124,6 +130,9 @@ public class CodigoInstitucionController implements Serializable {
 
     public CodigoInstitucion getCodigoInstitucion(java.lang.String id) {
         return getFacade().find(id);
+    }
+    public CodigoInstitucion buscarPorCodigoActivacion(java.lang.String idActivacion) {
+        return getFacade().buscarPorCodigoActivacion(idActivacion);
     }
 
     public List<CodigoInstitucion> getItemsAvailableSelectMany() {

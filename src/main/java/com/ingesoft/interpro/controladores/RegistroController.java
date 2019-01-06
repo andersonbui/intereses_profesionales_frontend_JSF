@@ -5,17 +5,23 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
-import com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK;
+import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.PersonaCodigoInstitucion;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
@@ -23,14 +29,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletException;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.util.SocialAuthUtil;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -144,35 +149,83 @@ public class RegistroController implements Serializable {
         return ejbFacade;
     }
 
+    public PersonaCodigoInstitucionController getPersonaCodigoInstitucionController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(),
+                null, "personaCodigoInstitucionController");
+        return personaCodigoInstitucionController;
+    }
+
     public CodigoInstitucionController getCodigoInstitucionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
-        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "codigoInstitucionController");
-
+        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(),
+                null, "codigoInstitucionController");
         return codigoInstitucionController;
-
     }
 
-    public void verificarCodigo() {
-        CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
-        codInstitucion = codigoInstitucionController.getCodigoInstitucion(codigo);
-        if (codInstitucion != null) {
-            verificado = true;
-        }
-    }
-
-    public void registrarse() {
+    public EstudianteController getEstudianteController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
-        PersonaController controllerPersona = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
-        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "personaCodigoInstitucionController");
-        if (codInstitucion != null) {
-            personaCodigoInstitucionController.create();
-            personaCodigoInstitucionController.getSelected().setCodigoInstitucion(codInstitucion);
-            personaCodigoInstitucionController.getSelected().setFechaIngreso(new Date());
-            personaCodigoInstitucionController.getSelected().setPersona(controllerPersona.getSelected());
-            personaCodigoInstitucionController.getSelected().setPersonaCodigoInstitucionPK(new PersonaCodigoInstitucionPK());
+        EstudianteController estudianteController = (EstudianteController) elResolver.getValue(facesContext.getELContext(), null, "estudianteController");
+        return estudianteController;
+    }
+
+    public GrupoUsuarioController getGrupoUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        GrupoUsuarioController grupoUsuarioController = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "grupoUsuarioController");
+        return grupoUsuarioController;
+    }
+
+    public void registrarse(ActionEvent e) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage msg;
+        try {
+            CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
+            codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
+
+            if (codInstitucion != null) {
+
+                EstudianteController estudianteController = getEstudianteController();
+                Estudiante estudiante = estudianteController.prepareCreate();
+                estudiante.getIdPersona().getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+                estudiante.getIdPersona().getIdUsuario().setClave(Utilidades.sha256(getPassword()));
+                estudiante.getIdPersona().getIdUsuario().setUsuario(getUsuario());
+                estudianteController.create();
+
+                Persona unaPersona = estudianteController.getSelected().getIdPersona();
+                Usuario unusuario = unaPersona.getIdUsuario();
+//                System.out.println("unusuario:" + unusuario);
+                // Crear grupo usuario
+                GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+                GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
+                grupoUsuario.setUsuario1(unusuario);
+                grupoUsuario.setUsuario(unusuario.getUsuario());
+                grupoUsuario.getGrupoUsuarioPK().setIdGrupoUsuario(codInstitucion.getEstado());
+                grupoUsuarioController.create();
+
+                //crear persona-codigoInstitucion
+                PersonaCodigoInstitucionController personaCodigoInstitucionController = getPersonaCodigoInstitucionController();
+                PersonaCodigoInstitucion personaCodigoInstitucion = personaCodigoInstitucionController.prepareCreate();
+                personaCodigoInstitucion.setPersona(unaPersona);
+                personaCodigoInstitucion.setCodigoInstitucion(codInstitucion);
+                personaCodigoInstitucion.setFechaIngreso(new Date());
+                personaCodigoInstitucionController.create();
+
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
+
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
+
+            } else {
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "C&oacute;digo de registro incorrecto, por favor verifique su c&oacute;digo.", "");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un Error, Intentalo mas tarde", "");
         }
+        context.addMessage(null, msg);
 
     }
 

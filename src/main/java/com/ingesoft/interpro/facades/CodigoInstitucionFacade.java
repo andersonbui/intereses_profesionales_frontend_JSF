@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,14 +30,16 @@ public class CodigoInstitucionFacade extends AbstractFacade<CodigoInstitucion> {
     public CodigoInstitucionFacade() {
         super(CodigoInstitucion.class);
     }
-    
-     
+
     public CodigoInstitucion buscarPorCodigoActivacion(String codigo) {
         Query query = em.createNamedQuery("CodigoInstitucion.findByCodigoActivacion");
         query.setParameter("codigoActivacion", codigo);
-        CodigoInstitucion codigoActiv = (CodigoInstitucion) query.getResultList().get(0);
-        if (codigoActiv != null) {
-            return codigoActiv;
+        List<CodigoInstitucion> lista = query.getResultList();
+        if (lista != null && !lista.isEmpty()) {
+            CodigoInstitucion codigoActiv = (CodigoInstitucion) lista.get(0);
+            if (codigoActiv != null) {
+                return codigoActiv;
+            }
         }
         return null;
 

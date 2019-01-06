@@ -196,7 +196,8 @@ public class Estudiante implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
+        return "Estudiante{" + "idEstudiante=" + idEstudiante + ", fechaIngreso=" + fechaIngreso + ", estrato=" + estrato + ", idPersona=" + idPersona + '}';
     }
+    
     
 }

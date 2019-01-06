@@ -60,32 +60,54 @@
     <h:body>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
+                <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
+                <p:growl id="growl" showDetail="true" autoUpdate="true"/>
                 <h:form class="login100-form validate-form">
-                    <!--<p:messages id="growl" showDetail="true" autoUpdate="true" />-->
-                    <p:growl id="growl" showDetail="true" autoUpdate="true"/>
                     <span class="login100-form-title p-b-37" >
                         Registro
                     </span>
                     <div rendered="#{empty loginController.profile}">
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese codigo de registro">
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese c&oacute;digo de registro">
                             <p:inputText  id="login-codigo"  class="form-control"
-                                          label="codigo"  value="#{registroController.codigo}"  placeholder="Ingrese codigo de registro" required="true"/>
+                                          label="codigo"  value="#{registroController.codigo}"  
+                                          placeholder="Ingrese un c&oacute;digo de registro" 
+                                          required="true"
+                                          requiredMessage="Es necesario ingresar un c&oacute;digo de registro"
+                                          />
                         </div>
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electronico">
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electr&oacute;nico">
                             <p:inputText id="login-username"  class="form-control"
-                                         label="username"  value="#{registroController.usuario}" placeholder="Ingrese su correo electronico"  required="true" />
+                                         label="username"  value="#{registroController.usuario}" 
+                                         placeholder="Ingrese su correo electr&oacute;nico"  
+                                         required="true" 
+                                         requiredMessage="Es necesario ingresar un correo electr&oacute;nico"
+                                         />
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" >
-                            <p:password id="password" class="form-control"  match="password2"
-                                        label="password" value="#{registroController.password}" placeholder="Ingrese su contrasena" required="true" />
+                            <p:password id="password" 
+                                        class="form-control"  
+                                        match="password2"
+                                        label="password" 
+                                        value="#{registroController.password}" 
+                                        placeholder="Ingrese su contrase&ntilde;a" 
+                                        required="true" 
+                                        requiredMessage="Es necesario ingresar una contrase&ntilde;a"
+                                        />
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" >
-                            <p:password id="password2" class="form-control"
-                                        label="password" value="#{registroController.password}" placeholder="Vuelve a ingresar tu contrasena"  required="true"/>
+                            <p:password id="password2" 
+                                        class="form-control"
+                                        label="password" 
+                                        value="#{registroController.password}" 
+                                        placeholder="Vuelva a ingresar su contrase&ntilde;a"  
+                                        required="true"
+                                        requiredMessage="Es necesario verificar la contrasen&ntilde;a"
+                                        validatorMessage="verificacion de codigo fallida."
+                                        />
                         </div>
-                        
+
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
-                                          actionListener="#{registroController.registrarse()}"  update="@form"  value="Registrate">
+                                          actionListener="#{registroController.registrarse}"  update="@form,growl"  value="Registrate">
                         </p:commandButton>
 
                         <div class="text-center p-t-57 p-b-20" >
@@ -104,8 +126,8 @@
                         </div>
 
                         <dir class="text-center">
-                            <b>Ya tienes una cuenta? </b><br/>
-                            <p:link outcome="/login.xhtml" class="txt2 hov1" >Inicia sesion</p:link>
+                            <b>¿Ya tienes una cuenta? </b><br/>
+                            <p:link outcome="/login.xhtml" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
                         </dir>
                     </div>
                     <h:panelGrid rendered="#{not empty loginController.profile}">

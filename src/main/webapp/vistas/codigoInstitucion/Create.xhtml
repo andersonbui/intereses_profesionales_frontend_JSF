@@ -19,8 +19,10 @@
                         <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_tipo}" for="tipo" />
                         <p:selectOneMenu id="tipo" value="#{codigoInstitucionController.selected.estado}" 
                                          required="true">
-                            <f:selectItem itemLabel="Estudiante" itemValue="Estudiante"/>
-                            <f:selectItem itemLabel="Docente" itemValue="Docente"/>
+                            <f:selectItems value="#{codigoInstitucionController.tiposCodigoInstitucion}"
+                                           var="item"
+                                           itemValue="#{item}" 
+                                           itemLabel="#{item}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_idInstitucion}" for="idInstitucion" />
                         <p:selectOneMenu id="idInstitucion" value="#{codigoInstitucionController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditCodigoInstitucionRequiredMessage_idInstitucion}">

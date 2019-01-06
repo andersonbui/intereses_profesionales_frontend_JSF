@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
 import java.io.Serializable;
@@ -43,8 +44,7 @@ public class PersonaController implements Serializable {
     public void estudianteSeleccionado(Persona persona) {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        DepartamentoController departamentoController = (DepartamentoController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "departamentoController");
+        DepartamentoController departamentoController = getDepartamentoController();
         CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "ciudadController");
 
@@ -68,9 +68,19 @@ public class PersonaController implements Serializable {
     }
 
     public Persona prepareCreate() {
+        UsuarioController usuarioController = getUsuarioController();
+        Usuario usuario = usuarioController.prepareCreate();
         selected = new Persona();
+        selected.setIdUsuario(usuario);
         initializeEmbeddableKey();
         return selected;
+    }
+
+    public UsuarioController getUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UsuarioController usuarioController = (UsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "usuarioController");
+        return usuarioController;
     }
 
     public EstudianteController getEstudianteController() {
@@ -115,6 +125,7 @@ public class PersonaController implements Serializable {
 //
 //        return prepareUpdate(null);
 //    }
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
         if (!JsfUtil.isValidationFailed()) {

@@ -103,8 +103,8 @@ public class EstudianteController implements Serializable {
     public Estudiante prepareCreate() {
         selected = new Estudiante();
         PersonaController personaController = getPersonaController();
-        personaController.prepareCreate();
-
+        Persona persona = personaController.prepareCreate();
+        selected.setIdPersona(persona);
         return selected;
     }
 
@@ -116,8 +116,8 @@ public class EstudianteController implements Serializable {
 
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteCreated"));
-        PersonaController controllerPersona = getPersonaController();
-        controllerPersona.create();
+//        PersonaController controllerPersona = getPersonaController();
+//        controllerPersona.create();
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
@@ -149,7 +149,10 @@ public class EstudianteController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    Estudiante est = getFacade().edit(selected);
+                    if(est != null){
+                        selected = est;
+                    }
                 } else {
                     getFacade().remove(selected);
                 }

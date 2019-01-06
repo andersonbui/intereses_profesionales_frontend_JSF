@@ -30,11 +30,11 @@ public abstract class AbstractFacade<T> {
         getEntityManager().persist(entity);
     }
 
-    public void edit(T entity) {
-        //        getEntityManager().merge(entity);
+    public T edit(T entity) {
         try {
-            getEntityManager().merge(entity);
-
+            T enti2 = getEntityManager().merge(entity);
+            getEntityManager().flush();
+            return enti2;
         } catch (EJBException e) {
             @SuppressWarnings("ThrowableResultIgnored")
             Exception cause = e.getCausedByException();
@@ -50,6 +50,7 @@ public abstract class AbstractFacade<T> {
             }
 //            Assert.fail("ejb exception");
         }
+        return null;
     }
 
     public void remove(T entity) {

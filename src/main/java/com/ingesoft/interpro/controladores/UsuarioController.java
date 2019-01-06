@@ -3,9 +3,11 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,7 +29,14 @@ public class UsuarioController implements Serializable {
     private com.ingesoft.interpro.facades.UsuarioFacade ejbFacade;
     private List<Usuario> items = null;
     private Usuario selected;
-
+    
+    public static final String EN_ESPERA = "EN_ESPERA";
+    public static final String ACTIVO = "ACTIVO";
+    public static final String INAACTIVO = "INACTIVO";
+    
+    public static final String TIPO_ESTUDIANTE = "ESTUDIANTE";
+    public static final String TIPO_DOCENTE = "DOCENTE";
+    
     public UsuarioController() {
     }
 
@@ -55,6 +64,7 @@ public class UsuarioController implements Serializable {
         return selected;
     }
 
+    
     public void create() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
         if (!JsfUtil.isValidationFailed()) {

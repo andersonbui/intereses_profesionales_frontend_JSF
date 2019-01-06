@@ -58,6 +58,7 @@ public class RegistroController implements Serializable {
     String password;
     boolean verificado;
     CodigoInstitucion codInstitucion;
+    String token;
 
     private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
     private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
@@ -99,6 +100,20 @@ public class RegistroController implements Serializable {
         }
 
         FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) throws IOException {
+
+        System.out.println("setToken: " + token);
+        if ("dedosdelvalle".equals(token)) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
+        }
+        this.token = token;
     }
 
     public Profile getProfile() {
@@ -203,7 +218,7 @@ public class RegistroController implements Serializable {
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
                 personaController.create();
                 unaPersona = personaController.getSelected();
-                
+
                 // crear persona-codigoInstitucion
                 PersonaCodigoInstitucionController personaCodigoInstitucionController = getPersonaCodigoInstitucionController();
                 PersonaCodigoInstitucion personaCodigoInstitucion = personaCodigoInstitucionController.prepareCreate();
@@ -211,7 +226,7 @@ public class RegistroController implements Serializable {
                 personaCodigoInstitucion.setCodigoInstitucion(codInstitucion);
                 personaCodigoInstitucion.setFechaIngreso(new Date());
                 personaCodigoInstitucionController.create();
-                
+
                 Usuario unusuario = unaPersona.getIdUsuario();
                 // Crear grupo usuario
                 GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
@@ -223,11 +238,9 @@ public class RegistroController implements Serializable {
 
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
-                
-                
+
                 // enviar email 
                 //TODO
-                
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "C&oacute;digo de registro incorrecto, por favor verifique su c&oacute;digo.", "");
             }

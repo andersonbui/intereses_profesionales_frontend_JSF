@@ -13,16 +13,19 @@
         <h:outputStylesheet library="css" name="util.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
     </h:head>
+    <f:metadata>
+        <f:viewParam name="token" value="#{registroController.token}"/>
+</f:metadata>
     <h:body>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-registro700 p-l-45 p-r-45 p-t-40 p-b-40" >
-                Su cuenta ha sido activada
+                El token  ha expirado, por favor vuelva a generar uno nuevo.
 
                 <h:panelGrid >
                     <h:graphicImage value="#{loginController.profile.profileImageURL}"
                                     styleClass="media-object" />
 
-                    <p:link class="btn btn-primary txt2 hov1"  outcome="/login.xhtml"  >Continuar con el registro</p:link>
+                    <p:link class="btn btn-primary txt2 hov1"  outcome="/login.xhtml"  >Generar un nuevo token</p:link>
                 </h:panelGrid>
             </div>
         </div>

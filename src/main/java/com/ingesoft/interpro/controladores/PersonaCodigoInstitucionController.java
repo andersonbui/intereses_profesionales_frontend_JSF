@@ -90,7 +90,10 @@ public class PersonaCodigoInstitucionController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    PersonaCodigoInstitucion pci = getFacade().edit(selected);
+                    if(pci != null){
+                        selected = pci;
+                    }
                 } else {
                     getFacade().remove(selected);
                 }

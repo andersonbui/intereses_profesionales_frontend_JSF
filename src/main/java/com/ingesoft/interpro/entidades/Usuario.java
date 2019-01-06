@@ -147,7 +147,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + "; usuario: "+usuario+" ]";
+        return "com.ingeniosoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + "; usuario: " + usuario + "; estado: " + estado + " ]";
     }
-    
+
 }

@@ -36,6 +36,7 @@ public class UsuarioController implements Serializable {
     
     public static final String TIPO_ESTUDIANTE = "ESTUDIANTE";
     public static final String TIPO_DOCENTE = "DOCENTE";
+    public static final String TIPO_ADMINISTRADOR = "ADMINISTRADOR";
     
     public UsuarioController() {
     }

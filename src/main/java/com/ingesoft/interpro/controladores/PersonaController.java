@@ -157,7 +157,10 @@ public class PersonaController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    Persona persona = getFacade().edit(selected);
+                    if(persona != null) {
+                        selected = persona;
+                    }
                 } else {
                     getFacade().remove(selected);
                 }

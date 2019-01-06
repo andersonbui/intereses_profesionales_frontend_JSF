@@ -87,22 +87,22 @@ public class LoginController implements Serializable {
     }
 
     public boolean isAdmin() {
-        return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals("administrador");
+        return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
     public boolean isEstudiante() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("estudiante");
+        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE);
     }
 
     public boolean permisoEstudiante() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("estudiante") || nombreGrupo.equals("administrador") || nombreGrupo.equals("docente");
+        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
     }
 
     public boolean isDocente() {
         String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("docente") || nombreGrupo.equals("administrador");
+        return nombreGrupo.equals(UsuarioController.TIPO_DOCENTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
     public void getPerfilUsuario() throws Exception {
@@ -169,7 +169,6 @@ public class LoginController implements Serializable {
             try {
                 req.login(this.usuario, this.password);
                 System.out.println("inicio de sesion con usuario: " + usuario + "; clave: " + password);
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
                 logueado = true;
             } catch (ServletException e) {
 //                e.printStackTrace();
@@ -181,16 +180,17 @@ public class LoginController implements Serializable {
             Principal principal = req.getUserPrincipal();
             actual = ejbFacade.buscarPorUsuario(principal.getName());
             if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
+                System.out.println("estado usuari: " + actual.getEstado());
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El usuario no esta activado. Por favor revise su bandeja de correo");
                 eliminarSesion();
             } else {
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
                 ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
                 Map<String, Object> sessionMap = external.getSessionMap();
                 sessionMap.put("usuario", actual);
-                context.addMessage(null, msg);
-
                 grupo = actual.getGrupoUsuarioList().get(0);
             }
+            context.addMessage(null, msg);
         } else {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
             context.addMessage(null, msg);

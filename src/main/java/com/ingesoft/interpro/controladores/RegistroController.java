@@ -172,6 +172,13 @@ public class RegistroController implements Serializable {
         return estudianteController;
     }
 
+    public PersonaController getPersonaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PersonaController personaController = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
+        return personaController;
+    }
+
     public GrupoUsuarioController getGrupoUsuarioController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         GrupoUsuarioController grupoUsuarioController = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
@@ -187,17 +194,25 @@ public class RegistroController implements Serializable {
             codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
 
             if (codInstitucion != null) {
-
-                EstudianteController estudianteController = getEstudianteController();
-                Estudiante estudiante = estudianteController.prepareCreate();
-                estudiante.getIdPersona().getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
-                estudiante.getIdPersona().getIdUsuario().setClave(Utilidades.sha256(getPassword()));
-                estudiante.getIdPersona().getIdUsuario().setUsuario(getUsuario());
-                estudianteController.create();
-
-                Persona unaPersona = estudianteController.getSelected().getIdPersona();
+                // Crear persona
+                PersonaController personaController = getPersonaController();
+                Persona unaPersona = personaController.prepareCreate();
+                unaPersona.setTipo(codInstitucion.getEstado());
+                unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+                unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
+                unaPersona.getIdUsuario().setUsuario(getUsuario());
+                personaController.create();
+                unaPersona = personaController.getSelected();
+                
+                // crear persona-codigoInstitucion
+                PersonaCodigoInstitucionController personaCodigoInstitucionController = getPersonaCodigoInstitucionController();
+                PersonaCodigoInstitucion personaCodigoInstitucion = personaCodigoInstitucionController.prepareCreate();
+                personaCodigoInstitucion.setPersona(unaPersona);
+                personaCodigoInstitucion.setCodigoInstitucion(codInstitucion);
+                personaCodigoInstitucion.setFechaIngreso(new Date());
+                personaCodigoInstitucionController.create();
+                
                 Usuario unusuario = unaPersona.getIdUsuario();
-//                System.out.println("unusuario:" + unusuario);
                 // Crear grupo usuario
                 GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
                 GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
@@ -206,18 +221,13 @@ public class RegistroController implements Serializable {
                 grupoUsuario.getGrupoUsuarioPK().setIdGrupoUsuario(codInstitucion.getEstado());
                 grupoUsuarioController.create();
 
-                //crear persona-codigoInstitucion
-                PersonaCodigoInstitucionController personaCodigoInstitucionController = getPersonaCodigoInstitucionController();
-                PersonaCodigoInstitucion personaCodigoInstitucion = personaCodigoInstitucionController.prepareCreate();
-                personaCodigoInstitucion.setPersona(unaPersona);
-                personaCodigoInstitucion.setCodigoInstitucion(codInstitucion);
-                personaCodigoInstitucion.setFechaIngreso(new Date());
-                personaCodigoInstitucionController.create();
-
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
-
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
-
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
+                
+                
+                // enviar email 
+                //TODO
+                
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "C&oacute;digo de registro incorrecto, por favor verifique su c&oacute;digo.", "");
             }

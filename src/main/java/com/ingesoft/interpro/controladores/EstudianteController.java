@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -20,16 +21,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
 @SessionScoped
-public class EstudianteController implements Serializable {
+public class EstudianteController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.EstudianteFacade ejbFacade;
     private List<Estudiante> items = null;
     private Estudiante selected;
+    private boolean editar;
     private int pasoActual;
     private boolean skip;
     private int number;
@@ -40,6 +43,10 @@ public class EstudianteController implements Serializable {
         puntos = 0;
     }
 
+    public boolean isEditar() {
+        return editar;
+    }
+    
     public int getPasoActual() {
         return pasoActual;
     }
@@ -75,13 +82,15 @@ public class EstudianteController implements Serializable {
         return pasoActual;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private EstudianteFacade getFacade() {
+    @Override
+    protected EstudianteFacade getFacade() {
         return ejbFacade;
     }
 
@@ -105,32 +114,36 @@ public class EstudianteController implements Serializable {
         PersonaController personaController = getPersonaController();
         Persona persona = personaController.prepareCreate();
         selected.setIdPersona(persona);
+        selected.getIdPersona().getIdUsuario().setClave("Ninguna");
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('EstudianteEditDialog').show()");
+        editar=false;
         return selected;
     }
 
     public Estudiante prepareUpdate() {
         PersonaController personaController = getPersonaController();
         personaController.prepareUpdate(selected.getIdPersona());
+        editar=true;
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteCreated"));
-//        PersonaController controllerPersona = getPersonaController();
-//        controllerPersona.create();
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteCreated"), selected);
+        selected = null;
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteUpdated"), selected);
         PersonaController controllerPersona = getPersonaController();
         controllerPersona.update();
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EstudianteDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EstudianteDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -142,37 +155,6 @@ public class EstudianteController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    Estudiante est = getFacade().edit(selected);
-                    if(est != null){
-                        selected = est;
-                    }
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
     }
 
     public String onFlowProcess(FlowEvent event) {

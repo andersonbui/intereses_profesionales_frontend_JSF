@@ -98,7 +98,7 @@ public class Evaluacion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Evaluacion[ idEvaluacion=" + idEvaluacion + " ]";
+        return "Evaluacion[ idEvaluacion=" + idEvaluacion + " ]";
     }
     
 }

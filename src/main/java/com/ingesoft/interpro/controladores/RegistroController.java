@@ -7,17 +7,14 @@ package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
-import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
-import com.ingesoft.interpro.entidades.PersonaCodigoInstitucion;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -164,14 +161,6 @@ public class RegistroController implements Serializable {
         return ejbFacade;
     }
 
-    public PersonaCodigoInstitucionController getPersonaCodigoInstitucionController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(),
-                null, "personaCodigoInstitucionController");
-        return personaCodigoInstitucionController;
-    }
-
     public CodigoInstitucionController getCodigoInstitucionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -209,23 +198,18 @@ public class RegistroController implements Serializable {
             codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
 
             if (codInstitucion != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, 10);
                 // Crear persona
                 PersonaController personaController = getPersonaController();
                 Persona unaPersona = personaController.prepareCreate();
-                unaPersona.setTipo(codInstitucion.getEstado());
                 unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
                 unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
-                personaController.create();
-                unaPersona = personaController.getSelected();
-
-                // crear persona-codigoInstitucion
-                PersonaCodigoInstitucionController personaCodigoInstitucionController = getPersonaCodigoInstitucionController();
-                PersonaCodigoInstitucion personaCodigoInstitucion = personaCodigoInstitucionController.prepareCreate();
-                personaCodigoInstitucion.setPersona(unaPersona);
-                personaCodigoInstitucion.setCodigoInstitucion(codInstitucion);
-                personaCodigoInstitucion.setFechaIngreso(new Date());
-                personaCodigoInstitucionController.create();
+                unaPersona.getIdUsuario().setFechaCreacion(new Date());
+                unaPersona.getIdUsuario().setTokenAcesso("a12345");
+                unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
+                unaPersona = personaController.create();
 
                 Usuario unusuario = unaPersona.getIdUsuario();
                 // Crear grupo usuario
@@ -233,7 +217,7 @@ public class RegistroController implements Serializable {
                 GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
                 grupoUsuario.setUsuario1(unusuario);
                 grupoUsuario.setUsuario(unusuario.getUsuario());
-                grupoUsuario.getGrupoUsuarioPK().setIdGrupoUsuario(codInstitucion.getEstado());
+                grupoUsuario.setTipoUsuario(codInstitucion.getIdTipoUsuario());
                 grupoUsuarioController.create();
 
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");

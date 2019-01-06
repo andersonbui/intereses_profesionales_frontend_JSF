@@ -114,7 +114,7 @@ public class Departamento implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Departamento[ idDepartamento=" + idDepartamento + " ]";
+        return "Departamento[ idDepartamento=" + idDepartamento + " ]";
     }
     
 }

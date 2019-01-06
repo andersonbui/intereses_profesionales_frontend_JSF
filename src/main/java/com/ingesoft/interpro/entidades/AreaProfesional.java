@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "AreaProfesional.findAll", query = "SELECT a FROM AreaProfesional a")
     , @NamedQuery(name = "AreaProfesional.findByIdAreaProfesional", query = "SELECT a FROM AreaProfesional a WHERE a.idAreaProfesional = :idAreaProfesional")
-    , @NamedQuery(name = "AreaProfesional.findByAreal", query = "SELECT a FROM AreaProfesional a WHERE a.areal = :areal")})
+    , @NamedQuery(name = "AreaProfesional.findByArea", query = "SELECT a FROM AreaProfesional a WHERE a.area = :area")})
 public class AreaProfesional implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,8 +40,8 @@ public class AreaProfesional implements Serializable {
     @Column(name = "idAreaProfesional")
     private Integer idAreaProfesional;
     @Size(max = 45)
-    @Column(name = "areal")
-    private String areal;
+    @Column(name = "area")
+    private String area;
     @OneToMany(mappedBy = "idAreaProfesional")
     private List<Encuesta> encuestaList;
 
@@ -60,12 +60,12 @@ public class AreaProfesional implements Serializable {
         this.idAreaProfesional = idAreaProfesional;
     }
 
-    public String getAreal() {
-        return areal;
+    public String getArea() {
+        return area;
     }
 
-    public void setAreal(String areal) {
-        this.areal = areal;
+    public void setArea(String area) {
+        this.area = area;
     }
 
     @XmlTransient
@@ -99,7 +99,7 @@ public class AreaProfesional implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.AreaProfesional[ idAreaProfesional=" + idAreaProfesional + " ]";
+        return "AreaProfesional[ idAreaProfesional=" + idAreaProfesional + " ]";
     }
     
 }

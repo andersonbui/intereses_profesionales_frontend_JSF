@@ -44,7 +44,7 @@ public class TipoAmbiente implements Serializable {
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
-    @Size(max = 200)
+    @Size(max = 700)
     @Column(name = "definicion")
     private String definicion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoAmbiente")
@@ -134,7 +134,7 @@ public class TipoAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.TipoAmbiente[ idTipoAmbiente=" + idTipoAmbiente + " ]";
+        return "TipoAmbiente[ idTipoAmbiente=" + idTipoAmbiente + " ]";
     }
     
 }

@@ -52,7 +52,10 @@
                             <center><p:panel header="Información de ubicación">
                                     <p:panelGrid columns="2" id="panelInformacionUbicacion" styleClass="panelgrid" rendered="#{personaController.selected != null}">
                                         <p:outputLabel style="font-weight:bold; color: black;" value="País " for="pais" />
-                                        <p:selectOneMenu filter="true" id="pais" value="#{paisController.selected}" required="true"  requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                        <p:selectOneMenu filter="true" id="pais" 
+                                                         value="#{paisController.selected}" 
+                                                         required="true"  
+                                                         requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
                                             <f:selectItem itemLabel="Seleccione..." noSelectionOption="true"/>
                                             <f:selectItems value="#{paisController.items}"
                                                            var="pais"
@@ -64,9 +67,11 @@
 
 
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Departamento: " for="departamento" />
-                                        <p:selectOneMenu id="departamento" immediate="true" filter="true" value="#{departamentoController.selected}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                        <p:selectOneMenu id="departamento" 
+                                                         immediate="true" filter="true" 
+                                                         value="#{departamentoController.selected}" required="true" 
+                                                         requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
                                             <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
-                                            <!--<f:selectItems value="{departamentoController.items}"--> 
                                             <f:selectItems value="#{paisController.selected.departamentoList}"
                                                            var="depto"
                                                            itemValue="#{depto}"

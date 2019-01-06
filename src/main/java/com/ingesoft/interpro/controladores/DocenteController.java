@@ -1,14 +1,11 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.CodigoInstitucion;
+import com.ingesoft.interpro.entidades.Docente;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.facades.CodigoInstitucionFacade;
+import com.ingesoft.interpro.facades.DocenteFacade;
 
-import java.util.UUID;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -22,29 +19,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "codigoInstitucionController")
+@ManagedBean(name = "docenteController")
 @SessionScoped
-public class CodigoInstitucionController implements Serializable {
+public class DocenteController implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.CodigoInstitucionFacade ejbFacade;
-    private List<CodigoInstitucion> items = null;
-    private CodigoInstitucion selected;
-    private final String[] tiposCodigoInstitucion;
+    private com.ingesoft.interpro.facades.DocenteFacade ejbFacade;
+    private List<Docente> items = null;
+    private Docente selected;
 
-    public CodigoInstitucionController() {
-        this.tiposCodigoInstitucion = new String[]{UsuarioController.TIPO_DOCENTE, UsuarioController.TIPO_ESTUDIANTE};
+    public DocenteController() {
     }
 
-    public String[] getTiposCodigoInstitucion() {
-        return tiposCodigoInstitucion;
-    }
-
-    public CodigoInstitucion getSelected() {
+    public Docente getSelected() {
         return selected;
     }
 
-    public void setSelected(CodigoInstitucion selected) {
+    public void setSelected(Docente selected) {
         this.selected = selected;
     }
 
@@ -54,49 +45,40 @@ public class CodigoInstitucionController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private CodigoInstitucionFacade getFacade() {
+    private DocenteFacade getFacade() {
         return ejbFacade;
     }
 
-    public CodigoInstitucion prepareCreate() {
-        selected = new CodigoInstitucion();
-        String codigo = UUID.randomUUID().toString().substring(0, 8); 
-        selected.setCodigoActivacion(codigo);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 5);
-        selected.setFechaCaducidad(calendar.getTime());
+    public Docente prepareCreate() {
+        selected = new Docente();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("DocenteCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("DocenteUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CodigoInstitucionDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("DocenteDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<CodigoInstitucion> getItems() {
+    public List<Docente> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    public CodigoInstitucion getItem(String codigoInstitucion) {
-        return getFacade().buscarPorCodigoActivacion(codigoInstitucion);
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -127,37 +109,34 @@ public class CodigoInstitucionController implements Serializable {
         }
     }
 
-    public CodigoInstitucion getCodigoInstitucion(java.lang.String id) {
+    public Docente getDocente(java.lang.Integer id) {
         return getFacade().find(id);
     }
-    public CodigoInstitucion buscarPorCodigoActivacion(java.lang.String idActivacion) {
-        return getFacade().buscarPorCodigoActivacion(idActivacion);
-    }
 
-    public List<CodigoInstitucion> getItemsAvailableSelectMany() {
+    public List<Docente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<CodigoInstitucion> getItemsAvailableSelectOne() {
+    public List<Docente> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = CodigoInstitucion.class)
-    public static class CodigoInstitucionControllerConverter implements Converter {
+    @FacesConverter(forClass = Docente.class)
+    public static class DocenteControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CodigoInstitucionController controller = (CodigoInstitucionController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "codigoInstitucionController");
-            return controller.getCodigoInstitucion(getKey(value));
+            DocenteController controller = (DocenteController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "docenteController");
+            return controller.getDocente(getKey(value));
         }
 
-        java.lang.String getKey(String value) {
-            java.lang.String key;
-            key = value;
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
@@ -172,11 +151,11 @@ public class CodigoInstitucionController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof CodigoInstitucion) {
-                CodigoInstitucion o = (CodigoInstitucion) object;
-                return getStringKey(o.getIdCodigoInstitucion());
+            if (object instanceof Docente) {
+                Docente o = (Docente) object;
+                return getStringKey(o.getIdPersona());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), CodigoInstitucion.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Docente.class.getName()});
                 return null;
             }
         }

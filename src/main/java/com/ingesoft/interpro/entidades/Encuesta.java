@@ -54,7 +54,7 @@ public class Encuesta implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @Size(max=5)
+    @Size(max = 5)
     @Column(name = "personalidad")
     private String personalidad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
@@ -204,7 +204,7 @@ public class Encuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Encuesta[ idEncuesta=" + idEncuesta + " ]";
+        return "Encuesta[ idEncuesta=" + idEncuesta + " ]";
     }
     
 }

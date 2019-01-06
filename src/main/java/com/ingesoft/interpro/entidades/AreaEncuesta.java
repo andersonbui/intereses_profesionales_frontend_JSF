@@ -163,7 +163,7 @@ public class AreaEncuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
+        return "AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
     }
     
 }

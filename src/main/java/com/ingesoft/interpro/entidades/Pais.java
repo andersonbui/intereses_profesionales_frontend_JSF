@@ -101,7 +101,7 @@ public class Pais implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Pais[ idPais=" + idPais + "; nombre: " + nombre + " ]";
+        return "Pais[ idPais=" + idPais + "; nombre: " + nombre + " ]";
     }
     
 }

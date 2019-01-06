@@ -23,14 +23,20 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "personaController")
 @SessionScoped
-public class PersonaController implements Serializable {
+public class PersonaController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.PersonaFacade ejbFacade;
     private List<Persona> items = null;
     private Persona selected;
+    private final String[] tiposEstadoUsuario;
 
     public PersonaController() {
+        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_ESPERA};
+    }
+
+    public String[] getTiposEstadoUsuario() {
+        return tiposEstadoUsuario;
     }
 
     public Persona getSelected() {
@@ -57,13 +63,15 @@ public class PersonaController implements Serializable {
         }
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private PersonaFacade getFacade() {
+    @Override
+    public PersonaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -121,24 +129,21 @@ public class PersonaController implements Serializable {
         return selected;
     }
 
-//    public Persona prepareUpdate() {
-//
-//        return prepareUpdate(null);
-//    }
-    
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
+    public Persona create() {
+        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
+        return perso;
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"));
+        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+//        UsuarioController usuarioController = getUsuarioController();
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"));
+        Persona perso = (Persona) persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -150,37 +155,6 @@ public class PersonaController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    Persona persona = getFacade().edit(selected);
-                    if(persona != null) {
-                        selected = persona;
-                    }
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
     }
 
     public Persona getPersona(java.lang.Integer id) {

@@ -121,7 +121,7 @@ public class Nota implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
+        return "Nota[ notaPK=" + notaPK + " ]";
     }
     
 }

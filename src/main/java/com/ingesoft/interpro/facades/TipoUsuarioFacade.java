@@ -5,7 +5,7 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.PersonaCodigoInstitucion;
+import com.ingesoft.interpro.entidades.TipoUsuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author debian
  */
 @Stateless
-public class PersonaCodigoInstitucionFacade extends AbstractFacade<PersonaCodigoInstitucion> {
+public class TipoUsuarioFacade extends AbstractFacade<TipoUsuario> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class PersonaCodigoInstitucionFacade extends AbstractFacade<PersonaCodigo
         return em;
     }
 
-    public PersonaCodigoInstitucionFacade() {
-        super(PersonaCodigoInstitucion.class);
+    public TipoUsuarioFacade() {
+        super(TipoUsuario.class);
     }
     
 }

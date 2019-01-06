@@ -10,7 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -21,28 +20,19 @@ public class GrupoUsuarioPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "idGrupoUsuario")
-    private String idGrupoUsuario;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "idUsuario")
     private int idUsuario;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idTipoUsuario")
+    private int idTipoUsuario;
 
     public GrupoUsuarioPK() {
     }
 
-    public GrupoUsuarioPK(String idGrupoUsuario, int idUsuario) {
-        this.idGrupoUsuario = idGrupoUsuario;
+    public GrupoUsuarioPK(int idUsuario, int idTipoUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public String getIdGrupoUsuario() {
-        return idGrupoUsuario;
-    }
-
-    public void setIdGrupoUsuario(String idGrupoUsuario) {
-        this.idGrupoUsuario = idGrupoUsuario;
+        this.idTipoUsuario = idTipoUsuario;
     }
 
     public int getIdUsuario() {
@@ -53,11 +43,19 @@ public class GrupoUsuarioPK implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    public int getIdTipoUsuario() {
+        return idTipoUsuario;
+    }
+
+    public void setIdTipoUsuario(int idTipoUsuario) {
+        this.idTipoUsuario = idTipoUsuario;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idGrupoUsuario != null ? idGrupoUsuario.hashCode() : 0);
         hash += (int) idUsuario;
+        hash += (int) idTipoUsuario;
         return hash;
     }
 
@@ -68,10 +66,10 @@ public class GrupoUsuarioPK implements Serializable {
             return false;
         }
         GrupoUsuarioPK other = (GrupoUsuarioPK) object;
-        if ((this.idGrupoUsuario == null && other.idGrupoUsuario != null) || (this.idGrupoUsuario != null && !this.idGrupoUsuario.equals(other.idGrupoUsuario))) {
+        if (this.idUsuario != other.idUsuario) {
             return false;
         }
-        if (this.idUsuario != other.idUsuario) {
+        if (this.idTipoUsuario != other.idTipoUsuario) {
             return false;
         }
         return true;
@@ -79,7 +77,7 @@ public class GrupoUsuarioPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.GrupoUsuarioPK[ idGrupoUsuario=" + idGrupoUsuario + ", idUsuario=" + idUsuario + " ]";
+        return "GrupoUsuarioPK[ idUsuario=" + idUsuario + ", idTipoUsuario=" + idTipoUsuario + " ]";
     }
     
 }

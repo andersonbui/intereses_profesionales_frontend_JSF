@@ -87,21 +87,22 @@ public class LoginController implements Serializable {
     }
 
     public boolean isAdmin() {
-        return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals(UsuarioController.TIPO_ADMINISTRADOR);
+        String nombreGrupo = grupo.getTipoUsuario().getTpo();
+        return nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
     public boolean isEstudiante() {
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        String nombreGrupo = grupo.getTipoUsuario().getTpo();
         return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE);
     }
 
     public boolean permisoEstudiante() {
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        String nombreGrupo = grupo.getTipoUsuario().getTpo();
         return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
     }
 
     public boolean isDocente() {
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
+        String nombreGrupo = grupo.getTipoUsuario().getTpo();
         return nombreGrupo.equals(UsuarioController.TIPO_DOCENTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
@@ -114,7 +115,6 @@ public class LoginController implements Serializable {
         if (socialManager != null) {
             AuthProvider provider = socialManager.connect(parametros);
             this.setProfile(provider.getUserProfile());
-
         }
 
         FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
@@ -179,8 +179,10 @@ public class LoginController implements Serializable {
             }
             Principal principal = req.getUserPrincipal();
             actual = ejbFacade.buscarPorUsuario(principal.getName());
+//                System.out.println("estado usuari: " + actual);
+//                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
             if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
-                System.out.println("estado usuari: " + actual.getEstado());
+//                System.out.println("estado usuari: " + actual.getEstado());
                 msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El usuario no esta activado. Por favor revise su bandeja de correo");
                 eliminarSesion();
             } else {
@@ -188,6 +190,7 @@ public class LoginController implements Serializable {
                 ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
                 Map<String, Object> sessionMap = external.getSessionMap();
                 sessionMap.put("usuario", actual);
+//                System.out.println("estado usuari: " + actual.getEstado());
                 grupo = actual.getGrupoUsuarioList().get(0);
             }
             context.addMessage(null, msg);

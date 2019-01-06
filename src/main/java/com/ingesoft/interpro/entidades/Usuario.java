@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +38,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario")
     , @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario")
     , @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave")
-    , @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")})
+    , @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")
+    , @NamedQuery(name = "Usuario.findByFechaCreacion", query = "SELECT u FROM Usuario u WHERE u.fechaCreacion = :fechaCreacion")
+    , @NamedQuery(name = "Usuario.findByTokenAcesso", query = "SELECT u FROM Usuario u WHERE u.tokenAcesso = :tokenAcesso")
+    , @NamedQuery(name = "Usuario.findByFechaExpiracionToken", query = "SELECT u FROM Usuario u WHERE u.fechaExpiracionToken = :fechaExpiracionToken")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +63,15 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
+    @Column(name = "fechaCreacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @Size(max = 100)
+    @Column(name = "tokenAcesso")
+    private String tokenAcesso;
+    @Column(name = "fechaExpiracionToken")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaExpiracionToken;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<Persona> personaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario1")
@@ -107,6 +122,30 @@ public class Usuario implements Serializable {
         this.estado = estado;
     }
 
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getTokenAcesso() {
+        return tokenAcesso;
+    }
+
+    public void setTokenAcesso(String tokenAcesso) {
+        this.tokenAcesso = tokenAcesso;
+    }
+
+    public Date getFechaExpiracionToken() {
+        return fechaExpiracionToken;
+    }
+
+    public void setFechaExpiracionToken(Date fechaExpiracionToken) {
+        this.fechaExpiracionToken = fechaExpiracionToken;
+    }
+
     @XmlTransient
     public List<Persona> getPersonaList() {
         return personaList;
@@ -147,7 +186,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingeniosoft.interpro.entidades.Usuario[ idUsuario=" + idUsuario + "; usuario: " + usuario + "; estado: " + estado + " ]";
+        return "Usuario[ idUsuario=" + idUsuario + "; usuario: " + usuario + "; estado: " + estado + " ]";
     }
-
+    
 }

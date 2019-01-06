@@ -23,7 +23,6 @@
                                  rows="10"
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  >
-
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
@@ -51,7 +50,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCodigoInstitucionTitle_tipo}"/>
                             </f:facet>
-                            <h:outputText value="#{item.estado}"/>
+                            <h:outputText value="#{item.idTipoUsuario.tpo}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">

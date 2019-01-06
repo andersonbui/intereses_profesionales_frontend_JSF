@@ -77,7 +77,7 @@ public class ResultadoPorAmbientePK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.ResultadoPorAmbientePK[ idEncuesta=" + idEncuesta + ", idTipoAmbiente=" + idTipoAmbiente + " ]";
+        return "ResultadoPorAmbientePK[ idEncuesta=" + idEncuesta + ", idTipoAmbiente=" + idTipoAmbiente + " ]";
     }
     
 }

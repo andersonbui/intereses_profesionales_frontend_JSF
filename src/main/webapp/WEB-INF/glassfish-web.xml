@@ -4,15 +4,15 @@
   <context-root>/intereses_profesionales_frontend_JSF</context-root>
   <security-role-mapping>
     <role-name>Estudiante</role-name>
-    <group-name>estudiante</group-name>
+    <group-name>1</group-name>
   </security-role-mapping>
   <security-role-mapping>
     <role-name>Profesor</role-name>
-    <group-name>profesor</group-name>
+    <group-name>2</group-name>
   </security-role-mapping>
   <security-role-mapping>
     <role-name>Administrador</role-name>
-    <group-name>administrador</group-name>
+    <group-name>3</group-name>
   </security-role-mapping>
   <class-loader delegate="true"/>
   <jsp-config>

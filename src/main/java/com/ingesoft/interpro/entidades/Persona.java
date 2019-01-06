@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -92,10 +93,10 @@ public class Persona implements Serializable {
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
+    private Docente docente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<Estudiante> estudianteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
-    private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
 
     public Persona() {
     }
@@ -208,6 +209,14 @@ public class Persona implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    public Docente getDocente() {
+        return docente;
+    }
+
+    public void setDocente(Docente docente) {
+        this.docente = docente;
+    }
+
     @XmlTransient
     public List<Estudiante> getEstudianteList() {
         return estudianteList;
@@ -215,15 +224,6 @@ public class Persona implements Serializable {
 
     public void setEstudianteList(List<Estudiante> estudianteList) {
         this.estudianteList = estudianteList;
-    }
-
-    @XmlTransient
-    public List<PersonaCodigoInstitucion> getPersonaCodigoInstitucionList() {
-        return personaCodigoInstitucionList;
-    }
-
-    public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
-        this.personaCodigoInstitucionList = personaCodigoInstitucionList;
     }
 
     @Override
@@ -248,7 +248,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Persona[ idPersona=" + idPersona + "; nombre: "+nombre+" ]";
+        return "Persona[ idPersona=" + idPersona + "; nombre: "+nombre+" ]";
     }
     
 }

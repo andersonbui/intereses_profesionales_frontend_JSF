@@ -19,12 +19,12 @@
                         <p:outputLabel value="#{bundle.EditCodigoInstitucionLabel_fechaCaducidad}" for="fechaCaducidad" />
                         <p:calendar id="fechaCaducidad" pattern="MM/dd/yyyy HH:mm:ss" value="#{codigoInstitucionController.selected.fechaCaducidad}" title="#{bundle.EditCodigoInstitucionTitle_fechaCaducidad}"  showOn="button"/>
                         <p:outputLabel value="#{bundle.EditCodigoInstitucionLabel_tipo}" for="tipo" />
-                        <p:selectOneMenu id="tipo" value="#{codigoInstitucionController.selected.estado}" 
+                        <p:selectOneMenu id="tipo" value="#{codigoInstitucionController.selected.idTipoUsuario}" 
                                          required="true">
-                            <f:selectItems value="#{codigoInstitucionController.tiposCodigoInstitucion}"
+                            <f:selectItems value="#{tipoUsuarioController.items}"
                                            var="item"
                                            itemValue="#{item}" 
-                                           itemLabel="#{item}"/>
+                                           itemLabel="#{item.tpo}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="#{bundle.EditCodigoInstitucionLabel_idInstitucion}" for="idInstitucion" />
                         <p:selectOneMenu id="idInstitucion" value="#{codigoInstitucionController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditCodigoInstitucionRequiredMessage_idInstitucion}">

@@ -113,7 +113,7 @@ public class Ciudad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Ciudad[ idCiudad=" + idCiudad + " ]";
+        return "Ciudad[ idCiudad=" + idCiudad + " ]";
     }
     
 }

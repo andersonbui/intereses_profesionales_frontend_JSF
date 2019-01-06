@@ -145,7 +145,7 @@ public class Grado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
+        return "Grado[ idGrado=" + idGrado + " ]";
     }
     
 }

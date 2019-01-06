@@ -4,7 +4,6 @@ import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.GrupoUsuarioPK;
-import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.GrupoUsuarioFacade;
 
 import java.io.Serializable;
@@ -43,6 +42,7 @@ public class GrupoUsuarioController implements Serializable {
 
     protected void setEmbeddableKeys() {
         selected.getGrupoUsuarioPK().setIdUsuario(selected.getUsuario1().getIdUsuario());
+        selected.getGrupoUsuarioPK().setIdTipoUsuario(selected.getTipoUsuario().getIdTipoUsuario());
     }
 
     protected void initializeEmbeddableKey() {
@@ -52,7 +52,6 @@ public class GrupoUsuarioController implements Serializable {
     private GrupoUsuarioFacade getFacade() {
         return ejbFacade;
     }
-
     public GrupoUsuario prepareCreate() {
         selected = new GrupoUsuario();
         initializeEmbeddableKey();
@@ -133,7 +132,7 @@ public class GrupoUsuarioController implements Serializable {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = GrupoUsuario.class)
+   @FacesConverter(forClass = GrupoUsuario.class)
     public static class GrupoUsuarioControllerConverter implements Converter {
 
         private static final String SEPARATOR = "#";
@@ -153,16 +152,16 @@ public class GrupoUsuarioController implements Serializable {
             GrupoUsuarioPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
             key = new GrupoUsuarioPK();
-            key.setIdGrupoUsuario(values[0]);
-            key.setIdUsuario(Integer.parseInt(values[1]));
+            key.setIdUsuario(Integer.parseInt(values[0]));
+            key.setIdTipoUsuario(Integer.parseInt(values[1]));
             return key;
         }
 
         String getStringKey(GrupoUsuarioPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdGrupoUsuario());
-            sb.append(SEPARATOR);
             sb.append(value.getIdUsuario());
+            sb.append(SEPARATOR);
+            sb.append(value.getIdTipoUsuario());
             return sb.toString();
         }
 

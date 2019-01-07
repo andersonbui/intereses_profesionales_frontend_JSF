@@ -13,17 +13,18 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author debian
  */
 public abstract class Controller implements Serializable {
-    
+
     protected abstract AbstractFacade getFacade();
-    
+
     protected abstract void setEmbeddableKeys();
-    
+
     protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
         Object persona = null;
         if (selected != null) {
@@ -53,5 +54,33 @@ public abstract class Controller implements Serializable {
             }
         }
         return persona;
+    }
+
+    public UsuarioController getUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UsuarioController usuarioController = (UsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "usuarioController");
+        return usuarioController;
+    }
+
+    public EstudianteController getEstudianteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        EstudianteController estudianteController = (EstudianteController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "estudianteController");
+        return estudianteController;
+    }
+
+    public DepartamentoController getDepartamentoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        DepartamentoController controllerPersona = (DepartamentoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "departamentoController");
+        return controllerPersona;
+    }
+
+    public PaisController getPaisController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PaisController paisController = (PaisController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "paisController");
+        return paisController;
     }
 }

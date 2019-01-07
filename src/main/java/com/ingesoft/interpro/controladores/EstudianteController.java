@@ -123,7 +123,7 @@ public class EstudianteController extends Controller implements Serializable {
 
     public Estudiante prepareUpdate() {
         PersonaController personaController = getPersonaController();
-        personaController.prepareUpdate(selected.getIdPersona());
+//        personaController.prepareUpdate(selected.getIdPersona());
         editar=true;
         return selected;
     }

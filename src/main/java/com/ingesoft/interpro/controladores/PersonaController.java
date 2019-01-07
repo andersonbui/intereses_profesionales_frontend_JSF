@@ -20,6 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "personaController")
 @SessionScoped
@@ -30,9 +31,14 @@ public class PersonaController extends Controller implements Serializable {
     private List<Persona> items = null;
     private Persona selected;
     private final String[] tiposEstadoUsuario;
+    private boolean editar;
 
     public PersonaController() {
         this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_ESPERA};
+    }
+
+    public boolean isEditar() {
+        return editar;
     }
 
     public String[] getTiposEstadoUsuario() {
@@ -59,7 +65,6 @@ public class PersonaController extends Controller implements Serializable {
             if (persona.getIdCiudad().getIdDepartamento() != null) {
                 departamentoController.setSelected(persona.getIdCiudad().getIdDepartamento());
             }
-
         }
     }
 
@@ -79,53 +84,39 @@ public class PersonaController extends Controller implements Serializable {
         UsuarioController usuarioController = getUsuarioController();
         Usuario usuario = usuarioController.prepareCreate();
         selected = new Persona();
+        selected.setIdCiudad(null);
+        usuario.setClave("Ninguna");
         selected.setIdUsuario(usuario);
         initializeEmbeddableKey();
+        getDepartamentoController().setSelected(null);
+        getPaisController().setSelected(null);
+        getEstudianteController().setSelected(null);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('PersonaEditDialog').show()");
         return selected;
     }
 
-    public UsuarioController getUsuarioController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UsuarioController usuarioController = (UsuarioController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "usuarioController");
-        return usuarioController;
-    }
-
-    public EstudianteController getEstudianteController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        EstudianteController estudianteController = (EstudianteController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "estudianteController");
-        return estudianteController;
-    }
-
-    public DepartamentoController getDepartamentoController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        DepartamentoController controllerPersona = (DepartamentoController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "departamentoController");
-        return controllerPersona;
-    }
-
-    public Persona prepareUpdate(Estudiante estudiante) {
-        if (estudiante != null) {
-            return prepareUpdate(estudiante.getIdPersona());
-        }
-        return null;
-    }
-
-    public Persona prepareUpdate(Persona persona) {
-        selected = persona;
-
+    public Persona prepareUpdate() {
         if (selected != null) {
-            if (!selected.getEstudianteList().isEmpty()) {
+            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
                 EstudianteController estudianteController = getEstudianteController();
                 estudianteController.setSelected(selected.getEstudianteList().get(0));
             }
+            DepartamentoController deptoController = getDepartamentoController();
             if (selected.getIdCiudad() != null) {
-                DepartamentoController deptoController = getDepartamentoController();
                 deptoController.setSelected(selected.getIdCiudad().getIdDepartamento());
+            } else {
+                deptoController.setSelected(null);
+                getPaisController().setSelected(null);
             }
-        }
 
+            UsuarioController usuarioController = getUsuarioController();
+            usuarioController.setSelected(selected.getIdUsuario());
+
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("PF('PersonaEditDialog').show()");
+
+        }
         return selected;
     }
 
@@ -138,8 +129,13 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public void update() {
+        UsuarioController usuarioController = getUsuarioController();
+        usuarioController.update();
+        if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
+            EstudianteController estudianteController = getEstudianteController();
+            estudianteController.update();
+        }
         Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
-//        UsuarioController usuarioController = getUsuarioController();
     }
 
     public void destroy() {

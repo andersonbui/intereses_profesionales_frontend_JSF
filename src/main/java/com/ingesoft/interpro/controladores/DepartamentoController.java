@@ -44,7 +44,7 @@ public class DepartamentoController implements Serializable {
 
     public void setSelected(Departamento selected) {
         this.selected = selected;
-        if(selected.getIdPais() != null){
+        if(selected != null ){
             getPaisController().setSelected(selected.getIdPais());
         }
 

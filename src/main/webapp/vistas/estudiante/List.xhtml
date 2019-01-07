@@ -65,10 +65,10 @@
                         </p:column>
                         
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{estudianteController.prepareCreate()}" update=":EstudianteEditForm" oncomplete=""/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personaController.prepareCreate()}" update=":EstudianteEditForm" oncomplete=""/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EstudianteViewForm" oncomplete="PF('EstudianteViewDialog').show()" disabled="#{empty estudianteController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}"  actionListener="#{estudianteController.prepareUpdate()}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{estudianteController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}"  actionListener="#{personaController.prepareUpdate()}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{personaController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}" rendered="#{loginController.admin}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

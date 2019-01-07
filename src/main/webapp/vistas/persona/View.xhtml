@@ -8,38 +8,38 @@
 
     <ui:composition>
 
-        <p:dialog id="PersonaViewDlg" widgetVar="PersonaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewPersonaTitle}">
+        <p:dialog id="PersonaViewDlg" widgetVar="PersonaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewTitle}">
             <h:form id="PersonaViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{personaController.selected != null}">
-                        <h:outputText value="#{bundle.ViewPersonaLabel_idPersona}"/>
-                        <h:outputText value="#{personaController.selected.idPersona}" title="#{bundle.ViewPersonaTitle_idPersona}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_nombre}"/>
-                        <h:outputText value="#{personaController.selected.nombre}" title="#{bundle.ViewPersonaTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_apellido}"/>
-                        <h:outputText value="#{personaController.selected.apellido}" title="#{bundle.ViewPersonaTitle_apellido}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_email}"/>
-                        <h:outputText value="#{personaController.selected.email}" title="#{bundle.ViewPersonaTitle_email}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_direccion}"/>
-                        <h:outputText value="#{personaController.selected.direccion}" title="#{bundle.ViewPersonaTitle_direccion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_identificacion}"/>
-                        <h:outputText value="#{personaController.selected.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
-                        <h:outputText value="#{personaController.selected.tipoIdentificacion}" title="#{bundle.ViewPersonaTitle_tipoIdentificacion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_fechaNacimiento}"/>
-                        <h:outputText value="#{personaController.selected.fechaNacimiento}" title="#{bundle.ViewPersonaTitle_fechaNacimiento}">
+                        <h:outputText value="#{bundle.PersonaLabel_idPersona}"/>
+                        <h:outputText value="#{personaController.selected.idPersona}" title="#{bundle.PersonaTitle_idPersona}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_nombre}"/>
+                        <h:outputText value="#{personaController.selected.nombre}" title="#{bundle.PersonaTitle_nombre}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_apellido}"/>
+                        <h:outputText value="#{personaController.selected.apellido}" title="#{bundle.PersonaTitle_apellido}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_email}"/>
+                        <h:outputText value="#{personaController.selected.email}" title="#{bundle.PersonaTitle_email}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_direccion}"/>
+                        <h:outputText value="#{personaController.selected.direccion}" title="#{bundle.PersonaTitle_direccion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_identificacion}"/>
+                        <h:outputText value="#{personaController.selected.identificacion}" title="#{bundle.PersonaTitle_identificacion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_tipoIdentificacion}"/>
+                        <h:outputText value="#{personaController.selected.tipoIdentificacion}" title="#{bundle.PersonaTitle_tipoIdentificacion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_fechaNacimiento}"/>
+                        <h:outputText value="#{personaController.selected.fechaNacimiento}" title="#{bundle.PersonaTitle_fechaNacimiento}">
                             <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                         </h:outputText>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_sexo}"/>
-                        <h:outputText value="#{personaController.selected.sexo}" title="#{bundle.ViewPersonaTitle_sexo}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_celular}"/>
-                        <h:outputText value="#{personaController.selected.celular}" title="#{bundle.ViewPersonaTitle_celular}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_tipo}"/>
-                        <h:outputText value="#{personaController.selected.tipo}" title="#{bundle.ViewPersonaTitle_tipo}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_idCiudad}"/>
-                        <h:outputText value="#{personaController.selected.idCiudad}" title="#{bundle.ViewPersonaTitle_idCiudad}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_idUsuario}"/>
-                        <h:outputText value="#{personaController.selected.idUsuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_sexo}"/>
+                        <h:outputText value="#{personaController.selected.sexo}" title="#{bundle.PersonaTitle_sexo}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_celular}"/>
+                        <h:outputText value="#{personaController.selected.celular}" title="#{bundle.PersonaTitle_celular}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_tipo}"/>
+                        <h:outputText value="#{personaController.selected.tipo}" title="#{bundle.PersonaTitle_tipo}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_idCiudad}"/>
+                        <h:outputText value="#{personaController.selected.idCiudad}" title="#{bundle.PersonaTitle_idCiudad}"/>
+                        <h:outputText value="#{bundle.UsuarioLabel_Usuario}"/>
+                        <h:outputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.PersonaTitle_idUsuario}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="PersonaViewDialog.hide()"/>
                 </h:panelGroup>

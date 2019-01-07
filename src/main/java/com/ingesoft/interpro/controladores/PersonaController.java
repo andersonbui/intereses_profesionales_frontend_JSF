@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
@@ -81,6 +82,7 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona prepareCreate() {
+        editar = false;
         UsuarioController usuarioController = getUsuarioController();
         Usuario usuario = usuarioController.prepareCreate();
         selected = new Persona();
@@ -97,10 +99,13 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona prepareUpdate() {
+        editar = true;
         if (selected != null) {
-            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
                 EstudianteController estudianteController = getEstudianteController();
+            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
                 estudianteController.setSelected(selected.getEstudianteList().get(0));
+            }else{
+                estudianteController.setSelected(null);
             }
             DepartamentoController deptoController = getDepartamentoController();
             if (selected.getIdCiudad() != null) {
@@ -122,6 +127,12 @@ public class PersonaController extends Controller implements Serializable {
 
     public Persona create() {
         Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
+        
+        GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
+        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+        grupoUsuarioController.create();
+        
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
@@ -135,6 +146,7 @@ public class PersonaController extends Controller implements Serializable {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
         }
+        
         Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 

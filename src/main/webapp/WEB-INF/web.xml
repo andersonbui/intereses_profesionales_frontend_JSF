@@ -25,7 +25,7 @@
     </welcome-file-list>
     <error-page>
         <exception-type>javax.ejb.EJBException</exception-type>
-        <location>/error.xhtml</location>
+        <location>/faces/error.xhtml</location>
     </error-page>
     <error-page>
         <exception-type>javax.servlet.ServletException</exception-type>

@@ -83,4 +83,18 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "paisController");
         return paisController;
     }
+
+    public GrupoUsuarioController getGrupoUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        GrupoUsuarioController grupoUsuarioController = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "grupoUsuarioController");
+        return grupoUsuarioController;
+    }
+    
+    public TipoUsuarioController getTipoUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        TipoUsuarioController tipoUsuarioController = (TipoUsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "tipoUsuarioController");
+        return tipoUsuarioController;
+    }
 }

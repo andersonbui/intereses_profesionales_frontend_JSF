@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -68,12 +69,11 @@ public class Encuesta implements Serializable {
     @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
     @ManyToOne
     private AreaProfesional idAreaProfesional;
-    @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")
+    @JoinColumns({
+        @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
+        , @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")})
     @ManyToOne(optional = false)
-    private Estudiante idEstudiante;
-    @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
-    @ManyToOne
-    private Grado idGrado;
+    private EstudianteGrado estudianteGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
 
@@ -157,20 +157,12 @@ public class Encuesta implements Serializable {
         this.idAreaProfesional = idAreaProfesional;
     }
 
-    public Estudiante getIdEstudiante() {
-        return idEstudiante;
+    public EstudianteGrado getEstudianteGrado() {
+        return estudianteGrado;
     }
 
-    public void setIdEstudiante(Estudiante idEstudiante) {
-        this.idEstudiante = idEstudiante;
-    }
-
-    public Grado getIdGrado() {
-        return idGrado;
-    }
-
-    public void setIdGrado(Grado idGrado) {
-        this.idGrado = idGrado;
+    public void setEstudianteGrado(EstudianteGrado estudianteGrado) {
+        this.estudianteGrado = estudianteGrado;
     }
 
     @XmlTransient

@@ -20,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -92,11 +91,12 @@ public class Persona implements Serializable {
     @JoinColumn(name = "idCiudad", referencedColumnName = "idCiudad")
     @ManyToOne
     private Ciudad idCiudad;
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
+    @ManyToOne
+    private Institucion idInstitucion;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
-    private Docente docente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<Estudiante> estudianteList;
 
@@ -203,20 +203,20 @@ public class Persona implements Serializable {
         this.idCiudad = idCiudad;
     }
 
+    public Institucion getIdInstitucion() {
+        return idInstitucion;
+    }
+
+    public void setIdInstitucion(Institucion idInstitucion) {
+        this.idInstitucion = idInstitucion;
+    }
+
     public Usuario getIdUsuario() {
         return idUsuario;
     }
 
     public void setIdUsuario(Usuario idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public Docente getDocente() {
-        return docente;
-    }
-
-    public void setDocente(Docente docente) {
-        this.docente = docente;
     }
 
     @XmlTransient

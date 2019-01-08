@@ -62,15 +62,11 @@ public class Estudiante implements Serializable {
     @Size(max = 45)
     @Column(name = "personalidad")
     private String personalidad;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<EstudianteGrado> estudianteGradoList;
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona")
     @ManyToOne(optional = false)
     private Persona idPersona;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
-    private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
-    private List<Encuesta> encuestaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
-    private List<EstudianteGrado> estudianteGradoList;
 
     public Estudiante() {
     }
@@ -135,30 +131,21 @@ public class Estudiante implements Serializable {
         this.personalidad = personalidad;
     }
 
+    @XmlTransient
+    public List<EstudianteGrado> getEstudianteGradoList() {
+        return estudianteGradoList;
+    }
+
+    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
+        this.estudianteGradoList = estudianteGradoList;
+    }
+
     public Persona getIdPersona() {
         return idPersona;
     }
 
     public void setIdPersona(Persona idPersona) {
         this.idPersona = idPersona;
-    }
-
-    @XmlTransient
-    public List<Nota> getNotaList() {
-        return notaList;
-    }
-
-    public void setNotaList(List<Nota> notaList) {
-        this.notaList = notaList;
-    }
-
-    @XmlTransient
-    public List<Encuesta> getEncuestaList() {
-        return encuestaList;
-    }
-
-    public void setEncuestaList(List<Encuesta> encuestaList) {
-        this.encuestaList = encuestaList;
     }
 
     @Override
@@ -183,16 +170,7 @@ public class Estudiante implements Serializable {
 
     @Override
     public String toString() {
-        return "Estudiante{" + "idEstudiante=" + idEstudiante + ", estrato=" + estrato + ", idPersona=" + idPersona + '}';
-    }
-
-    @XmlTransient
-    public List<EstudianteGrado> getEstudianteGradoList() {
-        return estudianteGradoList;
-    }
-
-    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
-        this.estudianteGradoList = estudianteGradoList;
+        return "com.ingesoft.interpro.entidades.Estudiante[ idEstudiante=" + idEstudiante + " ]";
     }
     
 }

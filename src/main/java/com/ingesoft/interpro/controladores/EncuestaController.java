@@ -120,7 +120,7 @@ public class EncuestaController implements Serializable {
             selected = new Encuesta();
             initializeEmbeddableKey();
             selected.setFecha(new Date());
-            selected.setIdEstudiante(estud);
+//            selected.setIdEstudiante(etudianteGrado);
             selected.setIdEncuesta(getIdEncuesta());
 
             System.out.println("antes encuesta creada: " + selected);

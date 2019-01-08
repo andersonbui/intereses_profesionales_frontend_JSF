@@ -53,11 +53,11 @@ public class Institucion implements Serializable {
     @Column(name = "dane")
     private String dane;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
-    private List<Docente> docenteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
     private List<CodigoInstitucion> codigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
     private List<Grado> gradoList;
+    @OneToMany(mappedBy = "idInstitucion")
+    private List<Persona> personaList;
 
     public Institucion() {
     }
@@ -96,15 +96,6 @@ public class Institucion implements Serializable {
 
     public void setDane(String dane) {
         this.dane = dane;
-    }
-
-    @XmlTransient
-    public List<Docente> getDocenteList() {
-        return docenteList;
-    }
-
-    public void setDocenteList(List<Docente> docenteList) {
-        this.docenteList = docenteList;
     }
 
     @XmlTransient
@@ -148,6 +139,15 @@ public class Institucion implements Serializable {
     @Override
     public String toString() {
         return "Institucion[ idInstitucion=" + idInstitucion + " ]";
+    }
+
+    @XmlTransient
+    public List<Persona> getPersonaList() {
+        return personaList;
+    }
+
+    public void setPersonaList(List<Persona> personaList) {
+        this.personaList = personaList;
     }
     
 }

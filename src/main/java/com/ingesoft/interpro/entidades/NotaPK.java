@@ -34,7 +34,7 @@ public class NotaPK implements Serializable {
     public NotaPK() {
     }
 
-    public NotaPK(int idMateria, int idEstudiante, int idGrado) {
+    public NotaPK(int idMateria, int idGrado, int idEstudiante) {
         this.idMateria = idMateria;
         this.idEstudiante = idEstudiante;
         this.idGrado = idGrado;
@@ -48,14 +48,6 @@ public class NotaPK implements Serializable {
         this.idMateria = idMateria;
     }
 
-    public int getIdEstudiante() {
-        return idEstudiante;
-    }
-
-    public void setIdEstudiante(int idEstudiante) {
-        this.idEstudiante = idEstudiante;
-    }
-
     public int getIdGrado() {
         return idGrado;
     }
@@ -64,12 +56,20 @@ public class NotaPK implements Serializable {
         this.idGrado = idGrado;
     }
 
+    public int getIdEstudiante() {
+        return idEstudiante;
+    }
+
+    public void setIdEstudiante(int idEstudiante) {
+        this.idEstudiante = idEstudiante;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idMateria;
-        hash += (int) idEstudiante;
         hash += (int) idGrado;
+        hash += (int) idEstudiante;
         return hash;
     }
 
@@ -83,10 +83,10 @@ public class NotaPK implements Serializable {
         if (this.idMateria != other.idMateria) {
             return false;
         }
-        if (this.idEstudiante != other.idEstudiante) {
+        if (this.idGrado != other.idGrado) {
             return false;
         }
-        if (this.idGrado != other.idGrado) {
+        if (this.idEstudiante != other.idEstudiante) {
             return false;
         }
         return true;

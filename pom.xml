@@ -129,12 +129,12 @@
             <version>4.15</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>mineriaBayes</groupId>
             <artifactId>mineriaBayes</artifactId>
             <version>1</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

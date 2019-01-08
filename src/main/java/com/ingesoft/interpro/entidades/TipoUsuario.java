@@ -63,6 +63,14 @@ public class TipoUsuario implements Serializable {
         this.idTipoUsuario = idTipoUsuario;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     @XmlTransient
     public List<CodigoInstitucion> getCodigoInstitucionList() {
         return codigoInstitucionList;
@@ -104,14 +112,6 @@ public class TipoUsuario implements Serializable {
     @Override
     public String toString() {
         return "com.ingeniosoft.entidades.TipoUsuario[ idTipoUsuario=" + idTipoUsuario + " ]";
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
     
 }

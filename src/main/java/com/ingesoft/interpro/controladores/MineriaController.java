@@ -65,7 +65,7 @@ public class MineriaController implements Serializable {
         ea.escribir(cabecera);
         for (Encuesta encuesta : encuestas) {
             sb = new StringBuilder();
-            String sexo = encuesta.getIdEstudiante().getIdPersona().getSexo().toUpperCase();
+            String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
             if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
                 continue;
             }
@@ -110,7 +110,7 @@ public class MineriaController implements Serializable {
 
     private Integer obtenerEdad(Encuesta encuesta) {
         Date fechaEnc = encuesta.getFecha();
-        Date fechaNac = encuesta.getIdEstudiante().getIdPersona().getFechaNacimiento();
+        Date fechaNac = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getFechaNacimiento();
         if (fechaEnc == null || fechaNac == null) {
             return 0;
         }

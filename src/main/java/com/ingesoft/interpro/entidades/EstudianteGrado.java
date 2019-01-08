@@ -6,8 +6,10 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -16,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -43,6 +47,11 @@ public class EstudianteGrado implements Serializable {
     private Grado grado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudianteGrado")
     private List<Nota> notaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudianteGrado")
+    private List<Encuesta> encuestaList;
+    @Column(name = "fecha")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
     public EstudianteGrado() {
     }
@@ -88,6 +97,24 @@ public class EstudianteGrado implements Serializable {
         this.notaList = notaList;
     }
 
+    @XmlTransient
+    public List<Encuesta> getEncuestaList() {
+        return encuestaList;
+    }
+
+    public void setEncuestaList(List<Encuesta> encuestaList) {
+        this.encuestaList = encuestaList;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -110,7 +137,7 @@ public class EstudianteGrado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.EstudianteGrado[ estudianteGradoPK=" + estudianteGradoPK + " ]";
+        return "EstudianteGrado[ estudianteGradoPK=" + estudianteGradoPK + " ]";
     }
     
 }

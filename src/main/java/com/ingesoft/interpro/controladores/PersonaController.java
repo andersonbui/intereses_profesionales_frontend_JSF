@@ -165,7 +165,7 @@ public class PersonaController extends Controller implements Serializable {
     public String obtenerTipoUsuario(Persona persona) {
         if (persona.getIdUsuario() != null && persona.getIdUsuario().getGrupoUsuarioList() != null) {
             if (!persona.getIdUsuario().getGrupoUsuarioList().isEmpty()) {
-                return "" + persona.getIdUsuario().getGrupoUsuarioList().get(0).getTipoUsuario().getTpo();
+                return "" + persona.getIdUsuario().getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
             }
         }
         return "--";
@@ -176,12 +176,12 @@ public class PersonaController extends Controller implements Serializable {
             Persona persona = getLoginController().getPersonaActual();
             List<GrupoUsuario> lista = persona.getIdUsuario().getGrupoUsuarioList();
             for (GrupoUsuario object : lista) {
-                String tipo = object.getTipoUsuario().getTpo();
+                String tipo = object.getTipoUsuario().getTipo();
                 if (tipo.equals(UsuarioController.TIPO_ADMINISTRADOR)) {
                     items = getFacade().findAll();
                     break;
                 } else if (tipo.equals(UsuarioController.TIPO_DOCENTE)) {
-//                     items = getFacade().findAllByInstitucion(persona.);
+//                     items = getFacade().findAllByInstitucion(persona.getDocente().getIdInstitucion().getIdInstitucion());
                     break;
                 }
 

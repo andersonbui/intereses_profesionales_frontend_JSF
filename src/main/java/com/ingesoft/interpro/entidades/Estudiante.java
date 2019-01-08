@@ -69,6 +69,8 @@ public class Estudiante implements Serializable {
     private List<Nota> notaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
     private List<Encuesta> encuestaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<EstudianteGrado> estudianteGradoList;
 
     public Estudiante() {
     }
@@ -182,6 +184,15 @@ public class Estudiante implements Serializable {
     @Override
     public String toString() {
         return "Estudiante{" + "idEstudiante=" + idEstudiante + ", estrato=" + estrato + ", idPersona=" + idPersona + '}';
+    }
+
+    @XmlTransient
+    public List<EstudianteGrado> getEstudianteGradoList() {
+        return estudianteGradoList;
+    }
+
+    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
+        this.estudianteGradoList = estudianteGradoList;
     }
     
 }

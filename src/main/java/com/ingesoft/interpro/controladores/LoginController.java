@@ -87,22 +87,22 @@ public class LoginController implements Serializable {
     }
 
     public boolean isAdmin() {
-        String nombreGrupo = grupo.getTipoUsuario().getTpo();
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
         return nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
     public boolean isEstudiante() {
-        String nombreGrupo = grupo.getTipoUsuario().getTpo();
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
         return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE);
     }
 
     public boolean permisoEstudiante() {
-        String nombreGrupo = grupo.getTipoUsuario().getTpo();
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
         return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
     }
 
     public boolean isDocente() {
-        String nombreGrupo = grupo.getTipoUsuario().getTpo();
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
         return nombreGrupo.equals(UsuarioController.TIPO_DOCENTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 

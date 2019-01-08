@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -47,6 +48,11 @@ public class Nota implements Serializable {
     @JoinColumn(name = "idMateria", referencedColumnName = "idMateria", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Materia materia;
+    @JoinColumns({
+        @JoinColumn(name = "idGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
+        , @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
+    private EstudianteGrado estudianteGrado;
 
     public Nota() {
     }
@@ -122,6 +128,14 @@ public class Nota implements Serializable {
     @Override
     public String toString() {
         return "Nota[ notaPK=" + notaPK + " ]";
+    }
+
+    public EstudianteGrado getEstudianteGrado() {
+        return estudianteGrado;
+    }
+
+    public void setEstudianteGrado(EstudianteGrado estudianteGrado) {
+        this.estudianteGrado = estudianteGrado;
     }
     
 }

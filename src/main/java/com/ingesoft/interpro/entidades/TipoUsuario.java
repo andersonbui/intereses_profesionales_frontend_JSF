@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TipoUsuario.findAll", query = "SELECT t FROM TipoUsuario t")
     , @NamedQuery(name = "TipoUsuario.findByIdTipoUsuario", query = "SELECT t FROM TipoUsuario t WHERE t.idTipoUsuario = :idTipoUsuario")
-    , @NamedQuery(name = "TipoUsuario.findByTpo", query = "SELECT t FROM TipoUsuario t WHERE t.tpo = :tpo")})
+    , @NamedQuery(name = "TipoUsuario.findByTipo", query = "SELECT t FROM TipoUsuario t WHERE t.tipo = :tipo")})
 public class TipoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,8 +41,8 @@ public class TipoUsuario implements Serializable {
     @Column(name = "idTipoUsuario")
     private Integer idTipoUsuario;
     @Size(max = 45)
-    @Column(name = "tpo")
-    private String tpo;
+    @Column(name = "tipo")
+    private String tipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoUsuario")
     private List<CodigoInstitucion> codigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuario")
@@ -61,14 +61,6 @@ public class TipoUsuario implements Serializable {
 
     public void setIdTipoUsuario(Integer idTipoUsuario) {
         this.idTipoUsuario = idTipoUsuario;
-    }
-
-    public String getTpo() {
-        return tpo;
-    }
-
-    public void setTpo(String tpo) {
-        this.tpo = tpo;
     }
 
     @XmlTransient
@@ -112,6 +104,14 @@ public class TipoUsuario implements Serializable {
     @Override
     public String toString() {
         return "com.ingeniosoft.entidades.TipoUsuario[ idTipoUsuario=" + idTipoUsuario + " ]";
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
 }

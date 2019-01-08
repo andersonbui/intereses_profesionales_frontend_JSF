@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Persona;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,9 @@ public class PersonaFacade extends AbstractFacade<Persona> {
     public PersonaFacade() {
         super(Persona.class);
     }
+    
+//    public List findAllByInstitucion(){
+//        
+//    }
     
 }

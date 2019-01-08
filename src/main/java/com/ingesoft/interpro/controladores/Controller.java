@@ -76,6 +76,18 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "departamentoController");
         return controllerPersona;
     }
+    public CiudadController getCiudadController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "ciudadController");
+        return ciudadController;
+    }
+    public LoginController getLoginController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "loginController");
+        return loginController;
+    }
 
     public PaisController getPaisController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

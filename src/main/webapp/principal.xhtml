@@ -107,9 +107,9 @@
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
                         
-                        <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
+                        <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >
                             <p:menuitem value="Usuarios" outcome="/vistas/persona/List.xhtml" />
-                            <p:menuitem value="Area" outcome="/vistas/area/List.xhtml" />
+                            <p:menuitem value="Area" outcome="/vistas/area/List.xhtml"  rendered="#{loginController.isAdmin()}" />
                             <p:menuitem value="Estudiante"  url="/estudiantes/"  outcome="/vistas/estudiante/List.xhtml" />
                             <p:menuitem value="Codigo Institucion" outcome="/vistas/codigoInstitucion/List.xhtml"  /> 
                         </p:submenu>

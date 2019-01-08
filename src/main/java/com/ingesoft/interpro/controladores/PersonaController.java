@@ -56,10 +56,8 @@ public class PersonaController extends Controller implements Serializable {
 
     public void estudianteSeleccionado(Persona persona) {
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
         DepartamentoController departamentoController = getDepartamentoController();
-        CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "ciudadController");
+        CiudadController ciudadController = getCiudadController();
 
         if (persona.getIdCiudad() != null) {
             ciudadController.setSelected(persona.getIdCiudad());
@@ -99,12 +97,19 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona prepareUpdate() {
+        return prepareUpdate(null);
+    }
+
+    public Persona prepareUpdate(Persona persona) {
+        if (persona != null) {
+            selected = persona;
+        }
         editar = true;
         if (selected != null) {
-                EstudianteController estudianteController = getEstudianteController();
+            EstudianteController estudianteController = getEstudianteController();
             if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
                 estudianteController.setSelected(selected.getEstudianteList().get(0));
-            }else{
+            } else {
                 estudianteController.setSelected(null);
             }
             DepartamentoController deptoController = getDepartamentoController();
@@ -118,21 +123,20 @@ public class PersonaController extends Controller implements Serializable {
             UsuarioController usuarioController = getUsuarioController();
             usuarioController.setSelected(selected.getIdUsuario());
 
-            RequestContext requestContext = RequestContext.getCurrentInstance();
-            requestContext.execute("PF('PersonaEditDialog').show()");
-
+//            RequestContext requestContext = RequestContext.getCurrentInstance();
+//            requestContext.execute("PF('PerfilEditDialog').show()");
         }
         return selected;
     }
 
     public Persona create() {
         Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
-        
+
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
         grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
         grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
         grupoUsuarioController.create();
-        
+
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
@@ -146,7 +150,7 @@ public class PersonaController extends Controller implements Serializable {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
         }
-        
+
         Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 
@@ -158,9 +162,30 @@ public class PersonaController extends Controller implements Serializable {
         }
     }
 
+    public String obtenerTipoUsuario(Persona persona) {
+        if (persona.getIdUsuario() != null && persona.getIdUsuario().getGrupoUsuarioList() != null) {
+            if (!persona.getIdUsuario().getGrupoUsuarioList().isEmpty()) {
+                return "" + persona.getIdUsuario().getGrupoUsuarioList().get(0).getTipoUsuario().getTpo();
+            }
+        }
+        return "--";
+    }
+
     public List<Persona> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            Persona persona = getLoginController().getPersonaActual();
+            List<GrupoUsuario> lista = persona.getIdUsuario().getGrupoUsuarioList();
+            for (GrupoUsuario object : lista) {
+                String tipo = object.getTipoUsuario().getTpo();
+                if (tipo.equals(UsuarioController.TIPO_ADMINISTRADOR)) {
+                    items = getFacade().findAll();
+                    break;
+                } else if (tipo.equals(UsuarioController.TIPO_DOCENTE)) {
+//                     items = getFacade().findAllByInstitucion(persona.);
+                    break;
+                }
+
+            }
         }
         return items;
     }

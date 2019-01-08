@@ -55,9 +55,10 @@
                                                            />  
                                         </p:selectOneRadio>
                                         <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.Label_tipoUsuario}" rendered="#{loginController.docente and !personaController.editar}" />
-                                        <p:selectOneRadio id="slt_idtipoUsuario" value="#{grupoUsuarioController.selected.tipoUsuario}" 
+                                        <p:selectOneRadio id="slt_idtipoUsuario" 
+                                                          value="#{grupoUsuarioController.selected.tipoUsuario}" 
                                                           required="true" 
-                                                          rendered="#{loginController.docente and !personaController.editar}" >
+                                                          rendered="#{grupoUsuarioController.selected != null and loginController.docente and !personaController.editar}" >
                                             <f:selectItems value="#{tipoUsuarioController.items}"
                                                            var="tipo"
                                                            itemValue="#{tipo}"

@@ -21,7 +21,7 @@
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Apellidos: " for="apellidos" />
                                         <p:inputText id="apellidos" value="#{personaController.selected.apellido}" required="true" requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}"/>
 
-                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_tipoIdentificacion}"/>
                                         <p:selectOneMenu id="idTipoIdentificacion" value="#{personaController.selected.tipoIdentificacion}">
                                             <f:selectItem itemLabel="Cedula de ciudadania" itemValue='Cedula de ciudadania' />
                                             <f:selectItem itemLabel="DNI" itemValue='DNI' />
@@ -30,10 +30,10 @@
                                             <f:selectItem itemLabel="Cedula de extrangeria" itemValue='Cedula de extrangeria' />    
                                             <f:selectItem itemLabel="Otro" itemValue='Otro' />
                                         </p:selectOneMenu>
-                                        
-                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_identificacion}"/>
+
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_identificacion}"/>
                                         <p:inputText value="#{personaController.selected.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
-                                        
+
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Fecha nacimiento: " for="fechaNacimiento" />
                                         <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" placeholder="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
 
@@ -42,7 +42,7 @@
                                             <f:selectItem itemLabel="M" itemValue='M' />
                                             <f:selectItem itemLabel="F" itemValue='F' />
                                         </p:selectOneRadio>
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.ViewPersonaLabel_idUsuario}"/>
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_idUsuario}"/>
                                         <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
                                     </p:panelGrid>
                                 </p:panel>
@@ -153,9 +153,13 @@
 
                     </p:wizard>
                     <p:commandButton actionListener="#{estudianteController.create()}" value="#{bundle.Save}" update="display,:PerfilViewForm:datalist,:growl" oncomplete="handleSubmit(args,'PerfilEditDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="PerfilCreateDialog.hide()"/>
+
                 </h:panelGroup>
             </h:form>
+            <h:form>
+                <p:commandButton value="#{bundle.Cancel}" onclick="PerfilCreateDialog.hide()"/>
+            </h:form>
+
         </p:dialog>
     </ui:composition>
 </html>

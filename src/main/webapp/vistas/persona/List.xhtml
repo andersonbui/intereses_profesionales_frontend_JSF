@@ -17,7 +17,8 @@
             <h:form id="PersonaListForm">
                 <p:panel header="#{bundle.ListPersonaTitle}">
                     <p:dataTable id="datalist" value="#{personaController.items}" var="item"
-                                 selectionMode="single" selection="#{personaController.selected}"
+                                 selectionMode="single" 
+                                 selection="#{personaController.selected}"
                                  paginator="true"
                                  rowKey="#{item.idPersona}"
                                  rows="10"
@@ -67,7 +68,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_tipo}"/>
                             </f:facet>
-                            <h:outputText value="#{item.tipo}"/>
+                            <h:outputText value="#{personaController.obtenerTipoUsuario(item)}" />
                         </p:column>
                         <p:column>
                             <f:facet name="header">

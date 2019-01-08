@@ -181,7 +181,7 @@ public class PersonaController extends Controller implements Serializable {
                     items = getFacade().findAll();
                     break;
                 } else if (tipo.equals(UsuarioController.TIPO_DOCENTE)) {
-//                     items = getFacade().findAllByInstitucion(persona.getDocente().getIdInstitucion().getIdInstitucion());
+                     items = getFacade().findAllByInstitucion(persona.getDocente().getIdInstitucion().getIdInstitucion());
                     break;
                 }
 

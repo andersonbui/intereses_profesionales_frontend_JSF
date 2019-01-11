@@ -55,16 +55,29 @@
                                                            />  
                                         </p:selectOneRadio>
                                         <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.Label_tipoUsuario}" rendered="#{loginController.docente and !personaController.editar}" />
-                                        <p:selectOneRadio id="slt_idtipoUsuario" 
+                                        <p:selectOneRadio id="selt_idtipoUsuario" 
                                                           value="#{grupoUsuarioController.selected.tipoUsuario}" 
                                                           required="true" 
                                                           rendered="#{grupoUsuarioController.selected != null and loginController.docente and !personaController.editar}" >
-                                            <f:selectItems value="#{tipoUsuarioController.items}"
+                                             
+                                            <f:selectItems value="#{tipoUsuarioController.getItemsFiltrados(loginController.actual.grupoUsuarioList)}"
                                                            var="tipo"
                                                            itemValue="#{tipo}"
                                                            itemLabel="#{tipo.tipo}"
-                                                           />  
+                                                           />
                                         </p:selectOneRadio>
+                                        
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_idInstitucion}" rendered="#{loginController.admin and !personaController.editar}" />
+                                        <p:selectOneMenu id="selt_idInstitucion"
+                                                          value="#{personaController.selected.idInstitucion}"
+                                                          required="true"
+                                                          rendered="#{grupoUsuarioController.selected != null and loginController.admin and !personaController.editar}" >
+                                            <f:selectItems value="#{institucionController.items}"
+                                                           var="insti"
+                                                           itemValue="#{insti}"
+                                                           itemLabel="#{insti.nombre}"
+                                                           />  
+                                        </p:selectOneMenu>
                                     </p:panelGrid>
                                 </p:panel>
                             </center>

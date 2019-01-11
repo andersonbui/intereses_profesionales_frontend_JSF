@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.TipoUsuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +29,17 @@ public class TipoUsuarioFacade extends AbstractFacade<TipoUsuario> {
     public TipoUsuarioFacade() {
         super(TipoUsuario.class);
     }
+    
+    public TipoUsuario obtenerPorTipo(String tipo) {
+        
+        Query query = em.createNamedQuery("TipoUsuario.findByTipo");
+        query.setParameter("tipo", tipo);
+        TipoUsuario tipoUsuario = (TipoUsuario) query.getResultList().get(0);
+        if (tipoUsuario != null) {
+            return tipoUsuario;
+        }
+        return null;
+    }
+       
     
 }

@@ -3,6 +3,8 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.TipoUsuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.TipoUsuarioFacade;
 
 import java.io.Serializable;
@@ -21,7 +23,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "tipoUsuarioController")
 @SessionScoped
-public class TipoUsuarioController implements Serializable {
+public class TipoUsuarioController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.TipoUsuarioFacade ejbFacade;
@@ -45,8 +47,13 @@ public class TipoUsuarioController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private TipoUsuarioFacade getFacade() {
+    protected TipoUsuarioFacade getFacade() {
         return ejbFacade;
+    }
+
+    public boolean esAdmin(String tipo) {
+//        return "ADMINISTRADOR".equals(tipo);
+        return false;
     }
 
     public TipoUsuario prepareCreate() {
@@ -56,18 +63,18 @@ public class TipoUsuarioController implements Serializable {
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioUpdated"), selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TipoUsuarioDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -81,36 +88,31 @@ public class TipoUsuarioController implements Serializable {
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
+    public List<TipoUsuario> getItemsFiltrados(List<GrupoUsuario> lista) {
+        if (items == null) {
+            items = getFacade().findAll();
+
+            TipoUsuarioController tipoUsuarioController = getTipoUsuarioController();
+            TipoUsuario tipoUsuarioAdmin = tipoUsuarioController.obtenerPorTipo(UsuarioController.TIPO_ADMINISTRADOR);
+            boolean isadmin = false;
+            for (GrupoUsuario item : lista) {
+                if (item.getTipoUsuario().equals(tipoUsuarioAdmin)) {
+                    isadmin = true;
                 }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
+            if (!isadmin) {
+                items.remove(tipoUsuarioAdmin);
             }
         }
+        return items;
     }
 
     public TipoUsuario getTipoUsuario(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public TipoUsuario obtenerPorTipo(String tipo) {
+        return getFacade().obtenerPorTipo(tipo);
     }
 
     public List<TipoUsuario> getItemsAvailableSelectMany() {

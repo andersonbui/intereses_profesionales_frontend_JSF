@@ -80,11 +80,13 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona prepareCreate() {
+        LoginController loginController = getLoginController();
         editar = false;
         UsuarioController usuarioController = getUsuarioController();
         Usuario usuario = usuarioController.prepareCreate();
+
         selected = new Persona();
-        selected.setIdCiudad(null);
+        selected.setIdCiudad(loginController.getPersonaActual().getIdCiudad());
         usuario.setClave("Ninguna");
         selected.setIdUsuario(usuario);
         initializeEmbeddableKey();
@@ -130,15 +132,20 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona create() {
-        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
-
+        Persona perso = null;
+        LoginController loginController = getLoginController();
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
-        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
-        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
-        grupoUsuarioController.create();
 
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+        if (loginController.isDocente()) {
+            perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
+
+            grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
+            grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+            grupoUsuarioController.create();
+            if (!JsfUtil.isValidationFailed()) {
+                items = null;    // Invalidate list of items to trigger re-query.
+            }
+
         }
         return perso;
     }
@@ -181,7 +188,7 @@ public class PersonaController extends Controller implements Serializable {
                     items = getFacade().findAll();
                     break;
                 } else if (tipo.equals(UsuarioController.TIPO_DOCENTE)) {
-                     items = persona.getIdInstitucion().getPersonaList();
+                    items = persona.getIdInstitucion().getPersonaList();
                     break;
                 }
 

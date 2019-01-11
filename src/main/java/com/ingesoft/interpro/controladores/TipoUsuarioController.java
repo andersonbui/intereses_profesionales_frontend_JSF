@@ -41,12 +41,14 @@ public class TipoUsuarioController extends Controller implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
+    @Override
     protected TipoUsuarioFacade getFacade() {
         return ejbFacade;
     }

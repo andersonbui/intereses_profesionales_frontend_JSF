@@ -66,7 +66,17 @@ public class PersonaController extends Controller implements Serializable {
             }
         }
     }
-
+    
+    public boolean isEstudiante() {
+        List<GrupoUsuario> listaGU = selected.getIdUsuario().getGrupoUsuarioList(); 
+        for (GrupoUsuario grupoUsuario : listaGU) {
+            if(grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     @Override
     protected void setEmbeddableKeys() {
     }

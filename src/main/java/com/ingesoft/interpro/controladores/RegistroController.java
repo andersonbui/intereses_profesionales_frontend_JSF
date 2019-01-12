@@ -114,7 +114,7 @@ public class RegistroController extends Controller implements Serializable {
             boolean antes = fechaActual.before(fechaExpiracion);
             if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
                 String tipo = unusuario.getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
-                if(tipo.equals(UsuarioController.TIPO_ESTUDIANTE)){
+                if(tipo.equals(UsuarioController.TIPO_ESTUDIANTE)) {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
                     estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
@@ -129,6 +129,7 @@ public class RegistroController extends Controller implements Serializable {
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
                 return;
             }
+            
         }
         context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
 

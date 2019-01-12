@@ -30,7 +30,7 @@ public abstract class AbstractFacade<T> {
         getEntityManager().persist(entity);
     }
 
-    public void edit(T entity) {
+    public Object edit(T entity) {
         //        getEntityManager().merge(entity);
         try {
             getEntityManager().merge(entity);
@@ -50,6 +50,7 @@ public abstract class AbstractFacade<T> {
             }
 //            Assert.fail("ejb exception");
         }
+        return null;
     }
 
     public void remove(T entity) {

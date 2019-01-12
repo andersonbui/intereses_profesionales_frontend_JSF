@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/principal.xhtml">
 
@@ -17,29 +18,33 @@
             PANTALLA DE INICIO
             <h:form id="form">
                 <p:panel header="Pregunta ambiente"  >  
+                    <h5>Puntos: <p:outputLabel value="#{preguntaAmbienteController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/></h5>
                     <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
-                    <p:row>
-                        <p:column>
-                            <div>
-                                <p:commandButton action="#{preguntaAmbienteController.nextImagen}" update="@form"
-                                                 icon="pi pi-caret-left" id="prev" style="margin-bottom: 5px"/>
-                                <p:commandButton action="#{preguntaAmbienteController.previousImagen}" update="@form"
-                                                 icon="pi pi-caret-right" id="next" style="margin-bottom: 5px"/>
+                    
+                    <div>
+                        <div class="contenedor-boton">
+                            <p:commandButton class="btn btn-8 btn-8g" action="#{preguntaAmbienteController.previousImagen}" update="@form"
+                                             value="Anterior" id="next" style="margin-bottom: 5px" disabled="false"/>
+                            <p:commandButton class="btn btn-8 btn-8g" action="#{preguntaAmbienteController.nextImagen}" update="@form"
+                                             value="Siguiente" id="prev" style="margin-bottom: 5px"/>
+                        </div>
 
-                                <p:graphicImage 
-                                    name="#{preguntaAmbienteController.obtenerImagenActual()}" 
-                                    style="width:350px; height: 300px"/>
-                            </div>
-                        </p:column>
-                        <p:column style="padding: 100px 40px">
-                            <p:commandButton class="tamano-boton-pregunta" value="Realista" id="realista" update="growl"  /><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Investigativo" id="investigativo" update="growl"/><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Artístico" id="artistico" update="growl" /><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Social" id="social" update="growl"/><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Emprendedor" id="emprendedor" update="growl"/><br/> 
-                            <p:commandButton class="tamano-boton-pregunta" value="Convencional" id="convencional" update="growl"/>
-                        </p:column>
-                    </p:row>
+                        <div class="contenedor-img">
+                            <p:graphicImage 
+                                name="#{preguntaAmbienteController.obtenerImagenActual()}" 
+                                style="width:350px; height: 300px"/>
+                        </div>
+
+                        <div class="contenedor-pregunta">
+                            <p:commandButton class="btn btn-8 btn-8g" value="Realista" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(1)}" id="realista" update="growl"  /><br/>
+                            <p:commandButton class="btn btn-8 btn-8g" value="Investigativo" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(2)}" id="investigativo" update="growl"/><br/>
+                            <p:commandButton class="btn btn-8 btn-8g" value="Artístico" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(3)}" id="artistico" update="growl"/><br/>
+                            <p:commandButton class="btn btn-8 btn-8g" value="Social" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(4)}" id="social" update="growl"/><br/>
+                            <p:commandButton class="btn btn-8 btn-8g" value="Emprendedor" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(5)}" id="emprendedor" update="growl"/><br/> 
+                            <p:commandButton class="btn btn-8 btn-8g" value="Convencional" onclick="activate" action="#{preguntaAmbienteController.buttonAction(preguntaAmbienteController.respuesta)}" actionListener="#{preguntaAmbienteController.comprobarRespuesta(6)}" id="convencional" update="growl"/>
+                        </div>
+                    </div>
+
                 </p:panel>
             </h:form>
         </ui:define>

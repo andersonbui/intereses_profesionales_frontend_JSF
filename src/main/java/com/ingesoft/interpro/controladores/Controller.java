@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
 
 /**
@@ -23,7 +24,9 @@ public abstract class Controller implements Serializable {
 
     protected abstract AbstractFacade getFacade();
 
-    protected abstract void setEmbeddableKeys();
+    protected void setEmbeddableKeys() {
+        
+    }
 
     protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
         Object persona = null;
@@ -108,5 +111,21 @@ public abstract class Controller implements Serializable {
         TipoUsuarioController tipoUsuarioController = (TipoUsuarioController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "tipoUsuarioController");
         return tipoUsuarioController;
+    }
+    
+    
+    public CodigoInstitucionController getCodigoInstitucionController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(),
+                null, "codigoInstitucionController");
+        return codigoInstitucionController;
+    }
+
+    public PersonaController getPersonaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PersonaController personaController = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
+        return personaController;
     }
 }

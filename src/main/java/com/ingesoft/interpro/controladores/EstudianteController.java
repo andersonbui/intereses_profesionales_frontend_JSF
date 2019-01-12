@@ -102,22 +102,10 @@ public class EstudianteController extends Controller implements Serializable {
         this.skip = skip;
     }
 
-    public PersonaController getPersonaController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        PersonaController controllerPersona = (PersonaController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "personaController");
-        return controllerPersona;
-    }
-
     public Estudiante prepareCreate() {
         selected = new Estudiante();
-        PersonaController personaController = getPersonaController();
-        Persona persona = personaController.prepareCreate();
-        selected.setIdPersona(persona);
-        selected.getIdPersona().getIdUsuario().setClave("Ninguna");
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('EstudianteEditDialog').show()");
-        editar=false;
+        editar = false;
         return selected;
     }
 

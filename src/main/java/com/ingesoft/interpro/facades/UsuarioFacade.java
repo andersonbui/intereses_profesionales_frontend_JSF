@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,6 +37,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Usuario findUsuario = (Usuario) query.getResultList().get(0);
         if (findUsuario != null) {
             return findUsuario;
+        }
+        return null;
+
+    }
+
+    public Usuario obtUsuarioPorToken(String token) {
+        Query query = em.createNamedQuery("Usuario.findByTokenAcesso");
+        query.setParameter("tokenAcesso", token);
+        List<Usuario> usuarios = query.getResultList();
+        if (usuarios != null && !usuarios.isEmpty()) {
+            Usuario findUsuario = (Usuario) usuarios.get(0);
+            if (findUsuario != null) {
+                return findUsuario;
+            }
         }
         return null;
 

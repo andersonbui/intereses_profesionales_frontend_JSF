@@ -80,21 +80,27 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public Persona prepareCreate() {
+        Persona persona = prepareCreateParaRegistrar();
         LoginController loginController = getLoginController();
+        selected.setIdCiudad(loginController.getPersonaActual().getIdCiudad());
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('PersonaEditDialog').show()");
+        return persona;
+    }
+
+    public Persona prepareCreateParaRegistrar() {
         editar = false;
         UsuarioController usuarioController = getUsuarioController();
         Usuario usuario = usuarioController.prepareCreate();
 
         selected = new Persona();
-        selected.setIdCiudad(loginController.getPersonaActual().getIdCiudad());
         usuario.setClave("Ninguna");
         selected.setIdUsuario(usuario);
-        initializeEmbeddableKey();
+
         getDepartamentoController().setSelected(null);
         getPaisController().setSelected(null);
         getEstudianteController().setSelected(null);
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('PersonaEditDialog').show()");
+        initializeEmbeddableKey();
         return selected;
     }
 
@@ -131,22 +137,32 @@ public class PersonaController extends Controller implements Serializable {
         return selected;
     }
 
-    public Persona create() {
-        Persona perso = null;
+    public Persona createPorOtro() {
         LoginController loginController = getLoginController();
-        GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
-
-        if (loginController.isDocente()) {
-            perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
-
-            grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
-            grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
-            grupoUsuarioController.create();
-            if (!JsfUtil.isValidationFailed()) {
-                items = null;    // Invalidate list of items to trigger re-query.
+        if (loginController.getActual() == null) {
+            if (!loginController.isDocente()) {
+                return null;
             }
-
         }
+        Persona perso = create();
+        
+        GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
+        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+        grupoUsuarioController.create();
+        return create();
+    }
+
+    private Persona create() {
+        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+        return perso;
+    }
+
+    public Persona createParaRegistrar() {
+        Persona perso = create();
         return perso;
     }
 

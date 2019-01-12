@@ -40,7 +40,7 @@ import org.brickred.socialauth.util.SocialAuthUtil;
  */
 @ManagedBean(name = "registroController")
 @SessionScoped
-public class RegistroController implements Serializable {
+public class RegistroController extends Controller implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 
@@ -102,14 +102,37 @@ public class RegistroController implements Serializable {
     public String getToken() {
         return token;
     }
-
+    
     public void setToken(String token) throws IOException {
+        Usuario unusuario = getUsuarioController().obtUsuarioPorToken(token);
+        FacesContext context = FacesContext.getCurrentInstance();
+        Calendar fechaExpiracion = Calendar.getInstance();
+        if (unusuario != null) {
+            Calendar fechaActual = Calendar.getInstance();
+            Date fechaExp = unusuario.getFechaExpiracionToken();
+            fechaExpiracion.setTime(fechaExp);
+            boolean antes = fechaActual.before(fechaExpiracion);
+            if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
+                String tipo = unusuario.getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
+                if(tipo.equals(UsuarioController.TIPO_ESTUDIANTE)){
+                    EstudianteController estudianteController = getEstudianteController();
+                    estudianteController.prepareCreate();
+                    estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
+                    estudianteController.create();
+                    
+                    unusuario.setEstado(UsuarioController.EN_PROCESO);
+                    UsuarioController usuarioController = getUsuarioController();
+                    usuarioController.setSelected(unusuario);
+                    usuarioController.create();
+                    
+                }
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
+                return;
+            }
+        }
+        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
 
         System.out.println("setToken: " + token);
-        if ("dedosdelvalle".equals(token)) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
-        }
         this.token = token;
     }
 
@@ -161,35 +184,6 @@ public class RegistroController implements Serializable {
         return ejbFacade;
     }
 
-    public CodigoInstitucionController getCodigoInstitucionController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(),
-                null, "codigoInstitucionController");
-        return codigoInstitucionController;
-    }
-
-    public EstudianteController getEstudianteController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        EstudianteController estudianteController = (EstudianteController) elResolver.getValue(facesContext.getELContext(), null, "estudianteController");
-        return estudianteController;
-    }
-
-    public PersonaController getPersonaController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        PersonaController personaController = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
-        return personaController;
-    }
-
-    public GrupoUsuarioController getGrupoUsuarioController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        GrupoUsuarioController grupoUsuarioController = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "grupoUsuarioController");
-        return grupoUsuarioController;
-    }
-
     public void registrarse(ActionEvent e) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage msg;
@@ -202,15 +196,16 @@ public class RegistroController implements Serializable {
                 calendar.add(Calendar.DAY_OF_MONTH, 10);
                 // Crear persona
                 PersonaController personaController = getPersonaController();
-                Persona unaPersona = personaController.prepareCreate();
+                Persona unaPersona = personaController.prepareCreateParaRegistrar();
                 unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
                 unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
                 unaPersona.getIdUsuario().setFechaCreacion(new Date());
                 unaPersona.getIdUsuario().setTokenAcesso("a12345");
                 unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
-                unaPersona = personaController.create();
-
+                unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
+                unaPersona = personaController.createParaRegistrar();
+                // TODO : falta enviar mensaje por usuario repetido
                 Usuario unusuario = unaPersona.getIdUsuario();
                 // Crear grupo usuario
                 GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();

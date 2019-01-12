@@ -30,6 +30,7 @@ public class UsuarioController extends Controller implements Serializable {
     private List<Usuario> items = null;
     private Usuario selected;
 
+    public static final String EN_PROCESO = "EN_PROCESO";
     public static final String EN_ESPERA = "EN_ESPERA";
     public static final String ACTIVO = "ACTIVO";
     public static final String INAACTIVO = "INACTIVO";
@@ -104,6 +105,9 @@ public class UsuarioController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
+    public Usuario obtUsuarioPorToken(String token) {
+        return getFacade().obtUsuarioPorToken(token);
+    }
     public List<Usuario> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

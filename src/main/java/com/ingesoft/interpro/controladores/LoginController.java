@@ -179,11 +179,15 @@ public class LoginController implements Serializable {
             }
             Principal principal = req.getUserPrincipal();
             actual = ejbFacade.buscarPorUsuario(principal.getName());
-//                System.out.println("estado usuari: " + actual);
+                System.out.println("estado usuari: " + actual);
 //                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
             if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
 //                System.out.println("estado usuari: " + actual.getEstado());
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El usuario no esta activado. Por favor revise su bandeja de correo");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta no ha sido activado. Por favor revise su bandeja de correo");
+                eliminarSesion();
+            } else if (UsuarioController.INAACTIVO.equals(actual.getEstado())) {
+//                System.out.println("estado usuari: " + actual.getEstado());
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta fue desactivado. Por favor comuniquese con el administrador.");
                 eliminarSesion();
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);

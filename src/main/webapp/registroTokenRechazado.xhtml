@@ -19,13 +19,13 @@
     <h:body>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-registro700 p-l-45 p-r-45 p-t-40 p-b-40" >
-                El token fue aceptado, puede iniciar sesion.
+                El token  ha expirado, por favor vuelva a generar uno nuevo.
 
                 <h:panelGrid >
                     <h:graphicImage value="#{loginController.profile.profileImageURL}"
                                     styleClass="media-object" />
 
-                    <p:link class="btn btn-primary txt2 hov1"  outcome="/login.xhtml"  >Iniciar sesi&oacute;n</p:link>
+                    <p:link class="btn btn-primary txt2 hov1"  outcome="/login.xhtml"  >Generar un nuevo token</p:link>
                 </h:panelGrid>
             </div>
         </div>

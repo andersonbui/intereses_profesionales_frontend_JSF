@@ -43,7 +43,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     private RespuestaAmbiente selected;
     private PreguntaAmbiente selectedPregunta;
     private List<String> listaPreguntasAmbiente = null;
-    private List<String> listaPreguntasAmbienteSeleccionada = null;
 
     private final int tamGrupo;
     private int pasoActual;
@@ -57,9 +56,8 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     Encuesta EncuestaAcutal;
     private boolean finalizo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
-    List<Evaluacion> listaEvaluacionItem;
+    List<Evaluacion> listaEvaluacionItem; // 
     List<TipoAmbiente> listaTipoAmbienteItem;
-    List<String> listaEnunciado;
     private boolean isEvaluacion;
     int activeIndex = 0;
 
@@ -84,16 +82,14 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         puntos = 0;
         gruposPreguntas = null;
         listaPreguntasAmbiente = new ArrayList<>();
-        listaPreguntasAmbienteSeleccionada = new ArrayList<>();
-        listaEnunciado = new ArrayList<>();
         indiceActual = 0;
     }
 
     @PostConstruct
     public void init() {
         reiniciarEvaluacion();
-        getItemPreguntaEvaluacion();
-        obtenerPreguntasAmbiente();
+//        getItemPreguntaEvaluacion();
+//        obtenerPreguntasAmbiente();
         selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
     }
 
@@ -107,14 +103,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 
     public void setActiveIndex(int activeIndex) {
         this.activeIndex = activeIndex;
-    }
-
-    public List<String> getListaEnunciado() {
-        return listaEnunciado;
-    }
-
-    public void setListaEnunciado(List<String> listaEnunciado) {
-        this.listaEnunciado = listaEnunciado;
     }
 
     public boolean isIsEvaluacion() {
@@ -222,14 +210,14 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
     }
 
-    public void reiniciarEvaluacion(){
+    public void reiniciarEvaluacion() {
         cont = 0;
         pasoActual = -1;
         puntos = 0;
         gruposPreguntas = null;
         indiceActual = 0;
-    } 
-    
+    }
+
     public int[] getVecIdImages() {
         return vecIdImages;
     }
@@ -262,28 +250,28 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         this.indiceActual = indiceActual;
     }
 
-    public List<String> obtenerPreguntasAmbiente() {
-        listaPreguntasAmbiente = new ArrayList<>();
-        for (int i = 0; i < vecIdPreguntas.length; i++) {
-            listaPreguntasAmbiente.add(getPreguntaAmbiente(vecIdPreguntas[i]).getEnunciado());
-            contAmbiente++;
-        }
-        System.out.println("listaPreguntasAmbiente: " + listaPreguntasAmbiente);
-        return listaPreguntasAmbiente;
-    }
-
-    public List<String> getGrupoItems(int numGrupo) {
+//    public List<String> obtenerPreguntasAmbiente() {
 //        listaPreguntasAmbiente = new ArrayList<>();
-        for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
+//        for (int i = 0; i < vecIdPreguntas.length; i++) {
+//            listaPreguntasAmbiente.add(getPreguntaAmbiente(vecIdPreguntas[i]).getEnunciado());
+//            contAmbiente++;
+//        }
+//        System.out.println("listaPreguntasAmbiente: " + listaPreguntasAmbiente);
+//        return listaPreguntasAmbiente;
+//    }
+    
+    public List<String> getGrupoItems(int numGrupo) {
+       System.out.println("cont: "+cont);
+       List listaPreguntasAmbienteSeleccionada = new ArrayList<>();
+        for (int i = tamGrupo * (numGrupo); i < tamGrupo * (numGrupo + 1); i++) {
             if (i >= 0 && i < vecIdPreguntas.length) {
-                listaPreguntasAmbienteSeleccionada.add(listaPreguntasAmbiente.get(i));
-//                listaPreguntasAmbiente.add(listaPreguntasAmbiente.get(i));
+                listaPreguntasAmbienteSeleccionada.add(getPreguntaAmbiente(vecIdPreguntas[i]).getEnunciado());
             } else {
                 break;
             }
         }
-        System.out.println("listaPreguntasAmbienteGetGrupoItem: " + listaPreguntasAmbiente);
-        return listaPreguntasAmbiente;
+        System.out.println("listaPreguntasAmbienteGetGrupoItem: " + listaPreguntasAmbienteSeleccionada);
+        return listaPreguntasAmbienteSeleccionada;
     }
 
     public void nextImagen() {
@@ -340,18 +328,18 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
     }
 
-    public int finalizarEncuesta(ActionEvent actionEvent) {
-//        grupo = getGrupoItems(pasoActual + 1);
-        for (RespuestaAmbiente respuesta : grupo) {
-            getFacade().edit(respuesta);
-        }
-        pasoActual += 1;
-        finalizo = true;
-        System.out.println("Contador finalizar:" + cont);
-        System.out.println("Paso actual finalizar: " + pasoActual);
-        // realizar estadistica de respuestas
-        return pasoActual;
-    }
+//    public int finalizarEncuesta(ActionEvent actionEvent) {
+////        grupo = getGrupoItems(pasoActual + 1);  getItemPreguntaEvaluacion()
+//        for (RespuestaAmbiente respuesta : grupo) {
+//            getFacade().edit(respuesta);
+//        }
+//        pasoActual += 1;
+//        finalizo = true;
+//        System.out.println("Contador finalizar:" + cont);
+//        System.out.println("Paso actual finalizar: " + pasoActual);
+//        // realizar estadistica de respuestas
+//        return pasoActual;
+//    }
 
     private class Elemento {
 
@@ -359,21 +347,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         public double valor;
     }
 
-//    public List<Integer> getGrupos() {
-//        gruposPreguntas = null;
-//        if (gruposPreguntas == null) {
-//            gruposPreguntas = new ArrayList<>();
-//            items = getItems();
-//            numGrupos = items.size() / tamGrupo;
-//            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-//            numGrupos = 6;
-//            for (int i = 1; i <= numGrupos; i++) {
-//                gruposPreguntas.add(i);
-//            }
-//            System.out.println("gruposPreguntas: " + gruposPreguntas);
-//        }
-//        return gruposPreguntas;
-//    }
     public RespuestaAmbiente getSelected() {
         return selected;
     }
@@ -457,42 +430,28 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso: " + pasoActual);
-        if (pasoActual == -1) {
-            cont++;
-            System.out.println("Contador:" + cont);
-            System.out.println("siguientes paso: " + pasoActual);
-            getItemPreguntaEvaluacion();
-            getGrupoItems(cont);
-            listaPreguntasAmbiente = getGrupoItems(cont);
-        }
+//        if (pasoActual == -1) {
+//            System.out.println("Contador:" + cont);
+////            getItemPreguntaEvaluacion();
+//        }
         pasoActual += 1;
         number = 0;
         return pasoActual;
     }
-
+ 
     public void getItemPreguntaEvaluacion() {
-        ArrayList<String> listaOpciones;
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        EvaluacionController evaluacionController = (EvaluacionController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "evaluacionController");
+//        ArrayList<String> listaOpciones;
+        EvaluacionController evaluacionController = getEvaluacionController();
         listaEvaluacionItem = evaluacionController.getItems();
         enunciado = listaEvaluacionItem.get(cont).getEnunciado();
         System.out.println(enunciado);
-        TipoAmbienteController tipoAmbienteControlle = (TipoAmbienteController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "tipoAmbienteController");
+        TipoAmbienteController tipoAmbienteControlle = getTipoAmbienteController();
         listaTipoAmbienteItem = tipoAmbienteControlle.getItems();
         definicion = listaTipoAmbienteItem.get(cont).getDefinicion();
         System.out.println(definicion);
-
-        listaOpciones = new ArrayList();
-        listaOpciones.add("Trabajar con plantas y animales");
-        listaOpciones.add("Materiales reales, tales como madera, herramientas y maquinaria");
-        listaOpciones.add("Trabajo al aire libres");
-        listaOpciones.add("Les gusta trabajar con teorías científicas");
-        listaOpciones.add("Les gusta la composición musical");
-        opciones = listaOpciones;
+        listaPreguntasAmbiente = getGrupoItems(cont);
         correcta = 0;
+        cont++;
     }
 
     public class Definicion {

@@ -110,6 +110,7 @@ public class EncuestaController extends Controller implements Serializable {
     public void prepararYCrear() throws IOException {
         pasoActivo = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
+        getRespuestaAmbienteController().reiniciar();
         // @TODO : Falta obtener el usuario
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();

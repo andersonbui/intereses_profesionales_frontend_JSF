@@ -267,6 +267,7 @@ public class RespuestaAmbienteController implements Serializable {
         }
         pasoActual += 1;
         finalizo = true;
+        System.out.println("Paso siguiente finalizar: " + pasoActual);
         // realizar estadistica de respuestas
         realizarEstadisticas();
         return pasoActual;

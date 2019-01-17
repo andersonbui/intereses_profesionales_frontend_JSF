@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.Evaluacion;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import com.ingesoft.interpro.entidades.TipoAmbiente;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
 import java.io.IOException;
 
@@ -18,8 +19,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.el.ELResolver;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -31,12 +35,15 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "respuestaAmbienteEvaluacionController")
 @SessionScoped
-public class RespuestaAmbienteEvaluacionController implements Serializable {
+public class RespuestaAmbienteEvaluacionController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
     private List<RespuestaAmbiente> items = null;
     private RespuestaAmbiente selected;
+    private PreguntaAmbiente selectedPregunta;
+    private List<String> listaPreguntasAmbiente = null;
+    private List<String> listaPreguntasAmbienteSeleccionada = null;
 
     private final int tamGrupo;
     private int pasoActual;
@@ -61,17 +68,37 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
     List<String> opciones;
     int correcta;
     int cont;
+    int indiceActual;
+    boolean respuesta;
+    int contAmbiente = 0;
+    int puntosPreguntaAmbiente = 0;
+
+    int[] vecIdImages = {1, 3, 5, 7, 9, 11, 31, 33, 35, 37, 39, 41, 61, 63, 65, 67, 69, 71, 91, 93, 95, 97, 99, 101, 121, 123, 125, 127, 129, 131, 151, 153, 155, 157, 159, 161};
+    int[] vecIdPreguntas = {1, 2, 5, 13, 14, 37, 38, 61, 39, 86, 40, 42, 43, 45, 48, 72, 31, 32, 43, 44, 73, 75, 78, 130, 139, 158, 160, 162, 167, 165};
 
     public RespuestaAmbienteEvaluacionController() {
         cont = 0;
-        tamGrupo = 6;
+        tamGrupo = 5;
         pasoActual = -1;
         numGrupos = 1;
         puntos = 0;
         gruposPreguntas = null;
-        listaResultadosPorAmbiente = null;
+        listaPreguntasAmbiente = new ArrayList<>();
+        listaPreguntasAmbienteSeleccionada = new ArrayList<>();
         listaEnunciado = new ArrayList<>();
+        indiceActual = 0;
+    }
+
+    @PostConstruct
+    public void init() {
+        reiniciarEvaluacion();
         getItemPreguntaEvaluacion();
+        obtenerPreguntasAmbiente();
+        selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
+    }
+
+    private PreguntaAmbiente getPreguntaAmbiente(java.lang.Integer id) {
+        return getPreguntaAmbienteController().getPreguntaAmbiente(id);
     }
 
     public int getActiveIndex() {
@@ -128,6 +155,14 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public List<String> getListaPreguntasAmbiente() {
+        return listaPreguntasAmbiente;
+    }
+
+    public void setListaPreguntasAmbiente(List<String> listaPreguntasAmbiente) {
+        this.listaPreguntasAmbiente = listaPreguntasAmbiente;
     }
 
     public int getPuntos() {
@@ -187,6 +222,114 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         }
     }
 
+    public void reiniciarEvaluacion(){
+        cont = 0;
+        pasoActual = -1;
+        puntos = 0;
+        gruposPreguntas = null;
+        indiceActual = 0;
+    } 
+    
+    public int[] getVecIdImages() {
+        return vecIdImages;
+    }
+
+    public void setVecIdImages(int[] vecIdImages) {
+        this.vecIdImages = vecIdImages;
+    }
+
+    public boolean isRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(boolean respuesta) {
+        this.respuesta = respuesta;
+    }
+
+    public int getPuntosPreguntaAmbiente() {
+        return puntosPreguntaAmbiente;
+    }
+
+    public void setPuntosPreguntaAmbiente(int puntosPreguntaAmbiente) {
+        this.puntosPreguntaAmbiente = puntosPreguntaAmbiente;
+    }
+
+    public int getIndiceActual() {
+        return indiceActual;
+    }
+
+    public void setIndiceActual(int indiceActual) {
+        this.indiceActual = indiceActual;
+    }
+
+    public List<String> obtenerPreguntasAmbiente() {
+        listaPreguntasAmbiente = new ArrayList<>();
+        for (int i = 0; i < vecIdPreguntas.length; i++) {
+            listaPreguntasAmbiente.add(getPreguntaAmbiente(vecIdPreguntas[i]).getEnunciado());
+            contAmbiente++;
+        }
+        System.out.println("listaPreguntasAmbiente: " + listaPreguntasAmbiente);
+        return listaPreguntasAmbiente;
+    }
+
+    public List<String> getGrupoItems(int numGrupo) {
+//        listaPreguntasAmbiente = new ArrayList<>();
+        for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
+            if (i >= 0 && i < vecIdPreguntas.length) {
+                listaPreguntasAmbienteSeleccionada.add(listaPreguntasAmbiente.get(i));
+//                listaPreguntasAmbiente.add(listaPreguntasAmbiente.get(i));
+            } else {
+                break;
+            }
+        }
+        System.out.println("listaPreguntasAmbienteGetGrupoItem: " + listaPreguntasAmbiente);
+        return listaPreguntasAmbiente;
+    }
+
+    public void nextImagen() {
+        if (indiceActual < vecIdImages.length - 1) {
+            indiceActual++;
+            selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
+        }
+        System.out.println("next");
+        System.out.println(indiceActual);
+    }
+
+    public void previousImagen() {
+        if (indiceActual > 0) {
+            indiceActual--;
+            selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
+        }
+        System.out.println("previo");
+        System.out.println(indiceActual);
+    }
+
+    public void addMessage(String summary, boolean success) {
+        FacesMessage message = new FacesMessage(success ? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR, summary, null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void buttonAction(boolean resp) {
+        if (resp == true) {
+            addMessage("Correcto!!", true);
+        } else {
+            addMessage("Incorrecto!!", false);
+        }
+    }
+
+    public void comprobarRespuesta(int id) {
+        if (selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id)) {
+            respuesta = true;
+            puntosPreguntaAmbiente++;
+            System.out.println("Respuesta correcta:" + respuesta);
+        } else {
+            respuesta = false;
+            puntosPreguntaAmbiente--;
+            System.out.println("Respuesta incorrecta:" + respuesta);
+        }
+        buttonAction(respuesta);
+    }
+
     public void increment() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
@@ -204,6 +347,8 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         }
         pasoActual += 1;
         finalizo = true;
+        System.out.println("Contador finalizar:" + cont);
+        System.out.println("Paso actual finalizar: " + pasoActual);
         // realizar estadistica de respuestas
         return pasoActual;
     }
@@ -214,22 +359,21 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         public double valor;
     }
 
-    public List<Integer> getGrupos() {
-        gruposPreguntas = null;
-        if (gruposPreguntas == null) {
-            gruposPreguntas = new ArrayList<>();
-            items = getItems();
-            numGrupos = items.size() / tamGrupo;
-            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-            numGrupos = 6;
-            for (int i = 1; i <= numGrupos; i++) {
-                gruposPreguntas.add(i);
-            }
-            System.out.println("gruposPreguntas: " + gruposPreguntas);
-        }
-        return gruposPreguntas;
-    }
-
+//    public List<Integer> getGrupos() {
+//        gruposPreguntas = null;
+//        if (gruposPreguntas == null) {
+//            gruposPreguntas = new ArrayList<>();
+//            items = getItems();
+//            numGrupos = items.size() / tamGrupo;
+//            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+//            numGrupos = 6;
+//            for (int i = 1; i <= numGrupos; i++) {
+//                gruposPreguntas.add(i);
+//            }
+//            System.out.println("gruposPreguntas: " + gruposPreguntas);
+//        }
+//        return gruposPreguntas;
+//    }
     public RespuestaAmbiente getSelected() {
         return selected;
     }
@@ -238,6 +382,15 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         this.selected = selected;
     }
 
+    public PreguntaAmbiente getSelectedPregunta() {
+        return selectedPregunta;
+    }
+
+    public void setSelectedPregunta(PreguntaAmbiente selectedPregunta) {
+        this.selectedPregunta = selectedPregunta;
+    }
+
+    @Override
     protected void setEmbeddableKeys() {
         selected.getRespuestaAmbientePK().setIdPreguntasAmbiente(selected.getPreguntaAmbiente().getIdPreguntaAmbiente());
         selected.getRespuestaAmbientePK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
@@ -247,7 +400,7 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         selected.setRespuestaAmbientePK(new com.ingesoft.interpro.entidades.RespuestaAmbientePK());
     }
 
-    private RespuestaAmbienteFacade getFacade() {
+    protected RespuestaAmbienteFacade getFacade() {
         return ejbFacade;
     }
 
@@ -285,6 +438,11 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         return items;
     }
 
+    public String obtenerImagenActual() {
+        String url = Variables.ubicacionImagenes + this.selectedPregunta.getUrlImagen();
+        return url;
+    }
+
     public RespuestaAmbiente getRespuestaAmbiente(com.ingesoft.interpro.entidades.RespuestaAmbientePK id) {
         return getFacade().find(id);
     }
@@ -301,6 +459,11 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
         System.out.println("siguientes paso: " + pasoActual);
         if (pasoActual == -1) {
             cont++;
+            System.out.println("Contador:" + cont);
+            System.out.println("siguientes paso: " + pasoActual);
+            getItemPreguntaEvaluacion();
+            getGrupoItems(cont);
+            listaPreguntasAmbiente = getGrupoItems(cont);
         }
         pasoActual += 1;
         number = 0;
@@ -315,11 +478,12 @@ public class RespuestaAmbienteEvaluacionController implements Serializable {
                 getValue(facesContext.getELContext(), null, "evaluacionController");
         listaEvaluacionItem = evaluacionController.getItems();
         enunciado = listaEvaluacionItem.get(cont).getEnunciado();
-
+        System.out.println(enunciado);
         TipoAmbienteController tipoAmbienteControlle = (TipoAmbienteController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "tipoAmbienteController");
         listaTipoAmbienteItem = tipoAmbienteControlle.getItems();
         definicion = listaTipoAmbienteItem.get(cont).getDefinicion();
+        System.out.println(definicion);
 
         listaOpciones = new ArrayList();
         listaOpciones.add("Trabajar con plantas y animales");

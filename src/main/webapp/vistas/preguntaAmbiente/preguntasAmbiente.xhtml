@@ -100,16 +100,16 @@
                                         <h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText>
                                         <center>
                                             <p:panelGrid columns="1" layout="grid">
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{preguntaAmbienteController.listaPreguntasAmbiente.get(0)}"  actionListener="#{preguntaAmbienteController.comprobarRespuesta(1)}" id="opcionA" update="growl"/>
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{preguntaAmbienteController.listaPreguntasAmbiente.get(1)}"  actionListener="#{preguntaAmbienteController.comprobarRespuesta(2)}" id="opcionB" update="growl"/>
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{preguntaAmbienteController.listaPreguntasAmbiente.get(2)}"  actionListener="#{preguntaAmbienteController.comprobarRespuesta(3)}" id="opcionC" update="growl"/>
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{preguntaAmbienteController.listaPreguntasAmbiente.get(3)}"  actionListener="#{preguntaAmbienteController.comprobarRespuesta(4)}" id="opcionD" update="growl"/>
-                                                <p:commandButton class="tamano-boton-pregunta" value="#{preguntaAmbienteController.listaPreguntasAmbiente.get(4)}"  actionListener="#{preguntaAmbienteController.comprobarRespuesta(5)}" id="opcionE" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente.get(0)}"  actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(1)}" id="opcionA" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente.get(1)}"  actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(2)}" id="opcionB" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente.get(2)}"  actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(3)}" id="opcionC" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente.get(3)}"  actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(4)}" id="opcionD" update="growl"/>
+                                                <p:commandButton class="tamano-boton-pregunta" value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente.get(4)}"  actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(5)}" id="opcionE" update="growl"/>
                                             </p:panelGrid>
                                         </center>
                                     </h:form>
                                 </p:panel>
-                                
+
                                 <h:panelGroup  style="background-color: black;" >
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >

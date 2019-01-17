@@ -134,4 +134,10 @@ public abstract class Controller implements Serializable {
         PreguntaAmbienteController preguntaAmbienteController = (PreguntaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "preguntaAmbienteController");
         return preguntaAmbienteController;
     }
+    public RespuestaAmbienteEvaluacionController getRespuestaAmbienteEvaluacionController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaAmbienteEvaluacionController respuestaAmbienteEvaluacionController = (RespuestaAmbienteEvaluacionController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteEvaluacionController");
+        return respuestaAmbienteEvaluacionController;
+    }
 }

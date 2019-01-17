@@ -28,7 +28,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
-public class EncuestaController implements Serializable {
+public class EncuestaController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
@@ -47,13 +47,15 @@ public class EncuestaController implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private EncuestaFacade getFacade() {
+    @Override
+    protected EncuestaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -107,6 +109,7 @@ public class EncuestaController implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         pasoActivo = 0;
+        getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         // @TODO : Falta obtener el usuario
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -174,18 +177,18 @@ public class EncuestaController implements Serializable {
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"));
+        selected = (Encuesta) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"),selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"),selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EncuestaDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EncuestaDeleted"),selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -197,34 +200,6 @@ public class EncuestaController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
     }
 
     public Encuesta getEncuesta(java.lang.Integer id) {

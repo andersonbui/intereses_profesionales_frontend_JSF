@@ -24,7 +24,7 @@
                             <f:selectItems value="#{tipoUsuarioController.items}"
                                            var="item"
                                            itemValue="#{item}" 
-                                           itemLabel="#{item.tpo}"/>
+                                           itemLabel="#{item.tipo}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="#{bundle.EditCodigoInstitucionLabel_idInstitucion}" for="idInstitucion" />
                         <p:selectOneMenu id="idInstitucion" value="#{codigoInstitucionController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditCodigoInstitucionRequiredMessage_idInstitucion}">

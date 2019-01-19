@@ -12,8 +12,6 @@
             <h:form id="PreguntaAmbienteViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaAmbienteController.selected != null}">
-                        <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_idPreguntaAmbiente}"/>
-                        <h:outputText value="#{preguntaAmbienteController.selected.idPreguntaAmbiente}" title="#{bundle.ViewPreguntaAmbienteTitle_idPreguntaAmbiente}"/>
                         <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_enunciado}"/>
                         <h:outputText value="#{preguntaAmbienteController.selected.enunciado}" title="#{bundle.ViewPreguntaAmbienteTitle_enunciado}"/>
                         <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_urlImagen}"/>
@@ -21,7 +19,7 @@
                         <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_orden}"/>
                         <h:outputText value="#{preguntaAmbienteController.selected.orden}" title="#{bundle.ViewPreguntaAmbienteTitle_orden}"/>
                         <h:outputText value="#{bundle.ViewPreguntaAmbienteLabel_idTipoAmbiente}"/>
-                        <h:outputText value="#{preguntaAmbienteController.selected.idTipoAmbiente}" title="#{bundle.ViewPreguntaAmbienteTitle_idTipoAmbiente}"/>
+                        <h:outputText value="#{preguntaAmbienteController.selected.idTipoAmbiente.tipo}" title="#{bundle.ViewPreguntaAmbienteTitle_idTipoAmbiente}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="PreguntaAmbienteViewDialog.hide()"/>
                 </h:panelGroup>

@@ -1,2 +1,5 @@
 url de registro para nuevos usuarios:
 http://localhost:8080/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml?token=dedosdelvalle
+
+Tareas faltantes:
+-actualizar el estado del token despues de ser utilizado

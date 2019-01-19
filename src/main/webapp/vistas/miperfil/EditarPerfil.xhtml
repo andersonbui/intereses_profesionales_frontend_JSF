@@ -34,6 +34,9 @@
                                         <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_identificacion}"/>
                                         <p:inputText value="#{personaController.selected.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
 
+                                        <p:outputLabel style="font-weight:bold; color: black;"  value="#{bundle.Label_celular}"/>
+                                        <p:inputText value="#{personaController.selected.celular}" title="#{bundle.Title_celular}"/>
+
                                         <p:outputLabel style="font-weight:bold; color: black;" value="Fecha nacimiento: " for="fechaNacimiento" />
                                         <p:calendar id="fechaNacimiento" pattern="MM/dd/yyyy" placeholder="MM/dd/yyyy" value="#{personaController.selected.fechaNacimiento}"  showOn="button"/>
 
@@ -42,8 +45,8 @@
                                             <f:selectItem itemLabel="M" itemValue='M' />
                                             <f:selectItem itemLabel="F" itemValue='F' />
                                         </p:selectOneRadio>
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_idUsuario}"/>
-                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}"/>
+                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.UsuarioTitle_Usuario}"/>
                                     </p:panelGrid>
                                 </p:panel>
                             </center>
@@ -152,7 +155,7 @@
                         </p:tab>
 
                     </p:wizard>
-                    <p:commandButton actionListener="#{estudianteController.create()}" value="#{bundle.Save}" update="display,:PerfilViewForm:datalist,:growl" oncomplete="handleSubmit(args,'PerfilEditDialog');"/>
+                    <p:commandButton actionListener="#{personaController.update()}" value="#{bundle.Save}" update="display,:PerfilViewForm:datalist,:growl" oncomplete="handleSubmit(args,'PerfilEditDialog');"/>
 
                 </h:panelGroup>
             </h:form>

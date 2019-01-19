@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Properties;
+import javax.faces.context.FacesContext;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -23,13 +24,13 @@ import javax.mail.internet.MimeMessage;
  */
 public class Utilidades {
 
-    public static void enviarCorreoCreacion(String correo, String usuario, String contrasena) {
-        Utilidades.enviarCorreo(correo,
-                "Registro en Doctorados de Ciencias de la Elecrónica ",
-                "Cordial Saludo \nEl registro en el sistema de Doctorados"
-                + " de Ciencias de la Electrónica fue exitoso,para ingresar "
-                + "sírvase usar los siguientes datos: \nNombre de Usuario: "
-                + usuario + "\n" + "Clave Ingreso: " + contrasena);
+    public static void enviarCorreoDeRegistro(String destino, String token) {
+        Utilidades.enviarCorreo(destino,
+                "Registro en Intereses profesionales",
+                "<br><b>Cordial Saludo \nEl registro en el sistema de intereses profesionalesfue exitoso</b><br/>"
+                + "Verifique su cuenta dando click al siguinte enlace "
+                + "http://" + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName()
+                + ":8080/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml?token=" + token + "");
 
     }
 
@@ -44,10 +45,8 @@ public class Utilidades {
     }
 
     public static boolean enviarCorreo(String destinatario, String asunto, String mensaje) {
-        // String de = "elcorreodelprofe@gmail.com";
-        // String clave = "lacontraseñadelcorreodelprofe";
-        final String de = "posgradoselectunic@gmail.com";
-        final String clave = "posgrados22";
+        final String de = "interesprofesionales@gmail.com";
+        final String clave = "qjjcuweflsdobjfl";
         String para = destinatario;
 
         boolean resultado = false;
@@ -67,11 +66,12 @@ public class Utilidades {
                 }
             });
 
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(de));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(para));
             message.setSubject(asunto);
-            message.setText(mensaje);
+            message.setText(mensaje, "utf-8", "html");
+//            simpleMessage.setContent(text, "text/html; charset=utf-8");
             Transport.send(message);
             resultado = true;
             System.out.println("========== CORREO ENVIADO CON ÉXITO ============");

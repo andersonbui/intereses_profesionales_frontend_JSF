@@ -115,6 +115,7 @@
                         </p:submenu>
                         
                         <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
+                            <p:menuitem value="EnviarMesaje"  action="#{registroController.enviarMensaje}"/>
                             <p:menuitem value="Preguntas ambiente" outcome="/vistas/preguntaAmbiente/List.xhtml"  /> 
                             <p:menuitem value="Preguntas personalidad" outcome="/vistas/preguntaPersonalidad/List.xhtml"  /> 
                             <p:menuitem value="AmbientePersonalidad" outcome="/vistas/ambientePersonalidad/List.xhtml" />

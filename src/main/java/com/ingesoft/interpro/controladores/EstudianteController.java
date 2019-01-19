@@ -126,8 +126,6 @@ public class EstudianteController extends Controller implements Serializable {
 
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EstudianteUpdated"), selected);
-        PersonaController controllerPersona = getPersonaController();
-        controllerPersona.update();
     }
 
     public void destroy() {

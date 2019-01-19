@@ -50,12 +50,14 @@ public class UsuarioController extends Controller implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
+    @Override
     protected UsuarioFacade getFacade() {
         return ejbFacade;
     }

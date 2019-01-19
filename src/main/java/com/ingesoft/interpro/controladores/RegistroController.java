@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -102,7 +103,7 @@ public class RegistroController extends Controller implements Serializable {
     public String getToken() {
         return token;
     }
-    
+
     public void setToken(String token) throws IOException {
         Usuario unusuario = getUsuarioController().obtUsuarioPorToken(token);
         FacesContext context = FacesContext.getCurrentInstance();
@@ -114,22 +115,22 @@ public class RegistroController extends Controller implements Serializable {
             boolean antes = fechaActual.before(fechaExpiracion);
             if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
                 String tipo = unusuario.getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
-                if(tipo.equals(UsuarioController.TIPO_ESTUDIANTE)) {
+                if (tipo.equals(UsuarioController.TIPO_ESTUDIANTE)) {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
                     estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
                     estudianteController.create();
-                    
+
                     unusuario.setEstado(UsuarioController.EN_PROCESO);
                     UsuarioController usuarioController = getUsuarioController();
                     usuarioController.setSelected(unusuario);
                     usuarioController.create();
-                    
+
                 }
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
                 return;
             }
-            
+
         }
         context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
 
@@ -198,16 +199,21 @@ public class RegistroController extends Controller implements Serializable {
                 // Crear persona
                 PersonaController personaController = getPersonaController();
                 Persona unaPersona = personaController.prepareCreateParaRegistrar();
+                unaPersona.setEmail(getUsuario());
                 unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
                 unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
                 unaPersona.getIdUsuario().setFechaCreacion(new Date());
-                unaPersona.getIdUsuario().setTokenAcesso("a12345");
+                unaPersona.getIdUsuario().setTokenAcesso("");
                 unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
                 unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
                 unaPersona = personaController.createParaRegistrar();
                 // TODO : falta enviar mensaje por usuario repetido
+                UsuarioController usuarioController = getUsuarioController();
                 Usuario unusuario = unaPersona.getIdUsuario();
+                unusuario.setTokenAcesso(generarToken(""+unusuario.getIdUsuario()));
+                usuarioController.setSelected(unusuario);
+                usuarioController.update();
                 // Crear grupo usuario
                 GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
                 GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
@@ -220,6 +226,8 @@ public class RegistroController extends Controller implements Serializable {
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
 
                 // enviar email 
+                Utilidades.enviarCorreoDeRegistro("andersonbuitron@unicauca.edu.co", unusuario.getTokenAcesso());
+//                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
                 //TODO
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "C&oacute;digo de registro incorrecto, por favor verifique su c&oacute;digo.", "");
@@ -230,6 +238,26 @@ public class RegistroController extends Controller implements Serializable {
         }
         context.addMessage(null, msg);
 
+    }
+
+    public String generarToken(String userid){
+        String rtoken = UUID.randomUUID().toString().toUpperCase() 
+            + "|" + userid + "|"
+            + Calendar.getInstance().getTimeInMillis();
+        return rtoken;
+    }
+    public void enviarMensaje() {
+//        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+        FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().get);
     }
 
     public boolean isVerificado() {

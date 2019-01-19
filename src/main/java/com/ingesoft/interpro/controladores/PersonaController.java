@@ -66,17 +66,17 @@ public class PersonaController extends Controller implements Serializable {
             }
         }
     }
-    
+
     public boolean isEstudiante() {
-        List<GrupoUsuario> listaGU = selected.getIdUsuario().getGrupoUsuarioList(); 
+        List<GrupoUsuario> listaGU = selected.getIdUsuario().getGrupoUsuarioList();
         for (GrupoUsuario grupoUsuario : listaGU) {
-            if(grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)){
+            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     @Override
     protected void setEmbeddableKeys() {
     }
@@ -155,7 +155,7 @@ public class PersonaController extends Controller implements Serializable {
             }
         }
         Persona perso = create();
-        
+
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
         grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
         grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
@@ -177,6 +177,11 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public void update() {
+        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+    }
+
+    public void updateConUsuarioEstudiante() {
+        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
         UsuarioController usuarioController = getUsuarioController();
         usuarioController.update();
         if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
@@ -184,7 +189,6 @@ public class PersonaController extends Controller implements Serializable {
             estudianteController.update();
         }
 
-        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 
     public void destroy() {

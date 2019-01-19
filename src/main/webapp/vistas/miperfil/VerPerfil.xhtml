@@ -34,14 +34,14 @@
                         </h:outputText>
                         <h:outputText value="#{bundle.PersonaLabel_sexo}"/>
                         <h:outputText value="#{loginController.personaActual.sexo}" title="#{bundle.PersonaTitle_sexo}"/>
-                        <h:outputText value="#{bundle.PersonaLabel_celular}"/>
-                        <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.PersonaTitle_celular}"/>
-                        <h:outputText value="#{bundle.PersonaLabel_tipo}"/>
-                        <h:outputText value="#{loginController.personaActual.tipo}" title="#{bundle.PersonaTitle_tipo}"/>
-                        <h:outputText value="#{bundle.PersonaLabel_idCiudad}"/>
-                        <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" title="#{bundle.PersonaTitle_idCiudad}"/>
+                        <h:outputText value="#{bundle.Label_celular}"/>
+                        <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.Title_celular}"/>
+                        <h:outputText value="#{bundle.Label_ciudad}"/>
+                        <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" 
+                                      title="#{bundle.Title_ciudad}"/>
                         <h:outputText value="#{bundle.UsuarioLabel_Usuario}"/>
-                        <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" title="#{bundle.UsuarioTitle_Usuario}"/>
+                        <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" 
+                                      title="#{bundle.UsuarioTitle_Usuario}"/>
                     </p:panelGrid>
                     <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil"
                                      actionListener="#{personaController.prepareUpdate(loginController.personaActual)}" 
@@ -52,3 +52,6 @@
         </ui:define>
     </ui:composition>
 </html>
+<!--
+                        <h:outputText value="{bundle.PersonaLabel_tipo}"/>
+                        <h:outputText value="{loginController.personaActual.tipo}" title="{bundle.PersonaTitle_tipo}"/>-->

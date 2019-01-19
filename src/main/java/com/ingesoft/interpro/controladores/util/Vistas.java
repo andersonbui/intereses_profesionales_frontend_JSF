@@ -60,4 +60,18 @@ public class Vistas implements Serializable {
         return ruta;
     }
 
+    public static String completarPerfil() {
+        ruta = rutaGeneral +  "/vistas/miperfil/completarPerfil.xhtml";
+        return ruta;
+    }
+    public static String login() {
+        ruta = rutaGeneral +  "/login.xhtml";
+        return ruta;
+    }
+
+    public static String inicio() {
+        ruta = rutaGeneral +  "/vistas/inicio.xhtml";
+        return ruta;
+    }
+
 }

@@ -5,17 +5,21 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
-import com.ingesoft.interpro.entidades.PersonaCodigoInstitucionPK;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.Principal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
@@ -23,14 +27,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletException;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.util.SocialAuthUtil;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -38,7 +41,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean(name = "registroController")
 @SessionScoped
-public class RegistroController implements Serializable {
+public class RegistroController extends Controller implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 
@@ -53,6 +56,7 @@ public class RegistroController implements Serializable {
     String password;
     boolean verificado;
     CodigoInstitucion codInstitucion;
+    String token;
 
     private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
     private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
@@ -94,6 +98,44 @@ public class RegistroController implements Serializable {
         }
 
         FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) throws IOException {
+        Usuario unusuario = getUsuarioController().obtUsuarioPorToken(token);
+        FacesContext context = FacesContext.getCurrentInstance();
+        Calendar fechaExpiracion = Calendar.getInstance();
+        if (unusuario != null) {
+            Calendar fechaActual = Calendar.getInstance();
+            Date fechaExp = unusuario.getFechaExpiracionToken();
+            fechaExpiracion.setTime(fechaExp);
+            boolean antes = fechaActual.before(fechaExpiracion);
+            if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
+                String tipo = unusuario.getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
+                if (tipo.equals(UsuarioController.TIPO_ESTUDIANTE)) {
+                    EstudianteController estudianteController = getEstudianteController();
+                    estudianteController.prepareCreate();
+                    estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
+                    estudianteController.create();
+
+                    unusuario.setEstado(UsuarioController.EN_PROCESO);
+                    UsuarioController usuarioController = getUsuarioController();
+                    usuarioController.setSelected(unusuario);
+                    usuarioController.create();
+
+                }
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
+                return;
+            }
+
+        }
+        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
+
+        System.out.println("setToken: " + token);
+        this.token = token;
     }
 
     public Profile getProfile() {
@@ -144,29 +186,78 @@ public class RegistroController implements Serializable {
         return ejbFacade;
     }
 
-    public void verificarCodigo() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        CodigoInstitucionController codigoInstitucionController = (CodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "codigoInstitucionController");
-        codInstitucion = codigoInstitucionController.getCodigoInstitucion(codigo);
-        if (codInstitucion != null) {
-            verificado = true;
+    public void registrarse(ActionEvent e) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage msg;
+        try {
+            CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
+            codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
+
+            if (codInstitucion != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, 10);
+                // Crear persona
+                PersonaController personaController = getPersonaController();
+                Persona unaPersona = personaController.prepareCreateParaRegistrar();
+                unaPersona.setEmail(getUsuario());
+                unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+                unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
+                unaPersona.getIdUsuario().setUsuario(getUsuario());
+                unaPersona.getIdUsuario().setFechaCreacion(new Date());
+                unaPersona.getIdUsuario().setTokenAcesso("");
+                unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
+                unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
+                unaPersona = personaController.createParaRegistrar();
+                // TODO : falta enviar mensaje por usuario repetido
+                UsuarioController usuarioController = getUsuarioController();
+                Usuario unusuario = unaPersona.getIdUsuario();
+                unusuario.setTokenAcesso(generarToken(""+unusuario.getIdUsuario()));
+                usuarioController.setSelected(unusuario);
+                usuarioController.update();
+                // Crear grupo usuario
+                GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+                GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
+                grupoUsuario.setUsuario1(unusuario);
+                grupoUsuario.setUsuario(unusuario.getUsuario());
+                grupoUsuario.setTipoUsuario(codInstitucion.getIdTipoUsuario());
+                grupoUsuarioController.create();
+
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
+
+                // enviar email 
+                Utilidades.enviarCorreoDeRegistro("andersonbuitron@unicauca.edu.co", unusuario.getTokenAcesso());
+//                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+                //TODO
+            } else {
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "C&oacute;digo de registro incorrecto, por favor verifique su c&oacute;digo.", "");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un Error, Intentalo mas tarde", "");
         }
+        context.addMessage(null, msg);
+
     }
 
-    public void registrarse() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        PersonaController controllerPersona = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
-        PersonaCodigoInstitucionController personaCodigoInstitucionController = (PersonaCodigoInstitucionController) elResolver.getValue(facesContext.getELContext(), null, "personaCodigoInstitucionController");
-        if (codInstitucion != null) {
-            personaCodigoInstitucionController.create();
-            personaCodigoInstitucionController.getSelected().setCodigoInstitucion(codInstitucion);
-            personaCodigoInstitucionController.getSelected().setFechaIngreso(new Date());
-            personaCodigoInstitucionController.getSelected().setPersona(controllerPersona.getSelected());
-            personaCodigoInstitucionController.getSelected().setPersonaCodigoInstitucionPK(new PersonaCodigoInstitucionPK());
-        }
-
+    public String generarToken(String userid){
+        String rtoken = UUID.randomUUID().toString().toUpperCase() 
+            + "|" + userid + "|"
+            + Calendar.getInstance().getTimeInMillis();
+        return rtoken;
+    }
+    public void enviarMensaje() {
+//        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+        FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
+        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().get);
     }
 
     public boolean isVerificado() {

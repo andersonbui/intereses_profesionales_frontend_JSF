@@ -5,7 +5,10 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.facades.CodigoInstitucionFacade;
 
+import java.util.UUID;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,8 +30,14 @@ public class CodigoInstitucionController implements Serializable {
     private com.ingesoft.interpro.facades.CodigoInstitucionFacade ejbFacade;
     private List<CodigoInstitucion> items = null;
     private CodigoInstitucion selected;
+    private final String[] tiposCodigoInstitucion;
 
     public CodigoInstitucionController() {
+        this.tiposCodigoInstitucion = new String[]{UsuarioController.TIPO_DOCENTE, UsuarioController.TIPO_ESTUDIANTE};
+    }
+
+    public String[] getTiposCodigoInstitucion() {
+        return tiposCodigoInstitucion;
     }
 
     public CodigoInstitucion getSelected() {
@@ -51,6 +60,11 @@ public class CodigoInstitucionController implements Serializable {
 
     public CodigoInstitucion prepareCreate() {
         selected = new CodigoInstitucion();
+        String codigo = UUID.randomUUID().toString().substring(0, 8); 
+        selected.setCodigoActivacion(codigo);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 5);
+        selected.setFechaCaducidad(calendar.getTime());
         initializeEmbeddableKey();
         return selected;
     }
@@ -115,6 +129,9 @@ public class CodigoInstitucionController implements Serializable {
 
     public CodigoInstitucion getCodigoInstitucion(java.lang.String id) {
         return getFacade().find(id);
+    }
+    public CodigoInstitucion buscarPorCodigoActivacion(java.lang.String idActivacion) {
+        return getFacade().buscarPorCodigoActivacion(idActivacion);
     }
 
     public List<CodigoInstitucion> getItemsAvailableSelectMany() {

@@ -129,6 +129,18 @@
             <version>4.15</version>
             <type>jar</type>
         </dependency>
+<!--        <dependency>
+            <groupId>mineriaBayes</groupId>
+            <artifactId>mineriaBayes</artifactId>
+            <version>1</version>
+            <scope>runtime</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>

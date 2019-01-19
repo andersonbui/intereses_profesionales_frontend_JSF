@@ -46,7 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Persona.findByFechaNacimiento", query = "SELECT p FROM Persona p WHERE p.fechaNacimiento = :fechaNacimiento")
     , @NamedQuery(name = "Persona.findBySexo", query = "SELECT p FROM Persona p WHERE p.sexo = :sexo")
     , @NamedQuery(name = "Persona.findByCelular", query = "SELECT p FROM Persona p WHERE p.celular = :celular")
-    , @NamedQuery(name = "Persona.findByTipo", query = "SELECT p FROM Persona p WHERE p.tipo = :tipo")})
+    , @NamedQuery(name = "Persona.findByTipo", query = "SELECT p FROM Persona p WHERE p.tipo = :tipo")
+//    , @NamedQuery(name = "Persona.findByIdInstitucion", query = "SELECT p FROM Persona p LEFT JOIN WHERE p.tipo = :tipo")
+})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,13 +91,14 @@ public class Persona implements Serializable {
     @JoinColumn(name = "idCiudad", referencedColumnName = "idCiudad")
     @ManyToOne
     private Ciudad idCiudad;
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
+    @ManyToOne
+    private Institucion idInstitucion;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<Estudiante> estudianteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
-    private List<PersonaCodigoInstitucion> personaCodigoInstitucionList;
 
     public Persona() {
     }
@@ -200,6 +203,14 @@ public class Persona implements Serializable {
         this.idCiudad = idCiudad;
     }
 
+    public Institucion getIdInstitucion() {
+        return idInstitucion;
+    }
+
+    public void setIdInstitucion(Institucion idInstitucion) {
+        this.idInstitucion = idInstitucion;
+    }
+
     public Usuario getIdUsuario() {
         return idUsuario;
     }
@@ -215,15 +226,6 @@ public class Persona implements Serializable {
 
     public void setEstudianteList(List<Estudiante> estudianteList) {
         this.estudianteList = estudianteList;
-    }
-
-    @XmlTransient
-    public List<PersonaCodigoInstitucion> getPersonaCodigoInstitucionList() {
-        return personaCodigoInstitucionList;
-    }
-
-    public void setPersonaCodigoInstitucionList(List<PersonaCodigoInstitucion> personaCodigoInstitucionList) {
-        this.personaCodigoInstitucionList = personaCodigoInstitucionList;
     }
 
     @Override
@@ -248,7 +250,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Persona[ idPersona=" + idPersona + "; nombre: "+nombre+" ]";
+        return "Persona[ idPersona=" + idPersona + "; nombre: "+nombre+" ]";
     }
     
 }

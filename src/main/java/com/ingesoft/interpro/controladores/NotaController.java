@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Nota;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.NotaPK;
 import com.ingesoft.interpro.facades.NotaFacade;
 
 import java.io.Serializable;
@@ -40,11 +41,11 @@ public class NotaController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
-        selected.getNotaPK().setIdEstudiante(selected.getEstudiante().getIdEstudiante());
-        selected.getNotaPK().setIdGrado(selected.getGrado().getIdGrado());
+        selected.getNotaPK().setIdEstudiante(selected.getEstudianteGrado().getEstudianteGradoPK().getIdEstudiante());
+        selected.getNotaPK().setIdGrado(selected.getEstudianteGrado().getEstudianteGradoPK().getIdGrado());
         selected.getNotaPK().setIdMateria(selected.getMateria().getIdMateria());
     }
-
+    
     protected void initializeEmbeddableKey() {
         selected.setNotaPK(new com.ingesoft.interpro.entidades.NotaPK());
     }
@@ -141,23 +142,23 @@ public class NotaController implements Serializable {
             return controller.getNota(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.NotaPK getKey(String value) {
-            com.ingesoft.interpro.entidades.NotaPK key;
+        NotaPK getKey(String value) {
+            NotaPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.NotaPK();
+            key = new NotaPK();
             key.setIdMateria(Integer.parseInt(values[0]));
-            key.setIdEstudiante(Integer.parseInt(values[1]));
-            key.setIdGrado(Integer.parseInt(values[2]));
+            key.setIdGrado(Integer.parseInt(values[1]));
+            key.setIdEstudiante(Integer.parseInt(values[2]));
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.NotaPK value) {
+        String getStringKey(NotaPK value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value.getIdMateria());
             sb.append(SEPARATOR);
-            sb.append(value.getIdEstudiante());
-            sb.append(SEPARATOR);
             sb.append(value.getIdGrado());
+            sb.append(SEPARATOR);
+            sb.append(value.getIdEstudiante());
             return sb.toString();
         }
 
@@ -176,5 +177,4 @@ public class NotaController implements Serializable {
         }
 
     }
-
 }

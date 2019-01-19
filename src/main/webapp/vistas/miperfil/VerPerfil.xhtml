@@ -16,37 +16,42 @@
             <h:form id="PerfilViewForm">
                 <h:panelGroup id="datalist">
                     <p:panelGrid columns="2" rendered="#{loginController.personaActual != null}">
-                        <h:outputText value="#{bundle.ViewPersonaLabel_nombre}"/>
-                        <h:outputText value="#{loginController.personaActual.nombre}" title="#{bundle.ViewPersonaTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_apellido}"/>
-                        <h:outputText value="#{loginController.personaActual.apellido}" title="#{bundle.ViewPersonaTitle_apellido}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_email}"/>
-                        <h:outputText value="#{loginController.personaActual.email}" title="#{bundle.ViewPersonaTitle_email}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_direccion}"/>
-                        <h:outputText value="#{loginController.personaActual.direccion}" title="#{bundle.ViewPersonaTitle_direccion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_identificacion}"/>
-                        <h:outputText value="#{loginController.personaActual.identificacion}" title="#{bundle.ViewPersonaTitle_identificacion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_tipoIdentificacion}"/>
-                        <h:outputText value="#{loginController.personaActual.tipoIdentificacion}" title="#{bundle.ViewPersonaTitle_tipoIdentificacion}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_fechaNacimiento}"/>
-                        <h:outputText value="#{loginController.personaActual.fechaNacimiento}" title="#{bundle.ViewPersonaTitle_fechaNacimiento}">
+                        <h:outputText value="#{bundle.PersonaLabel_nombre}"/>
+                        <h:outputText value="#{loginController.personaActual.nombre}" title="#{bundle.PersonaTitle_nombre}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_apellido}"/>
+                        <h:outputText value="#{loginController.personaActual.apellido}" title="#{bundle.PersonaTitle_apellido}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_email}"/>
+                        <h:outputText value="#{loginController.personaActual.email}" title="#{bundle.PersonaTitle_email}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_direccion}"/>
+                        <h:outputText value="#{loginController.personaActual.direccion}" title="#{bundle.PersonaTitle_direccion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_identificacion}"/>
+                        <h:outputText value="#{loginController.personaActual.identificacion}" title="#{bundle.PersonaTitle_identificacion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_tipoIdentificacion}"/>
+                        <h:outputText value="#{loginController.personaActual.tipoIdentificacion}" title="#{bundle.PersonaTitle_tipoIdentificacion}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_fechaNacimiento}"/>
+                        <h:outputText value="#{loginController.personaActual.fechaNacimiento}" title="#{bundle.PersonaTitle_fechaNacimiento}">
                             <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                         </h:outputText>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_sexo}"/>
-                        <h:outputText value="#{loginController.personaActual.sexo}" title="#{bundle.ViewPersonaTitle_sexo}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_celular}"/>
-                        <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.ViewPersonaTitle_celular}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_tipo}"/>
-                        <h:outputText value="#{loginController.personaActual.tipo}" title="#{bundle.ViewPersonaTitle_tipo}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_idCiudad}"/>
-                        <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" title="#{bundle.ViewPersonaTitle_idCiudad}"/>
-                        <h:outputText value="#{bundle.ViewPersonaLabel_idUsuario}"/>
-                        <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" title="#{bundle.ViewPersonaTitle_idUsuario}"/>
+                        <h:outputText value="#{bundle.PersonaLabel_sexo}"/>
+                        <h:outputText value="#{loginController.personaActual.sexo}" title="#{bundle.PersonaTitle_sexo}"/>
+                        <h:outputText value="#{bundle.Label_celular}"/>
+                        <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.Title_celular}"/>
+                        <h:outputText value="#{bundle.Label_ciudad}"/>
+                        <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" 
+                                      title="#{bundle.Title_ciudad}"/>
+                        <h:outputText value="#{bundle.UsuarioLabel_Usuario}"/>
+                        <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" 
+                                      title="#{bundle.UsuarioTitle_Usuario}"/>
                     </p:panelGrid>
-                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil" actionListener="#{personaController.setSelected(loginController.personaActual)}" update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
+                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil"
+                                     actionListener="#{personaController.prepareUpdate(loginController.personaActual)}" 
+                                     update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
                 </h:panelGroup>
             </h:form>
             <ui:include src="EditarPerfil.xhtml"/>
         </ui:define>
     </ui:composition>
 </html>
+<!--
+                        <h:outputText value="{bundle.PersonaLabel_tipo}"/>
+                        <h:outputText value="{loginController.personaActual.tipo}" title="{bundle.PersonaTitle_tipo}"/>-->

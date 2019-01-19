@@ -100,7 +100,7 @@ public class TipoEleccionMateria implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.TipoEleccionMateria[ idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
+        return "TipoEleccionMateria[ idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
     }
     
 }

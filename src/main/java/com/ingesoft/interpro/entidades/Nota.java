@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,9 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Nota.findAll", query = "SELECT n FROM Nota n")
     , @NamedQuery(name = "Nota.findByIdMateria", query = "SELECT n FROM Nota n WHERE n.notaPK.idMateria = :idMateria")
-    , @NamedQuery(name = "Nota.findByIdEstudiante", query = "SELECT n FROM Nota n WHERE n.notaPK.idEstudiante = :idEstudiante")
+    , @NamedQuery(name = "Nota.findByNota", query = "SELECT n FROM Nota n WHERE n.nota = :nota")
     , @NamedQuery(name = "Nota.findByIdGrado", query = "SELECT n FROM Nota n WHERE n.notaPK.idGrado = :idGrado")
-    , @NamedQuery(name = "Nota.findByNota", query = "SELECT n FROM Nota n WHERE n.nota = :nota")})
+    , @NamedQuery(name = "Nota.findByIdEstudiante", query = "SELECT n FROM Nota n WHERE n.notaPK.idEstudiante = :idEstudiante")})
 public class Nota implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,15 +39,14 @@ public class Nota implements Serializable {
     @Size(max = 45)
     @Column(name = "nota")
     private String nota;
-    @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Estudiante estudiante;
-    @JoinColumn(name = "idGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Grado grado;
     @JoinColumn(name = "idMateria", referencedColumnName = "idMateria", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Materia materia;
+    @JoinColumns({
+        @JoinColumn(name = "idGrado", referencedColumnName = "idGrado", insertable = false, updatable = false)
+        , @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
+    private EstudianteGrado estudianteGrado;
 
     public Nota() {
     }
@@ -55,8 +55,8 @@ public class Nota implements Serializable {
         this.notaPK = notaPK;
     }
 
-    public Nota(int idMateria, int idEstudiante, int idGrado) {
-        this.notaPK = new NotaPK(idMateria, idEstudiante, idGrado);
+    public Nota(int idMateria, int idGrado, int idEstudiante) {
+        this.notaPK = new NotaPK(idMateria, idGrado, idEstudiante);
     }
 
     public NotaPK getNotaPK() {
@@ -75,28 +75,20 @@ public class Nota implements Serializable {
         this.nota = nota;
     }
 
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
-    }
-
-    public Grado getGrado() {
-        return grado;
-    }
-
-    public void setGrado(Grado grado) {
-        this.grado = grado;
-    }
-
     public Materia getMateria() {
         return materia;
     }
 
     public void setMateria(Materia materia) {
         this.materia = materia;
+    }
+
+    public EstudianteGrado getEstudianteGrado() {
+        return estudianteGrado;
+    }
+
+    public void setEstudianteGrado(EstudianteGrado estudianteGrado) {
+        this.estudianteGrado = estudianteGrado;
     }
 
     @Override
@@ -121,7 +113,7 @@ public class Nota implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Nota[ notaPK=" + notaPK + " ]";
+        return "Nota[ notaPK=" + notaPK + " ]";
     }
     
 }

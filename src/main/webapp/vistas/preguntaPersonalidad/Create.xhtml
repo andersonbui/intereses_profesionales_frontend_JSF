@@ -12,8 +12,6 @@
             <h:form id="PreguntaPersonalidadCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaPersonalidadController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_idPregunta}" for="idPregunta" />
-                        <p:inputText id="idPregunta" value="#{preguntaPersonalidadController.selected.idPregunta}" title="#{bundle.CreatePreguntaPersonalidadTitle_idPregunta}" required="true" requiredMessage="#{bundle.CreatePreguntaPersonalidadRequiredMessage_idPregunta}"/>
                         <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_enunciado1}" for="enunciado1" />
                         <p:inputText id="enunciado1" value="#{preguntaPersonalidadController.selected.enunciado1}" title="#{bundle.CreatePreguntaPersonalidadTitle_enunciado1}" />
                         <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_suma}" for="suma" />
@@ -23,9 +21,10 @@
                         <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_enunciado2}" for="enunciado2" />
                         <p:inputText id="enunciado2" value="#{preguntaPersonalidadController.selected.enunciado2}" title="#{bundle.CreatePreguntaPersonalidadTitle_enunciado2}" />
                         <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_idTipo}" for="idTipo" />
-                        <p:selectOneMenu id="idTipo" value="#{preguntaPersonalidadController.selected.idTipo}" required="true" requiredMessage="#{bundle.EditPreguntaPersonalidadRequiredMessage_idTipo}">
-                            <f:selectItems value="#{tipoController.itemsAvailableSelectOne}"
+                        <p:selectOneMenu id="idTipo" value="#{preguntaPersonalidadController.selected.idTipoPersonalidad}" required="true" requiredMessage="#{bundle.EditPreguntaPersonalidadRequiredMessage_idTipo}">
+                            <f:selectItems value="#{tipoPersonalidadController.itemsAvailableSelectOne}"
                                            var="idTipoItem"
+                                           itemLabel="#{idTipoItem.tipo}"
                                            itemValue="#{idTipoItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>

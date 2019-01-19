@@ -1,0 +1,5 @@
+"idPersona","nombre","apellido","email","direccion","identificacion","tipoIdentificacion","fechaNacimiento","sexo","celular","idUsuario","tipo","idCiudad"
+"1","luis","valdez","luis@gmail.es","carr",NULL,NULL,"2003-10-10 00:00:00","F",NULL,"1","ESTUDIANTE","1"
+"2","Yesmi","Bolaños","yes@gmail.es","carr","1059358","Cedula de ciudadania","1999-12-26 00:00:00","F","310","2","ADMINISTRADOR","141"
+"3","andres","cruz","andres@gmail.es","carr","196","cedula","2005-11-01 00:00:00","M","310","3","DOCENTE","1"
+"25",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"26","DOCENTE",NULL

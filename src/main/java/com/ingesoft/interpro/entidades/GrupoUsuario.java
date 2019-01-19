@@ -26,9 +26,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
-    , @NamedQuery(name = "GrupoUsuario.findByIdGrupoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idGrupoUsuario = :idGrupoUsuario")
     , @NamedQuery(name = "GrupoUsuario.findByUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario = :usuario")
-    , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")})
+    , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")
+    , @NamedQuery(name = "GrupoUsuario.findByIdTipoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idTipoUsuario = :idTipoUsuario")})
 public class GrupoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,6 +37,9 @@ public class GrupoUsuario implements Serializable {
     @Size(max = 45)
     @Column(name = "usuario")
     private String usuario;
+    @JoinColumn(name = "idTipoUsuario", referencedColumnName = "idTipoUsuario", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private TipoUsuario tipoUsuario;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario1;
@@ -48,8 +51,8 @@ public class GrupoUsuario implements Serializable {
         this.grupoUsuarioPK = grupoUsuarioPK;
     }
 
-    public GrupoUsuario(String idGrupoUsuario, int idUsuario) {
-        this.grupoUsuarioPK = new GrupoUsuarioPK(idGrupoUsuario, idUsuario);
+    public GrupoUsuario(int idUsuario, int idTipoUsuario) {
+        this.grupoUsuarioPK = new GrupoUsuarioPK(idUsuario, idTipoUsuario);
     }
 
     public GrupoUsuarioPK getGrupoUsuarioPK() {
@@ -66,6 +69,14 @@ public class GrupoUsuario implements Serializable {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Usuario getUsuario1() {
@@ -98,7 +109,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
+        return "GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
     }
     
 }

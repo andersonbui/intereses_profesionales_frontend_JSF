@@ -108,7 +108,7 @@ public class ResultadoPorAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.ResultadoPorAmbiente[ resultadoPorAmbientePK=" + resultadoPorAmbientePK + " ]";
+        return "ResultadoPorAmbiente[ resultadoPorAmbientePK=" + resultadoPorAmbientePK + " ]";
     }
     
 }

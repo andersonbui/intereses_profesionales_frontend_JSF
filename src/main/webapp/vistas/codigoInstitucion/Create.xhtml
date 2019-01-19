@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CodigoInstitucionCreateDlg" widgetVar="CodigoInstitucionCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCodigoInstitucionTitle}">
+            <h:form id="CodigoInstitucionCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{codigoInstitucionController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_codigoActivacion}" for="codigoActivacion" />
+                        <p:inputText id="codigoActivacion" value="#{codigoInstitucionController.selected.codigoActivacion}" title="#{bundle.CreateCodigoInstitucionTitle_codigoActivacion}" />
+                        <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_fechaCaducidad}" for="fechaCaducidad" />
+                        <p:calendar id="fechaCaducidad" pattern="MM/dd/yyyy HH:mm:ss" value="#{codigoInstitucionController.selected.fechaCaducidad}" title="#{bundle.EditCodigoInstitucionTitle_fechaCaducidad}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_tipo}" for="tipo" />
+                       <p:selectOneMenu id="tipo" value="#{codigoInstitucionController.selected.idTipoUsuario}" 
+                                         required="true">
+                            <f:selectItems value="#{tipoUsuarioController.items}"
+                                           var="item"
+                                           itemValue="#{item}" 
+                                           itemLabel="#{item.tipo}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateCodigoInstitucionLabel_idInstitucion}" for="idInstitucion" />
+                        <p:selectOneMenu id="idInstitucion" value="#{codigoInstitucionController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditCodigoInstitucionRequiredMessage_idInstitucion}">
+                            <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
+                                           var="idInstitucionItem"
+                                           itemValue="#{idInstitucionItem}" 
+                                           itemLabel="#{idInstitucionItem.nombre}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{codigoInstitucionController.create}" value="#{bundle.Save}" update="display,:CodigoInstitucionListForm:datalist,:growl" oncomplete="handleSubmit(args,'CodigoInstitucionCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CodigoInstitucionCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

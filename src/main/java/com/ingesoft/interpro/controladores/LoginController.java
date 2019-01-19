@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -35,7 +36,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean(name = "loginController")
 @SessionScoped
-public class LoginController implements Serializable {
+public class LoginController extends Controller implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 
@@ -87,22 +88,23 @@ public class LoginController implements Serializable {
     }
 
     public boolean isAdmin() {
-        return grupo.getGrupoUsuarioPK().getIdGrupoUsuario().equals("administrador");
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
+        return nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
-    
-    public boolean isEstudiante(){
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("estudiante") ;
+
+    public boolean isEstudiante() {
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
+        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE);
     }
-    
+
     public boolean permisoEstudiante() {
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("estudiante") || nombreGrupo.equals("administrador") || nombreGrupo.equals("docente");
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
+        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
     }
 
     public boolean isDocente() {
-        String nombreGrupo = grupo.getGrupoUsuarioPK().getIdGrupoUsuario();
-        return nombreGrupo.equals("docente") || nombreGrupo.equals("administrador");
+        String nombreGrupo = grupo.getTipoUsuario().getTipo();
+        return nombreGrupo.equals(UsuarioController.TIPO_DOCENTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
     }
 
     public void getPerfilUsuario() throws Exception {
@@ -114,7 +116,6 @@ public class LoginController implements Serializable {
         if (socialManager != null) {
             AuthProvider provider = socialManager.connect(parametros);
             this.setProfile(provider.getUserProfile());
-
         }
 
         FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
@@ -156,6 +157,7 @@ public class LoginController implements Serializable {
         return getFacade().find(id);
     }
 
+    @Override
     public UsuarioFacade getFacade() {
         return ejbFacade;
     }
@@ -164,47 +166,85 @@ public class LoginController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         FacesMessage msg;
-        String ruta = "/intereses_profesionales_frontend_JSF/faces/vistas/inicio.xhtml";
+        String ruta = Vistas.inicio();
         if (req.getUserPrincipal() == null) {
             try {
                 req.login(this.usuario, this.password);
                 System.out.println("inicio de sesion con usuario: " + usuario + "; clave: " + password);
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
                 logueado = true;
+                Principal principal = req.getUserPrincipal();
+                actual = ejbFacade.buscarPorUsuario(principal.getName());
             } catch (ServletException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
                 logueado = false;
                 context.addMessage(null, msg);
                 return;
             }
-            Principal principal = req.getUserPrincipal();
-            actual = ejbFacade.buscarPorUsuario(principal.getName());
-            ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
-            Map<String, Object> sessionMap = external.getSessionMap();
-            sessionMap.put("usuario", actual);
+            System.out.println("estado usuari: " + actual);
+//                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
+            if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
+                System.out.println("estado usuari: " + actual.getEstado());
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta no ha sido activado. Por favor revise su bandeja de correo");
+                eliminarSesion();
+            } else if (UsuarioController.INAACTIVO.equals(actual.getEstado())) {
+                System.out.println("estado usuari: " + actual.getEstado());
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta fue desactivado. Por favor comuniquese con el administrador.");
+                eliminarSesion();
+            } else {
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
+                ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
+                Map<String, Object> sessionMap = external.getSessionMap();
+                sessionMap.put("usuario", actual);
+                System.out.println("estado usuari: " + actual.getEstado());
+                grupo = actual.getGrupoUsuarioList().get(0);
+            }
             context.addMessage(null, msg);
-
-            grupo = actual.getGrupoUsuarioList().get(0);
-
         } else {
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Que alegria, Has vuelto", this.usuario);
             context.addMessage(null, msg);
             logueado = true;
             String nombreUsuario = req.getUserPrincipal().getName();
             actual = ejbFacade.buscarPorUsuario(nombreUsuario);
         }
-        GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
-        if (gtu != null) {
-            personaActual = actual.getPersonaList().get(0);
-//            int grupo = gtu.getGrupoUsuarioPK().getIdGrupoUsuario();
-            RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);
-            RequestContext.getCurrentInstance().addCallbackParam("view", ruta);
+        if (actual != null) {
+            GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
+            if (gtu != null) {
+                personaActual = actual.getPersonaList().get(0);
+                if (UsuarioController.EN_PROCESO.equals(actual.getEstado())) {
+                    PersonaController personaController = getPersonaController();
+                    personaController.prepareUpdate(personaActual);
+                    ruta = Vistas.completarPerfil();
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
+                } else {
+                    //            int grupo = gtu.getGrupoUsuarioPK().getIdGrupoUsuario();
+//                FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
+                    RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);
+                    RequestContext.getCurrentInstance().addCallbackParam("view", ruta);
+                }
+            }
         }
     }
 
-    public String salir() throws IOException {
+    public void guardarEnProceso() throws IOException {
+//        getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
+        PersonaController personaController = getPersonaController();
+        personaController.update();
 
+        String ruta = Vistas.inicio();
+//        RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);
+//        RequestContext.getCurrentInstance().addCallbackParam("view", ruta);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
+    }
+
+//     public boolean guardarEnProceso() {
+//         
+//     }
+//    
+    public void eliminarSesion() {
+        actual = null;
+        personaActual = null;
+        grupo = null;
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
         logueado = false;
@@ -214,8 +254,12 @@ public class LoginController implements Serializable {
             fc.getExternalContext().invalidateSession();
 
         } catch (ServletException e) {
-            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Cerrar Sesion"));
+            fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "FAILED", "Error al Cerrar Sesion"));
         }
+    }
+
+    public String salir() throws IOException {
+        eliminarSesion();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
         return "";
     }

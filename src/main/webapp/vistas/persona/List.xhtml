@@ -17,7 +17,8 @@
             <h:form id="PersonaListForm">
                 <p:panel header="#{bundle.ListPersonaTitle}">
                     <p:dataTable id="datalist" value="#{personaController.items}" var="item"
-                                 selectionMode="single" selection="#{personaController.selected}"
+                                 selectionMode="single" 
+                                 selection="#{personaController.selected}"
                                  paginator="true"
                                  rowKey="#{item.idPersona}"
                                  rows="10"
@@ -29,89 +30,63 @@
 
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_idPersona}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_idPersona}"/>
                             </f:facet>
                             <h:outputText value="#{item.idPersona}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_nombre}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_nombre}"/>
                             </f:facet>
                             <h:outputText value="#{item.nombre}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_apellido}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_apellido}"/>
                             </f:facet>
                             <h:outputText value="#{item.apellido}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_email}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_email}"/>
                             </f:facet>
                             <h:outputText value="#{item.email}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_direccion}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.direccion}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_identificacion}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_identificacion}"/>
                             </f:facet>
                             <h:outputText value="#{item.identificacion}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_tipoIdentificacion}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.tipoIdentificacion}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_fechaNacimiento}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.fechaNacimiento}">
-                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_sexo}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_sexo}"/>
                             </f:facet>
                             <h:outputText value="#{item.sexo}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_celular}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_tipo}"/>
                             </f:facet>
-                            <h:outputText value="#{item.celular}"/>
+                            <h:outputText value="#{personaController.obtenerTipoUsuario(item)}" />
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_tipo}"/>
+                                <h:outputText value="#{bundle.UsuarioTitle_Usuario}"/>
                             </f:facet>
-                            <h:outputText value="#{item.tipo}"/>
+                            <h:outputText value="#{item.idUsuario.usuario}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_idCiudad}"/>
+                                <h:outputText value="#{bundle.UsuarioTitle_estado}"/>
                             </f:facet>
-                            <h:outputText value="#{item.idCiudad}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonaTitle_idUsuario}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idUsuario}"/>
+                            <h:outputText value="#{item.idUsuario.estado}"/>
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personaController.prepareCreate}" update=":PersonaCreateForm" oncomplete="PF('PersonaCreateDialog').show()"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personaController.prepareCreate}" update=":PersonaEditForm" oncomplete="PF('PersonaEditDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":PersonaViewForm" oncomplete="PF('PersonaViewDialog').show()" disabled="#{empty personaController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":PersonaEditForm" oncomplete="PF('PersonaEditDialog').show()" disabled="#{empty personaController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{personaController.destroy}" update=":growl,datalist" disabled="#{empty personaController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" actionListener="#{personaController.prepareUpdate}" update=":PersonaEditForm" oncomplete="PF('PersonaEditDialog').show()" disabled="#{empty personaController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{personaController.destroy}" update=":growl,datalist" disabled="#{empty personaController.selected}"  rendered="#{loginController.admin}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

@@ -3,6 +3,9 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
 import java.io.Serializable;
@@ -18,17 +21,29 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "personaController")
 @SessionScoped
-public class PersonaController implements Serializable {
+public class PersonaController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.PersonaFacade ejbFacade;
     private List<Persona> items = null;
     private Persona selected;
+    private final String[] tiposEstadoUsuario;
+    private boolean editar;
 
     public PersonaController() {
+        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_ESPERA};
+    }
+
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public String[] getTiposEstadoUsuario() {
+        return tiposEstadoUsuario;
     }
 
     public Persona getSelected() {
@@ -41,89 +56,175 @@ public class PersonaController implements Serializable {
 
     public void estudianteSeleccionado(Persona persona) {
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        DepartamentoController departamentoController = (DepartamentoController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "departamentoController");
-        CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "ciudadController");
-        
+        DepartamentoController departamentoController = getDepartamentoController();
+        CiudadController ciudadController = getCiudadController();
+
         if (persona.getIdCiudad() != null) {
             ciudadController.setSelected(persona.getIdCiudad());
             if (persona.getIdCiudad().getIdDepartamento() != null) {
                 departamentoController.setSelected(persona.getIdCiudad().getIdDepartamento());
             }
-
         }
     }
 
+    public boolean isEstudiante() {
+        List<GrupoUsuario> listaGU = selected.getIdUsuario().getGrupoUsuarioList();
+        for (GrupoUsuario grupoUsuario : listaGU) {
+            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private PersonaFacade getFacade() {
+    @Override
+    public PersonaFacade getFacade() {
         return ejbFacade;
     }
 
     public Persona prepareCreate() {
+        Persona persona = prepareCreateParaRegistrar();
+        LoginController loginController = getLoginController();
+        selected.setIdCiudad(loginController.getPersonaActual().getIdCiudad());
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('PersonaEditDialog').show()");
+        return persona;
+    }
+
+    public Persona prepareCreateParaRegistrar() {
+        editar = false;
+        UsuarioController usuarioController = getUsuarioController();
+        Usuario usuario = usuarioController.prepareCreate();
+
         selected = new Persona();
+        usuario.setClave("Ninguna");
+        selected.setIdUsuario(usuario);
+
+        getDepartamentoController().setSelected(null);
+        getPaisController().setSelected(null);
+        getEstudianteController().setSelected(null);
         initializeEmbeddableKey();
         return selected;
     }
 
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"));
+    public Persona prepareUpdate() {
+        return prepareUpdate(null);
+    }
+
+    public Persona prepareUpdate(Persona persona) {
+        if (persona != null) {
+            selected = persona;
+        }
+        editar = true;
+        if (selected != null) {
+            EstudianteController estudianteController = getEstudianteController();
+            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
+                estudianteController.setSelected(selected.getEstudianteList().get(0));
+            } else {
+                estudianteController.setSelected(null);
+            }
+            DepartamentoController deptoController = getDepartamentoController();
+            if (selected.getIdCiudad() != null) {
+                deptoController.setSelected(selected.getIdCiudad().getIdDepartamento());
+            } else {
+                deptoController.setSelected(null);
+                getPaisController().setSelected(null);
+            }
+
+            UsuarioController usuarioController = getUsuarioController();
+            usuarioController.setSelected(selected.getIdUsuario());
+
+//            RequestContext requestContext = RequestContext.getCurrentInstance();
+//            requestContext.execute("PF('PerfilEditDialog').show()");
+        }
+        return selected;
+    }
+
+    public Persona createPorOtro() {
+        LoginController loginController = getLoginController();
+        if (loginController.getActual() == null) {
+            if (!loginController.isDocente()) {
+                return null;
+            }
+        }
+        Persona perso = create();
+
+        GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
+        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+        grupoUsuarioController.create();
+        return create();
+    }
+
+    private Persona create() {
+        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
+        return perso;
+    }
+
+    public Persona createParaRegistrar() {
+        Persona perso = create();
+        return perso;
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"));
+        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+    }
+
+    public void updateConUsuarioEstudiante() {
+        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+        UsuarioController usuarioController = getUsuarioController();
+        usuarioController.update();
+        if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
+            EstudianteController estudianteController = getEstudianteController();
+            estudianteController.update();
+        }
+
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"));
+        Persona perso = (Persona) persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PersonaDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Persona> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+    public String obtenerTipoUsuario(Persona persona) {
+        if (persona.getIdUsuario() != null && persona.getIdUsuario().getGrupoUsuarioList() != null) {
+            if (!persona.getIdUsuario().getGrupoUsuarioList().isEmpty()) {
+                return "" + persona.getIdUsuario().getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
             }
         }
+        return "--";
+    }
+
+    public List<Persona> getItems() {
+        if (items == null) {
+            Persona persona = getLoginController().getPersonaActual();
+            List<GrupoUsuario> lista = persona.getIdUsuario().getGrupoUsuarioList();
+            for (GrupoUsuario object : lista) {
+                String tipo = object.getTipoUsuario().getTipo();
+                if (tipo.equals(UsuarioController.TIPO_ADMINISTRADOR)) {
+                    items = getFacade().findAll();
+                    break;
+                } else if (tipo.equals(UsuarioController.TIPO_DOCENTE)) {
+                    items = persona.getIdInstitucion().getPersonaList();
+                    break;
+                }
+
+            }
+        }
+        return items;
     }
 
     public Persona getPersona(java.lang.Integer id) {

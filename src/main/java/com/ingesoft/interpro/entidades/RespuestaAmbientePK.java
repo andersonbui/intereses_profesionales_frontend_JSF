@@ -77,7 +77,7 @@ public class RespuestaAmbientePK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaAmbientePK[ idPreguntasAmbiente=" + idPreguntasAmbiente + ", idEncuesta=" + idEncuesta + " ]";
+        return "RespuestaAmbientePK[ idPreguntasAmbiente=" + idPreguntasAmbiente + ", idEncuesta=" + idEncuesta + " ]";
     }
     
 }

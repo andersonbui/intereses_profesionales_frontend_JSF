@@ -3,9 +3,11 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -21,12 +23,21 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "usuarioController")
 @SessionScoped
-public class UsuarioController implements Serializable {
+public class UsuarioController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.UsuarioFacade ejbFacade;
     private List<Usuario> items = null;
     private Usuario selected;
+
+    public static final String EN_PROCESO = "EN_PROCESO";
+    public static final String EN_ESPERA = "EN_ESPERA";
+    public static final String ACTIVO = "ACTIVO";
+    public static final String INAACTIVO = "INACTIVO";
+
+    public static final String TIPO_ESTUDIANTE = "ESTUDIANTE";
+    public static final String TIPO_DOCENTE = "DOCENTE";
+    public static final String TIPO_ADMINISTRADOR = "ADMINISTRADOR";
 
     public UsuarioController() {
     }
@@ -39,35 +50,46 @@ public class UsuarioController implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private UsuarioFacade getFacade() {
+    @Override
+    protected UsuarioFacade getFacade() {
         return ejbFacade;
     }
 
     public Usuario prepareCreate() {
         selected = new Usuario();
         initializeEmbeddableKey();
+        GrupoUsuario grupoUsuario = getGrupoUsuarioController().prepareCreate();
+
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
+        Usuario unselected = (Usuario) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"), selected);
+        GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+        
+        for (GrupoUsuario grupoUsuario : unselected.getGrupoUsuarioList()) {
+            grupoUsuario.setUsuario(unselected.getUsuario());
+            grupoUsuarioController.setSelected(grupoUsuario);
+            grupoUsuarioController.create();
+        }
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -81,38 +103,13 @@ public class UsuarioController implements Serializable {
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
-    }
-
     public Usuario getUsuario(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
+    public Usuario obtUsuarioPorToken(String token) {
+        return getFacade().obtUsuarioPorToken(token);
+    }
     public List<Usuario> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

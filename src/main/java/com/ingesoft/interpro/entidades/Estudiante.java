@@ -6,7 +6,6 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,8 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Estudiante.findAll", query = "SELECT e FROM Estudiante e")
     , @NamedQuery(name = "Estudiante.findByIdEstudiante", query = "SELECT e FROM Estudiante e WHERE e.idEstudiante = :idEstudiante")
-    , @NamedQuery(name = "Estudiante.findByFechaIngreso", query = "SELECT e FROM Estudiante e WHERE e.fechaIngreso = :fechaIngreso")
     , @NamedQuery(name = "Estudiante.findByEstrato", query = "SELECT e FROM Estudiante e WHERE e.estrato = :estrato")
     , @NamedQuery(name = "Estudiante.findByCuantosViven", query = "SELECT e FROM Estudiante e WHERE e.cuantosViven = :cuantosViven")
     , @NamedQuery(name = "Estudiante.findByCuantosTrabajan", query = "SELECT e FROM Estudiante e WHERE e.cuantosTrabajan = :cuantosTrabajan")
@@ -52,9 +48,6 @@ public class Estudiante implements Serializable {
     @Basic(optional = false)
     @Column(name = "idEstudiante")
     private Integer idEstudiante;
-    @Column(name = "fechaIngreso")
-    @Temporal(TemporalType.DATE)
-    private Date fechaIngreso;
     @Size(max = 2)
     @Column(name = "estrato")
     private String estrato;
@@ -69,13 +62,11 @@ public class Estudiante implements Serializable {
     @Size(max = 45)
     @Column(name = "personalidad")
     private String personalidad;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<EstudianteGrado> estudianteGradoList;
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona")
     @ManyToOne(optional = false)
     private Persona idPersona;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
-    private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEstudiante")
-    private List<Encuesta> encuestaList;
 
     public Estudiante() {
     }
@@ -90,14 +81,6 @@ public class Estudiante implements Serializable {
 
     public void setIdEstudiante(Integer idEstudiante) {
         this.idEstudiante = idEstudiante;
-    }
-
-    public Date getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
     }
 
     public String getEstrato() {
@@ -148,30 +131,21 @@ public class Estudiante implements Serializable {
         this.personalidad = personalidad;
     }
 
+    @XmlTransient
+    public List<EstudianteGrado> getEstudianteGradoList() {
+        return estudianteGradoList;
+    }
+
+    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
+        this.estudianteGradoList = estudianteGradoList;
+    }
+
     public Persona getIdPersona() {
         return idPersona;
     }
 
     public void setIdPersona(Persona idPersona) {
         this.idPersona = idPersona;
-    }
-
-    @XmlTransient
-    public List<Nota> getNotaList() {
-        return notaList;
-    }
-
-    public void setNotaList(List<Nota> notaList) {
-        this.notaList = notaList;
-    }
-
-    @XmlTransient
-    public List<Encuesta> getEncuestaList() {
-        return encuestaList;
-    }
-
-    public void setEncuestaList(List<Encuesta> encuestaList) {
-        this.encuestaList = encuestaList;
     }
 
     @Override

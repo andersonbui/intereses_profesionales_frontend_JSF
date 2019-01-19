@@ -46,9 +46,9 @@ public class Materia implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @JoinColumn(name = "Area_idArea", referencedColumnName = "idArea")
+    @JoinColumn(name = "idArea", referencedColumnName = "idArea")
     @ManyToOne(optional = false)
-    private Area areaidArea;
+    private Area idArea;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<Nota> notaList;
 
@@ -75,12 +75,12 @@ public class Materia implements Serializable {
         this.nombre = nombre;
     }
 
-    public Area getAreaidArea() {
-        return areaidArea;
+    public Area getIdArea() {
+        return idArea;
     }
 
-    public void setAreaidArea(Area areaidArea) {
-        this.areaidArea = areaidArea;
+    public void setIdArea(Area idArea) {
+        this.idArea = idArea;
     }
 
     @XmlTransient
@@ -114,7 +114,7 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Materia[ idMateria=" + idMateria + " ]";
+        return "Materia[ idMateria=" + idMateria + " ]";
     }
     
 }

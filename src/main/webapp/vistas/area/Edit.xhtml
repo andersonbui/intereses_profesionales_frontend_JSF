@@ -13,7 +13,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{areaController.selected != null}">
                         <p:outputLabel value="#{bundle.EditAreaLabel_idArea}" for="idArea" />
-                        <p:inputText id="idArea" value="#{areaController.selected.idArea}" title="#{bundle.EditAreaTitle_idArea}" required="true" requiredMessage="#{bundle.EditAreaRequiredMessage_idArea}"/>
+                        <p:outputLabel id="idArea" value="#{areaController.selected.idArea}" title="#{bundle.EditAreaTitle_idArea}" />
                         <p:outputLabel value="#{bundle.EditAreaLabel_nombre}" for="nombre" />
                         <p:inputText id="nombre" value="#{areaController.selected.nombre}" title="#{bundle.EditAreaTitle_nombre}" />
                     </p:panelGrid>

@@ -29,65 +29,46 @@
 
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_idEstudiante}"/>
+                                <h:outputText value="#{bundle.Usuario_usuario}"/>
                             </f:facet>
-                            <h:outputText value="#{item.idEstudiante}"/>
+                            <h:outputText value="#{item.idPersona.idUsuario.usuario}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_fechaIngreso}"/>
+                                <h:outputText value="#{bundle.Persona_email}"/>
                             </f:facet>
-                            <h:outputText value="#{item.fechaIngreso}">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                            </h:outputText>
+                            <h:outputText value="#{item.idPersona.email}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_estrato}"/>
+                                <h:outputText value="#{bundle.ListPersonaTitle_identificacion}"/>
                             </f:facet>
-                            <h:outputText value="#{item.estrato}"/>
+                            <h:outputText value="#{item.idPersona.identificacion}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_cuantosViven}"/>
+                                <h:outputText value="#{bundle.ListPersonaTitle_nombre}"/>
                             </f:facet>
-                            <h:outputText value="#{item.cuantosViven}"/>
+                            <h:outputText value="#{item.idPersona.nombre}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_cuantosTrabajan}"/>
+                                <h:outputText value="#{bundle.ListPersonaTitle_apellido}"/>
                             </f:facet>
-                            <h:outputText value="#{item.cuantosTrabajan}"/>
+                            <h:outputText value="#{item.idPersona.apellido}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_viveConPadres}"/>
+                                <h:outputText value="#{bundle.Usuario_estado}"/>
                             </f:facet>
-                            <p:selectBooleanCheckbox value="#{item.viveConPadres}" disabled="true"/>
+                            <h:outputText value="#{item.idPersona.idUsuario.estado}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_desplazados}"/>
-                            </f:facet>
-                            <p:selectBooleanCheckbox value="#{item.desplazados}" disabled="true"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_personalidad}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.personalidad}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEstudianteTitle_idPersona}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idPersona}"/>
-                        </p:column>
+                        
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{estudianteController.prepareCreate}" update=":EstudianteCreateForm" oncomplete="PF('EstudianteCreateDialog').show()"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personaController.prepareCreate()}" update=":EstudianteEditForm" oncomplete=""/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EstudianteViewForm" oncomplete="PF('EstudianteViewDialog').show()" disabled="#{empty estudianteController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{estudianteController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}"  actionListener="#{personaController.prepareUpdate()}" update=":EstudianteEditForm" oncomplete="PF('EstudianteEditDialog').show()" disabled="#{empty estudianteController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{personaController.destroy}" update=":growl,datalist" disabled="#{empty estudianteController.selected}" rendered="#{loginController.admin}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TipoPersonalidad.findAll", query = "SELECT t FROM TipoPersonalidad t")
     , @NamedQuery(name = "TipoPersonalidad.findByIdTipoPersonalidad", query = "SELECT t FROM TipoPersonalidad t WHERE t.idTipoPersonalidad = :idTipoPersonalidad")
-    , @NamedQuery(name = "TipoPersonalidad.findByTipo", query = "SELECT t FROM TipoPersonalidad t WHERE t.tipo = :tipo")})
+    , @NamedQuery(name = "TipoPersonalidad.findByTipo", query = "SELECT t FROM TipoPersonalidad t WHERE t.tipo = :tipo")
+    , @NamedQuery(name = "TipoPersonalidad.findByDescription", query = "SELECT t FROM TipoPersonalidad t WHERE t.description = :description")})
 public class TipoPersonalidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +45,9 @@ public class TipoPersonalidad implements Serializable {
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
+    @Size(max = 100)
+    @Column(name = "description")
+    private String description;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersonalidad")
     private List<PreguntaPersonalidad> preguntaPersonalidadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPersonalidad")
@@ -70,6 +74,14 @@ public class TipoPersonalidad implements Serializable {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @XmlTransient
@@ -112,7 +124,7 @@ public class TipoPersonalidad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.TipoPersonalidad[ idTipoPersonalidad=" + idTipoPersonalidad + " ]";
+        return "TipoPersonalidad[ idTipoPersonalidad=" + idTipoPersonalidad + " ]";
     }
     
 }

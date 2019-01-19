@@ -46,7 +46,7 @@ public class Area implements Serializable {
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "area")
     private List<AreaEncuesta> areaEncuestaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "areaidArea")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idArea")
     private List<Materia> materiaList;
 
     public Area() {
@@ -112,7 +112,7 @@ public class Area implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Area[ idArea=" + idArea + " ]";
+        return "Area[ idArea=" + idArea + " ]";
     }
     
 }

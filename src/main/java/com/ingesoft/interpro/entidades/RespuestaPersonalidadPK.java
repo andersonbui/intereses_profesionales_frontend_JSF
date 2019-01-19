@@ -77,7 +77,7 @@ public class RespuestaPersonalidadPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaPersonalidadPK[ idPreguntaPersonalidad=" + idPreguntaPersonalidad + ", idEncuesta=" + idEncuesta + " ]";
+        return "RespuestaPersonalidadPK[ idPreguntaPersonalidad=" + idPreguntaPersonalidad + ", idEncuesta=" + idEncuesta + " ]";
     }
     
 }

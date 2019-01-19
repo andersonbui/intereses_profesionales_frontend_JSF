@@ -12,8 +12,6 @@
             <h:form id="PreguntaAmbienteEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaAmbienteController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditPreguntaAmbienteLabel_idPreguntaAmbiente}" for="idPreguntaAmbiente" />
-                        <p:inputText id="idPreguntaAmbiente" value="#{preguntaAmbienteController.selected.idPreguntaAmbiente}" title="#{bundle.EditPreguntaAmbienteTitle_idPreguntaAmbiente}" required="true" requiredMessage="#{bundle.EditPreguntaAmbienteRequiredMessage_idPreguntaAmbiente}"/>
                         <p:outputLabel value="#{bundle.EditPreguntaAmbienteLabel_enunciado}" for="enunciado" />
                         <p:inputText id="enunciado" value="#{preguntaAmbienteController.selected.enunciado}" title="#{bundle.EditPreguntaAmbienteTitle_enunciado}" />
                         <p:outputLabel value="#{bundle.EditPreguntaAmbienteLabel_urlImagen}" for="urlImagen" />
@@ -25,6 +23,7 @@
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{tipoAmbienteController.itemsAvailableSelectOne}"
                                            var="idTipoAmbienteItem"
+                                           itemLabel="#{idTipoAmbienteItem.tipo}"
                                            itemValue="#{idTipoAmbienteItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>

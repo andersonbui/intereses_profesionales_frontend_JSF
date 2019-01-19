@@ -57,9 +57,7 @@ public class Grado implements Serializable {
     @ManyToOne(optional = false)
     private Institucion idInstitucion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
-    private List<Nota> notaList;
-    @OneToMany(mappedBy = "idGrado")
-    private List<Encuesta> encuestaList;
+    private List<EstudianteGrado> estudianteGradoList;
 
     public Grado() {
     }
@@ -106,21 +104,12 @@ public class Grado implements Serializable {
     }
 
     @XmlTransient
-    public List<Nota> getNotaList() {
-        return notaList;
+    public List<EstudianteGrado> getEstudianteGradoList() {
+        return estudianteGradoList;
     }
 
-    public void setNotaList(List<Nota> notaList) {
-        this.notaList = notaList;
-    }
-
-    @XmlTransient
-    public List<Encuesta> getEncuestaList() {
-        return encuestaList;
-    }
-
-    public void setEncuestaList(List<Encuesta> encuestaList) {
-        this.encuestaList = encuestaList;
+    public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
+        this.estudianteGradoList = estudianteGradoList;
     }
 
     @Override
@@ -145,7 +134,7 @@ public class Grado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.Grado[ idGrado=" + idGrado + " ]";
+        return "Grado[ idGrado=" + idGrado + " ]";
     }
     
 }

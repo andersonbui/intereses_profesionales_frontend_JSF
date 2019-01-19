@@ -12,8 +12,6 @@
             <h:form id="PreguntaAmbienteCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaAmbienteController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_idPreguntaAmbiente}" for="idPreguntaAmbiente" />
-                        <p:inputText id="idPreguntaAmbiente" value="#{preguntaAmbienteController.selected.idPreguntaAmbiente}" title="#{bundle.CreatePreguntaAmbienteTitle_idPreguntaAmbiente}" required="true" requiredMessage="#{bundle.CreatePreguntaAmbienteRequiredMessage_idPreguntaAmbiente}"/>
                         <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_enunciado}" for="enunciado" />
                         <p:inputText id="enunciado" value="#{preguntaAmbienteController.selected.enunciado}" title="#{bundle.CreatePreguntaAmbienteTitle_enunciado}" />
                         <p:outputLabel value="#{bundle.CreatePreguntaAmbienteLabel_urlImagen}" for="urlImagen" />
@@ -24,6 +22,7 @@
                         <p:selectOneMenu id="idTipoAmbiente" value="#{preguntaAmbienteController.selected.idTipoAmbiente}" required="true" requiredMessage="#{bundle.EditPreguntaAmbienteRequiredMessage_idTipoAmbiente}">
                             <f:selectItems value="#{tipoAmbienteController.itemsAvailableSelectOne}"
                                            var="idTipoAmbienteItem"
+                                           itemLabel="#{idTipoAmbienteItem.tipo}"
                                            itemValue="#{idTipoAmbienteItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>

@@ -12,8 +12,6 @@
             <h:form id="PreguntaPersonalidadViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaPersonalidadController.selected != null}">
-                        <h:outputText value="#{bundle.ViewPreguntaPersonalidadLabel_idPregunta}"/>
-                        <h:outputText value="#{preguntaPersonalidadController.selected.idPregunta}" title="#{bundle.ViewPreguntaPersonalidadTitle_idPregunta}"/>
                         <h:outputText value="#{bundle.ViewPreguntaPersonalidadLabel_enunciado1}"/>
                         <h:outputText value="#{preguntaPersonalidadController.selected.enunciado1}" title="#{bundle.ViewPreguntaPersonalidadTitle_enunciado1}"/>
                         <h:outputText value="#{bundle.ViewPreguntaPersonalidadLabel_suma}"/>
@@ -23,7 +21,7 @@
                         <h:outputText value="#{bundle.ViewPreguntaPersonalidadLabel_enunciado2}"/>
                         <h:outputText value="#{preguntaPersonalidadController.selected.enunciado2}" title="#{bundle.ViewPreguntaPersonalidadTitle_enunciado2}"/>
                         <h:outputText value="#{bundle.ViewPreguntaPersonalidadLabel_idTipo}"/>
-                        <h:outputText value="#{preguntaPersonalidadController.selected.idTipo}" title="#{bundle.ViewPreguntaPersonalidadTitle_idTipo}"/>
+                        <h:outputText value="#{preguntaPersonalidadController.selected.idTipoPersonalidad.tipo}" title="#{bundle.ViewPreguntaPersonalidadTitle_idTipo}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="PreguntaPersonalidadViewDialog.hide()"/>
                 </h:panelGroup>

@@ -14,57 +14,11 @@
             <h:outputText value="#{bundle.ListPersonaTitle}"></h:outputText>
         </ui:define>
 
-        <ui:define name="content">
-            PANTALLA DE INICIO
-            <h:form id="form">
-                <p:panel header="Pregunta ambiente"  >  
-                    <h5>Puntos: <p:outputLabel value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/></h5>
-                    <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
-                    
-                    <div>
-                        <div class="contenedor-boton">
-                            <p:commandButton class="btn btn-8 btn-8g" action="#{respuestaAmbienteEvaluacionController.previousImagen}" update="@form"
-                                             value="Anterior" id="next" style="margin-bottom: 5px" disabled="false"/>
-                            <p:commandButton class="btn btn-8 btn-8g" action="#{respuestaAmbienteEvaluacionController.nextImagen}" update="@form"
-                                             value="Siguiente" id="prev" style="margin-bottom: 5px"/>
-                        </div>
-
-                        <div class="contenedor-img">
-                            <p:graphicImage 
-                                name="#{respuestaAmbienteEvaluacionController.obtenerImagenActual()}" 
-                                style="width:350px; height: 300px"/>
-                        </div>
-
-                        <div class="contenedor-pregunta">
-                            <p:commandButton class="btn btn-8 btn-8g" value="Realista" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(1)}" id="realista" update="growl"  /><br/>
-                            <p:commandButton class="btn btn-8 btn-8g" value="Investigativo" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(2)}" id="investigativo" update="growl"/><br/>
-                            <p:commandButton class="btn btn-8 btn-8g" value="Artístico" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(3)}" id="artistico" update="growl"/><br/>
-                            <p:commandButton class="btn btn-8 btn-8g" value="Social" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(4)}" id="social" update="growl"/><br/>
-                            <p:commandButton class="btn btn-8 btn-8g" value="Emprendedor" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(5)}" id="emprendedor" update="growl"/><br/> 
-                            <p:commandButton class="btn btn-8 btn-8g" value="Convencional" 
-                                             onclick="activate" 
-                                             action="#{respuestaAmbienteEvaluacionController.buttonAction(respuestaAmbienteEvaluacionController.respuesta)}" 
-                                             actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(6)}" id="convencional" update="growl"/>
-                        </div>
-                    </div>
-
-                </p:panel>
-            </h:form>
+        <ui:define name="content">            
+            <center><div><p:graphicImage name="img/interpro.png"/><br/>
+            <h3>Bienvenido al sitio, aquí podrá identificar sus intereses profesionales y <br/>
+            personalidad.<br/>
+            ¡Disfrute la encuesta aprendiendo, ganando y compartiendo!</h3></div></center>
         </ui:define>
     </ui:composition>
 

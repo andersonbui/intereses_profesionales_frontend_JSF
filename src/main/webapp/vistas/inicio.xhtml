@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/principal.xhtml">
 
@@ -13,36 +14,11 @@
             <h:outputText value="#{bundle.ListPersonaTitle}"></h:outputText>
         </ui:define>
 
-        <ui:define name="content">
-            PANTALLA DE INICIO
-            <h:form id="form">
-                <p:panel header="Pregunta ambiente"  >  
-                    <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
-                    <p:row>
-                        <p:column>
-                            <div>
-                                <p:commandButton action="#{preguntaAmbienteController.nextImagen}" update="@form"
-                                                 icon="pi pi-caret-left" id="prev" style="margin-bottom: 5px"/>
-                                <p:commandButton action="#{preguntaAmbienteController.previousImagen}" update="@form"
-                                                 icon="pi pi-caret-right" id="next" style="margin-bottom: 5px"/>
-
-                                <p:graphicImage 
-                                    name="#{preguntaAmbienteController.obtenerImagenActual()}" 
-                                    style="width:350px; height: 300px"/>
-                            </div>
-                        </p:column>
-                        <p:column style="padding: 100px 40px">
-                            <p:commandButton class="tamano-boton-pregunta" value="Realista" id="realista" update="growl"  /><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Investigativo" id="investigativo" update="growl"/><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Artístico" id="artistico" update="growl" /><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Social" id="social" update="growl"/><br/>
-                            <p:commandButton class="tamano-boton-pregunta" value="Emprendedor" id="emprendedor" update="growl"/><br/> 
-                            <p:commandButton class="tamano-boton-pregunta" value="Convencional" id="convencional" update="growl"/>
-                        </p:column>
-                    </p:row>
-                </p:panel>
-            </h:form>
-            <!--<ui:include src="./miperfil/completarPerfil.xhtml"/>-->
+        <ui:define name="content">            
+            <center><div><p:graphicImage name="img/interpro.png"/><br/>
+            <h3>Bienvenido al sitio, aquí podrá identificar sus intereses profesionales y <br/>
+            personalidad.<br/>
+            ¡Disfrute la encuesta aprendiendo, ganando y compartiendo!</h3></div></center>
         </ui:define>
     </ui:composition>
 

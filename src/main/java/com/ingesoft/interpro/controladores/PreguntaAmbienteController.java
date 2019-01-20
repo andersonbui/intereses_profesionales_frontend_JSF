@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.el.ELResolver;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -31,31 +32,15 @@ import javax.faces.convert.FacesConverter;
 public class PreguntaAmbienteController implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    int idActual;
 
 //    public boolean skip;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaAmbienteFacade ejbFacade;
     private List<PreguntaAmbiente> items = null;
     private PreguntaAmbiente selected;
-
     public PreguntaAmbienteController() {
-        idActual = 1;
     }
-
-    @PostConstruct
-    public void init() {
-        selected = getPreguntaAmbiente(idActual);
-    }
-
-    public int getIdActual() {
-        return idActual;
-    }
-
-    public void setIdActual(int idActual) {
-        this.idActual = idActual;
-    }
-
+    
     public PreguntaAmbiente getSelected() {
         return selected;
     }
@@ -80,25 +65,6 @@ public class PreguntaAmbienteController implements Serializable {
         return selected;
     }
 
-    public String obtenerImagenActual() {
-        String url = Variables.ubicacionImagenes + getSelected().getUrlImagen();
-        return url;
-    }
-
-    public void nextImagen() {
-        idActual++;
-        selected = getPreguntaAmbiente(idActual);
-        System.out.println("next");
-    }
-
-    public void previousImagen() {
-        if (idActual > 1) {
-            idActual--;
-        }
-        selected = getPreguntaAmbiente(idActual);
-        System.out.println("previo");
-    }
-
     public void preparePreguntas(Usuario usuario, Encuesta encuesta) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -106,7 +72,7 @@ public class PreguntaAmbienteController implements Serializable {
         getItems();
         respuestaController.prepararRespuestas(items, encuesta);
     }
-
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -215,3 +181,4 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
 }
+

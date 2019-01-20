@@ -12,17 +12,15 @@
             <h:form id="InstitucionCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{institucionController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateInstitucionLabel_idInstitucion}" for="idInstitucion" />
-                        <p:inputText id="idInstitucion" value="#{institucionController.selected.idInstitucion}" title="#{bundle.CreateInstitucionTitle_idInstitucion}" required="true" requiredMessage="#{bundle.CreateInstitucionRequiredMessage_idInstitucion}"/>
-                        <p:outputLabel value="#{bundle.CreateInstitucionLabel_nombre}" for="nombre" />
-                        <p:inputText id="nombre" value="#{institucionController.selected.nombre}" title="#{bundle.CreateInstitucionTitle_nombre}" />
-                        <p:outputLabel value="#{bundle.CreateInstitucionLabel_nit}" for="nit" />
-                        <p:inputText id="nit" value="#{institucionController.selected.nit}" title="#{bundle.CreateInstitucionTitle_nit}" />
-                        <p:outputLabel value="#{bundle.CreateInstitucionLabel_dane}" for="dane" />
-                        <p:inputText id="dane" value="#{institucionController.selected.dane}" title="#{bundle.CreateInstitucionTitle_dane}" />
+                        <p:outputLabel value="#{bundle.InstitucionLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{institucionController.selected.nombre}" title="#{bundle.InstitucionTitle_nombre}" />
+                        <p:outputLabel value="#{bundle.InstitucionLabel_nit}" for="nit" />
+                        <p:inputText id="nit" value="#{institucionController.selected.nit}" title="#{bundle.InstitucionTitle_nit}" />
+                        <p:outputLabel value="#{bundle.InstitucionLabel_dane}" for="dane" />
+                        <p:inputText id="dane" value="#{institucionController.selected.dane}" title="#{bundle.InstitucionTitle_dane}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{institucionController.create}" value="#{bundle.Save}" update="display,:InstitucionListForm:datalist,:growl" oncomplete="handleSubmit(args,'InstitucionCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="InstitucionCreateDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PF('InstitucionCreateDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

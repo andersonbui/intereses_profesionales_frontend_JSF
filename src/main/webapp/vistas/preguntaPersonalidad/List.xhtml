@@ -24,8 +24,8 @@
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  >
 
-                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
-                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowSelect"   update="createButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton editButton deleteButton"/>
 
                         <p:column>
                             <f:facet name="header">
@@ -38,12 +38,6 @@
                                 <h:outputText value="#{bundle.PreguntaPersonalidadTitle_enunciado1}"/>
                             </f:facet>
                             <h:outputText value="#{item.enunciado1}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.PreguntaPersonalidadTitle_suma}"/>
-                            </f:facet>
-                            <p:selectBooleanCheckbox value="#{item.suma}" disabled="true"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
@@ -65,7 +59,6 @@
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{preguntaPersonalidadController.prepareCreate}" update=":PreguntaPersonalidadCreateForm" oncomplete="PF('PreguntaPersonalidadCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":PreguntaPersonalidadViewForm" oncomplete="PF('PreguntaPersonalidadViewDialog').show()" disabled="#{empty preguntaPersonalidadController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":PreguntaPersonalidadEditForm" oncomplete="PF('PreguntaPersonalidadEditDialog').show()" disabled="#{empty preguntaPersonalidadController.selected}"/>
                             <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{preguntaPersonalidadController.destroy}" update=":growl,datalist" disabled="#{empty preguntaPersonalidadController.selected}"/>
                         </f:facet>
@@ -75,7 +68,6 @@
 
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
-            <ui:include src="View.xhtml"/>
         </ui:define>
     </ui:composition>
 

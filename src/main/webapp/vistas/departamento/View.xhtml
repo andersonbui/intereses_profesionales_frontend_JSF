@@ -12,12 +12,10 @@
             <h:form id="DepartamentoViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{departamentoController.selected != null}">
-                        <h:outputText value="#{bundle.ViewDepartamentoLabel_idDepartamento}"/>
-                        <h:outputText value="#{departamentoController.selected.idDepartamento}" title="#{bundle.ViewDepartamentoTitle_idDepartamento}"/>
-                        <h:outputText value="#{bundle.ViewDepartamentoLabel_nombre}"/>
-                        <h:outputText value="#{departamentoController.selected.nombre}" title="#{bundle.ViewDepartamentoTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewDepartamentoLabel_idPais}"/>
-                        <h:outputText value="#{departamentoController.selected.idPais}" title="#{bundle.ViewDepartamentoTitle_idPais}"/>
+                        <h:outputText value="#{bundle.Label_nombre}"/>
+                        <h:outputText value="#{departamentoController.selected.nombre}" title="#{bundle.Title_nombre}"/>
+                        <h:outputText value="#{bundle.Label_Pais}"/>
+                        <h:outputText value="#{departamentoController.selected.idPais.nombre}" title="#{bundle.Title_Pais}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="DepartamentoViewDialog.hide()"/>
                 </h:panelGroup>

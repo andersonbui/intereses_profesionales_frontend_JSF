@@ -12,19 +12,18 @@
             <h:form id="MateriaCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{materiaController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateMateriaLabel_idMateria}" for="idMateria" />
-                        <p:inputText id="idMateria" value="#{materiaController.selected.idMateria}" title="#{bundle.CreateMateriaTitle_idMateria}" required="true" requiredMessage="#{bundle.CreateMateriaRequiredMessage_idMateria}"/>
                         <p:outputLabel value="#{bundle.CreateMateriaLabel_nombre}" for="nombre" />
                         <p:inputText id="nombre" value="#{materiaController.selected.nombre}" title="#{bundle.CreateMateriaTitle_nombre}" />
-                        <p:outputLabel value="#{bundle.CreateMateriaLabel_areaidArea}" for="areaidArea" />
-                        <p:selectOneMenu id="areaidArea" value="#{materiaController.selected.areaidArea}" required="true" requiredMessage="#{bundle.EditMateriaRequiredMessage_areaidArea}">
+                        <p:outputLabel value="#{bundle.CreateMateriaLabel_idArea}" for="idArea" />
+                        <p:selectOneMenu id="idArea" value="#{materiaController.selected.idArea}" required="true" requiredMessage="#{bundle.EditMateriaRequiredMessage_idArea}">
                             <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
-                                           var="areaidAreaItem"
-                                           itemValue="#{areaidAreaItem}"/>
+                                           var="idAreaItem"
+                                           itemLabel="#{idAreaItem.nombre}"
+                                           itemValue="#{idAreaItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{materiaController.create}" value="#{bundle.Save}" update="display,:MateriaListForm:datalist,:growl" oncomplete="handleSubmit(args,'MateriaCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="MateriaCreateDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PF('MateriaCreateDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

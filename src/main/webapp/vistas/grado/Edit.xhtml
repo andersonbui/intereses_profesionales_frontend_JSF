@@ -12,8 +12,6 @@
             <h:form id="GradoEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{gradoController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditGradoLabel_idGrado}" for="idGrado" />
-                        <p:inputText id="idGrado" value="#{gradoController.selected.idGrado}" title="#{bundle.EditGradoTitle_idGrado}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_idGrado}"/>
                         <p:outputLabel value="#{bundle.EditGradoLabel_curso}" for="curso" />
                         <p:inputText id="curso" value="#{gradoController.selected.curso}" title="#{bundle.EditGradoTitle_curso}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_curso}"/>
                         <p:outputLabel value="#{bundle.EditGradoLabel_grado}" for="grado" />
@@ -23,11 +21,12 @@
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="idInstitucionItem"
+                                           itemLabel="#{idInstitucionItem.nombre}"
                                            itemValue="#{idInstitucionItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{gradoController.update}" value="#{bundle.Save}" update="display,:GradoListForm:datalist,:growl" oncomplete="handleSubmit(args, 'GradoEditDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="GradoEditDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PF('GradoEditDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

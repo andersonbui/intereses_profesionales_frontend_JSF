@@ -7,20 +7,17 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-
-        <p:dialog id="PreguntaPersonalidadCreateDlg" widgetVar="PreguntaPersonalidadCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePreguntaPersonalidadTitle}">
+        <p:dialog id="PreguntaPersonalidadCreateDlg" widgetVar="PreguntaPersonalidadCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.PreguntaPersonalidadTitle}">
             <h:form id="PreguntaPersonalidadCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{preguntaPersonalidadController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_enunciado1}" for="enunciado1" />
-                        <p:inputText id="enunciado1" value="#{preguntaPersonalidadController.selected.enunciado1}" title="#{bundle.CreatePreguntaPersonalidadTitle_enunciado1}" />
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_suma}" for="suma" />
-                        <p:selectBooleanCheckbox id="suma" value="#{preguntaPersonalidadController.selected.suma}" />
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_orden}" for="orden" />
-                        <p:inputText id="orden" value="#{preguntaPersonalidadController.selected.orden}" title="#{bundle.CreatePreguntaPersonalidadTitle_orden}" />
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_enunciado2}" for="enunciado2" />
-                        <p:inputText id="enunciado2" value="#{preguntaPersonalidadController.selected.enunciado2}" title="#{bundle.CreatePreguntaPersonalidadTitle_enunciado2}" />
-                        <p:outputLabel value="#{bundle.CreatePreguntaPersonalidadLabel_idTipo}" for="idTipo" />
+                        <p:outputLabel value="#{bundle.PreguntaPersonalidadLabel_enunciado1}" for="enunciado1" />
+                        <p:inputText id="enunciado1" value="#{preguntaPersonalidadController.selected.enunciado1}" title="#{bundle.PreguntaPersonalidadTitle_enunciado1}" />
+                        <p:outputLabel value="#{bundle.PreguntaPersonalidadLabel_orden}" for="orden" />
+                        <p:inputText id="orden" value="#{preguntaPersonalidadController.selected.orden}" title="#{bundle.PreguntaPersonalidadTitle_orden}" />
+                        <p:outputLabel value="#{bundle.PreguntaPersonalidadLabel_enunciado2}" for="enunciado2" />
+                        <p:inputText id="enunciado2" value="#{preguntaPersonalidadController.selected.enunciado2}" title="#{bundle.PreguntaPersonalidadTitle_enunciado2}" />
+                        <p:outputLabel value="#{bundle.PreguntaPersonalidadTitle_tipo}" for="idTipo" />
                         <p:selectOneMenu id="idTipo" value="#{preguntaPersonalidadController.selected.idTipoPersonalidad}" required="true" requiredMessage="#{bundle.EditPreguntaPersonalidadRequiredMessage_idTipo}">
                             <f:selectItems value="#{tipoPersonalidadController.itemsAvailableSelectOne}"
                                            var="idTipoItem"

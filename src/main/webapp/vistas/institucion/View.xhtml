@@ -12,14 +12,14 @@
             <h:form id="InstitucionViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{institucionController.selected != null}">
-                        <h:outputText value="#{bundle.ViewInstitucionLabel_idInstitucion}"/>
-                        <h:outputText value="#{institucionController.selected.idInstitucion}" title="#{bundle.ViewInstitucionTitle_idInstitucion}"/>
-                        <h:outputText value="#{bundle.ViewInstitucionLabel_nombre}"/>
-                        <h:outputText value="#{institucionController.selected.nombre}" title="#{bundle.ViewInstitucionTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewInstitucionLabel_nit}"/>
-                        <h:outputText value="#{institucionController.selected.nit}" title="#{bundle.ViewInstitucionTitle_nit}"/>
-                        <h:outputText value="#{bundle.ViewInstitucionLabel_dane}"/>
-                        <h:outputText value="#{institucionController.selected.dane}" title="#{bundle.ViewInstitucionTitle_dane}"/>
+                        <h:outputText value="#{bundle.InstitucionLabel_idInstitucion}"/>
+                        <h:outputText value="#{institucionController.selected.idInstitucion}" title="#{bundle.InstitucionTitle_idInstitucion}"/>
+                        <h:outputText value="#{bundle.InstitucionLabel_nombre}"/>
+                        <h:outputText value="#{institucionController.selected.nombre}" title="#{bundle.InstitucionTitle_nombre}"/>
+                        <h:outputText value="#{bundle.InstitucionLabel_nit}"/>
+                        <h:outputText value="#{institucionController.selected.nit}" title="#{bundle.InstitucionTitle_nit}"/>
+                        <h:outputText value="#{bundle.InstitucionLabel_dane}"/>
+                        <h:outputText value="#{institucionController.selected.dane}" title="#{bundle.InstitucionTitle_dane}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="InstitucionViewDialog.hide()"/>
                 </h:panelGroup>

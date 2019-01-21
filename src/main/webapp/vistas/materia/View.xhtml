@@ -12,12 +12,10 @@
             <h:form id="MateriaViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{materiaController.selected != null}">
-                        <h:outputText value="#{bundle.ViewMateriaLabel_idMateria}"/>
-                        <h:outputText value="#{materiaController.selected.idMateria}" title="#{bundle.ViewMateriaTitle_idMateria}"/>
                         <h:outputText value="#{bundle.ViewMateriaLabel_nombre}"/>
                         <h:outputText value="#{materiaController.selected.nombre}" title="#{bundle.ViewMateriaTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewMateriaLabel_areaidArea}"/>
-                        <h:outputText value="#{materiaController.selected.areaidArea}" title="#{bundle.ViewMateriaTitle_areaidArea}"/>
+                        <h:outputText value="#{bundle.ViewMateriaLabel_idArea}"/>
+                        <h:outputText value="#{materiaController.selected.idArea}" title="#{bundle.ViewMateriaTitle_idArea}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="MateriaViewDialog.hide()"/>
                 </h:panelGroup>

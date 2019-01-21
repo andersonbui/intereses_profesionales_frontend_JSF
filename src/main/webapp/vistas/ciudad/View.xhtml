@@ -12,12 +12,10 @@
             <h:form id="CiudadViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{ciudadController.selected != null}">
-                        <h:outputText value="#{bundle.ViewCiudadLabel_idCiudad}"/>
-                        <h:outputText value="#{ciudadController.selected.idCiudad}" title="#{bundle.ViewCiudadTitle_idCiudad}"/>
-                        <h:outputText value="#{bundle.ViewCiudadLabel_nombre}"/>
-                        <h:outputText value="#{ciudadController.selected.nombre}" title="#{bundle.ViewCiudadTitle_nombre}"/>
-                        <h:outputText value="#{bundle.ViewCiudadLabel_idDepartamento}"/>
-                        <h:outputText value="#{ciudadController.selected.idDepartamento}" title="#{bundle.ViewCiudadTitle_idDepartamento}"/>
+                        <h:outputText value="#{bundle.Label_ciudad}"/>
+                        <h:outputText value="#{ciudadController.selected.nombre}" title="#{bundle.Title_ciudad}"/>
+                        <h:outputText value="#{bundle.Label_Departamento}"/>
+                        <h:outputText value="#{ciudadController.selected.idDepartamento.nombre}" title="#{bundle.Title_Departamento}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="CiudadViewDialog.hide()"/>
                 </h:panelGroup>

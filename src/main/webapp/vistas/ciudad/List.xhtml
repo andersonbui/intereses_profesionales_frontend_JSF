@@ -29,21 +29,21 @@
 
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListCiudadTitle_idCiudad}"/>
+                                <h:outputText value="#{bundle.Title_idCiudad}"/>
                             </f:facet>
                             <h:outputText value="#{item.idCiudad}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListCiudadTitle_nombre}"/>
+                                <h:outputText value="#{bundle.Title_ciudad}"/>
                             </f:facet>
                             <h:outputText value="#{item.nombre}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListCiudadTitle_idDepartamento}"/>
+                                <h:outputText value="#{bundle.Title_Departamento}"/>
                             </f:facet>
-                            <h:outputText value="#{item.idDepartamento}"/>
+                            <h:outputText value="#{item.idDepartamento.nombre}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{ciudadController.prepareCreate}" update=":CiudadCreateForm" oncomplete="PF('CiudadCreateDialog').show()"/>

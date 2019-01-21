@@ -211,7 +211,7 @@ public class RegistroController extends Controller implements Serializable {
                 // TODO : falta enviar mensaje por usuario repetido
                 UsuarioController usuarioController = getUsuarioController();
                 Usuario unusuario = unaPersona.getIdUsuario();
-                unusuario.setTokenAcesso(generarToken(""+unusuario.getIdUsuario()));
+                unusuario.setTokenAcesso(generarToken("" + unusuario.getIdUsuario()));
                 usuarioController.setSelected(unusuario);
                 usuarioController.update();
                 // Crear grupo usuario
@@ -226,7 +226,7 @@ public class RegistroController extends Controller implements Serializable {
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
 
                 // enviar email 
-                Utilidades.enviarCorreoDeRegistro("andersonbuitron@unicauca.edu.co", unusuario.getTokenAcesso());
+                Utilidades.enviarCorreoDeRegistro(getUsuario(), unusuario.getTokenAcesso());
 //                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
                 //TODO
             } else {
@@ -240,12 +240,14 @@ public class RegistroController extends Controller implements Serializable {
 
     }
 
-    public String generarToken(String userid){
-        String rtoken = UUID.randomUUID().toString().toUpperCase() 
-            + "|" + userid + "|"
-            + Calendar.getInstance().getTimeInMillis();
+    public String generarToken(String userid) {
+        String rtoken = UUID.randomUUID().toString().toUpperCase()
+                + userid
+                + Calendar.getInstance().getTimeInMillis();
+        rtoken = rtoken.replace('-', '0');
         return rtoken;
     }
+
     public void enviarMensaje() {
 //        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
         FacesContext context = FacesContext.getCurrentInstance();

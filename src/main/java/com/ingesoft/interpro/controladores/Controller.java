@@ -6,7 +6,7 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.JsfUtil;
-import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -25,7 +25,7 @@ public abstract class Controller implements Serializable {
     protected abstract AbstractFacade getFacade();
 
     protected void setEmbeddableKeys() {
-        
+
     }
 
     protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
@@ -72,6 +72,20 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "estudianteController");
         return estudianteController;
     }
+    
+    public EstudianteGradoController getEstudianteGradoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        EstudianteGradoController estudianteGradoController = (EstudianteGradoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "estudianteGradoController");
+        return estudianteGradoController;
+    }
+    
+    public GradoController getGradoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        GradoController gradoController = (GradoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "gradoController");
+        return gradoController;
+    }
 
     public DepartamentoController getDepartamentoController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -79,12 +93,14 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "departamentoController");
         return controllerPersona;
     }
+
     public CiudadController getCiudadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         CiudadController ciudadController = (CiudadController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "ciudadController");
         return ciudadController;
     }
+
     public LoginController getLoginController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
@@ -105,15 +121,13 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "grupoUsuarioController");
         return grupoUsuarioController;
     }
-    
+
     public TipoUsuarioController getTipoUsuarioController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         TipoUsuarioController tipoUsuarioController = (TipoUsuarioController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "tipoUsuarioController");
         return tipoUsuarioController;
     }
-    
-    
     public CodigoInstitucionController getCodigoInstitucionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -127,5 +141,46 @@ public abstract class Controller implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         PersonaController personaController = (PersonaController) elResolver.getValue(facesContext.getELContext(), null, "personaController");
         return personaController;
+    }
+
+    public TipoAmbienteController getTipoAmbienteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        TipoAmbienteController tipoAmbienteController = (TipoAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "tipoAmbienteController");
+        return tipoAmbienteController;
+    }
+
+    public PreguntaAmbienteController getPreguntaAmbienteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PreguntaAmbienteController preguntaAmbienteController = (PreguntaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "preguntaAmbienteController");
+        return preguntaAmbienteController;
+    }
+
+    public RespuestaAmbienteEvaluacionController getRespuestaAmbienteEvaluacionController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaAmbienteEvaluacionController respuestaAmbienteEvaluacionController = (RespuestaAmbienteEvaluacionController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteEvaluacionController");
+        return respuestaAmbienteEvaluacionController;
+    }
+
+    public RespuestaAmbienteController getRespuestaAmbienteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaAmbienteController respuestaAmbienteController = (RespuestaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
+        return respuestaAmbienteController;
+    }
+
+    public EvaluacionController getEvaluacionController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EvaluacionController evaluacionController = (EvaluacionController) elResolver.getValue(facesContext.getELContext(), null, "evaluacionController");
+        return evaluacionController;
+    }
+    public AreaEncuestaController getAreaEncuestaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
+        return areaEncuestaController;
     }
 }

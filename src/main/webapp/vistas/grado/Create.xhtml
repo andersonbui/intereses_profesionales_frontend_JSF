@@ -9,11 +9,9 @@
     <ui:composition>
 
         <p:dialog id="GradoCreateDlg" widgetVar="GradoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateGradoTitle}">
-            <h:form id="GradoCreateForm">
-                <h:panelGroup id="display">
+            <h:panelGroup id="display">
+                <h:form id="GradoCreateForm">
                     <p:panelGrid columns="2" rendered="#{gradoController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateGradoLabel_idGrado}" for="idGrado" />
-                        <p:inputText id="idGrado" value="#{gradoController.selected.idGrado}" title="#{bundle.CreateGradoTitle_idGrado}" required="true" requiredMessage="#{bundle.CreateGradoRequiredMessage_idGrado}"/>
                         <p:outputLabel value="#{bundle.CreateGradoLabel_curso}" for="curso" />
                         <p:inputText id="curso" value="#{gradoController.selected.curso}" title="#{bundle.CreateGradoTitle_curso}" required="true" requiredMessage="#{bundle.CreateGradoRequiredMessage_curso}"/>
                         <p:outputLabel value="#{bundle.CreateGradoLabel_grado}" for="grado" />
@@ -22,13 +20,14 @@
                         <p:selectOneMenu id="idInstitucion" value="#{gradoController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_idInstitucion}">
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="idInstitucionItem"
+                                           itemLabel="#{idInstitucionItem.nombre}"
                                            itemValue="#{idInstitucionItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{gradoController.create}" value="#{bundle.Save}" update="display,:GradoListForm:datalist,:growl" oncomplete="handleSubmit(args,'GradoCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="GradoCreateDialog.hide()"/>
-                </h:panelGroup>
-            </h:form>
+                    <p:commandButton value="#{bundle.Cancel}" ajax="true" onclick="PF('GradoCreateDialog').hide()"/>
+                </h:form>
+            </h:panelGroup>
         </p:dialog>
 
     </ui:composition>

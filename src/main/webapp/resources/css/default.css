@@ -1,3 +1,18 @@
+.tamano-boton-pregunta{
+    background-color: #4CAF50 !important;
+}
+.contenedor-img{
+    display: inline;
+    float: left;   
+}
+.contenedor-pregunta {
+    display: inline-grid;
+    margin: 10px 20px
+}
+.contenedor-boton{
+    padding: 0px 65px;   
+}
+
 elemento {
 }
 #content {

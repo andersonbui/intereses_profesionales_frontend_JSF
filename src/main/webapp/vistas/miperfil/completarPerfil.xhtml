@@ -168,16 +168,31 @@
                                                 <f:selectItem itemLabel="5" itemValue="5"/>
                                                 <f:selectItem itemLabel="6" itemValue="6"/>
                                             </p:selectOneMenu>
+
+                                            <p:outputLabel style="font-weight:bold; color: black;" value="Grado" for="idSelectGrado" />
+                                            <p:selectOneMenu id="idSelectGrado" 
+                                                             immediate="true" filter="true" 
+                                                             value="#{estudianteGradoController.selected.grado}" required="true" 
+                                                             requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                                <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{loginController.personaActual.idInstitucion.gradoList}"
+                                                               var="grado"
+                                                               itemValue="#{grado}"
+                                                               itemLabel="#{grado.curso}"
+                                                               />                                                                                              
+                                                <f:ajax render="@form" />
+                                            </p:selectOneMenu>
                                         </p:panelGrid>
                                     </p:panel></center>
+                                <p:commandButton actionListener="#{loginController.guardarEnProceso()}" 
+                                                 value="#{bundle.Save}"   
+                                                 class="btn btn-primary"
+                                                 update="@form" 
+                                                 type="submit" 
+                                                 />
                             </p:tab>
 
                         </p:wizard>
-                        <p:commandButton actionListener="#{loginController.guardarEnProceso()}" 
-                                         value="#{bundle.Save}"   
-                                         class="btn btn-primary"
-                                         type="submit" 
-                                         />
 
 
                     </h:panelGroup>

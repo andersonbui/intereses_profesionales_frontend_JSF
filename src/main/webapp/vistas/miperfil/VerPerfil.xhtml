@@ -36,6 +36,11 @@
                         <h:outputText value="#{loginController.personaActual.sexo}" title="#{bundle.PersonaTitle_sexo}"/>
                         <h:outputText value="#{bundle.Label_celular}"/>
                         <h:outputText value="#{loginController.personaActual.celular}" title="#{bundle.Title_celular}"/>
+                        <h:outputText value="#{bundle.Label_Institucion}"/>
+                        <h:outputText value="#{loginController.personaActual.idInstitucion.nombre}" title="#{bundle.Title_Institucion}"/>
+                        <h:outputText value="#{bundle.Label_Grado}"
+                                      rendered="#{estudianteController.isEstudiante(loginController.personaActual)}"/>
+                        <h:outputText value="#{loginController.utimoGrado()}" rendered="#{estudianteController.isEstudiante(loginController.personaActual)}" title="#{bundle.Title_Grado}"/>
                         <h:outputText value="#{bundle.Label_ciudad}"/>
                         <h:outputText value="#{loginController.personaActual.idCiudad!=null?loginController.personaActual.idCiudad.nombre:''}" 
                                       title="#{bundle.Title_ciudad}"/>

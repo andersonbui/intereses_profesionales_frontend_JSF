@@ -12,15 +12,14 @@
             <h:form id="CiudadEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{ciudadController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditCiudadLabel_idCiudad}" for="idCiudad" />
-                        <p:inputText id="idCiudad" value="#{ciudadController.selected.idCiudad}" title="#{bundle.EditCiudadTitle_idCiudad}" required="true" requiredMessage="#{bundle.EditCiudadRequiredMessage_idCiudad}"/>
-                        <p:outputLabel value="#{bundle.EditCiudadLabel_nombre}" for="nombre" />
-                        <p:inputText id="nombre" value="#{ciudadController.selected.nombre}" title="#{bundle.EditCiudadTitle_nombre}" />
-                        <p:outputLabel value="#{bundle.EditCiudadLabel_idDepartamento}" for="idDepartamento" />
-                        <p:selectOneMenu id="idDepartamento" value="#{ciudadController.selected.idDepartamento}" required="true" requiredMessage="#{bundle.EditCiudadRequiredMessage_idDepartamento}">
+                        <p:outputLabel value="#{bundle.Label_ciudad}" for="nombre" />
+                        <p:inputText id="nombre" value="#{ciudadController.selected.nombre}" title="#{bundle.Title_ciudad}" />
+                        <p:outputLabel value="#{bundle.Label_Departamento}" for="idDepartamento" />
+                        <p:selectOneMenu id="idDepartamento" value="#{ciudadController.selected.idDepartamento}" required="true" requiredMessage="#{bundle.CiudadRequiredMessage_idDepartamento}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{departamentoController.itemsAvailableSelectOne}"
                                            var="idDepartamentoItem"
+                                           itemLabel="#{idDepartamentoItem.nombre}"
                                            itemValue="#{idDepartamentoItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>

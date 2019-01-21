@@ -114,8 +114,8 @@ public class RegistroController extends Controller implements Serializable {
             fechaExpiracion.setTime(fechaExp);
             boolean antes = fechaActual.before(fechaExpiracion);
             if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
-                String tipo = unusuario.getGrupoUsuarioList().get(0).getTipoUsuario().getTipo();
-                if (tipo.equals(UsuarioController.TIPO_ESTUDIANTE)) {
+                Persona persona = unusuario.getPersonaList().get(0);
+                if (getEstudianteController().isEstudiante(persona)) {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
                     estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));

@@ -105,7 +105,7 @@ public class LoginController extends Controller implements Serializable {
     public String utimoGrado() {
         Estudiante estudiante = getEstudianteController().obtenerEstudiante(personaActual);
         if (estudiante != null) {
-            return getEstudianteGradoController().obtenerUltimoGrado(estudiante.getIdEstudiante()).getGrado().getCurso();
+            return getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante()).getGrado().getCurso();
         }
         return "";
     }

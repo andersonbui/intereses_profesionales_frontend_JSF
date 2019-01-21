@@ -120,7 +120,7 @@ public class PersonaController extends Controller implements Serializable {
                 Estudiante estudiante = selected.getEstudianteList().get(0);
                 estudianteController.setSelected(estudiante);
                 EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
-                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoGrado(estudiante.getIdEstudiante());
+                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante());
                 if(estudianteGrado == null) {
                     estudianteGrado = getEstudianteGradoController().prepareCreate();
                     estudianteGrado.setEstudiante(estudiante);

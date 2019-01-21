@@ -122,13 +122,15 @@ public class EncuestaController extends Controller implements Serializable {
         Usuario usu = loginController.getActual();
         System.out.println("usuario: " + usu);
         try {
-//            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
+            if(estudianteGrado == null){
+                System.out.println("Este estudiante no tiene EstudianteGrado");
+            }
             selected = new Encuesta();
             initializeEmbeddableKey();
             selected.setFecha(new Date());
-//            Grado Grado = new Grado(); 
-//            EstudianteGrado estudianteGrado = new EstudianteGrado();
-//            selected.setIdEstudiante(etudianteGrado);
+            selected.setEstudianteGrado(estudianteGrado);
             selected.setIdEncuesta(getIdEncuesta());
 //            selected.setEstudianteGrado(estudianteGrado);
             System.out.println("antes encuesta creada: " + selected);

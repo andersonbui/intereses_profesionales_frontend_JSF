@@ -113,12 +113,14 @@ public class EstudianteGradoController implements Serializable {
         }
     }
 
-    public EstudianteGrado obtenerUltimoEstudianteGrado(int idEstudiante){
+    public EstudianteGrado obtenerUltimoEstudianteGrado(int idEstudiante) {
         List<EstudianteGrado> lista = getFacade().buscarPorIdEstudiante(idEstudiante);
-         selected = lista.get(0);
+        if (!lista.isEmpty()) {
+            selected = lista.get(0);
+        }
         return selected;
     }
-    
+
     public EstudianteGrado getEstudianteGrado(EstudianteGradoPK id) {
         return getFacade().find(id);
     }

@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -93,13 +94,20 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean isEstudiante() {
-        String nombreGrupo = grupo.getTipoUsuario().getTipo();
-        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE);
+        return getEstudianteController().isEstudiante(personaActual);
     }
 
     public boolean permisoEstudiante() {
         String nombreGrupo = grupo.getTipoUsuario().getTipo();
         return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
+    }
+
+    public String utimoGrado() {
+        Estudiante estudiante = getEstudianteController().obtenerEstudiante(personaActual);
+        if (estudiante != null) {
+            return getEstudianteGradoController().obtenerUltimoGrado(estudiante.getIdEstudiante()).getGrado().getCurso();
+        }
+        return "";
     }
 
     public boolean isDocente() {
@@ -229,7 +237,7 @@ public class LoginController extends Controller implements Serializable {
     public void guardarEnProceso() throws IOException {
 //        getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
         PersonaController personaController = getPersonaController();
-        personaController.update();
+        personaController.updateConUsuarioEstudiante();
 
         String ruta = Vistas.inicio();
 //        RequestContext.getCurrentInstance().addCallbackParam("estaLogeado", logueado);

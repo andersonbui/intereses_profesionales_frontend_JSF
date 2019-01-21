@@ -72,6 +72,20 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "estudianteController");
         return estudianteController;
     }
+    
+    public EstudianteGradoController getEstudianteGradoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        EstudianteGradoController estudianteGradoController = (EstudianteGradoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "estudianteGradoController");
+        return estudianteGradoController;
+    }
+    
+    public GradoController getGradoController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        GradoController gradoController = (GradoController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "gradoController");
+        return gradoController;
+    }
 
     public DepartamentoController getDepartamentoController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -108,12 +122,12 @@ public abstract class Controller implements Serializable {
         return grupoUsuarioController;
     }
 
-//    public TipoUsuarioController getTipoUsuarioController() {
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        TipoUsuarioController tipoUsuarioController = (TipoUsuarioController) facesContext.getApplication().getELResolver().
-//                getValue(facesContext.getELContext(), null, "tipoUsuarioController");
-//        return tipoUsuarioController;
-//    }
+    public TipoUsuarioController getTipoUsuarioController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        TipoUsuarioController tipoUsuarioController = (TipoUsuarioController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "tipoUsuarioController");
+        return tipoUsuarioController;
+    }
     public CodigoInstitucionController getCodigoInstitucionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -162,5 +176,11 @@ public abstract class Controller implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EvaluacionController evaluacionController = (EvaluacionController) elResolver.getValue(facesContext.getELContext(), null, "evaluacionController");
         return evaluacionController;
+    }
+    public AreaEncuestaController getAreaEncuestaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
+        return areaEncuestaController;
     }
 }

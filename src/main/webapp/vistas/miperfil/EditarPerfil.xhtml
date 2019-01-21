@@ -47,6 +47,22 @@
                                         </p:selectOneRadio>
                                         <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}"/>
                                         <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.UsuarioTitle_Usuario}"/>
+                                        <p:outputLabel style="font-weight:bold; color: black;"
+                                                       rendered="#{loginController.isEstudiante()}"
+                                                       value="Grado" for="idSelectGrado" />
+                                        <p:selectOneMenu id="idSelectGrado" 
+                                                         rendered="#{loginController.isEstudiante()}"
+                                                         immediate="true" filter="true" 
+                                                         value="#{estudianteGradoController.selected.grado}" required="true" 
+                                                         requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{loginController.personaActual.idInstitucion.gradoList}"
+                                                           var="grado"
+                                                           itemValue="#{grado}"
+                                                           itemLabel="#{grado.curso}"
+                                                           />
+                                            <f:ajax render="@form" />
+                                        </p:selectOneMenu>
                                     </p:panelGrid>
                                 </p:panel>
                             </center>

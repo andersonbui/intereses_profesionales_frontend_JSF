@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
@@ -67,16 +68,6 @@ public class PersonaController extends Controller implements Serializable {
         }
     }
 
-    public boolean isEstudiante() {
-        List<GrupoUsuario> listaGU = selected.getIdUsuario().getGrupoUsuarioList();
-        for (GrupoUsuario grupoUsuario : listaGU) {
-            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     protected void setEmbeddableKeys() {
     }
@@ -126,7 +117,15 @@ public class PersonaController extends Controller implements Serializable {
         if (selected != null) {
             EstudianteController estudianteController = getEstudianteController();
             if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
-                estudianteController.setSelected(selected.getEstudianteList().get(0));
+                Estudiante estudiante = selected.getEstudianteList().get(0);
+                estudianteController.setSelected(estudiante);
+                EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
+                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoGrado(estudiante.getIdEstudiante());
+                if(estudianteGrado == null) {
+                    estudianteGrado = getEstudianteGradoController().prepareCreate();
+                    estudianteGrado.setEstudiante(estudiante);
+                }
+                System.out.println("estudianteGrado: "+estudianteGrado.getGrado());
             } else {
                 estudianteController.setSelected(null);
             }
@@ -187,6 +186,7 @@ public class PersonaController extends Controller implements Serializable {
         if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
+            getEstudianteGradoController().create();
         }
 
     }
@@ -221,7 +221,6 @@ public class PersonaController extends Controller implements Serializable {
                     items = persona.getIdInstitucion().getPersonaList();
                     break;
                 }
-
             }
         }
         return items;

@@ -5,6 +5,8 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -114,21 +116,23 @@ public class EncuestaController extends Controller implements Serializable {
         // @TODO : Falta obtener el usuario
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        LoginController loginController = (LoginController) elOtroResolver.getValue(facesContext.getELContext(), null, "loginController");
+        LoginController loginController = getLoginController();
         AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
         areaEncuestaController.prepararParaEncuesta();
         Usuario usu = loginController.getActual();
         System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+//            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
             selected = new Encuesta();
             initializeEmbeddableKey();
             selected.setFecha(new Date());
+//            Grado Grado = new Grado(); 
+//            EstudianteGrado estudianteGrado = new EstudianteGrado();
 //            selected.setIdEstudiante(etudianteGrado);
             selected.setIdEncuesta(getIdEncuesta());
-
+//            selected.setEstudianteGrado(estudianteGrado);
             System.out.println("antes encuesta creada: " + selected);
-            create();
+//            create();
 //            selected = getEncuesta(selected.toString());
             System.out.println("despues encuesta creada: " + selected);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");

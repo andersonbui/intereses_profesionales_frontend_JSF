@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
@@ -46,7 +47,7 @@ public class EstudianteController extends Controller implements Serializable {
     public boolean isEditar() {
         return editar;
     }
-    
+
     public int getPasoActual() {
         return pasoActual;
     }
@@ -112,7 +113,7 @@ public class EstudianteController extends Controller implements Serializable {
     public Estudiante prepareUpdate() {
         PersonaController personaController = getPersonaController();
 //        personaController.prepareUpdate(selected.getIdPersona());
-        editar=true;
+        editar = true;
         return selected;
     }
 
@@ -150,6 +151,23 @@ public class EstudianteController extends Controller implements Serializable {
         } else {
             return event.getNewStep();
         }
+    }
+
+    public Estudiante obtenerEstudiante(Persona persona) {
+        if (persona.getEstudianteList() != null && !persona.getEstudianteList().isEmpty()) {
+            return persona.getEstudianteList().get(0);
+        }
+        return null;
+    }
+
+    public boolean isEstudiante(Persona persona) {
+        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+        for (GrupoUsuario grupoUsuario : listaGU) {
+            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Estudiante getEstudiante(java.lang.Integer id) {

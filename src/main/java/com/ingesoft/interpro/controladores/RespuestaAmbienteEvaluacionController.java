@@ -103,7 +103,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         reiniciarEvaluacion();
 //        getItemPreguntaEvaluacion();
 //        obtenerPreguntasAmbiente();
-        selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
     }
 
     private PreguntaAmbiente getPreguntaAmbiente(java.lang.Integer id) {
@@ -285,7 +284,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     public void nextImagen() {
         if (indiceActual < vecIdImages.length - 1) {
             indiceActual++;
-            selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
         }
         System.out.println("next");
         System.out.println(indiceActual);
@@ -294,7 +292,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     public void previousImagen() {
         if (indiceActual > 0) {
             indiceActual--;
-            selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
         }
         System.out.println("previo");
         System.out.println(indiceActual);
@@ -423,6 +420,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 //    }
 
     public String obtenerImagenActual() {
+        selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
         String url = Variables.ubicacionImagenes + this.selectedPregunta.getUrlImagen();
         return url;
     }

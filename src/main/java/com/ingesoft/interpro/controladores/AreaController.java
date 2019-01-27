@@ -3,11 +3,9 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Area;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.entidades.Materia;
 import com.ingesoft.interpro.facades.AreaFacade;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -20,8 +18,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.event.ValueChangeEvent;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "areaController")
 @SessionScoped

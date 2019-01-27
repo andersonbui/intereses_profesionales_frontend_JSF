@@ -8,7 +8,7 @@
 
     <ui:composition template="/principal.xhtml">
 
-
+        <h:outputStylesheet library="css" name="codigoEstudiante.css"/>
         <ui:define name="title">
             <h:outputText value="#{bundle.ListCodigoInstitucionTitle}"></h:outputText>
         </ui:define>
@@ -32,12 +32,21 @@
                             </f:facet>
                             <h:outputText value="#{item.idCodigoInstitucion}"/>
                         </p:column>
-                        <p:column>
+                        <p:column class="codigos" >
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCodigoInstitucionTitle_codigoActivacion}"/>
                             </f:facet>
-                            <h:outputText value="#{item.codigoActivacion}"/>
+                            <div class="codigo" style="width: 100%">
+                                <div style="background: #EFBB35"></div>
+                                <span title="clic para copiar">#{item.codigoActivacion}</span>
+                            </div>
                         </p:column>
+                        <!--<p:column>-->
+<!--                            <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="e22">  
+                                <p:ajax event="success" listener="{codigoInstitucionController.successListener}" />  
+                                <p:ajax event="error" listener="{codigoInstitucionController.errorListener}" />  
+                            </pe:clipboard>-->
+                        <!--</p:column>-->
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCodigoInstitucionTitle_fechaCaducidad}"/>
@@ -71,6 +80,41 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
+            <script>
+                // clipboard fuente:https://alligator.io/js/copying-to-clipboard/
+                const aioCodigos = document.querySelectorAll('.codigo span');
+
+                aioCodigos.forEach(codigo => {
+                  codigo.addEventListener('click', () => {
+                    const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(codigo);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+
+                    try {
+                      document.execCommand('copy');
+                      selection.removeAllRanges();
+
+                      const original = codigo.textContent;
+                      codigo.textContent = 'Copied!';
+                      codigo.classList.add('success');
+
+                      setTimeout(() => {
+                        codigo.textContent = original;
+                        codigo.classList.remove('success');
+                      }, 1200);
+                    } catch(e) {
+                      const errorMsg = document.querySelector('.error-msg');
+                      errorMsg.classList.add('show');
+
+                      setTimeout(() => {
+                        errorMsg.classList.remove('show');
+                      }, 1200);
+                    }
+                  });
+                });
+            </script>
         </ui:define>
     </ui:composition>
 

@@ -16,37 +16,67 @@
         <ui:define name="content">
             <h:form id="EstadisticaForm">
                  <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{estudianteGradoController.selected != null}">
+                    <p:panelGrid columns="2" >
                         
-                        <p:outputLabel value="#{bundle.EditEstudianteGradoLabel_estudianteGradoPK_date}" for="estudianteGradoPK_date" />
-                        <p:calendar id="estudianteGradoPK_date" pattern="MM/dd/yyyy" 
-                                    value="#{estadisticaController.fechaInicio}" title="#{bundle.EditEstudianteGradoTitle_estudianteGradoPK_date}" required="true" requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" showOn="button"/>
-                        <p:outputLabel value="#{bundle.EditEstudianteGradoLabel_estudianteGradoPK_date}" for="estudianteGradoPK_date" />
-                        <p:calendar id="estudianteGradoPK_date" pattern="MM/dd/yyyy" 
-                                    value="#{estadisticaController.fechafin}" title="#{bundle.EditEstudianteGradoTitle_estudianteGradoPK_date}" required="true" requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" showOn="button"/>
-                        
-                        
+                        <p:outputLabel value="#{bundle.Label_fechaInicio}" for="id_fecha_inicio" />
+                        <p:calendar id="id_fecha_inicio" pattern="MM/dd/yyyy" 
+                                    navigator="true" 
+                                    immediate="true"
+                                    value="#{estadisticaController.fechaInicio}" title="#{bundle.Title_fechaInicio}" 
+                                    required="true"
+                                    requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" 
+                                    >              
+                            <p:ajax event="dateSelect" listener="#{estadisticaController.onDateSelect}" update="id_fecha_fin" />
+                        </p:calendar>
+                        <p:outputLabel value="#{bundle.Label_fechaFin}" for="id_fecha_fin" />
+                        <p:calendar id="id_fecha_fin" widgetVar="idwid_fecha_fin" pattern="MM/dd/yyyy" 
+                                    navigator="true" 
+                                    mindate="#{estadisticaController.fechaInicio}"
+                                    value="#{estadisticaController.fechafin}" 
+                                    title="#{bundle.Title_fechaFin}" required="true" 
+                                    requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" 
+                                    />
                         
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
-                        <p:selectOneMenu id="id_select_institucion" value="#{insticucionController.selected}" required="true" requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+                        <p:selectOneMenu id="id_select_institucion" 
+                                         value="#{institucionController.selected}" 
+                                         required="true"
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+                            
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
-                                           itemValue="#{institucion}"/>
+                                           itemValue="#{institucion}"/>                                                                                    
+                            <f:ajax render="id_select_estudiante" />
                         </p:selectOneMenu>
                         
-                        <p:outputLabel value="#{bundle.Label_grado}" for="estudiante" />
-                        <p:selectOneMenu id="estudiante" value="#{gradoController.selected}" required="true" requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
+                        <p:outputLabel value="#{bundle.Label_grado}" for="id_select_estudiante" />
+                        <p:selectOneMenu id="id_select_estudiante" 
+                                         value="#{estadisticaController.grado}" 
+                                         required="true" 
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{gradoController.itemsAvailableSelectOne}"
+                            <f:selectItems value="#{institucionController.selected.gradoList}"
+                                           rendered="#{institucionController.selected != null}"
                                            var="grado"
                                            itemLabel="#{grado.curso}"
                                            itemValue="#{grado}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{estudianteGradoController.update}" value="#{bundle.Save}" update="display,:EstudianteGradoListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EstudianteGradoEditDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="EstudianteGradoEditDialog.hide()"/>
+                    <p:commandButton actionListener="#{estudianteGradoController.update}" 
+                                     value="cargar" 
+                                     update="display,:EstadisticaForm:grafica,:growl"/>
+                    <p:panel id="grafica" >
+                         <p:chart type="bar" 
+                                rendered="#{estadisticaController.graficoModelo != null}" 
+                                model="#{estadisticaController.graficoModelo}" 
+                                style="height:250px;  text-align: center; "
+                                />
+                    </p:panel>
+                    <!--<p:commandButton value="{bundle.Cancel}" onclick="EstudianteGradoEditDialog.hide()"/>-->
                 </h:panelGroup>
             </h:form>
         </ui:define>

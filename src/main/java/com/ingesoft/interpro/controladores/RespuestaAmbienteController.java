@@ -89,12 +89,8 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public BarChartModel getGraficoModelo() {
         graficoModelo = new BarChartModel();
-
         EncuestaAcutal = grupo.get(0).getEncuesta();
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
+        ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
 
         if (listaResultadosPorAmbiente == null) {
             listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());

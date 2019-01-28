@@ -98,7 +98,7 @@
                         </p:submenu>
                         <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
                             <p:menuitem value="Por Institucion"  icon="ui-icon-home" />
-                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Estudiante" outcome="/vistas/encuesta/Estadistica.xhtml" />
                             <p:menuitem value="Por Grado"  icon="ui-icon-home" />
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">

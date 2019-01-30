@@ -35,7 +35,9 @@
                                     value="#{estadisticaController.fechafin}" 
                                     title="#{bundle.Title_fechaFin}" required="true" 
                                     requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" 
-                                    />
+                                    >
+                            <p:ajax event="dateSelect" listener="#{estadisticaController.reiniciarEstadistica()}" />
+                        </p:calendar>
                         
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
@@ -48,8 +50,8 @@
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
-                                           itemValue="#{institucion}"/>                                                                                    
-                            <f:ajax render="id_select_estudiante" />
+                                           itemValue="#{institucion}"/>
+                            <f:ajax render="id_select_estudiante" listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="#{bundle.Label_grado}" for="id_select_estudiante" />
@@ -64,15 +66,15 @@
                                            var="grado"
                                            itemLabel="#{grado.curso}"
                                            itemValue="#{grado}"/>
+                            <f:ajax render="id_select_estudiante" listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{estudianteGradoController.update}" 
-                                     value="cargar" 
-                                     update="display,:EstadisticaForm:grafica,:growl"/>
+                    <p:commandButton value="cargar" 
+                                     update="grafica"/>
                     <p:panel id="grafica" >
                          <p:chart type="bar" 
-                                rendered="#{estadisticaController.graficoModelo != null}" 
-                                model="#{estadisticaController.graficoModelo}" 
+                                  rendered="#{estadisticaController.estadisticaPorGrado() != null}" 
+                                  model="#{estadisticaController.estadisticaPorGrado()}" 
                                 style="height:250px;  text-align: center; "
                                 />
                     </p:panel>

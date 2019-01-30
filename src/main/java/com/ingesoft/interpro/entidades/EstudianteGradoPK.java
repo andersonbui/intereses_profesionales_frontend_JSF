@@ -77,7 +77,7 @@ public class EstudianteGradoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.EstudianteGradoPK[ idGrado=" + idGrado + ", idEstudiante=" + idEstudiante + " ]";
+        return "EstudianteGradoPK[ idGrado=" + idGrado + ", idEstudiante=" + idEstudiante + " ]";
     }
     
 }

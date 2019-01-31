@@ -29,15 +29,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "AreaEncuesta.findByIdArea", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idArea = :idArea")
     , @NamedQuery(name = "AreaEncuesta.findByIdEncuesta", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idEncuesta = :idEncuesta")
     , @NamedQuery(name = "AreaEncuesta.findByPosicion", query = "SELECT a FROM AreaEncuesta a WHERE a.posicion = :posicion")
-    , @NamedQuery(name = "AreaEncuesta.findByGusto", query = "SELECT a FROM AreaEncuesta a WHERE a.gusto = :gusto")})
+    , @NamedQuery(name = "AreaEncuesta.findByGusto", query = "SELECT a FROM AreaEncuesta a WHERE a.gusto = :gusto")
+    , @NamedQuery(name = "AreaEncuesta.findByIdTipoEleccionMateria", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idTipoEleccionMateria = :idTipoEleccionMateria")})
 public class AreaEncuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AreaEncuestaPK areaEncuestaPK;
-    @Size(max = 45)
     @Column(name = "posicion")
-    private String posicion;
+    private Short posicion;
     @Size(max = 45)
     @Column(name = "gusto")
     private String gusto;
@@ -47,9 +47,9 @@ public class AreaEncuesta implements Serializable {
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta encuesta;
-    @JoinColumn(name = "idTipoEleccionMateria", referencedColumnName = "idTipoEleccionMateria")
+    @JoinColumn(name = "idTipoEleccionMateria", referencedColumnName = "idTipoEleccionMateria", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private TipoEleccionMateria idTipoEleccionMateria;
+    private TipoEleccionMateria tipoEleccionMateria;
 
     public AreaEncuesta() {
     }
@@ -58,8 +58,8 @@ public class AreaEncuesta implements Serializable {
         this.areaEncuestaPK = areaEncuestaPK;
     }
 
-    public AreaEncuesta(int idArea, int idEncuesta) {
-        this.areaEncuestaPK = new AreaEncuestaPK(idArea, idEncuesta);
+    public AreaEncuesta(int idArea, int idEncuesta, int idTipoEleccionMateria) {
+        this.areaEncuestaPK = new AreaEncuestaPK(idArea, idEncuesta, idTipoEleccionMateria);
     }
 
     public AreaEncuestaPK getAreaEncuestaPK() {
@@ -70,11 +70,11 @@ public class AreaEncuesta implements Serializable {
         this.areaEncuestaPK = areaEncuestaPK;
     }
 
-    public String getPosicion() {
+    public Short getPosicion() {
         return posicion;
     }
 
-    public void setPosicion(String posicion) {
+    public void setPosicion(Short posicion) {
         this.posicion = posicion;
     }
 
@@ -102,12 +102,12 @@ public class AreaEncuesta implements Serializable {
         this.encuesta = encuesta;
     }
 
-    public TipoEleccionMateria getIdTipoEleccionMateria() {
-        return idTipoEleccionMateria;
+    public TipoEleccionMateria getTipoEleccionMateria() {
+        return tipoEleccionMateria;
     }
 
-    public void setIdTipoEleccionMateria(TipoEleccionMateria idTipoEleccionMateria) {
-        this.idTipoEleccionMateria = idTipoEleccionMateria;
+    public void setTipoEleccionMateria(TipoEleccionMateria tipoEleccionMateria) {
+        this.tipoEleccionMateria = tipoEleccionMateria;
     }
 
     @Override

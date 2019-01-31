@@ -26,13 +26,24 @@ public class AreaEncuestaPK implements Serializable {
     @NotNull
     @Column(name = "idEncuesta")
     private int idEncuesta;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idTipoEleccionMateria")
+    private int idTipoEleccionMateria;
 
     public AreaEncuestaPK() {
     }
 
-    public AreaEncuestaPK(int idArea, int idEncuesta) {
+    /**
+     *
+     * @param idArea
+     * @param idEncuesta
+     * @param idTipoEleccionMateria
+     */
+    public AreaEncuestaPK(int idArea, int idEncuesta, int idTipoEleccionMateria) {
         this.idArea = idArea;
         this.idEncuesta = idEncuesta;
+        this.idTipoEleccionMateria = idTipoEleccionMateria;
     }
 
     public int getIdArea() {
@@ -51,11 +62,20 @@ public class AreaEncuestaPK implements Serializable {
         this.idEncuesta = idEncuesta;
     }
 
+    public int getIdTipoEleccionMateria() {
+        return idTipoEleccionMateria;
+    }
+
+    public void setIdTipoEleccionMateria(int idTipoEleccionMateria) {
+        this.idTipoEleccionMateria = idTipoEleccionMateria;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idArea;
         hash += (int) idEncuesta;
+        hash += (int) idTipoEleccionMateria;
         return hash;
     }
 
@@ -72,12 +92,15 @@ public class AreaEncuestaPK implements Serializable {
         if (this.idEncuesta != other.idEncuesta) {
             return false;
         }
+        if (this.idTipoEleccionMateria != other.idTipoEleccionMateria) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "AreaEncuestaPK[ idArea=" + idArea + ", idEncuesta=" + idEncuesta + " ]";
+        return "AreaEncuestaPK[ idArea=" + idArea + ", idEncuesta=" + idEncuesta + ", idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
     }
-    
+
 }

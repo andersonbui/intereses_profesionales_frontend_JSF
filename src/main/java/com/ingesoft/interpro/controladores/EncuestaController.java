@@ -128,18 +128,18 @@ public class EncuestaController extends Controller implements Serializable {
             selected.setIdEncuesta(getIdEncuesta());
 //            selected.setEstudianteGrado(estudianteGrado);
             System.out.println("antes encuesta creada: " + selected);
-//            create();
 //            selected = getEncuesta(selected.toString());
             System.out.println("despues encuesta creada: " + selected);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
-            AreaController areaController = getAreaController();
-            areaController.inicializar();
-            
             // @desarrollo
             if (Utilidades.esDesarrollo()) {
                 selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
             }
+            create();
+            
+            AreaController areaController = getAreaController();
+            areaController.inicializar();
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();

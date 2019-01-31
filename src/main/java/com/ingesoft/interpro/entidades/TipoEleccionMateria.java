@@ -43,7 +43,7 @@ public class TipoEleccionMateria implements Serializable {
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoEleccionMateria")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoEleccionMateria")
     private List<AreaEncuesta> areaEncuestaList;
 
     public TipoEleccionMateria() {

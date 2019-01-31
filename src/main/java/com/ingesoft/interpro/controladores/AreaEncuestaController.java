@@ -45,6 +45,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
     protected void setEmbeddableKeys() {
         selected.getAreaEncuestaPK().setIdArea(selected.getArea().getIdArea());
         selected.getAreaEncuestaPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
+        selected.getAreaEncuestaPK().setIdTipoEleccionMateria(selected.getTipoEleccionMateria().getIdTipoEleccionMateria());
     }
 
     protected void initializeEmbeddableKey() {
@@ -89,8 +90,8 @@ public class AreaEncuestaController extends Controller implements Serializable {
             prepareCreate();
             selected.setArea(area);
             selected.setEncuesta(encuesta);
-            selected.setPosicion("" + i);
-            selected.setIdTipoEleccionMateria(tipoEleccionMateria);
+            selected.setPosicion((short)i);
+            selected.setTipoEleccionMateria(tipoEleccionMateria);
             create();
         }
     }
@@ -165,6 +166,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
             key = new com.ingesoft.interpro.entidades.AreaEncuestaPK();
             key.setIdArea(Integer.parseInt(values[0]));
             key.setIdEncuesta(Integer.parseInt(values[1]));
+            key.setIdTipoEleccionMateria(Integer.parseInt(values[2]));
             return key;
         }
 
@@ -173,6 +175,8 @@ public class AreaEncuestaController extends Controller implements Serializable {
             sb.append(value.getIdArea());
             sb.append(SEPARATOR);
             sb.append(value.getIdEncuesta());
+            sb.append(SEPARATOR);
+            sb.append(value.getIdTipoEleccionMateria());
             return sb.toString();
         }
 

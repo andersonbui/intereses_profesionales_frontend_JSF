@@ -73,8 +73,8 @@
                                      update="grafica"/>
                     <p:panel id="grafica" >
                          <p:chart type="bar" 
-                                  rendered="#{estadisticaController.estadisticaPorGrado() != null}" 
-                                  model="#{estadisticaController.estadisticaPorGrado()}" 
+                                  rendered="#{estadisticaController.getGraficoModelo() != null}" 
+                                  model="#{estadisticaController.getGraficoModelo()}" 
                                 style="height:250px;  text-align: center; "
                                 />
                     </p:panel>

@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Area;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.facades.AreaFacade;
 
 import java.io.Serializable;
@@ -30,15 +31,30 @@ public class AreaController implements Serializable {
     private Area[] itemsMas = null;
     private Area[] itemsNota = null;
     private Area selected;
-    private Area selected2;
-    private Area selected3;
 
     public AreaController() {
-        itemsMenos = new Area[3];  
-        itemsMas = new Area[3];  
-        itemsNota = new Area[3];  
     }
 
+    public void inicializar(){
+        itemsMenos = new Area[3];
+        itemsMas = new Area[3];
+        itemsNota = new Area[3];
+        // @desarrollo
+        if (Utilidades.esDesarrollo()) {
+            List<Area> areas =  getItems();
+            System.out.println("inicializando: "+areas);
+            itemsMenos[0] = areas.get(0);
+            itemsMenos[1] = areas.get(1);
+            itemsMenos[2] = areas.get(2);
+            itemsMas[0] = areas.get(3);
+            itemsMas[1] = areas.get(4);
+            itemsMas[2] = areas.get(5);
+            itemsNota[0] = areas.get(2);
+            itemsNota[1] = areas.get(5);
+            itemsNota[2] = areas.get(3);
+        }
+    }
+    
     public Area[] getItemsMenos() {
         return itemsMenos;
     }
@@ -61,22 +77,6 @@ public class AreaController implements Serializable {
 
     public void setItemsNota(Area[] itemsNota) {
         this.itemsNota = itemsNota;
-    }
-
-    public Area getSelected2() {
-        return selected2;
-    }
-
-    public void setSelected2(Area selected2) {
-        this.selected2 = selected2;
-    }
-
-    public Area getSelected3() {
-        return selected3;
-    }
-
-    public void setSelected3(Area selected3) {
-        this.selected3 = selected3;
     }
 
     public Area getSelected() {

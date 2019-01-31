@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
@@ -34,6 +35,10 @@ public class EstadisticaController implements Serializable {
 
     }
 
+    public void reiniciar() {
+        
+    }
+    
     public void setGraficoModelo(BarChartModel graficoModelo) {
         this.graficoModelo = graficoModelo;
     }

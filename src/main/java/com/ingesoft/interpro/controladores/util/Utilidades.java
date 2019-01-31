@@ -109,4 +109,11 @@ public class Utilidades {
         }
         return vectorA;
     }
+    
+    public static boolean esDesarrollo(){
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        String myConstantValue = ctx.getExternalContext().getInitParameter("javax.faces.PROJECT_STAGE");
+        System.out.println("myConstantValue: "+myConstantValue);
+        return "Development".equals(myConstantValue);
+    }
 }

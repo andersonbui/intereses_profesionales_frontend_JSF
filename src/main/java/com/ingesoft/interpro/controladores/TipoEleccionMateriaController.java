@@ -27,6 +27,9 @@ public class TipoEleccionMateriaController implements Serializable {
     private com.ingesoft.interpro.facades.TipoEleccionMateriaFacade ejbFacade;
     private List<TipoEleccionMateria> items = null;
     private TipoEleccionMateria selected;
+    public static int TIPO_ELECCION_MATERIA_MAYOR = 1;
+    public static int TIPO_ELECCION_MATERIA_MENOR = 2;
+    public static int TIPO_ELECCION_MATERIA_NOTA = 3;
 
     public TipoEleccionMateriaController() {
     }
@@ -111,6 +114,18 @@ public class TipoEleccionMateriaController implements Serializable {
 
     public TipoEleccionMateria getTipoEleccionMateria(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public TipoEleccionMateria getTipoEleccionMateriaMayor() {
+        return getFacade().find(TIPO_ELECCION_MATERIA_MAYOR);
+    }
+    
+    public TipoEleccionMateria getTipoEleccionMateriaMenor() {
+        return getFacade().find(TIPO_ELECCION_MATERIA_MENOR);
+    }
+
+    public TipoEleccionMateria getTipoEleccionMateriaPorNota() {
+        return getFacade().find(TIPO_ELECCION_MATERIA_NOTA);
     }
 
     public List<TipoEleccionMateria> getItemsAvailableSelectMany() {

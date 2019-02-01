@@ -41,7 +41,7 @@
                         
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
-                                         value="#{institucionController.selected}" 
+                                         value="#{estadisticaController.institucion}" 
                                          required="true"
                                          immediate="true" 
                                          requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
@@ -61,16 +61,18 @@
                                          immediate="true" 
                                          requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{institucionController.selected.gradoList}"
-                                           rendered="#{institucionController.selected != null}"
+                            <f:selectItems value="#{estadisticaController.institucion.gradoList}"
+                                           rendered="#{estadisticaController.institucion!= null}"
                                            var="grado"
                                            itemLabel="#{grado.curso}"
                                            itemValue="#{grado}"/>
-                            <f:ajax render="id_select_estudiante" listener="#{estadisticaController.reiniciarEstadistica()}" />
+                            <f:ajax  listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton value="cargar" 
-                                     update="grafica"/>
+                    <p:commandButton  
+                                     value="cargar" 
+                                     update="grafica,:EstadisticaForm:grafica,:growl"/>
+<!--                    <p:commandButton value="cargar" update="grafica"/>-->
                     <p:panel id="grafica" >
                          <p:chart type="bar" 
                                   rendered="#{estadisticaController.getGraficoModelo() != null}" 

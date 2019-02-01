@@ -8,6 +8,7 @@ import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class EstadisticaController implements Serializable {
     Date fechaInicio;
     Date fechafin;
     private BarChartModel graficoModelo;
+    String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
 
     public EstadisticaController() {
 
@@ -100,10 +102,10 @@ public class EstadisticaController implements Serializable {
             System.out.println("grado: " + grado);
             int opcion = detectarTipoEstadistica();
             System.out.println("opcion: " + opcion);
-
+            List<Datos> listaBarras = null;
             switch (opcion) {
                 case 11:
-                    graficoModelo = estadisticaPorGrado();
+                    listaBarras = estadisticaPorGrado();
                     break;
                 default:
                     graficoModelo = null;
@@ -112,9 +114,19 @@ public class EstadisticaController implements Serializable {
                     msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
                     context.addMessage(null, msg);
             }
-            System.out.println("graficoModelo: "+graficoModelo);
+            if (listaBarras != null && !listaBarras.isEmpty()) {
+                graficoModelo = new BarChartModel();
+                for (Datos datos : listaBarras) {
+                    ChartSeries barra = new ChartSeries("ambiente:--");
+                    barra.set(datos.tipo, datos.valor);
+                    barra.setLabel(datos.label);
+                    graficoModelo.addSeries(barra);
+                }
+//                graficoModelo.setSeriesColors("");
+                graficoModelo.setShowPointLabels(true);
+            }
+            System.out.println("graficoModelo: " + graficoModelo);
             return graficoModelo;
-
         }
         System.out.println("getGraficoModelo derecho");
         return graficoModelo;
@@ -134,9 +146,10 @@ public class EstadisticaController implements Serializable {
         return opcion;
     }
 
-    public BarChartModel estadisticaPorGrado() {
+    public List<Datos> estadisticaPorGrado() {
+        List<Datos> listaBarras = null;
         if (grado != null && graficoModelo == null) {
-
+            listaBarras = new ArrayList<>();
             List<EstudianteGrado> listEstudianteGrado = grado.getEstudianteGradoList();
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
@@ -148,7 +161,6 @@ public class EstadisticaController implements Serializable {
                         continue;
                     }
                     int i = 0;
-                    ChartSeries barra;
 //                  System.out.println("lista:" + listaResultadosPorAmbiente);
                     Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
                         @Override
@@ -156,26 +168,34 @@ public class EstadisticaController implements Serializable {
                             return -r1.getValor().compareTo(r2.getValor());
                         }
                     });
-                    graficoModelo = new BarChartModel();
+                    Datos datos;
                     for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-                        barra = new ChartSeries("ambiente:--");
-                        barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
-                        barra.setLabel(result.getTipoAmbiente().getTipo());
+                        datos = new Datos();
+                        datos.tipo = result.getTipoAmbiente().getIdTipoAmbiente();
+                        datos.label = result.getTipoAmbiente().getTipo();
+                        datos.valor = (double) result.getValor();
+                        datos.color = colores[datos.tipo - 1];
 //                      System.out.println("result:" + result.getValor());
-                        graficoModelo.addSeries(barra);
+                        listaBarras.add(datos);
                     }
-                    graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
-                    graficoModelo.setShowPointLabels(true);
-                    return graficoModelo;
 
                 }
             }
-
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage msg;
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
-            context.addMessage(null, msg);
+            if (listaBarras.isEmpty()) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FacesMessage msg;
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
+                context.addMessage(null, msg);
+            }
         }
-        return graficoModelo;
+        return listaBarras;
+    }
+
+    public class Datos {
+
+        String color;
+        String label;
+        int tipo;
+        Double valor;
     }
 }

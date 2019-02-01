@@ -249,7 +249,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
     }
 
-    public void increment() {
+    public void incrementJuego() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
         requestContext.execute("PF('knob').setValue(" + number + ")");

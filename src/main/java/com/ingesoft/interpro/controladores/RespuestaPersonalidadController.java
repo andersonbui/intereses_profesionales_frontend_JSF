@@ -43,6 +43,7 @@ public class RespuestaPersonalidadController implements Serializable {
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
+    int [] vecContPersonalidad;
 
     public RespuestaPersonalidadController() {
         tamGrupo = 4;
@@ -152,9 +153,6 @@ public class RespuestaPersonalidadController implements Serializable {
         return realizarEstadisticas();
     }
 
-    /**
-     *
-     */
     private String realizarEstadisticas() {
         // TODO falta esperar los hilos de guardado para despues realizar la estadistica
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -258,6 +256,14 @@ public class RespuestaPersonalidadController implements Serializable {
             }
         }
         return listaRespuestas;
+    }
+//    public class RespuestaPersonalidadAux{
+//        RespuestaPersonalidad respuestaPersonalidad;
+//        
+//    }
+    
+    public void accion(){
+        System.out.println("hola accion;");
     }
 
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {

@@ -43,7 +43,7 @@
                             <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
                                               update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaPersonalidadController.finalizarEncuesta}"
+                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
                                               update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
@@ -60,10 +60,10 @@
                                 <center><c:forEach begin="0" end="3" var="index">
                                         <div class="personalidad">
                                             <div>
-                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" style=" height: 300px; width: 355px; padding: 20px 20px; border:red ridge thick " />   
+                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" class="img_personalidad" style="" />   
                                             </div>
                                             <div>
-                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" style="padding: 20px 20px; font-weight: bold; "/>
+                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" class="txt_personalidad" />
                                             </div>
                                         </div>
                                     </c:forEach></center>
@@ -74,9 +74,9 @@
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                              update=":PreguntaCreatePersonalidadForm, @form" >
                             </p:commandButton>
-                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
+<!--                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
                                              update=":PreguntaCreatePersonalidadForm, @form" >
-                            </p:commandButton>
+                            </p:commandButton>-->
                         </h:panelGroup>
                     </h:panelGroup>
 

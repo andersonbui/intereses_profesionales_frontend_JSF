@@ -25,6 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -88,6 +89,12 @@ public class EncuestaController extends Controller implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
     }
 
+    public void finalizarEncuesta( ) {
+        String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
+        selected.setPersonalidad(personalidad);
+        update();
+    }
+    
     public int getIdEncuesta() {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
@@ -148,8 +155,8 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i) {
-        String result_personalidad = "IIEJ";
-        //String result_personalidad=selected.getPersonalidad();
+//        String result_personalidad = "IIEJ";
+        String result_personalidad=selected.getPersonalidad();
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -158,8 +165,8 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad_descripcion(int i) {
-        String result_personalidad = "IIEJ";
-        //String result_personalidad=selected.getPersonalidad();
+//        String result_personalidad = "IIEJ";
+        String result_personalidad=selected.getPersonalidad();
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {
             return null;

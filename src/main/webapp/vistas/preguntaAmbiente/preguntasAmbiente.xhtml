@@ -94,7 +94,8 @@
                                     </h:form>
                                 </p:panel>
                                 <p:panel header="Pregunta ambiente"  rendered="#{respuestaAmbienteEvaluacionController.pasoActual != -1}">  
-                                    <h5>Puntos: <p:outputLabel id="puntosPreguntaAmbiente" value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/></h5>
+                                    <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
+                                    <p:outputLabel id="puntosPreguntaAmbiente" value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>
                                     <h:form>
                                         <p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta: </p><br/>
                                         <h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText>
@@ -104,7 +105,7 @@
                                                     <p:commandButton class="tamano-boton-pregunta" 
                                                                      value="#{item.enunciado}" 
                                                                      actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuestaSeleccion(item)}" 
-                                                                     id="opcion" update=":growl"/><br/>
+                                                                     id="opcion" update=":growl, @form, :PreguntaAmbienteForm"/><br/>
                                                 </ui:repeat>
                                             </p:panelGrid>
                                         </center>
@@ -128,7 +129,8 @@
                             <p:panel header="Preguntas de ambiente" rendered="#{respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">
 
                                     <p:panel header="Pregunta ambiente"  >  
-                                        <h5>Puntos: <p:outputLabel value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/></h5>
+                                        <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
+                                        <p:outputLabel value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>
                                       <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
 
                                         <div>

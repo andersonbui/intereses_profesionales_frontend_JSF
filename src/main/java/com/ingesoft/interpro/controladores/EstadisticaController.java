@@ -36,9 +36,9 @@ public class EstadisticaController implements Serializable {
     }
 
     public void reiniciar() {
-        
+
     }
-    
+
     public void setGraficoModelo(BarChartModel graficoModelo) {
         this.graficoModelo = graficoModelo;
     }
@@ -98,9 +98,8 @@ public class EstadisticaController implements Serializable {
     public BarChartModel getGraficoModelo() {
         if (grado != null && graficoModelo == null) {
             System.out.println("grado: " + grado);
-            graficoModelo = new BarChartModel();
-
             int opcion = detectarTipoEstadistica();
+            System.out.println("opcion: " + opcion);
 
             switch (opcion) {
                 case 11:
@@ -113,11 +112,12 @@ public class EstadisticaController implements Serializable {
                     msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
                     context.addMessage(null, msg);
             }
+            System.out.println("graficoModelo: "+graficoModelo);
             return graficoModelo;
 
         }
-        System.out.println("retorno null");
-        return null;
+        System.out.println("getGraficoModelo derecho");
+        return graficoModelo;
     }
 
     private int detectarTipoEstadistica() {
@@ -136,8 +136,6 @@ public class EstadisticaController implements Serializable {
 
     public BarChartModel estadisticaPorGrado() {
         if (grado != null && graficoModelo == null) {
-            System.out.println("grado: " + grado);
-            graficoModelo = new BarChartModel();
 
             List<EstudianteGrado> listEstudianteGrado = grado.getEstudianteGradoList();
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
@@ -147,12 +145,10 @@ public class EstadisticaController implements Serializable {
 
                     List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
                     if (listaResultadosPorAmbiente.isEmpty()) {
-                        System.out.println("listaResultadosPorAmbiente: " + listaResultadosPorAmbiente);
                         continue;
                     }
-                    System.out.println("deberia imprimir grafica");
                     int i = 0;
-                    ChartSeries barra = null;
+                    ChartSeries barra;
 //                  System.out.println("lista:" + listaResultadosPorAmbiente);
                     Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
                         @Override
@@ -160,6 +156,7 @@ public class EstadisticaController implements Serializable {
                             return -r1.getValor().compareTo(r2.getValor());
                         }
                     });
+                    graficoModelo = new BarChartModel();
                     for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
                         barra = new ChartSeries("ambiente:--");
                         barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
@@ -179,7 +176,6 @@ public class EstadisticaController implements Serializable {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
             context.addMessage(null, msg);
         }
-        System.out.println("retorno null");
-        return null;
+        return graficoModelo;
     }
 }

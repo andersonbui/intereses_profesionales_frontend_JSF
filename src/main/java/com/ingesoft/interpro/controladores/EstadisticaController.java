@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import be.ceau.chart.color.Color;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
@@ -32,9 +33,17 @@ public class EstadisticaController implements Serializable {
     Date fechafin;
     private BarChartModel graficoModelo;
     String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
+    List<Color> lista_colores;
 
     public EstadisticaController() {
-
+        lista_colores = new ArrayList(6);
+        lista_colores.add(new Color(255, 0, 0, 0.7));//rojo-investigativo
+        lista_colores.add(new Color(0, 0, 255, 0.7));//azul-social
+        lista_colores.add(new Color(255, 170, 0, 0.7));//anaranjado-artistico
+        lista_colores.add(new Color(0, 255, 255, 0.7));//cyan-convencional
+        lista_colores.add(new Color(255, 255, 0, 0.7));//amarillo-emprendedor
+        lista_colores.add(new Color(0, 255, 0, 0.7));//verde-realista
+        
     }
 
     public void reiniciar() {
@@ -162,12 +171,12 @@ public class EstadisticaController implements Serializable {
                     }
                     int i = 0;
 //                  System.out.println("lista:" + listaResultadosPorAmbiente);
-                    Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
-                        @Override
-                        public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
-                            return -r1.getValor().compareTo(r2.getValor());
-                        }
-                    });
+//                    Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
+//                        @Override
+//                        public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
+//                            return -r1.getValor().compareTo(r2.getValor());
+//                        }
+//                    });
                     Datos datos;
                     for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
                         datos = new Datos();
@@ -178,7 +187,6 @@ public class EstadisticaController implements Serializable {
 //                      System.out.println("result:" + result.getValor());
                         listaBarras.add(datos);
                     }
-
                 }
             }
             if (listaBarras.isEmpty()) {

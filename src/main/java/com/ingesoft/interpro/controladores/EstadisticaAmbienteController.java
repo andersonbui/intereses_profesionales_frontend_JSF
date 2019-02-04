@@ -28,9 +28,9 @@ import org.primefaces.event.SelectEvent;
 //import org.primefaces.model.chart.BarChartModel;
 //import org.primefaces.model.chart.ChartSeries;
 
-@ManagedBean(name = "estadisticaController")
+@ManagedBean(name = "estadisticaAmbienteController")
 @SessionScoped
-public class EstadisticaController implements Serializable {
+public class EstadisticaAmbienteController implements Serializable {
 
     Institucion institucion;
     Grado grado;
@@ -41,7 +41,7 @@ public class EstadisticaController implements Serializable {
     String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
     List<Color> lista_colores;
 
-    public EstadisticaController() {
+    public EstadisticaAmbienteController() {
         lista_colores = new ArrayList(6);
         lista_colores.add(new Color(255, 0, 0, 0.7));//rojo-investigativo
         lista_colores.add(new Color(0, 0, 255, 0.7));//azul-social
@@ -130,9 +130,7 @@ public class EstadisticaController implements Serializable {
         return string_grafico;
     }
 
-    public String cargarGrafico() {
-//        if (grado != null && string_grafico == null) {
-//            System.out.println("grado: " + grado);
+    public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
         List<ResultadoPorAmbiente> listaResultados = null;
@@ -141,10 +139,10 @@ public class EstadisticaController implements Serializable {
                 listaResultados = resultadosPorEstudiante(estudiante);
                 break;
             case 11:
-                listaResultados = resultadosPorGrado(grado);
+                listaResultados = resultadosAmbientePorGrado(grado);
                 break;
             case 1:
-                listaResultados = resultadosPorInstitucion(institucion);
+                listaResultados = resultadosAmbientePorInstitucion(institucion);
                 break;
             default:
                 string_grafico = null;
@@ -163,11 +161,7 @@ public class EstadisticaController implements Serializable {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
             context.addMessage(null, msg);
         }
-//            System.out.println("graficoModelo: " + string_grafico);
         return string_grafico;
-//        }
-//        System.out.println("getGraficoModelo derecho" + string_grafico);
-//        return string_grafico;
     }
 
     private String obtenerGrafico(Datos[] listaDatos) {
@@ -206,13 +200,13 @@ public class EstadisticaController implements Serializable {
         return opcion;
     }
 
-    public List<ResultadoPorAmbiente> resultadosPorInstitucion(Institucion una_institucion) {
+    public List<ResultadoPorAmbiente> resultadosAmbientePorInstitucion(Institucion una_institucion) {
         if (una_institucion != null) {
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
             List<Grado> listEstudianteGrado = una_institucion.getGradoList();
             List<ResultadoPorAmbiente> listaResult_aux;
             for (Grado un_grado : listEstudianteGrado) {
-                listaResult_aux = resultadosPorGrado(un_grado);
+                listaResult_aux = resultadosAmbientePorGrado(un_grado);
                 if (listaResult_aux == null || listaResult_aux.isEmpty()) {
                     continue;
                 }
@@ -223,7 +217,7 @@ public class EstadisticaController implements Serializable {
         return null;
     }
 
-    public List<ResultadoPorAmbiente> resultadosPorGrado(Grado un_grado) {
+    public List<ResultadoPorAmbiente> resultadosAmbientePorGrado(Grado un_grado) {
         if (un_grado != null) {
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
             List<EstudianteGrado> listEstudianteGrado = un_grado.getEstudianteGradoList();
@@ -275,7 +269,7 @@ public class EstadisticaController implements Serializable {
 //    public Datos[] estadisticaPorInstitucion(Institucion una_institucion) {
 //        Datos[] listaBarras = null;
 //        List<ResultadoPorAmbiente> listaResultados;
-//        listaResultados = resultadosPorInstitucion(una_institucion);
+//        listaResultados = resultadosAmbientePorInstitucion(una_institucion);
 //
 //        if (listaResultados != null && listaResultados.isEmpty()) {
 //            FacesContext context = FacesContext.getCurrentInstance();
@@ -298,7 +292,7 @@ public class EstadisticaController implements Serializable {
 //    public Datos[] estadisticaPorGrado(Grado un_grado) {
 //        Datos[] listaBarras = null;
 //        List<ResultadoPorAmbiente> listaResultados;
-//        listaResultados = resultadosPorGrado(un_grado);
+//        listaResultados = resultadosAmbientePorGrado(un_grado);
 //
 //        if (listaResultados != null && listaResultados.isEmpty()) {
 //            FacesContext context = FacesContext.getCurrentInstance();

@@ -7,17 +7,16 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/principal.xhtml">
-
-
         <ui:define name="title">
             <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
         </ui:define>
 
         <ui:define name="content">
+            <h:outputScript library="js" name="Chart.js"/>
             <h:form id="EstadisticaForm">
-                 <h:panelGroup id="display">
+                <h:panelGroup id="display">
                     <p:panelGrid columns="2" >
-                        
+
                         <p:outputLabel value="#{bundle.Label_fechaInicio}" for="id_fecha_inicio" />
                         <p:calendar id="id_fecha_inicio" pattern="MM/dd/yyyy" 
                                     navigator="true" 
@@ -38,14 +37,14 @@
                                     >
                             <p:ajax event="dateSelect" listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:calendar>
-                        
+
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
                                          value="#{estadisticaController.institucion}" 
                                          required="true"
                                          immediate="true" 
                                          requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
-                            
+
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="institucion"
@@ -53,7 +52,7 @@
                                            itemValue="#{institucion}"/>
                             <f:ajax render="id_select_estudiante" listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
-                        
+
                         <p:outputLabel value="#{bundle.Label_grado}" for="id_select_estudiante" />
                         <p:selectOneMenu id="id_select_estudiante" 
                                          value="#{estadisticaController.grado}" 
@@ -69,20 +68,41 @@
                             <f:ajax  listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton  
+                    <p:commandButton actionListener="#{estadisticaController.cargarGrafico()}"
                                      value="cargar" 
-                                     update="grafica,:EstadisticaForm:grafica,:growl"/>
-<!--                    <p:commandButton value="cargar" update="grafica"/>-->
-                    <p:panel id="grafica" >
-                         <p:chart type="bar" 
-                                  rendered="#{estadisticaController.getGraficoModelo() != null}" 
-                                  model="#{estadisticaController.getGraficoModelo()}" 
+                                     update="grafica,:growl,display,divgrafico">
+                    </p:commandButton>
+                    <h:body id='divgrafico'>
+                        <p:fragment id="grafica" rendered="#{estadisticaController.getGraficoModelo() != null}">
+                            <!--                         
+                            <p:chart type="bar" 
+                                rendered="{estadisticaController.getGraficoModelo() != null}" 
+                                model="{estadisticaController.getGraficoModelo()}" 
                                 style="height:250px;  text-align: center; "
-                                />
-                    </p:panel>
+                              />-->
+                            <!--<p:ajax  event="click" listener="saludar('ansono')" />-->
+                            <script>saludar("fragment");
+                            graficar(#{estadisticaController.getGraficoModelo()});
+                            </script>
+                            #{estadisticaController.getGraficoModelo()}
+                            <div style="height: 400px; width: 400px;" >
+                                <canvas id="myChart" width="400" height="400"></canvas>
+                            </div>
+                        </p:fragment>
+                    </h:body>
                     <!--<p:commandButton value="{bundle.Cancel}" onclick="EstudianteGradoEditDialog.hide()"/>-->
                 </h:panelGroup>
             </h:form>
+            <script type="text/javascript">
+                function graficar(json) {
+                    console.log(json);
+                    var ctx = document.getElementById("myChart");
+                    var myChart = new Chart(ctx, json);
+                }
+                function saludar(nombre) {
+                    console.log('hola ' + nombre);
+                }
+            </script>
         </ui:define>
     </ui:composition>
 

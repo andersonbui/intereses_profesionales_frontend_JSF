@@ -6,6 +6,7 @@ import be.ceau.chart.data.BarData;
 import be.ceau.chart.dataset.BarDataset;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
@@ -16,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -31,7 +34,7 @@ public class EstadisticaController implements Serializable {
 
     Institucion institucion;
     Grado grado;
-    Institucion estudiante;
+    Estudiante estudiante;
     Date fechaInicio;
     Date fechafin;
     private String string_grafico;
@@ -69,11 +72,11 @@ public class EstadisticaController implements Serializable {
         this.grado = grado;
     }
 
-    public Institucion getEstidiante() {
+    public Estudiante getEstudiante() {
         return estudiante;
     }
 
-    public void setEstidiante(Institucion Estidiante) {
+    public void setEstudiante(Estudiante Estidiante) {
         this.estudiante = Estidiante;
     }
 
@@ -101,70 +104,91 @@ public class EstadisticaController implements Serializable {
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", format.format(event.getObject())));
     }
 
+    public List<Estudiante> obternerEstudiante(Grado un_grado) {
+
+        if (un_grado == null) {
+            return null;
+        }
+        List<Estudiante> listaEstudiantes = new ArrayList();
+        List<EstudianteGrado> listaEstudiantesGrado = un_grado.getEstudianteGradoList();
+//        Set set_estudiantes = new HashSet();
+        for (EstudianteGrado estudianteGrado : listaEstudiantesGrado) {
+            Estudiante un_estudiante = estudianteGrado.getEstudiante();
+            if (!listaEstudiantes.contains(un_estudiante)) {
+                listaEstudiantes.add(un_estudiante);
+            }
+        }
+        return listaEstudiantes;
+    }
+
     public void reiniciarEstadistica() {
         string_grafico = null;
     }
 
-    public String getGraficoModelo(){
-        System.out.println("getGraficoModelo: "+string_grafico);
-        return string_grafico;
-    }
-    
-    public String cargarGrafico() {
-        if (grado != null && string_grafico == null) {
-            System.out.println("grado: " + grado);
-            int opcion = detectarTipoEstadistica();
-            System.out.println("opcion: " + opcion);
-            Datos[] listaBarras = null;
-            switch (opcion) {
-                case 11:
-                    listaBarras = estadisticaPorGrado();
-                    break;
-                default:
-                    string_grafico = null;
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    FacesMessage msg;
-                    msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadsitica", "");
-                    context.addMessage(null, msg);
-            }
-            if (listaBarras != null) {
-                string_grafico = obtenerGrafico(listaBarras);
-            }else{
-                string_grafico = null;
-            }
-//            System.out.println("graficoModelo: " + string_grafico);
-            return string_grafico;
-        }
-        System.out.println("getGraficoModelo derecho" + string_grafico);
+    public String getGraficoModelo() {
+        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
 
-    private String obtenerGrafico(Datos[] listaBarras) {
+    public String cargarGrafico() {
+//        if (grado != null && string_grafico == null) {
+//            System.out.println("grado: " + grado);
+        int opcion = detectarTipoEstadistica();
+        System.out.println("opcion: " + opcion);
+        List<ResultadoPorAmbiente> listaResultados = null;
+        switch (opcion) {
+            case 111:
+                listaResultados = resultadosPorEstudiante(estudiante);
+                break;
+            case 11:
+                listaResultados = resultadosPorGrado(grado);
+                break;
+            case 1:
+                listaResultados = resultadosPorInstitucion(institucion);
+                break;
+            default:
+                string_grafico = null;
+                System.out.println("opcion incorrecta");
+        }
+
+        if (listaResultados != null && !listaResultados.isEmpty()) {
+            Datos[] listaBarras = null;
+            listaBarras = promedioResultados(listaResultados);
+            System.out.println("listaBarras: ");
+            System.out.println(listaBarras);
+            string_grafico = obtenerGrafico(listaBarras);
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage msg;
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
+            context.addMessage(null, msg);
+        }
+//            System.out.println("graficoModelo: " + string_grafico);
+        return string_grafico;
+//        }
+//        System.out.println("getGraficoModelo derecho" + string_grafico);
+//        return string_grafico;
+    }
+
+    private String obtenerGrafico(Datos[] listaDatos) {
         List datas = new ArrayList();
-        datas.add(12.0);
-        datas.add(19.0);
-        datas.add(3.0);
-        datas.add(5.0);
-        datas.add(2.0);
-        datas.add(32.0);
         List<Color> colors = new ArrayList();
-        colors.add(new Color(255, 0, 0, 0.7));
-        colors.add(new Color(0, 0, 255, 0.7));
-        colors.add(new Color(255, 170, 0, 0.7));
-        colors.add(new Color(0, 255, 255, 0.7));
-        colors.add(new Color(255, 255, 0, 0.7));
-        colors.add(new Color(0, 255, 0, 0.7));
+        BarData data = new BarData();
+        for (Datos dato : listaDatos) {
+            double valor = Math.round(dato.valor * 1000D) / 1000D;
+            datas.add(valor);
+            colors.add(dato.color);
+            data.addLabel(dato.label);
+        }
 
         BarDataset dataset = new BarDataset()
-                .setLabel("sample chart")
+                .setLabel("puntuación")
                 .setData(datas)
                 .setBackgroundColor(colors)
-                .setBorderWidth(0);
-//        dataset.s
-        BarData data = new BarData();
-        data.setLabels("Rojo", "Azul", "Wednesday", "Thursday", "Friday", "Saturday")
-                .addDataset(dataset);
-        
+                .setBorderColor(Color.DARK_GRAY)
+                .setBorderWidth(2);
+        data.addDataset(dataset);
+
         return new BarChart(data).toJson();
     }
 
@@ -182,17 +206,27 @@ public class EstadisticaController implements Serializable {
         return opcion;
     }
 
-    /**
-     * por ahora trae todos los resultados de las encuestas sin importar si
-     * pretenecen al mismo es
-     *
-     * @return
-     */
-    public Datos[] estadisticaPorGrado() {
-        Datos[] listaBarras = null;
-        List<ResultadoPorAmbiente> listaResultados = new ArrayList();
-        if (grado != null && string_grafico == null) {
-            List<EstudianteGrado> listEstudianteGrado = grado.getEstudianteGradoList();
+    public List<ResultadoPorAmbiente> resultadosPorInstitucion(Institucion una_institucion) {
+        if (una_institucion != null) {
+            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+            List<Grado> listEstudianteGrado = una_institucion.getGradoList();
+            List<ResultadoPorAmbiente> listaResult_aux;
+            for (Grado un_grado : listEstudianteGrado) {
+                listaResult_aux = resultadosPorGrado(un_grado);
+                if (listaResult_aux == null || listaResult_aux.isEmpty()) {
+                    continue;
+                }
+                listaResultados.addAll(listaResult_aux);
+            }
+            return listaResultados;
+        }
+        return null;
+    }
+
+    public List<ResultadoPorAmbiente> resultadosPorGrado(Grado un_grado) {
+        if (un_grado != null) {
+            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+            List<EstudianteGrado> listEstudianteGrado = un_grado.getEstudianteGradoList();
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
                 List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
@@ -205,21 +239,87 @@ public class EstadisticaController implements Serializable {
                     listaResultados.addAll(listaResultadosPorAmbiente);
                 }
             }
-
-            if (listaResultados.isEmpty()) {
-                FacesContext context = FacesContext.getCurrentInstance();
-                FacesMessage msg;
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
-                context.addMessage(null, msg);
-            } else {
-                listaBarras = promedioResultados(listaResultados);
-            }
+            return listaResultados;
         }
-        System.out.println("listaBarras: "+listaBarras);
-        return listaBarras;
+        return null;
     }
 
+    public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante) {
+        if (un_estudiante != null) {
+            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+            List<EstudianteGrado> listEstudianteGrado = un_estudiante.getEstudianteGradoList();
+            for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
+
+                List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
+                for (Encuesta encuesta : listaEncuestas) {
+
+                    List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+                    if (listaResultadosPorAmbiente.isEmpty()) {
+                        continue;
+                    }
+                    listaResultados.addAll(listaResultadosPorAmbiente);
+                }
+            }
+            return listaResultados;
+        }
+        return null;
+    }
+
+    /**
+     * por ahora trae todos los resultados de las encuestas sin importar si
+     * pretenecen al mismo es
+     *
+     * @param una_institucion
+     * @return
+     */
+//    public Datos[] estadisticaPorInstitucion(Institucion una_institucion) {
+//        Datos[] listaBarras = null;
+//        List<ResultadoPorAmbiente> listaResultados;
+//        listaResultados = resultadosPorInstitucion(una_institucion);
+//
+//        if (listaResultados != null && listaResultados.isEmpty()) {
+//            FacesContext context = FacesContext.getCurrentInstance();
+//            FacesMessage msg;
+//            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
+//            context.addMessage(null, msg);
+//        } else {
+//            listaBarras = promedioResultados(listaResultados);
+//        }
+//        System.out.println("listaBarras: " + listaBarras);
+//        return listaBarras;
+//    }
+    /**
+     * por ahora trae todos los resultados de las encuestas sin importar si
+     * pretenecen al mismo es
+     *
+     * @param un_grado
+     * @return
+     */
+//    public Datos[] estadisticaPorGrado(Grado un_grado) {
+//        Datos[] listaBarras = null;
+//        List<ResultadoPorAmbiente> listaResultados;
+//        listaResultados = resultadosPorGrado(un_grado);
+//
+//        if (listaResultados != null && listaResultados.isEmpty()) {
+//            FacesContext context = FacesContext.getCurrentInstance();
+//            FacesMessage msg;
+//            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
+//            context.addMessage(null, msg);
+//        } else {
+//            listaBarras = promedioResultados(listaResultados);
+//        }
+//        System.out.println("listaBarras: " + listaBarras);
+//        return listaBarras;
+//    }
+    /**
+     *
+     * @param listaResultadosPorAmbiente
+     * @return
+     */
     public Datos[] promedioResultados(List<ResultadoPorAmbiente> listaResultadosPorAmbiente) {
+        if (listaResultadosPorAmbiente == null || listaResultadosPorAmbiente.isEmpty()) {
+            return null;
+        }
         Datos[] listaDatos = new Datos[6];
         Datos datos;
         System.out.println("result: " + listaResultadosPorAmbiente);
@@ -237,8 +337,6 @@ public class EstadisticaController implements Serializable {
                 listaDatos[tipo - 1].color = new Color(r, g, b, a);
             }
             datos = listaDatos[tipo - 1];
-//            System.out.println("datos: " + datos);
-//            System.out.println("result: " + result);
             datos.valor += (double) result.getValor();
         }
         for (Datos listaDato : listaDatos) {

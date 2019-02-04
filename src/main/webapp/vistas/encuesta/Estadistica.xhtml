@@ -17,27 +17,6 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" >
 
-                        <p:outputLabel value="#{bundle.Label_fechaInicio}" for="id_fecha_inicio" />
-                        <p:calendar id="id_fecha_inicio" pattern="MM/dd/yyyy" 
-                                    navigator="true" 
-                                    immediate="true"
-                                    value="#{estadisticaController.fechaInicio}" title="#{bundle.Title_fechaInicio}" 
-                                    required="true"
-                                    requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" 
-                                    >              
-                            <p:ajax event="dateSelect" listener="#{estadisticaController.onDateSelect}" update="id_fecha_fin" />
-                        </p:calendar>
-                        <p:outputLabel value="#{bundle.Label_fechaFin}" for="id_fecha_fin" />
-                        <p:calendar id="id_fecha_fin" widgetVar="idwid_fecha_fin" pattern="MM/dd/yyyy" 
-                                    navigator="true" 
-                                    mindate="#{estadisticaController.fechaInicio}"
-                                    value="#{estadisticaController.fechafin}" 
-                                    title="#{bundle.Title_fechaFin}" required="true" 
-                                    requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudianteGradoPK_date}" 
-                                    >
-                            <p:ajax event="dateSelect" listener="#{estadisticaController.reiniciarEstadistica()}" />
-                        </p:calendar>
-
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
                                          value="#{estadisticaController.institucion}" 
@@ -50,13 +29,12 @@
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
                                            itemValue="#{institucion}"/>
-                            <f:ajax render="id_select_estudiante" listener="#{estadisticaController.reiniciarEstadistica()}" />
+                            <f:ajax render="id_select_grado" listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="#{bundle.Label_grado}" for="id_select_estudiante" />
-                        <p:selectOneMenu id="id_select_estudiante" 
+                        <p:outputLabel value="#{bundle.Label_grado}" for="id_select_grado" />
+                        <p:selectOneMenu id="id_select_grado" 
                                          value="#{estadisticaController.grado}" 
-                                         required="true" 
                                          immediate="true" 
                                          requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
@@ -65,42 +43,45 @@
                                            var="grado"
                                            itemLabel="#{grado.curso}"
                                            itemValue="#{grado}"/>
-                            <f:ajax  listener="#{estadisticaController.reiniciarEstadistica()}" />
+                            <f:ajax render="id_select_grado" listener="#{estadisticaController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_estudiante}" for="id_select_estudiante" />
+                        <p:selectOneMenu id="id_select_estudiante" 
+                                         value="#{estadisticaController.estudiante}" 
+                                         immediate="true" 
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaController.obternerEstudiante(estadisticaController.grado)}"
+                                           rendered="#{estadisticaController.grado != null}"
+                                           var="estudiante"
+                                           itemLabel="#{estudiante.idPersona.email}"
+                                           itemValue="#{estudiante}"/>
+                            <f:ajax listener="#{estadisticaController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{estadisticaController.cargarGrafico()}"
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico">
                     </p:commandButton>
-                    <h:body id='divgrafico'>
-                        <p:fragment id="grafica" rendered="#{estadisticaController.getGraficoModelo() != null}">
-                            <!--                         
-                            <p:chart type="bar" 
-                                rendered="{estadisticaController.getGraficoModelo() != null}" 
-                                model="{estadisticaController.getGraficoModelo()}" 
-                                style="height:250px;  text-align: center; "
-                              />-->
-                            <!--<p:ajax  event="click" listener="saludar('ansono')" />-->
-                            <script>saludar("fragment");
-                            graficar(#{estadisticaController.getGraficoModelo()});
+                    <h:body id='divgrafico' >
+                        <p:panelGrid id="grafica"  rendered="#{estadisticaController.getGraficoModelo() != null}">
+                            <script>
+                                graficar(#{estadisticaController.getGraficoModelo()});
                             </script>
-                            #{estadisticaController.getGraficoModelo()}
-                            <div style="height: 400px; width: 400px;" >
-                                <canvas id="myChart" width="400" height="400"></canvas>
+                            <div style="height: 300px; width: 700px;" >
+                                <canvas id="myChart" width="700" height="300"></canvas>
                             </div>
-                        </p:fragment>
+                        </p:panelGrid>
                     </h:body>
-                    <!--<p:commandButton value="{bundle.Cancel}" onclick="EstudianteGradoEditDialog.hide()"/>-->
                 </h:panelGroup>
             </h:form>
             <script type="text/javascript">
                 function graficar(json) {
-                    console.log(json);
-                    var ctx = document.getElementById("myChart");
-                    var myChart = new Chart(ctx, json);
-                }
-                function saludar(nombre) {
-                    console.log('hola ' + nombre);
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+                        var myChart = new Chart(ctx, json);
+                    }
                 }
             </script>
         </ui:define>

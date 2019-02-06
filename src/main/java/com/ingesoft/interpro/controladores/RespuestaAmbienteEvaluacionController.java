@@ -68,6 +68,8 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     int indiceActual;
     boolean respuesta;
     int puntosPreguntaAmbiente = 0;
+    int contCorrect;
+    int contCorrectImg;
 
     int[] vecIdImages = {1, 3, 5, 7, 9, 11, 31, 33, 35, 37, 39, 41, 61, 63, 65, 67, 69, 71, 91, 93, 95, 97, 99, 101, 121, 123, 125, 127, 129, 131, 151, 153, 155, 157, 159, 161};
     int[] vecIdPreguntas = {1, 2, 5, 13, 14, 37, 38, 61, 39, 86, 40, 42, 43, 45, 48, 72, 31, 32, 43, 44, 73, 75, 78, 130, 139, 158, 160, 162, 167, 165};
@@ -247,6 +249,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
         System.out.println("next");
         System.out.println(indiceActual);
+        contCorrectImg = 0;
     }
 
     public void previousImagen() {
@@ -269,14 +272,14 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
             addMessage("Incorrecto!!", false);
         }
     }
-    int contCorrect;
+    
 
     public void comprobarRespuesta(int id) {
         if (selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id)) {
             respuesta = true;
-            if (contCorrect == 0) {
+            if (contCorrectImg == 0) {
                 puntosPreguntaAmbiente++;
-                contCorrect++;
+                contCorrectImg++;
             }
             System.out.println("Respuesta correcta:" + respuesta);
         } else {

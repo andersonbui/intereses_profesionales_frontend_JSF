@@ -92,7 +92,7 @@
                         <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
                             <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Encuesta" rendered="#{loginController.permisoEstudiante()}">
+                        <p:submenu label="Encuesta" rendered="#{loginController.estudiante}">
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
@@ -102,9 +102,9 @@
                             <p:menuitem value="Por Grado"  icon="ui-icon-home" />
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
-                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="una cosa"  />
                             <p:menuitem value="Generar mineria" action="#{mineriaController.sacarDatos}" />
-                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="otra cosa"  />
                         </p:submenu>
                         
                         <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >

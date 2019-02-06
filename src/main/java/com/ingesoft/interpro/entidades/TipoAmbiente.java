@@ -47,6 +47,9 @@ public class TipoAmbiente implements Serializable {
     @Size(max = 700)
     @Column(name = "definicion")
     private String definicion;
+    @Size(max = 20)
+    @Column(name = "color")
+    private String color;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoAmbiente")
     private List<PreguntaAmbiente> preguntaAmbienteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoAmbiente")
@@ -83,6 +86,14 @@ public class TipoAmbiente implements Serializable {
 
     public void setDefinicion(String definicion) {
         this.definicion = definicion;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @XmlTransient

@@ -3,23 +3,21 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
-import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -27,6 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -71,6 +70,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
+        getAreaEncuestaController().almacenarEncuestaAreas(selected);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 
@@ -89,6 +89,12 @@ public class EncuestaController extends Controller implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
     }
 
+    public void finalizarEncuesta( ) {
+        String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
+        selected.setPersonalidad(personalidad);
+        update();
+    }
+    
     public int getIdEncuesta() {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
@@ -99,11 +105,6 @@ public class EncuestaController extends Controller implements Serializable {
         return selected;
     }
 
-//    public Encuesta prepareCreate() {
-//        selected = new Encuesta();
-//        initializeEmbeddableKey();
-//        return selected;
-//    }
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
@@ -114,17 +115,17 @@ public class EncuestaController extends Controller implements Serializable {
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         // @TODO : Falta obtener el usuario
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
+//        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
+//        areaEncuestaController.prepararParaEncuesta();
         LoginController loginController = getLoginController();
-        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
-        areaEncuestaController.prepararParaEncuesta();
         Usuario usu = loginController.getActual();
         System.out.println("usuario: " + usu);
         try {
             Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
-            if(estudianteGrado == null){
+            if (estudianteGrado == null) {
                 System.out.println("Este estudiante no tiene EstudianteGrado");
             }
             selected = new Encuesta();
@@ -134,10 +135,18 @@ public class EncuestaController extends Controller implements Serializable {
             selected.setIdEncuesta(getIdEncuesta());
 //            selected.setEstudianteGrado(estudianteGrado);
             System.out.println("antes encuesta creada: " + selected);
-//            create();
 //            selected = getEncuesta(selected.toString());
             System.out.println("despues encuesta creada: " + selected);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+
+            // @desarrollo
+            if (Utilidades.esDesarrollo()) {
+                selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+            }
+            create();
+            
+            AreaController areaController = getAreaController();
+            areaController.inicializar();
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
@@ -146,8 +155,8 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i) {
-        String result_personalidad = "IIEJ";
-        //String result_personalidad=selected.getPersonalidad();
+//        String result_personalidad = "IIEJ";
+        String result_personalidad=selected.getPersonalidad();
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -156,46 +165,49 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad_descripcion(int i) {
-        String result_personalidad = "IIEJ";
-        //String result_personalidad=selected.getPersonalidad();
+//        String result_personalidad = "IIEJ";
+        String result_personalidad=selected.getPersonalidad();
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
-        if (null == codigo_personalidad) return null;
-        else switch (codigo_personalidad) {
-            case "0E":
-                return "Estrovertido";
-            case "0I":
-                return "Introvertido";
-            case "1I":
-                return "Intuitivo";
-            case "1S":
-                return "Sensato";
-            case "2E":
-                return "Emocional";
-            case "2R":
-                return "Racional";
-            case "3J":
-                return "Juzgador";
-            case "3P":
-                return "Perceptivo";
-            default:
-                return null;
+        if (null == codigo_personalidad) {
+            return null;
+        } else {
+            switch (codigo_personalidad) {
+                case "0E":
+                    return "Estrovertido";
+                case "0I":
+                    return "Introvertido";
+                case "1I":
+                    return "Intuitivo";
+                case "1S":
+                    return "Sensato";
+                case "2E":
+                    return "Emocional";
+                case "2R":
+                    return "Racional";
+                case "3J":
+                    return "Juzgador";
+                case "3P":
+                    return "Perceptivo";
+                default:
+                    return null;
+            }
         }
 
     }
 
     public void create() {
-        selected = (Encuesta) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"),selected);
+        selected = (Encuesta) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"),selected);
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EncuestaDeleted"),selected);
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EncuestaDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.

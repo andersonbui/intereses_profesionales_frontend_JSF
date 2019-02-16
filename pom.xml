@@ -136,6 +136,11 @@
             <scope>runtime</scope>
         </dependency>-->
         <dependency>
+            <groupId>be.ceau</groupId>
+            <artifactId>chart</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>

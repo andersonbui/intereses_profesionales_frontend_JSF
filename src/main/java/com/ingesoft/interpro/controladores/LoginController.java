@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
@@ -235,7 +236,10 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public void guardarEnProceso() throws IOException {
-//        getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
+        // @desarrollo
+        if (!Utilidades.esDesarrollo()) {
+            getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
+        }
         PersonaController personaController = getPersonaController();
         personaController.updateConUsuarioEstudiante();
 
@@ -245,10 +249,6 @@ public class LoginController extends Controller implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
     }
 
-//     public boolean guardarEnProceso() {
-//         
-//     }
-//    
     public void eliminarSesion() {
         actual = null;
         personaActual = null;

@@ -92,19 +92,19 @@
                         <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
                             <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Encuesta" rendered="#{loginController.permisoEstudiante()}">
+                        <p:submenu label="Encuesta" rendered="#{loginController.estudiante}">
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
                             <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
                         </p:submenu>
                         <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
                             <p:menuitem value="Por Institucion"  icon="ui-icon-home" />
-                            <p:menuitem value="Por Estudiante"  icon="ui-icon-home" />
+                            <p:menuitem value="Por Estudiante" outcome="/vistas/encuesta/Estadistica.xhtml" />
                             <p:menuitem value="Por Grado"  icon="ui-icon-home" />
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
-                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="una cosa"  />
                             <p:menuitem value="Generar mineria" action="#{mineriaController.sacarDatos}" />
-                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="otra cosa"  />
                         </p:submenu>
                         
                         <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >
@@ -120,14 +120,14 @@
                             <p:menuitem value="ciudad" outcome="/vistas/ciudad/List.xhtml" />
                             <p:menuitem value="departamento" outcome="/vistas/departamento/List.xhtml" />
                             <p:menuitem value="pais" outcome="/vistas/pais/List.xhtml" />
+                            <p:menuitem value="Encuesta" outcome="/vistas/encuesta/List.xhtml" />
                         </p:submenu>
                         
-                        <p:submenu label="Gestion datos" rendered="#{loginController.isAdmin()}" >
+                        <p:submenu label="Gestion datos" rendered="#{false}" >
                             <p:menuitem value="Pregunta"  action="#{encuestaController.prepararYCrear}"/>
                             <p:menuitem value="Usuario" outcome="/vistas/usuario/List.xhtml" />
                             <p:menuitem value="Estudiante"  url="/estudiantes/"  outcome="/vistas/estudiante/List.xhtml" />
                             <p:menuitem value="EnviarMesaje"  action="#{registroController.enviarMensaje}"/>
-                            <p:menuitem value="Encuesta" outcome="/vistas/encuesta/List.xhtml" />
                             <p:menuitem value="EstudianteGrado" outcome="/vistas/estudianteGrado/List.xhtml" />
                             <p:menuitem value="Gusto Materia" outcome="/vistas/materiaGusto/List.xhtml" />
                             <p:menuitem value="Nota" outcome="/vistas/nota/List.xhtml" />

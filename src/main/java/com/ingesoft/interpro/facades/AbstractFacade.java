@@ -33,6 +33,7 @@ public abstract class AbstractFacade<T> {
     public T edit(T entity) {
         try {
             T enti2 = getEntityManager().merge(entity);
+            getEntityManager().flush();
             return enti2;
         } catch (EJBException e) {
             @SuppressWarnings("ThrowableResultIgnored")

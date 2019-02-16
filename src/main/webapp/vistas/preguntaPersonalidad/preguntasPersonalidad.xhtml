@@ -13,6 +13,16 @@
                 <div id="display">
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaPersonalidadController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
+                            <div style="width: 100%; display: table; padding: 0px 100px;" >
+                                <div  class="float-l">
+                                    <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
+                                    <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                                </div>
+                                <h:panelGroup id="grupoTimeJuego" class="float-r">
+                                    <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
+                                    <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
+                                </h:panelGroup>
+                            </div>
                             <h1><p:progressBar value="#{respuestaPersonalidadController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             <p:panelGrid id="panel" styleClass="panelgrid">
                                 <ui:repeat value="#{respuestaPersonalidadController.grupo}" var="item">
@@ -27,7 +37,9 @@
                                                 <f:selectItem itemLabel="3" itemValue='3' />
                                                 <f:selectItem itemLabel="4" itemValue='4' />    
                                                 <f:selectItem itemLabel="5" itemValue='5' />
+                                                <f:ajax render="pregunta1"  />
                                             </p:selectOneRadio>
+                                           
                                         </p:column>
                                         <p:column style=" font-size: 18px; font-weight:bold; color: black">
                                             <p:outputLabel value="#{item.preguntaPersonalidad.enunciado2}"/>
@@ -43,7 +55,7 @@
                             <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
                                               update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaPersonalidadController.finalizarEncuesta}"
+                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
                                               update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
@@ -55,15 +67,16 @@
                                 <h1>Felicidades</h1>
                                 <p>Has completado las preguntas de personalidad</p>
 
-                                <h5>Su personalidad es:</h5>
+                                <p:outputLabel value="Su personalidad es:" style="font-size: 30px; font-weight:bold;"/>
+                                <p:outputLabel style="font-size: 30px; font-weight:bold;"/>
                                 <p:outputLabel value="#{encuestaController.selected.personalidad}"/><br/> <br/>
                                 <center><c:forEach begin="0" end="3" var="index">
                                         <div class="personalidad">
                                             <div>
-                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" style=" height: 300px; width: 355px; padding: 20px 20px; border:red ridge thick " />   
+                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" class="img_personalidad" style="" />   
                                             </div>
                                             <div>
-                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" style="padding: 20px 20px; font-weight: bold; "/>
+                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" class="txt_personalidad" />
                                             </div>
                                         </div>
                                     </c:forEach></center>
@@ -74,9 +87,9 @@
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                              update=":PreguntaCreatePersonalidadForm, @form" >
                             </p:commandButton>
-                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                             update=":PreguntaCreatePersonalidadForm, @form" >
-                            </p:commandButton>
+                            <!--                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
+                                                                         update=":PreguntaCreatePersonalidadForm, @form" >
+                                                        </p:commandButton>-->
                         </h:panelGroup>
                     </h:panelGroup>
 

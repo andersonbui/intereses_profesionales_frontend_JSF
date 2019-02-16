@@ -3,14 +3,18 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.RespuestaPersonalidad;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
+import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +43,7 @@ public class RespuestaPersonalidadController implements Serializable {
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
+    int [] vecContPersonalidad;
 
     public RespuestaPersonalidadController() {
         tamGrupo = 4;
@@ -137,7 +142,7 @@ public class RespuestaPersonalidadController implements Serializable {
         return pasoActual;
     }
 
-    public int finalizarEncuesta(ActionEvent actionEvent) {
+    public String finalizarEncuesta() {
 //        grupo = getGrupoItems(pasoActual + 1);
         for (RespuestaPersonalidad respuesta : grupo) {
             getFacade().edit(respuesta);
@@ -145,15 +150,10 @@ public class RespuestaPersonalidadController implements Serializable {
         pasoActual += 1;
 
         // realizar estadistica de respuestas
-        realizarEstadisticas();
-
-        return pasoActual;
+        return realizarEstadisticas();
     }
 
-    /**
-     *
-     */
-    private void realizarEstadisticas() {
+    private String realizarEstadisticas() {
         // TODO falta esperar los hilos de guardado para despues realizar la estadistica
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -184,6 +184,26 @@ public class RespuestaPersonalidadController implements Serializable {
             respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
             respuestaPorPersonalidadController.create();
         }
+        return obtenerPersonalidad(valores);
+    }
+
+    private String obtenerPersonalidad(Elemento[] valores) {
+        String personalidad = "";
+        String perso;
+        
+        perso = valores[2].tipoPer.getTipo();
+        personalidad += (valores[2].valor <= 24) ? perso.charAt(0): perso.charAt(1);
+        
+        perso = valores[3].tipoPer.getTipo();
+        personalidad += (valores[3].valor <= 24) ? perso.charAt(0): perso.charAt(1);
+        
+        perso = valores[1].tipoPer.getTipo();
+        personalidad += (valores[1].valor <= 24) ? perso.charAt(0): perso.charAt(1);
+        
+        perso = valores[0].tipoPer.getTipo();
+        personalidad += (valores[0].valor <= 24) ? perso.charAt(0): perso.charAt(1);
+        System.out.println("personalidad: "+personalidad);
+        return personalidad;
     }
 
     private class Elemento {
@@ -237,6 +257,14 @@ public class RespuestaPersonalidadController implements Serializable {
         }
         return listaRespuestas;
     }
+//    public class RespuestaPersonalidadAux{
+//        RespuestaPersonalidad respuestaPersonalidad;
+//        
+//    }
+    
+    public void accion(){
+        System.out.println("hola accion;");
+    }
 
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
@@ -247,9 +275,17 @@ public class RespuestaPersonalidadController implements Serializable {
             selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
             selected.setPreguntaPersonalidad(pregunta);
             selected.setEncuesta(encuesta);
-            selected.setRespuesta(2);
             items.add(selected);
         }
+
+        // @desarrollo
+        if (Utilidades.esDesarrollo()) {
+//            System.out.println("encuesta: " + encuesta);
+            Random rand = new Random(Calendar.getInstance().getTimeInMillis());
+            for (RespuestaPersonalidad item : items) {
+                item.setRespuesta(1+rand.nextInt(5));
+            }
+        }// @end
         getGrupos();
         pasoActual = 0;
         grupo = getGrupoItems(pasoActual + 1);

@@ -3,16 +3,17 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.AreaEncuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Area;
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.TipoEleccionMateria;
 import com.ingesoft.interpro.facades.AreaEncuestaFacade;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -22,13 +23,12 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "areaEncuestaController")
 @SessionScoped
-public class AreaEncuestaController implements Serializable {
+public class AreaEncuestaController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;
     private List<AreaEncuesta> items = null;
     private AreaEncuesta selected;
-    private List<String> mensajes;
 
     public AreaEncuestaController() {
     }
@@ -41,24 +41,23 @@ public class AreaEncuestaController implements Serializable {
         this.selected = selected;
     }
 
-    public List<String> getMensajes() {
-        return mensajes;
-    }
-
-    public void setMensajes(List<String> mensajes) {
-        this.mensajes = mensajes;
-    }
-
+    @Override
     protected void setEmbeddableKeys() {
         selected.getAreaEncuestaPK().setIdArea(selected.getArea().getIdArea());
         selected.getAreaEncuestaPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
+        selected.getAreaEncuestaPK().setIdTipoEleccionMateria(selected.getTipoEleccionMateria().getIdTipoEleccionMateria());
     }
 
     protected void initializeEmbeddableKey() {
         selected.setAreaEncuestaPK(new com.ingesoft.interpro.entidades.AreaEncuestaPK());
     }
 
-    private AreaEncuestaFacade getFacade() {
+    /**
+     *
+     * @return
+     */
+    @Override
+    protected AreaEncuestaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -68,14 +67,33 @@ public class AreaEncuestaController implements Serializable {
         return selected;
     }
 
-    public AreaEncuesta prepararParaEncuesta() {
-        mensajes = new ArrayList<>();
-        items = new ArrayList<>();
-        items.add(new AreaEncuesta("Materias de mayor preferencia", "Selecciona en orden descendente las areas que mas te gustan."));
-        items.add(new AreaEncuesta("Materias de menor preferencia", "Selecciona como Area #1 la que menos le gusta, como #2 la siguiente que menos le gusta, asi susecivamente."));
-        items.add(new AreaEncuesta("Materias de mayor nota", "Escoja como Area #1 el area de las materias en las cuales saca mejor nota, como #2 la siguiente area, asi sucesivamente. "));
+    public void almacenarEncuestaAreas(Encuesta encuesta) {
+        AreaController areaController = getAreaController();
+        TipoEleccionMateriaController tipoEleccionMateriaController = getTipoEleccionMateriaController();
+        
+        Area[] areas = areaController.getItemsMenos();
+        TipoEleccionMateria tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMenor();
+        almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
+        
+        areas = areaController.getItemsMas();
+        tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMayor();
+        almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
+        
+        areas = areaController.getItemsNota();
+        tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaPorNota();
+        almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
+    }
 
-        return selected;
+    protected void almacenarAreasEncuesta(Area[] areasmenos, Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria) {
+        for (int i = 0; i < areasmenos.length; i++) {
+            Area area = areasmenos[i];
+            prepareCreate();
+            selected.setArea(area);
+            selected.setEncuesta(encuesta);
+            selected.setPosicion((short)i);
+            selected.setTipoEleccionMateria(tipoEleccionMateria);
+            create();
+        }
     }
 
     public void actualizar() {
@@ -83,22 +101,24 @@ public class AreaEncuestaController implements Serializable {
 //            getFacade().edit(item);
 //        }
     }
-    public AreaEncuesta obtenerItem(int index){
+
+    public AreaEncuesta obtenerItem(int index) {
         return items.get(index);
     }
+
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaUpdated"), selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -110,34 +130,6 @@ public class AreaEncuestaController implements Serializable {
             items = getFacade().findAll();
         }
         return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
     }
 
     public AreaEncuesta getAreaEncuesta(com.ingesoft.interpro.entidades.AreaEncuestaPK id) {
@@ -174,6 +166,7 @@ public class AreaEncuestaController implements Serializable {
             key = new com.ingesoft.interpro.entidades.AreaEncuestaPK();
             key.setIdArea(Integer.parseInt(values[0]));
             key.setIdEncuesta(Integer.parseInt(values[1]));
+            key.setIdTipoEleccionMateria(Integer.parseInt(values[2]));
             return key;
         }
 
@@ -182,6 +175,8 @@ public class AreaEncuestaController implements Serializable {
             sb.append(value.getIdArea());
             sb.append(SEPARATOR);
             sb.append(value.getIdEncuesta());
+            sb.append(SEPARATOR);
+            sb.append(value.getIdTipoEleccionMateria());
             return sb.toString();
         }
 

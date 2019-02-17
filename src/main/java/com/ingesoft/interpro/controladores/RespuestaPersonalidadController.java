@@ -257,13 +257,14 @@ public class RespuestaPersonalidadController implements Serializable {
         }
         return listaRespuestas;
     }
+
 //    public class RespuestaPersonalidadAux{
 //        RespuestaPersonalidad respuestaPersonalidad;
 //        
 //    }
-    
-    public void accion(){
-        System.out.println("hola accion;");
+
+    public void accion(RespuestaPersonalidad indice){
+        System.out.println("hola accion;"+indice);
     }
 
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {

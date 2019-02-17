@@ -37,6 +37,10 @@ public class EncuestaController extends Controller implements Serializable {
     private Encuesta selected;
     private int pasoActivo;
 
+    public boolean esDesarrollo() {
+        return Utilidades.esDesarrollo();
+    }
+    
     public EncuestaController() {
     }
 
@@ -114,6 +118,8 @@ public class EncuestaController extends Controller implements Serializable {
         pasoActivo = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
+        getAreaEncuestaController().inicializar();
+        
         // @TODO : Falta obtener el usuario
 //        FacesContext facesContext = FacesContext.getCurrentInstance();
 //        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();

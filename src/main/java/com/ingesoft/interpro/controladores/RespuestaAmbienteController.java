@@ -174,6 +174,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public int getnombrePaso() {
+        System.out.println("barra de progreso");
         return (pasoActual * 100 / numGrupos);
     }
 

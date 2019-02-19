@@ -15,7 +15,7 @@
             <h:outputScript library="js" name="Chart.js"/>
             <h:form id="EstadisticaForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" >
+                    <p:panelGrid columns="2" id="id_selects">
 
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
@@ -29,7 +29,7 @@
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
                                            itemValue="#{institucion}"/>
-                            <f:ajax render="id_select_grado" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 
                         <p:outputLabel value="#{bundle.Label_grado}" for="id_select_grado" />
@@ -43,13 +43,13 @@
                                            var="grado"
                                            itemLabel="#{grado.curso}"
                                            itemValue="#{grado}"/>
-                            <f:ajax render="id_select_grado" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 
                         <p:outputLabel value="#{bundle.Label_estudiante}" for="id_select_estudiante" />
                         <p:selectOneMenu id="id_select_estudiante" 
                                          value="#{estadisticaAmbienteController.estudiante}" 
-                                         immediate="true" 
+                                         immediate="true">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{estadisticaAmbienteController.obternerEstudiante(estadisticaAmbienteController.grado)}"
                                            rendered="#{estadisticaAmbienteController.grado != null}"

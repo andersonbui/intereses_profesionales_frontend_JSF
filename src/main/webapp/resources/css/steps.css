@@ -38,3 +38,8 @@ body .ui-steps.custom .ui-steps-item .ui-menuitem-link .ui-steps-title {
 body .ui-steps.custom .ui-steps-item.ui-state-highlight .ui-menuitem-link .ui-steps-title {
     color: #555;
 }
+.ui-wizard-navbar {
+    text-align: right;
+    width: 50%;
+    margin: auto;
+}

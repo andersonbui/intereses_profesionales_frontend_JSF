@@ -51,7 +51,17 @@ public class EstadisticaAmbienteController implements Serializable {
         lista_colores.add(new Color(0, 255, 0, 0.7));//verde-realista
 
     }
+    String tiempo;
 
+    public String getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(String tiempo) {
+        this.tiempo = tiempo;
+    }
+    
+    
     public void reiniciar() {
 
     }

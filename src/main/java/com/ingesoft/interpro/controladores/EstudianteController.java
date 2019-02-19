@@ -167,6 +167,26 @@ public class EstudianteController extends Controller implements Serializable {
         }
         return false;
     }
+    
+    public boolean esDocente(Persona persona) {
+        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+        for (GrupoUsuario grupoUsuario : listaGU) {
+            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_DOCENTE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean esAdmin(Persona persona) {
+        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+        for (GrupoUsuario grupoUsuario : listaGU) {
+            if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ADMINISTRADOR)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);

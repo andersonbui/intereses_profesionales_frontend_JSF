@@ -258,6 +258,7 @@
                 <p:commandButton value="Siguiente encuesta" ajax="true"
                                  action="#{encuestaController.pasoPreguntasPersonalidad()}"
                                  actionListener="#{preguntaPersonalidadController.preparePreguntasPersonalidad(loginController.actual, encuestaController.selected)}"
+                                 rendered="#{encuestaController.esDesarrollo() or respuestaAmbienteController.esUltimoPaso()}"
                                  > 
                 </p:commandButton>
             </h:form>

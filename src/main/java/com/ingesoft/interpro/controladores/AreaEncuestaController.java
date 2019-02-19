@@ -29,8 +29,14 @@ public class AreaEncuestaController extends Controller implements Serializable {
     private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;
     private List<AreaEncuesta> items = null;
     private AreaEncuesta selected;
+    private int contadorPaso;
 
     public AreaEncuestaController() {
+        contadorPaso = 0;
+    }
+
+    public void inicializar() {
+        contadorPaso = 0;
     }
 
     public AreaEncuesta getSelected() {
@@ -70,15 +76,15 @@ public class AreaEncuestaController extends Controller implements Serializable {
     public void almacenarEncuestaAreas(Encuesta encuesta) {
         AreaController areaController = getAreaController();
         TipoEleccionMateriaController tipoEleccionMateriaController = getTipoEleccionMateriaController();
-        
+
         Area[] areas = areaController.getItemsMenos();
         TipoEleccionMateria tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMenor();
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
-        
+
         areas = areaController.getItemsMas();
         tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMayor();
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
-        
+
         areas = areaController.getItemsNota();
         tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaPorNota();
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
@@ -90,7 +96,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
             prepareCreate();
             selected.setArea(area);
             selected.setEncuesta(encuesta);
-            selected.setPosicion((short)i);
+            selected.setPosicion((short) i);
             selected.setTipoEleccionMateria(tipoEleccionMateria);
             create();
         }

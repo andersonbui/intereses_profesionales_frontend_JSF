@@ -253,7 +253,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public void incrementJuego() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
-        requestContext.execute("PF('knob').setValue(" + number + ")");
+//        requestContext.execute("PF('knob').setValue(" + number + ")");
         if (number > 15) {
             number = 0;
             puntos--;
@@ -415,6 +415,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return color;
     }
 
+    public String claseNoSeleccionada(RespuestaAmbiente item) {
+        return item.getRespuesta().isNaN()? "border: 2px solid red; padding: 4px;" : "border: 2px solid white; padding: 4px;";
+    }
+
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"), selected);
     }
@@ -496,7 +500,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             System.out.println("encuesta: " + encuesta);
             Random rand = new Random(Calendar.getInstance().getTimeInMillis());
             for (RespuestaAmbiente item : items) {
-                item.setRespuesta((float) valores[rand.nextInt(3)]);
+//                item.setRespuesta((float) valores[rand.nextInt(3)]);
             }
         }// @end
         listaResultadosPorAmbiente = null;

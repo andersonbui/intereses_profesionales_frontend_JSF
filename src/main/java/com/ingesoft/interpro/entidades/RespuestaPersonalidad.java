@@ -75,7 +75,6 @@ public class RespuestaPersonalidad implements Serializable {
     }
 
     public void setRespuesta(int respuesta) {
-        System.out.println("hola accion este no es;");
         this.respuesta = respuesta;
     }
 

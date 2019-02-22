@@ -21,7 +21,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean(name = "estadisticaAmbienteController")
+@ManagedBean(name = "estadisticaPersonalidadController")
 @SessionScoped
 public class EstadisticaPersonalidadController implements Serializable {
 

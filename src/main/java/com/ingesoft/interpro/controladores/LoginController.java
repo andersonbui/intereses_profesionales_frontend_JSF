@@ -90,8 +90,7 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean isAdmin() {
-        String nombreGrupo = grupo.getTipoUsuario().getTipo();
-        return nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
+        return getEstudianteController().esAdmin(personaActual);
     }
 
     public boolean isEstudiante() {
@@ -112,8 +111,7 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean isDocente() {
-        String nombreGrupo = grupo.getTipoUsuario().getTipo();
-        return nombreGrupo.equals(UsuarioController.TIPO_DOCENTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR);
+        return getEstudianteController().esDocente(personaActual) || getEstudianteController().esAdmin(personaActual);
     }
 
     public void getPerfilUsuario() throws Exception {

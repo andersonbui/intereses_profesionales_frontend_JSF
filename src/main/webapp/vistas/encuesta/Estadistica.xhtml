@@ -49,7 +49,7 @@
                         <p:outputLabel value="#{bundle.Label_estudiante}" for="id_select_estudiante" />
                         <p:selectOneMenu id="id_select_estudiante" 
                                          value="#{estadisticaAmbienteController.estudiante}" 
-                                         immediate="true" 
+                                         immediate="true" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{estadisticaAmbienteController.obternerEstudiante(estadisticaAmbienteController.grado)}"
                                            rendered="#{estadisticaAmbienteController.grado != null}"

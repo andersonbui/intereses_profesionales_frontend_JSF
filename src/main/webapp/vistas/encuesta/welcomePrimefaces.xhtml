@@ -10,7 +10,7 @@
             <h:form>
                 <!--value="{areaEncuestaController.obtenerItem(0).area}"-->
                 <p:wizard  widgetVar="perfilEstudianteWizard" showNavBar="true"   nextLabel="Siguiente" backLabel="Anterior">
-                   <p:tab id="areaProfesionalTab" title="Area profesinal">
+                    <p:tab id="areaProfesionalTab" title="Area profesinal">
                         <center><p:panel header="Profesion preferida">
                                 <br/><p><b>Selecciona el area profesional en la que le gustaria estudiar.</b></p><br/>
                                 <p:panelGrid columns="2" id="panelInformacionAreaProfesional" styleClass="panelgrid">
@@ -169,7 +169,7 @@
                                 </p:panelGrid>
                             </p:panel></center>
                     </p:tab>
-                    
+
                 </p:wizard>
                 <p:commandButton value="Siguiente encuesta" ajax="true"
                                  action="#{encuestaController.pasoPreguntasAmbiente()}"

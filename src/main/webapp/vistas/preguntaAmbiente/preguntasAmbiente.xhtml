@@ -9,11 +9,6 @@
     <!--<p:dialog id="PreguntaCreateDlgAmbiente"  closable="true" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">-->
 
     <ui:composition template="/realizarEncuesta.xhtml">
-        <script>
-            window.sync = function (t) {
-                PF('knob').setValue(t.current);
-            };
-        </script> 
 
         <style type="text/css">
             .value {
@@ -23,11 +18,30 @@
         </style>
 
         <ui:define name="content">
+            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170">
+                <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
+                        <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
+                        <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
+                        <p:graphicImage name="img/emoji_disgustado.png" width="30px" height="30px"/> cuando no le guste la actividad descrita en la imagen<br/>
+
+                        Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto. Exitos!</p></b>
+            </p:dialog>
+            <p:dialog header="Instrucciones de evaluación" widgetVar="instruccionesEvaluacionDialog" modal="true" height="170">
+                <b><p>
+                        Usted está en la evaluación de perfiles profesionales: <br/><br/>
+                        Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
+
+                        Cada respuesta correcta le sumará un punto de evaluacion y cada incorrecta les restara uno.
+                    </p></b>
+            </p:dialog>
+            <script>
+                $(document).ready(function () {
+                    PF('instruccionesAmbienteDialog').show();
+                });
+            </script>
             <h:form id="PreguntaAmbienteForm"  style="display: block;">         
                 <center>
                     <div id="display">
-
-
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
                             <p:panel header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion}">
                                 <div style="width: 100%; display: table; padding: 0px 100px;" >
@@ -81,7 +95,7 @@
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.puedeAnteriorPaso()}" >
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso}"
-                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}">
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.casiFinaliza()}"
                                                      update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso()}" >
@@ -98,16 +112,19 @@
                                     <p:knob  min="0" max="10" widgetVar="knob" disabled="true" value="0" height="70px" />
                                 </h:panelGroup>
                                 <p:panel header="Definicion del ambiente" rendered="#{respuestaAmbienteEvaluacionController.pasoActual == -1}">
+                                    <script>
+                                        PF('instruccionesEvaluacionDialog').show();
+                                    </script>
                                     <h:form>
-                                        <h:outputText value="#{respuestaAmbienteEvaluacionController.definicion}" escape="false"  ></h:outputText>
+                                        <b><h:outputText value="#{respuestaAmbienteEvaluacionController.definicion}" escape="false"  ></h:outputText></b>
                                     </h:form>
                                 </p:panel>
                                 <p:panel header="Pregunta ambiente"  rendered="#{respuestaAmbienteEvaluacionController.pasoActual != -1}">  
                                     <!--                                    <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
                                                                         <p:outputLabel id="puntosPreguntaAmbiente" value="{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>-->
                                     <h:form>
-                                        <p>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta: </p><br/>
-                                        <h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText>
+                                        <!--                                        <p><b>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta: </b></p><br/>-->
+                                        <h4><h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText></h4>
                                         <center>
                                             <p:panelGrid columns="1" layout="grid">
                                                 <ui:repeat value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente}" var="item">
@@ -211,7 +228,7 @@
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:panelGrid styleClass="panelgrid">
                                     <h1>Felicidades</h1>
-                                    <p>Has completado las preguntas de Ambiente</p>
+                                    <p><b>Has completado las preguntas de Ambiente</b></p>
 
 
                                     <p:row style="border:red ridge thick">
@@ -255,12 +272,20 @@
                 </center>
             </h:form>
             <h:form>
-                <p:commandButton value="Siguiente encuesta" ajax="true"
+                <p:commandButton value="Siguiente encuestaAmbiente" ajax="true"
                                  action="#{encuestaController.pasoPreguntasPersonalidad()}"
                                  actionListener="#{preguntaPersonalidadController.preparePreguntasPersonalidad(loginController.actual, encuestaController.selected)}"
                                  > 
                 </p:commandButton>
             </h:form>
+            <script>
+                window.sync = function (t) {
+                    PF('knob').setValue(t.current);
+                };
+//                $(document).ready(function () {
+//                    PF('instruccionesAmbienteDialog').show();
+//                });
+            </script> 
         </ui:define>
     </ui:composition>
 </html>

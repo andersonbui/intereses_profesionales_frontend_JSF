@@ -359,10 +359,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso: " + pasoActual);
-//        if (pasoActual == -1) {
-//            System.out.println("Contador:" + cont);
-////            getItemPreguntaEvaluacion();
-//        }
         pasoActual += 1;
         number = 0;
         return pasoActual;

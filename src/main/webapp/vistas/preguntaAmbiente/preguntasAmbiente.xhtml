@@ -30,18 +30,18 @@
             </p:dialog>
             <p:dialog header="Instrucciones de evaluación" widgetVar="instruccionesEvaluacionDialog" modal="true" height="170">
                 <b><p>
-                        Usted está en la evaluación de perfiles profesionales: <br/><br/>
-                        Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
+                    Usted está en la evaluación de perfiles profesionales: <br/><br/>
+                    Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
 
-                        Cada respuesta correcta le sumará un punto de evaluacion y cada incorrecta les restara uno.
-                    </p></b>
+                    Cada respuesta correcta le sumará un punto de evaluacion y cada incorrecta les restara uno.
+                </p></b>
             </p:dialog>
             <script>
                 $(document).ready(function () {
                     PF('instruccionesAmbienteDialog').show();
                 });
             </script>
-            <h:form id="PreguntaAmbienteForm"  style="display: block;">         
+            <h:form id="PreguntaAmbienteForm"  style="display: block;">
                 <center>
                     <div id="display">
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
@@ -52,7 +52,7 @@
                                         <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                     </div>
                                     <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                        <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego()}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
+                                        <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego()}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and respuestaAmbienteEvaluacionController.isEvaluacionImagenes}"/>
                                         <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
                                     </h:panelGroup>
                                 </div>
@@ -293,9 +293,6 @@
                 window.sync = function (t) {
                     PF('knob').setValue(t.current);
                 };
-//                $(document).ready(function () {
-//                    PF('instruccionesAmbienteDialog').show();
-//                });
             </script> 
         </ui:define>
     </ui:composition>

@@ -253,10 +253,14 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public void incrementJuego() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         number++;
-//        requestContext.execute("PF('knob').setValue(" + number + ")");
+        requestContext.execute("PF('knob').setValue(" + number + ")");
         if (number > 15) {
             number = 0;
-            puntos--;
+            if (puntos > 0) {
+                puntos--;
+            } else {
+                
+            }
         }
     }
 
@@ -416,7 +420,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public String claseNoSeleccionada(RespuestaAmbiente item) {
-        return item.getRespuesta().isNaN()? "border: 2px solid red; padding: 4px;" : "border: 2px solid white; padding: 4px;";
+        return item.getRespuesta().isNaN() ? "border: 2px solid red; padding: 4px;" : "border: 2px solid white; padding: 4px;";
     }
 
     public void update() {

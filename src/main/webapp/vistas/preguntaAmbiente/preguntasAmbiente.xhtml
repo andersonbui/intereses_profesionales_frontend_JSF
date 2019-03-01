@@ -265,9 +265,17 @@
                                         </p:column>
 
                                         <p:column >
-                                            <h5>Su puntaje de juego y evaluación fue: </h5>
-                                            <p:outputLabel value="Juegos: #{respuestaAmbienteController.puntos}"/><br/>
-                                            <p:outputLabel value="Evaluación: #{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}"/><br/>
+                                            <div style="height:200px">
+                                                <h5>Su puntaje de juego y evaluación fue: </h5>
+                                                <p:outputLabel value="Juegos: #{respuestaAmbienteController.puntos}"/>
+                                                <br/>
+                                                <p:outputLabel value="Evaluación: #{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}"/><br/>
+                                            </div>
+                                            <p:commandButton value="Siguiente encuesta" ajax="true" style="float:right;" class="btn"
+                                                             action="#{encuestaController.pasoPreguntasPersonalidad()}"
+                                                             actionListener="#{preguntaPersonalidadController.preparePreguntasPersonalidad(loginController.actual, encuestaController.selected)}"
+                                                             rendered="#{encuestaController.esDesarrollo() or respuestaAmbienteController.esUltimoPaso()}" >
+                                            </p:commandButton>
                                         </p:column>
 
                                     </p:row>

@@ -194,8 +194,7 @@ public class RegistroController extends Controller implements Serializable {
             codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
 
             if (codInstitucion != null) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DAY_OF_MONTH, 10);
+                
                 // Crear persona
                 PersonaController personaController = getPersonaController();
                 Persona unaPersona = personaController.prepareCreateParaRegistrar();
@@ -205,13 +204,13 @@ public class RegistroController extends Controller implements Serializable {
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
                 unaPersona.getIdUsuario().setFechaCreacion(new Date());
                 unaPersona.getIdUsuario().setTokenAcesso("");
-                unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
+                unaPersona.getIdUsuario().setFechaExpiracionToken(Utilidades.getFechaExpiracion());
                 unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
                 unaPersona = personaController.createParaRegistrar();
                 // TODO : falta enviar mensaje por usuario repetido
                 UsuarioController usuarioController = getUsuarioController();
                 Usuario unusuario = unaPersona.getIdUsuario();
-                unusuario.setTokenAcesso(generarToken("" + unusuario.getIdUsuario()));
+                unusuario.setTokenAcesso(Utilidades.generarToken("" + unusuario.getIdUsuario()));
                 usuarioController.setSelected(unusuario);
                 usuarioController.update();
                 // Crear grupo usuario
@@ -240,25 +239,19 @@ public class RegistroController extends Controller implements Serializable {
 
     }
 
-    public String generarToken(String userid) {
-        String rtoken = UUID.randomUUID().toString().toUpperCase()
-                + userid
-                + Calendar.getInstance().getTimeInMillis();
-        rtoken = rtoken.replace('-', '0');
-        return rtoken;
-    }
+
 
     public void enviarMensaje() {
-//        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
 //        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().get);
     }
 

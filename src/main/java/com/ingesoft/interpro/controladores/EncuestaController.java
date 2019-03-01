@@ -40,7 +40,7 @@ public class EncuestaController extends Controller implements Serializable {
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
     }
-    
+
     public EncuestaController() {
     }
 
@@ -85,20 +85,24 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void pasoResumen() throws IOException {
         this.pasoActivo = 3;
+        actualizarSelected();
+        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
+        estadisticaAmbienteController.setEncuesta(selected);
+        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
     }
 
     public void finalizar() throws IOException {
         this.pasoActivo = 0;
-        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
+        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
     }
 
-    public void finalizarEncuesta( ) {
+    public void finalizarEncuesta() {
         String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
         selected.setPersonalidad(personalidad);
         update();
     }
-    
+
     public int getIdEncuesta() {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
@@ -119,7 +123,7 @@ public class EncuestaController extends Controller implements Serializable {
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();
-        
+
         // @TODO : Falta obtener el usuario
 //        FacesContext facesContext = FacesContext.getCurrentInstance();
 //        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -150,7 +154,7 @@ public class EncuestaController extends Controller implements Serializable {
                 selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
             }
             create();
-            
+
             AreaController areaController = getAreaController();
             areaController.inicializar();
         } catch (Exception e) {
@@ -162,7 +166,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public String resultado_personalidad(int i) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad=selected.getPersonalidad();
+        String result_personalidad = selected.getPersonalidad();
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -172,7 +176,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public String resultado_personalidad_descripcion(int i) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad=selected.getPersonalidad();
+        String result_personalidad = selected.getPersonalidad();
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {
             return null;
@@ -209,7 +213,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
+        selected = (Encuesta) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
     }
 
     public void destroy() {

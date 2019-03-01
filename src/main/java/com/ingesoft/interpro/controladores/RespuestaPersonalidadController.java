@@ -266,7 +266,6 @@ public class RespuestaPersonalidadController extends Controller implements Seria
             getRespuestaAmbienteController().setNumber(0);
         }
         vecContRespuestasPersonalidad[posicion]++;
-        ;
         System.out.println("hola accion;" + respuestaPersonalidad);
     }
 

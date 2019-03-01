@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
@@ -120,11 +121,11 @@ public class PersonaController extends Controller implements Serializable {
                 estudianteController.setSelected(estudiante);
                 EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
                 EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante());
-                if(estudianteGrado == null) {
+                if (estudianteGrado == null) {
                     estudianteGrado = getEstudianteGradoController().prepareCreate();
                     estudianteGrado.setEstudiante(estudiante);
                 }
-                System.out.println("estudianteGrado: "+estudianteGrado.getGrado());
+                System.out.println("estudianteGrado: " + estudianteGrado.getGrado());
             } else {
                 estudianteController.setSelected(null);
             }
@@ -145,28 +146,41 @@ public class PersonaController extends Controller implements Serializable {
         return selected;
     }
 
-    public Persona createPorOtro() {
+    /**
+     * Usado para crear un usuario desde una cuenta de docente o administrador
+     *
+     * @return
+     */
+    public Persona crearPorAdminDocente() {
         LoginController loginController = getLoginController();
         if (loginController.getActual() == null) {
             if (!loginController.isDocente()) {
                 return null;
             }
         }
-        Persona perso = create();
-
+        selected.setEmail(selected.getIdUsuario().getUsuario());
+        //guardar en la base de datos y refrescar cambios en app
+        create();
+        Usuario un_usuario = selected.getIdUsuario();
+        un_usuario.setTokenAcesso(Utilidades.generarToken("" + un_usuario.getIdUsuario()));
+        un_usuario.setFechaExpiracionToken(Utilidades.getFechaExpiracion());
+        getUsuarioController().setSelected(un_usuario);
+        getUsuarioController().update();
+        
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
-        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
-        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+        grupoUsuarioController.getSelected().setUsuario(selected.getIdUsuario().getUsuario());
+        grupoUsuarioController.getSelected().setUsuario1(selected.getIdUsuario());
+        Utilidades.enviarCorreoDeRegistro(un_usuario.getUsuario(), un_usuario.getTokenAcesso());
         grupoUsuarioController.create();
-        return create();
+        return null;
     }
 
     private Persona create() {
-        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
+        selected = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
-        return perso;
+        return selected;
     }
 
     public Persona createParaRegistrar() {
@@ -174,8 +188,8 @@ public class PersonaController extends Controller implements Serializable {
         return perso;
     }
 
-    public void update() {
-        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+    public Persona update() {
+        return (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 
     public void updateConUsuarioEstudiante() {

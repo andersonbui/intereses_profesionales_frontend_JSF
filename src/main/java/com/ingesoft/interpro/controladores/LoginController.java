@@ -15,6 +15,7 @@ import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.ejb.EJB;
@@ -52,7 +53,7 @@ public class LoginController extends Controller implements Serializable {
     String usuario;
     String password;
     boolean logueado;
-    private GrupoUsuario grupo;
+    private List<GrupoUsuario> grupos;
 
     private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
     private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
@@ -94,12 +95,17 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean isEstudiante() {
-        return getEstudianteController().isEstudiante(personaActual);
+        return getUsuarioController().esEstudiante(actual.getIdUsuario());
     }
 
     public boolean permisoEstudiante() {
-        String nombreGrupo = grupo.getTipoUsuario().getTipo();
-        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
+        for (GrupoUsuario grupo : grupos) {
+            String nombreGrupo = grupo.getTipoUsuario().getTipo();
+            if(nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public String utimoGrado() {
@@ -204,7 +210,7 @@ public class LoginController extends Controller implements Serializable {
                 Map<String, Object> sessionMap = external.getSessionMap();
                 sessionMap.put("usuario", actual);
                 System.out.println("estado usuari: " + actual.getEstado());
-                grupo = actual.getGrupoUsuarioList().get(0);
+                grupos = getGrupoUsuarioController().getGruposUsuario(actual);
             }
             context.addMessage(null, msg);
         } else {
@@ -215,9 +221,8 @@ public class LoginController extends Controller implements Serializable {
             actual = ejbFacade.buscarPorUsuario(nombreUsuario);
         }
         if (actual != null) {
-            GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
-            if (gtu != null) {
-                personaActual = actual.getPersonaList().get(0);
+            if (grupos != null && !grupos.isEmpty()) {
+                personaActual = getPersonaController().getPersona(actual);
                 if (UsuarioController.EN_PROCESO.equals(actual.getEstado())) {
                     PersonaController personaController = getPersonaController();
                     personaController.prepareUpdate(personaActual);
@@ -235,9 +240,9 @@ public class LoginController extends Controller implements Serializable {
 
     public void guardarEnProceso() throws IOException {
         // @desarrollo
-        if (!Utilidades.esDesarrollo()) {
+//        if (!Utilidades.esDesarrollo()) {
             getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
-        }
+//        }
         PersonaController personaController = getPersonaController();
         personaController.updateConUsuarioEstudiante();
 
@@ -250,7 +255,7 @@ public class LoginController extends Controller implements Serializable {
     public void eliminarSesion() {
         actual = null;
         personaActual = null;
-        grupo = null;
+        grupos = null;
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
         logueado = false;

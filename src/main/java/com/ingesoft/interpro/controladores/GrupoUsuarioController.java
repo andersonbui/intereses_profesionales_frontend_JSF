@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.GrupoUsuarioPK;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.GrupoUsuarioFacade;
 
 import java.io.Serializable;
@@ -123,6 +124,11 @@ public class GrupoUsuarioController implements Serializable {
     public GrupoUsuario getGrupoUsuario(GrupoUsuarioPK id) {
         return getFacade().find(id);
     }
+
+    public List<GrupoUsuario> getGruposUsuario(Usuario usuario) {
+        return getFacade().getGruposUsuario(usuario);
+    }
+
 
     public List<GrupoUsuario> getItemsAvailableSelectMany() {
         return getFacade().findAll();

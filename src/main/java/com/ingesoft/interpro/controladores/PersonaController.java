@@ -11,6 +11,7 @@ import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -163,7 +164,9 @@ public class PersonaController extends Controller implements Serializable {
         create();
         Usuario un_usuario = selected.getIdUsuario();
         un_usuario.setTokenAcesso(Utilidades.generarToken("" + un_usuario.getIdUsuario()));
+        un_usuario.setFechaCreacion(new Date());
         un_usuario.setFechaExpiracionToken(Utilidades.getFechaExpiracion());
+        un_usuario.setClave(Utilidades.sha256(un_usuario.getClave()));
         getUsuarioController().setSelected(un_usuario);
         getUsuarioController().update();
         
@@ -242,7 +245,11 @@ public class PersonaController extends Controller implements Serializable {
     public Persona getPersona(java.lang.Integer id) {
         return getFacade().find(id);
     }
-
+    
+    public Persona getPersona(Usuario id) {
+        return getFacade().findPorIdUsuario(id);
+    }
+   
     public List<Persona> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

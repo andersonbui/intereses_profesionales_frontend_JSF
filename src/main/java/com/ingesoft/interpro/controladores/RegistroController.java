@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
@@ -17,11 +18,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -47,8 +47,9 @@ public class RegistroController extends Controller implements Serializable {
 
     @EJB
     UsuarioFacade ejbFacade;
-
-    private Usuario actual;
+    private Usuario selected;
+    
+//    private Usuario actual;
     private SocialAuthManager socialManager;
     private Profile profile;
     String codigo;
@@ -114,19 +115,20 @@ public class RegistroController extends Controller implements Serializable {
             fechaExpiracion.setTime(fechaExp);
             boolean antes = fechaActual.before(fechaExpiracion);
             if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
-                Persona persona = unusuario.getPersonaList().get(0);
-                if (getEstudianteController().isEstudiante(persona)) {
+                Persona persona = getPersonaController().getPersona(unusuario);
+                
+                if (getUsuarioController().esEstudiante(unusuario.getIdUsuario())) {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
-                    estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
+                    estudianteController.getSelected().setIdPersona(persona);
                     estudianteController.create();
-
-                    unusuario.setEstado(UsuarioController.EN_PROCESO);
-                    UsuarioController usuarioController = getUsuarioController();
-                    usuarioController.setSelected(unusuario);
-                    usuarioController.create();
-
+//                    UsuarioController usuarioController = getUsuarioController();
+//                    usuarioController.setSelected(unusuario);
+//                    usuarioController.create();
                 }
+                unusuario.setEstado(UsuarioController.EN_PROCESO);
+                selected = unusuario;
+                this.create();
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
                 return;
             }
@@ -170,13 +172,13 @@ public class RegistroController extends Controller implements Serializable {
         this.codigo = codigo;
     }
 
-    public Usuario getActual() {
-        return actual;
-    }
-
-    public void setActual(Usuario actual) {
-        this.actual = actual;
-    }
+//    public Usuario getActual() {
+//        return actual;
+//    }
+//
+//    public void setActual(Usuario actual) {
+//        this.actual = actual;
+//    }
 
     public Usuario getUsuario(java.lang.Integer id) {
         return getFacade().find(id);
@@ -186,6 +188,9 @@ public class RegistroController extends Controller implements Serializable {
         return ejbFacade;
     }
 
+    public void create() {
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"), selected);
+    }
     public void registrarse(ActionEvent e) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage msg;

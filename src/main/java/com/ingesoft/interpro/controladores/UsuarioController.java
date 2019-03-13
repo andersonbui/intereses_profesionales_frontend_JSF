@@ -102,7 +102,11 @@ public class UsuarioController extends Controller implements Serializable {
         }
         return items;
     }
-
+ 
+    public boolean esEstudiante(java.lang.Integer idUsuario) {
+        return getFacade().esEstudiante(idUsuario);
+    }
+    
     public Usuario getUsuario(java.lang.Integer id) {
         return getFacade().find(id);
     }

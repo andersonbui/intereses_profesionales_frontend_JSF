@@ -43,21 +43,36 @@
                                             <f:selectItem itemLabel="M" itemValue='M' />
                                             <f:selectItem itemLabel="F" itemValue='F' />
                                         </p:selectOneRadio>
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}"/>
-                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" title="#{bundle.Title_Usuario}" requiredMessage="#{bundle.RequiredMessage_idUsuario}"/>
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_estado}"/>
-                                        <p:outputLabel value="#{personaController.selected.idUsuario.estado}" title="#{bundle.UsuarioTitle_estado}"  rendered="#{!loginController.isDocente()}"/>
-                                        <p:selectOneRadio id="estadoUsuario" value="#{personaController.selected.idUsuario.estado}" required="true" rendered="#{loginController.isDocente()}">
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}" for="id_usuario"/>
+                                        <p:inputText value="#{personaController.selected.idUsuario.usuario}" 
+                                                     title="#{bundle.Title_Usuario}" 
+                                                     required="true"
+                                                     id="id_usuario" requiredMessage="#{bundle.RequiredMessage_idUsuario}"/>
+                                        <p:outputLabel style="font-weight:bold; color: black;" 
+                                                       for="id_estadoUsuario" 
+                                                       value="#{bundle.UsuarioLabel_estado}"
+                                                       rendered="#{personaController.editar}"/>
+                                        <p:outputLabel value="#{personaController.selected.idUsuario.estado}" 
+                                                       title="#{bundle.UsuarioTitle_estado}"  
+                                                       for="id_estadoUsuario"
+                                                       rendered="#{!loginController.isDocente()}"/>
+                                        <p:selectOneRadio id="id_estadoUsuario" 
+                                                          value="#{personaController.selected.idUsuario.estado}" 
+                                                          required="true" 
+                                                          rendered="#{loginController.isDocente() and personaController.editar}">
                                             <f:selectItems value="#{personaController.tiposEstadoUsuario}"
                                                            var="estado"
                                                            itemValue="#{estado}"
                                                            itemLabel="#{estado}"
                                                            />  
                                         </p:selectOneRadio>
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.Label_tipoUsuario}" rendered="#{loginController.docente and !personaController.editar}" />
-                                        <p:selectOneRadio id="selt_idtipoUsuario" 
+                                        <p:outputLabel  style="font-weight:bold; color: black;"  
+                                                        value="#{bundle.Label_tipoUsuario}" 
+                                                        for="id_tipoUsuario"
+                                                        rendered="#{loginController.docente and !personaController.editar}" />
+                                        <p:selectOneRadio id="id_tipoUsuario" 
                                                           value="#{grupoUsuarioController.selected.tipoUsuario}" 
-                                                          required="true" 
+                                                          required="true"
                                                           rendered="#{grupoUsuarioController.selected != null and loginController.docente and !personaController.editar}" >
                                              
                                             <f:selectItems value="#{tipoUsuarioController.getItemsFiltrados(loginController.actual.grupoUsuarioList)}"
@@ -67,8 +82,12 @@
                                                            />
                                         </p:selectOneRadio>
                                         
-                                        <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.PersonaLabel_idInstitucion}" rendered="#{loginController.admin and !personaController.editar}" />
-                                        <p:selectOneMenu id="selt_idInstitucion"
+                                        <p:outputLabel  style="font-weight:bold; color: black;"
+                                                        value="#{bundle.Label_Institucion}"
+                                                        for="id_Institucion"
+                                                        rendered="#{loginController.admin and !personaController.editar}"/>
+                                        
+                                        <p:selectOneMenu id="id_Institucion"
                                                           value="#{personaController.selected.idInstitucion}"
                                                           required="true"
                                                           rendered="#{grupoUsuarioController.selected != null and loginController.admin and !personaController.editar}" >
@@ -76,7 +95,7 @@
                                                            var="insti"
                                                            itemValue="#{insti}"
                                                            itemLabel="#{insti.nombre}"
-                                                           />  
+                                                           />
                                         </p:selectOneMenu>
                                     </p:panelGrid>
                                 </p:panel>

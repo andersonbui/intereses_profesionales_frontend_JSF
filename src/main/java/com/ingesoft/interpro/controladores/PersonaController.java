@@ -37,7 +37,7 @@ public class PersonaController extends Controller implements Serializable {
     private boolean editar;
 
     public PersonaController() {
-        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_ESPERA};
+        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO};
     }
 
     public boolean isEditar() {
@@ -137,7 +137,7 @@ public class PersonaController extends Controller implements Serializable {
                 deptoController.setSelected(null);
                 getPaisController().setSelected(null);
             }
-
+            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
             UsuarioController usuarioController = getUsuarioController();
             usuarioController.setSelected(selected.getIdUsuario());
 

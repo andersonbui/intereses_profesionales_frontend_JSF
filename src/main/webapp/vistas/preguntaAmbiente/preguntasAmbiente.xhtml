@@ -20,7 +20,7 @@
 
         <ui:define name="content">
             <p:growl id="msgs" /> 
-            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170">
+            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170" onHide="funclock()">
                 <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
                         <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
                         <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
@@ -28,7 +28,7 @@
 
                         Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto. Exitos!</p></b>
             </p:dialog>
-            <p:dialog header="Instrucciones de evaluación" widgetVar="instruccionesEvaluacionDialog" modal="true" height="170">
+            <p:dialog header="Instrucciones de evaluación" widgetVar="instruccionesEvaluacionDialog" modal="true" height="170" onHide="funclock()">
                 <b><p>
                     Usted está en la evaluación de perfiles profesionales: <br/><br/>
                     Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
@@ -40,8 +40,81 @@
                 $(document).ready(function () {
                     PF('instruccionesAmbienteDialog').show();
                 });
+                
+                var tiempo = 15;
+                let reloj;
+                function reiniciarClock(){
+                    tiempo = 15;
+                }
+                
+                function paraClock() {
+                    clearInterval(reloj);
+                }
+                
+                function funclock() {
+                    reloj = setInterval('updateClock()', 1000);
+                }
+                
+                function updateClock ()
+                {
+                    // Compose the string for display
+                    var currentTimeString = tiempo;
+
+                    $(".jclock").html(currentTimeString);
+                    tiempo--;
+                    if(tiempo === 0){
+//                        mojarra.ab(document.getElementById('PreguntaAmbienteForm:id_btn_tiempo'), null, 'click', 'PreguntaAmbienteForm:puntos_id', 0);
+//                        mojarra.ab('PreguntaAmbienteForm:id_btn_tiempo', null, 'action', 'PreguntaAmbienteForm:puntos_id', {'onevent': incrementJuego() });
+//                        jsf.ajax.request(document.getElementById('PreguntaAmbienteForm:id_btn_tiempo'),'action',{
+//                            execute: 'incrementJuego()',
+//                            render: 'PreguntaAmbienteForm:puntos_id'
+//                        }); //{respuestaAmbienteController.incrementJuego}
+                        event = 'event';
+                        let ret = PrimeFaces.bcn(document.getElementById('PreguntaAmbienteForm:id_btn_tiempo'), event, [
+                            function (event) {
+                                PrimeFaces.ab({
+                                  s: 'PreguntaAmbienteForm:id_btn_tiempo',
+                                  e: 'click',
+                                  p: 'PreguntaAmbienteForm:id_btn_tiempo',
+                                  u: 'PreguntaAmbienteForm:puntos_id'
+                                });
+                            },
+                            function (event) {
+                                PrimeFaces.ab({
+                                  s: 'PreguntaAmbienteForm:id_btn_tiempo'
+                                });
+                                return false;
+                            }
+                        ]);
+                        console.log(ret);
+                        reiniciarClock();
+                    }
+                }
+
+                
+//                function funclock() {
+//                  var options = {
+//                    format: '%I:%M:%S', // 12-hour
+//                    timeNotation: '12h',
+//                    am_pm: true,
+//                    fontFamily: 'Verdana, Times New Roman',
+//                    fontSize: '20px',
+//                    foreground: 'yellow',
+//                    background: 'red'
+//                  }
+//                    var t = (new Date());
+//                    t.setHours('0');
+//                    t.setMinutes('0');
+//                    t.setSeconds('15');
+//                    $('.jclock').jclock('setSeedTime', t.getTime());
+//                    $('.jclock').jclock(options);
+//                    $('.jclock').jclock('startClock');
+//                }
             </script>
             <h:form id="PreguntaAmbienteForm"  style="display: block;">
+                <p:commandButton id="id_btn_tiempo" value="click" action="#{respuestaAmbienteController.disminuirPuntaje()}" style="display:none" >
+                    <p:ajax  event="click"  update="PreguntaAmbienteForm:puntos_id" ></p:ajax>
+                </p:commandButton>
                 <center>
                     <div id="display">
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
@@ -51,9 +124,11 @@
                                         <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
                                         <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                     </div>
-                                    <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                        <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego()}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and respuestaAmbienteEvaluacionController.isEvaluacionImagenes}"/>
-                                        <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
+                                    <h:panelGroup id="grupoTimeJuego" class="float-r" style="font-size: 1.5em;">
+                                        <!--<p:poll id="timeJuego" interval="1" listener="{respuestaAmbienteController.incrementJuego()}" update="puntos_id"--> 
+                                        <!--stop="{respuestaAmbienteController.isEvaluacion and respuestaAmbienteEvaluacionController.isEvaluacionImagenes}"/>-->
+                                        <!--<p:knob  id="relog" min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />-->
+                                        <div class="jclock"></div>
                                     </h:panelGroup>
                                 </div>
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>

@@ -250,18 +250,21 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
     }
 
-    public void incrementJuego() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        number++;
-        requestContext.execute("PF('knob').setValue(" + number + ")");
-        if (number > 15) {
-            number = 0;
-            if (puntos > 0) {
-                puntos--;
-            } else {
-                
-            }
+    public void disminuirPuntaje() {
+//        RequestContext requestContext = RequestContext.getCurrentInstance();
+        System.out.println("carambas---");
+//        number++;
+//            puntos++;
+//        requestContext.execute("PF('knob').setValue(" + number + ")");
+//        if (number > 15) {
+//            number = 0;
+        if (puntos > 0) {
+            puntos--;
         }
+//            else {
+//                
+//            }
+//        }
     }
 
     public void casiFinaliza() {

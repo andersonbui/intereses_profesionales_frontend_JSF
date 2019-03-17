@@ -263,7 +263,7 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         int posicion = respuestaPersonalidad.getPreguntaPersonalidad().getOrden() - 1;
         if (vecContRespuestasPersonalidad[posicion] == 0) {
             getRespuestaAmbienteController().setPuntos(getRespuestaAmbienteController().getPuntos() + 1);
-            getRespuestaAmbienteController().setNumber(0);
+            getRespuestaAmbienteController().setTiempo(0);//Number(0);
         }
         vecContRespuestasPersonalidad[posicion]++;
         System.out.println("hola accion;" + respuestaPersonalidad);

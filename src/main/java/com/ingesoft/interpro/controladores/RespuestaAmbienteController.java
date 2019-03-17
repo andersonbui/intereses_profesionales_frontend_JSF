@@ -60,6 +60,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
     private boolean isEvaluacion;
+    boolean detener_reloj;
 
     public RespuestaAmbienteController() {
         tamGrupo = 6;
@@ -69,6 +70,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 //        listaValoresAmbiente = null;
         pasoActual = 0;
         puntos = 0;
+        detener_reloj = true;
     }
 
     public void reiniciar() {
@@ -78,6 +80,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         listaResultadosPorAmbiente = null;
 //        listaValoresAmbiente = null;
         isEvaluacion = false;
+        detener_reloj = true;
     }
 
     public boolean isIsEvaluacion() {
@@ -202,6 +205,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public void volverAEncuesta() {
         isEvaluacion = false;
+        arrancarReloj();
     }
 
     public int siguientePaso(ActionEvent actionEvent) {
@@ -213,6 +217,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }// @end
         if ((pasoActual + 1) % intervaloEvaluacion == 0) {
             isEvaluacion = true;
+            detenerReloj();
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }
@@ -249,25 +254,24 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             puntos++;
         }
     }
-    boolean ejecutar_reloj = false;
 
-    public boolean ejecutarReloj() {
-        return ejecutar_reloj;
+    public boolean relojDetenido() {
+        return detener_reloj;
     }
 
     public void arrancarReloj() {
-        ejecutar_reloj = true;
+        detener_reloj = false;
     }
 
     public void detenerReloj() {
-        ejecutar_reloj = false;
+        detener_reloj = true;
     }
 
     public void incrementPuntaje() {
-        ejecutar_reloj = !ejecutar_reloj;
+        detener_reloj = !detener_reloj;
         puntos++;
         tiempo++;
-        System.out.println("mostrar_reloj: " + ejecutar_reloj);
+        System.out.println("mostrar_reloj: " + detener_reloj);
         System.out.println("puntos: " + puntos);
         System.out.println("tiempo: " + tiempo);
     }

@@ -20,21 +20,28 @@
 
         <ui:define name="content">
             <p:growl id="msgs" /> 
-            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170" onHide="" >
-                <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
-                        <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
-                        <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
-                        <p:graphicImage name="img/emoji_disgustado.png" width="30px" height="30px"/> cuando no le guste la actividad descrita en la imagen<br/>
+            <h:form >
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170" closable="true" >
+                    <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
+                            <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
+                            <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
+                            <p:graphicImage name="img/emoji_disgustado.png" width="30px" height="30px"/> cuando no le guste la actividad descrita en la imagen<br/>
 
-                        Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto. Exitos!</p></b>
-            </p:dialog>
+                            Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto. Exitos!</p></b>
+
+                    <p:commandButton value="Aceptar" update="@form, PreguntaAmbienteForm:grupoTimeJuego" ajax="true" 
+                                     actionListener="#{respuestaAmbienteController.arrancarReloj()}" 
+                                     onclick="PF('instruccionesAmbienteDialog').show();" />
+
+                </p:dialog>
+            </h:form>
             <p:dialog header="Instrucciones de evaluación" widgetVar="instruccionesEvaluacionDialog" modal="true" height="170">
                 <b><p>
-                    Usted está en la evaluación de perfiles profesionales: <br/><br/>
-                    Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
+                        Usted está en la evaluación de perfiles profesionales: <br/><br/>
+                        Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta.<br/>
 
-                    Cada respuesta correcta le sumará un punto de evaluacion y cada incorrecta les restara uno.
-                </p></b>
+                        Cada respuesta correcta le sumará un punto de evaluacion y cada incorrecta les restara uno.
+                    </p></b>
             </p:dialog>
             <script>
                 $(document).ready(function () {
@@ -55,8 +62,8 @@
                                     <h:panelGroup id="grupoTimeJuego" class="float-r">
                                         <p:poll id="timeJuego" interval="1"  process="@form" 
                                                 listener="#{respuestaAmbienteController.incrementJuego()}" 
-                                                update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.ejecutarReloj()}" 
-                                                stop="#{respuestaAmbienteController.ejecutarReloj()}" />
+                                                update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.relojDetenido()}" 
+                                                stop="#{respuestaAmbienteController.relojDetenido()}" />
                                         <p:knob id="id_knop_clock" min="0" max="15" widgetVar="knob" 
                                                 value="#{respuestaAmbienteController.tiempo}" height="70px" />
                                     </h:panelGroup>
@@ -80,7 +87,7 @@
                                                                 <em><span>Me gusta</span></em>
                                                                 <p:graphicImage name="img/emoji_feliz.png" />
                                                                 <p:ajax event="click" listener="#{respuestaAmbienteController.meGusta(item)}" 
-                                                                        update="@parent:@parent" />
+                                                                        update="@parent:@parent, PreguntaAmbienteForm:grupoTimeJuego, PreguntaAmbienteForm:puntos_id" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="indiferente1#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -88,7 +95,7 @@
                                                                 <em><span>Indiferente</span></em>
                                                                 <p:graphicImage name="img/emoji_neutral.png" />
                                                                 <p:ajax event="click" listener="#{respuestaAmbienteController.indiferente(item)}" 
-                                                                        update="@parent:@parent" />
+                                                                        update="@parent:@parent, PreguntaAmbienteForm:grupoTimeJuego, PreguntaAmbienteForm:puntos_id" />
                                                             </p:commandLink>
                                                         </li>
                                                         <li id="nomegusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -97,7 +104,7 @@
                                                                 <em><span>No me gusta</span></em>
                                                                 <p:graphicImage name="img/emoji_disgustado.png" />
                                                                 <p:ajax event="click" listener="#{respuestaAmbienteController.noMeGusta(item)}" 
-                                                                        update="@parent:@parent" />
+                                                                        update="@parent:@parent, PreguntaAmbienteForm:grupoTimeJuego, PreguntaAmbienteForm:puntos_id" />
                                                             </p:commandLink>
                                                         </li>
                                                     </ul>

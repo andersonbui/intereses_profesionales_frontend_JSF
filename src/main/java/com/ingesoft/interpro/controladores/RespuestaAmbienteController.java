@@ -277,9 +277,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public void incrementJuego() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
         tiempo++;
-//        requestContext.execute("PF('knob').setValue(" + tiempo + ")");
         if (tiempo > 15) {
             tiempo = 0;
             if (puntos > 0) {

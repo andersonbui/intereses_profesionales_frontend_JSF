@@ -64,11 +64,11 @@
                                                 listener="#{respuestaAmbienteController.incrementJuego()}" 
                                                 update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.relojDetenido()}" 
                                                 stop="#{respuestaAmbienteController.relojDetenido()}" />
-                                        <p:knob id="id_knop_clock" min="0" max="15" widgetVar="knob" 
+                                        <p:knob min="0" max="15" widgetVar="knob" 
                                                 value="#{respuestaAmbienteController.tiempo}" height="70px" />
                                     </h:panelGroup>
                                 </div>
-                                <p:commandButton actionListener="#{respuestaAmbienteController.incrementPuntaje()}" update="@form" />
+                                <!--<p:commandButton actionListener="{respuestaAmbienteController.incrementPuntaje()}" update="@form" />-->
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">
                                     <p:column id="pregunta#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -176,14 +176,21 @@
                                 </h:panelGroup>
                             </p:panel> 
                             <p:panel header="Preguntas de ambiente" rendered="#{respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">
-                                <div  class="float-l">
-                                    <p:outputLabel value="Puntos de evaluación: " style=" font-size: 30px; font-weight:bold;"/>
-                                    <h:outputText id="puntosEvalImagenes_id" value="#{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                                <div style="width: 100%; display: table; padding: 10px 100px;" >
+                                    <div  class="float-l">
+                                        <p:outputLabel value="Puntos de evaluación: " style=" font-size: 30px; font-weight:bold;"/>
+                                        <h:outputText id="puntosEvalImagenes_id" value="#{encuestaController.puntosEval}" 
+                                                      style=" font-size: 18px; font-weight:bold; color: black"/>
+                                    </div>
+                                    <h:panelGroup id="id_grupoTimeEval" class="float-r">
+                                        <p:poll id="timeEvaluacionImagenes" interval="1" 
+                                                listener="#{encuestaController.incrementTiempoEval()}" 
+                                                update="id_grupoTimeEval" autoStart="#{!encuestaController.relojEvalDetenido()}" 
+                                                stop="#{encuestaController.relojEvalDetenido()}"/>
+                                        <p:knob min="0" max="15" widgetVar="knob" 
+                                                value="#{encuestaController.tiempoEval}" height="70px" />
+                                    </h:panelGroup>
                                 </div>
-                                <h:panelGroup id="grupoTimeEvalImagenes" class="float-r">
-                                    <p:poll id="timeEvaluacionImagenes" interval="1" listener="#{respuestaAmbienteEvaluacionController.incrementEvaluacion()}" update="puntosEvalImagenes_id" stop="#{!respuestaAmbienteController.isEvaluacion and (respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
-                                    <p:knob  min="0" max="10" widgetVar="knob" disabled="true" value="0" height="70px" />
-                                </h:panelGroup>
                                 <p:panel header="Pregunta ambiente"  >  
                                     <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
                                     <p:outputLabel value="{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>

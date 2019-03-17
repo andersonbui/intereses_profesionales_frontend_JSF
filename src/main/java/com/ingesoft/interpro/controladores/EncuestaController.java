@@ -36,14 +36,34 @@ public class EncuestaController extends Controller implements Serializable {
     private List<Encuesta> items = null;
     private Encuesta selected;
     private int pasoActivo;
+    private int tiempo_eval;
+    private int puntos_eval;
+    boolean detener_relojEval;
 
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
     }
 
     public EncuestaController() {
+        detener_relojEval = true;
     }
 
+    public int getTiempoEval() {
+        return tiempo_eval;
+    }
+
+    public void setTiempoEval(int tiempo_eval) {
+        this.tiempo_eval = tiempo_eval;
+    }
+
+    public int getPuntosEval() {
+        return puntos_eval;
+    }
+
+    public void setPuntosEval(int puntos_eval) {
+        this.puntos_eval = puntos_eval;
+    }
+    
     public Encuesta getSelected() {
         return selected;
     }
@@ -72,6 +92,29 @@ public class EncuestaController extends Controller implements Serializable {
         this.pasoActivo = pasoActivo;
     }
 
+    public boolean relojEvalDetenido() {
+        return detener_relojEval;
+    }
+
+    public void arrancarRelojEval() {
+        detener_relojEval = false;
+    }
+
+    public void detenerRelojEval() {
+        detener_relojEval = true;
+    }
+    
+    public void incrementTiempoEval() {
+        tiempo_eval++;
+        if (tiempo_eval > 15) {
+            tiempo_eval = 0;
+            if (puntos_eval > 0) {
+                puntos_eval--;
+            } else {
+
+            }
+        }
+    }
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
@@ -120,6 +163,7 @@ public class EncuestaController extends Controller implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         pasoActivo = 0;
+        detener_relojEval = true;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();

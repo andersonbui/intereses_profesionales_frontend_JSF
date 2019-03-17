@@ -31,7 +31,7 @@
                                     <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                 </div>
                                 <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                    <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
+                                    <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.disminuirPuntaje}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
                                     <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
                                 </h:panelGroup>
                             </div>

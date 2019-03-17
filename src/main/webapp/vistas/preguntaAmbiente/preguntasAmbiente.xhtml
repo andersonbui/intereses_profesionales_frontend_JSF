@@ -20,7 +20,7 @@
 
         <ui:define name="content">
             <p:growl id="msgs" /> 
-            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170">
+            <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="170" onHide="" >
                 <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
                         <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
                         <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
@@ -45,17 +45,23 @@
                 <center>
                     <div id="display">
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
-                            <p:panel header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion}">
-                                <div style="width: 100%; display: table; padding: 0px 100px;" >
+                            <p:panel  header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion}">
+                                <div style="width: 100%; display: table; padding: 10px 100px;" >
                                     <div  class="float-l">
                                         <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
                                         <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                     </div>
+                                    <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
                                     <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                        <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego()}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and respuestaAmbienteEvaluacionController.isEvaluacionImagenes}"/>
-                                        <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
+                                        <p:poll id="timeJuego" interval="1"  process="@form" 
+                                                listener="#{respuestaAmbienteController.incrementJuego()}" 
+                                                update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.ejecutarReloj()}" 
+                                                stop="#{respuestaAmbienteController.ejecutarReloj()}" />
+                                        <p:knob id="id_knop_clock" min="0" max="15" widgetVar="knob" 
+                                                value="#{respuestaAmbienteController.tiempo}" height="70px" />
                                     </h:panelGroup>
                                 </div>
+                                <p:commandButton actionListener="#{respuestaAmbienteController.incrementPuntaje()}" update="@form" />
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">
                                     <p:column id="pregunta#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -297,11 +303,6 @@
                                  > 
                 </p:commandButton>
             </h:form>
-            <script>
-                window.sync = function (t) {
-                    PF('knob').setValue(t.current);
-                };
-            </script> 
         </ui:define>
     </ui:composition>
 </html>

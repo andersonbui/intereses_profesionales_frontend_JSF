@@ -48,7 +48,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
-    private int number;
+    private int tiempo;
     private int puntos;
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
@@ -141,12 +141,12 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return images;
     }
 
-    public int getNumber() {
-        return number;
+    public int getTiempo() {
+        return tiempo;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
     }
 
     public int getPuntos() {
@@ -218,7 +218,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
         pasoActual += 1;
         grupo = getGrupoItems(pasoActual + 1);
-        number = 0;
+        tiempo = 0;
         return pasoActual;
     }
 
@@ -245,21 +245,43 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
         cantidadRespuestas[indice]++;
         if (cantidadRespuestas[indice] == 1) {
-            number = 0;
+            tiempo = 0;
             puntos++;
         }
+    }
+    boolean ejecutar_reloj = false;
+
+    public boolean ejecutarReloj() {
+        return ejecutar_reloj;
+    }
+
+    public void arrancarReloj() {
+        ejecutar_reloj = true;
+    }
+
+    public void detenerReloj() {
+        ejecutar_reloj = false;
+    }
+
+    public void incrementPuntaje() {
+        ejecutar_reloj = !ejecutar_reloj;
+        puntos++;
+        tiempo++;
+        System.out.println("mostrar_reloj: " + ejecutar_reloj);
+        System.out.println("puntos: " + puntos);
+        System.out.println("tiempo: " + tiempo);
     }
 
     public void incrementJuego() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        number++;
-        requestContext.execute("PF('knob').setValue(" + number + ")");
-        if (number > 15) {
-            number = 0;
+        tiempo++;
+//        requestContext.execute("PF('knob').setValue(" + tiempo + ")");
+        if (tiempo > 15) {
+            tiempo = 0;
             if (puntos > 0) {
                 puntos--;
             } else {
-                
+
             }
         }
     }

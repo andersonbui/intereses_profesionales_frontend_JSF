@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.validarores;
 
+import com.ingesoft.interpro.controladores.UsuarioController;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
@@ -19,16 +20,10 @@ import org.primefaces.validate.ClientValidator;
  *
  * @author debian
  */
-@FacesValidator(value = "emailValidator")
-public class EmailValidator implements Validator, ClientValidator {
+@FacesValidator(value = "existeEmailValidator")
+public class ExisteEmailValidator implements Validator, ClientValidator {
  
-    private Pattern pattern;
-  
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                                                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  
-    public EmailValidator() {
-        pattern = Pattern.compile(EMAIL_PATTERN).compile(EMAIL_PATTERN);
+    public ExisteEmailValidator() {
     }
  
     @Override
@@ -36,10 +31,12 @@ public class EmailValidator implements Validator, ClientValidator {
         if(value == null) {
             return;
         }
-         
-        if(!pattern.matcher(value.toString()).matches()) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error validation", 
-                        value + " no es un email valido."));
+        String email = value.toString();
+        UsuarioController usuarioController = (UsuarioController) context.getApplication().getELResolver().
+                getValue(context.getELContext(), null, "usuarioController");
+        if(usuarioController.obtUsuarioPorEmail(email) != null) {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Validation Error", 
+                        "El email ya existe, por favor ingrese otro."));
         }
     }
  

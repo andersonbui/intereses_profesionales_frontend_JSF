@@ -114,6 +114,11 @@ public class UsuarioController extends Controller implements Serializable {
     public Usuario obtUsuarioPorToken(String token) {
         return getFacade().obtUsuarioPorToken(token);
     }
+    
+    public Usuario obtUsuarioPorEmail(String email) {
+        return getFacade().obtUsuarioPorEmail(email);
+    }
+    
     public List<Usuario> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

@@ -56,24 +56,24 @@
                 <center>
                     <div id="display">
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
-                            <p:panel  header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion}">
+                            <p:panel id="id_panel_encueeta_ambiente" header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion}">
                                 <div style="width: 100%; display: table; padding: 10px 100px;" >
-                                    <div  class="float-l">
+                                    <div class="float-l">
                                         <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
                                         <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                     </div>
                                     <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
                                     <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                        <p:poll id="timeJuego" interval="1"  process="@form" 
-                                                listener="#{respuestaAmbienteController.incrementJuego()}" 
-                                                update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.relojDetenido()}" 
-                                                stop="#{respuestaAmbienteController.isEvaluacion and respuestaAmbienteEvaluacionController.isEvaluacionImagenes}" />
-                                                <!--stop="{!respuestaAmbienteController.relojDetenido()}" />-->
+                                        <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
+                                                listener="#{respuestaAmbienteController.incrementJuego()}"
+                                                update="grupoTimeJuego" autoStart="#{!respuestaAmbienteController.relojDetenido()}"
+                                                stop="#{respuestaAmbienteController.relojDetenido()}" />
+                                                <!--stop="{respuestaAmbienteController.relojDetenido()}" />-->
                                         <p:knob min="0" max="15" widgetVar="knob" 
                                                 value="#{respuestaAmbienteController.tiempo}" height="70px" />
                                     </h:panelGroup>
                                 </div>
-                                <p:commandButton actionListener="{respuestaAmbienteController.incrementPuntaje()}" update="@form" />
+                                <p:commandButton actionListener="#{respuestaAmbienteController.incrementPuntaje()}" update="@form" />
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">
                                     <p:column id="pregunta#{item.preguntaAmbiente.idPreguntaAmbiente}">
@@ -119,11 +119,12 @@
                                     </p:column>
                                 </p:dataGrid>
                                 <h:panelGroup  style="background-color: black;" >
-                                    <p:commandButton class="float-l"  value="anterior" ajax="true" actionListener="#{respuestaAmbienteController.anteriorPaso}"
+                                    <p:commandButton class="float-l" value="anterior" ajax="true" actionListener="#{respuestaAmbienteController.anteriorPaso}"
                                                      update="@form" rendered="#{respuestaAmbienteController.puedeAnteriorPaso()}" >
                                     </p:commandButton>
-                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso}"
-                                                     update="@form, msgs" rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
+                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso()}"
+                                                     update="grupoTimeJuego" 
+                                                     rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.casiFinaliza()}"
                                                      update="@form" rendered="#{respuestaAmbienteController.esPenultimoPaso()}" >

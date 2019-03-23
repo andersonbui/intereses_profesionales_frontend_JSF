@@ -208,7 +208,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         arrancarReloj();
     }
 
-    public int siguientePaso(ActionEvent actionEvent) {
+    public int siguientePaso() {
         System.out.println("siguientes paso: " + pasoActual);
         int intervaloEvaluacion = 6;
         // @desarrollo
@@ -216,8 +216,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             intervaloEvaluacion = 3;
         }// @end
         if ((pasoActual + 1) % intervaloEvaluacion == 0) {
-            isEvaluacion = true;
             detenerReloj();
+            isEvaluacion = true;
+            System.out.println("reloj: "+relojDetenido());
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }

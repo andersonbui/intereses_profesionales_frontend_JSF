@@ -64,7 +64,7 @@
                                             </p:selectOneRadio>
                                             
                                             <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}" for="id_email"/>
-                                            <p:inputText id="id_email" value="#{personaController.selected.idUsuario.usuario}" 
+                                            <p:inputText id="id_email" value="#{personaController.selected.idUsuario.usuario}" readonly="true"
                                                          required="true" type="email" title="#{bundle.ViewPersonaTitle_idUsuario}">
                                                 <f:validator validatorId="emailValidator" />
                                             </p:inputText>            

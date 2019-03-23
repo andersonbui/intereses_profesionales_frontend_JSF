@@ -159,7 +159,8 @@ public class EstudianteController extends Controller implements Serializable {
     }
 
     public boolean isEstudiante(Persona persona) {
-        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+//        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+        List<GrupoUsuario> listaGU = getGrupoUsuarioController().getGruposUsuario(persona.getIdUsuario());
         for (GrupoUsuario grupoUsuario : listaGU) {
             System.out.println("ee: "+grupoUsuario);
             if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {

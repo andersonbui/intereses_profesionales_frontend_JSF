@@ -7,6 +7,7 @@ import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -175,9 +176,10 @@ public class EncuestaController extends Controller implements Serializable {
 //        areaEncuestaController.prepararParaEncuesta();
         LoginController loginController = getLoginController();
         Usuario usu = loginController.getActual();
+        Persona persona = loginController.getPersonaActual();
         System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
+            Estudiante estud = getEstudianteController().obtenerEstudiante(persona);
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
             if (estudianteGrado == null) {
                 System.out.println("Este estudiante no tiene EstudianteGrado");

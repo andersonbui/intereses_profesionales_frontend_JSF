@@ -122,9 +122,6 @@ public class RegistroController extends Controller implements Serializable {
                     estudianteController.prepareCreate();
                     estudianteController.getSelected().setIdPersona(persona);
                     estudianteController.create();
-//                    UsuarioController usuarioController = getUsuarioController();
-//                    usuarioController.setSelected(unusuario);
-//                    usuarioController.create();
                 }
                 unusuario.setEstado(UsuarioController.EN_PROCESO);
                 selected = unusuario;

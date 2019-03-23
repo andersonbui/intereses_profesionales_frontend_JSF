@@ -117,8 +117,12 @@ public class PersonaController extends Controller implements Serializable {
         editar = true;
         if (selected != null) {
             EstudianteController estudianteController = getEstudianteController();
-            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
-                Estudiante estudiante = selected.getEstudianteList().get(0);
+            selected.getEstudianteList().size();
+            System.out.println("lista estudiantes: " + estudianteController.isEstudiante(persona));
+            if (estudianteController.isEstudiante(persona)) {
+//                Estudiante estudiante = selected.getEstudianteList().get(0);
+                Estudiante estudiante = estudianteController.getEstudiantePorIdUsuario(selected.getIdUsuario().getIdUsuario());
+            System.out.println("es estudiantes: " + estudiante);
                 estudianteController.setSelected(estudiante);
                 EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
                 EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante());
@@ -169,7 +173,7 @@ public class PersonaController extends Controller implements Serializable {
         un_usuario.setClave(Utilidades.sha256(un_usuario.getClave()));
         getUsuarioController().setSelected(un_usuario);
         getUsuarioController().update();
-        
+
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
         grupoUsuarioController.getSelected().setUsuario(selected.getIdUsuario().getUsuario());
         grupoUsuarioController.getSelected().setUsuario1(selected.getIdUsuario());
@@ -245,11 +249,11 @@ public class PersonaController extends Controller implements Serializable {
     public Persona getPersona(java.lang.Integer id) {
         return getFacade().find(id);
     }
-    
+
     public Persona getPersona(Usuario id) {
         return getFacade().findPorIdUsuario(id);
     }
-   
+
     public List<Persona> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

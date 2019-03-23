@@ -23,7 +23,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "grupoUsuarioController")
 @SessionScoped
-public class GrupoUsuarioController implements Serializable {
+public class GrupoUsuarioController extends Controller implements Serializable{
 
     @EJB
     private com.ingesoft.interpro.facades.GrupoUsuarioFacade ejbFacade;
@@ -50,7 +50,7 @@ public class GrupoUsuarioController implements Serializable {
         selected.setGrupoUsuarioPK(new GrupoUsuarioPK());
     }
 
-    private GrupoUsuarioFacade getFacade() {
+    protected GrupoUsuarioFacade getFacade() {
         return ejbFacade;
     }
     public GrupoUsuario prepareCreate() {

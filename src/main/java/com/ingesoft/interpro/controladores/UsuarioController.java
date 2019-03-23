@@ -65,7 +65,7 @@ public class UsuarioController extends Controller implements Serializable {
     public Usuario prepareCreate() {
         selected = new Usuario();
         initializeEmbeddableKey();
-        GrupoUsuario grupoUsuario = getGrupoUsuarioController().prepareCreate();
+//        GrupoUsuario grupoUsuario = getGrupoUsuarioController().prepareCreate();
 
         return selected;
     }

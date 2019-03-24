@@ -77,6 +77,10 @@ public class Encuesta implements Serializable {
     private EstudianteGrado estudianteGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
+    @Column(name = "puntajeEncuesta")
+    private Integer puntajeEncuesta;
+    @Column(name = "puntajeEvaluacion")
+    private Integer puntajeEvaluacion;
 
     public Encuesta() {
     }
@@ -175,6 +179,22 @@ public class Encuesta implements Serializable {
         this.respuestaPersonalidadList = respuestaPersonalidadList;
     }
 
+
+    public Integer getPuntajeEncuesta() {
+        return puntajeEncuesta;
+    }
+
+    public void setPuntajeEncuesta(Integer puntajeEncuesta) {
+        this.puntajeEncuesta = puntajeEncuesta;
+    }
+
+    public Integer getPuntajeEvaluacion() {
+        return puntajeEvaluacion;
+    }
+
+    public void setPuntajeEvaluacion(Integer puntajeEvaluacion) {
+        this.puntajeEvaluacion = puntajeEvaluacion;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

@@ -123,7 +123,7 @@
                                                      update="@form" rendered="#{respuestaAmbienteController.puedeAnteriorPaso()}" >
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso()}"
-                                                     update="grupoTimeJuego" 
+                                                     update="@form" 
                                                      rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.casiFinaliza()}"

@@ -144,6 +144,9 @@ public class EncuestaController extends Controller implements Serializable {
     public void finalizarEncuesta() {
         String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
         selected.setPersonalidad(personalidad);
+        int puntaje = getRespuestaAmbienteController().getPuntos();
+        selected.setPuntajeEncuesta(puntaje);
+        selected.setPuntajeEvaluacion(puntos_eval);
         update();
     }
 
@@ -179,7 +182,7 @@ public class EncuestaController extends Controller implements Serializable {
         Persona persona = loginController.getPersonaActual();
         System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = getEstudianteController().obtenerEstudiante(persona);
+            Estudiante estud = getEstudianteController().getEstudiantePorIdUsuario(usu.getIdUsuario());
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
             if (estudianteGrado == null) {
                 System.out.println("Este estudiante no tiene EstudianteGrado");

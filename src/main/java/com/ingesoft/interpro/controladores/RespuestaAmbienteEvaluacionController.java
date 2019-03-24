@@ -96,6 +96,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 
     public void cambiarEvaluacionDeImagenes() {
         isEvaluacionImagenes = true;
+        getEncuestaController().setTiempo(0);
     }
 
     @PostConstruct
@@ -272,7 +273,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
             addMessage("Incorrecto!!", false);
         }
     }
-    
 
     public void comprobarRespuesta(int id) {
         if (selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id)) {
@@ -360,6 +360,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso: " + pasoActual);
         pasoActual += 1;
+        getEncuestaController().arrancarReloj();
         number = 0;
         return pasoActual;
     }

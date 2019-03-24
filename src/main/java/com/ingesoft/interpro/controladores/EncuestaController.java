@@ -37,34 +37,45 @@ public class EncuestaController extends Controller implements Serializable {
     private List<Encuesta> items = null;
     private Encuesta selected;
     private int pasoActivo;
-    private int tiempo_eval;
+
+    private boolean evaluacion;
+    private int tiempo;
     private int puntos_eval;
-    boolean detener_relojEval;
+    private int puntos_encuesta;
+    boolean detener_reloj;
 
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
     }
 
     public EncuestaController() {
-        detener_relojEval = true;
+        detener_reloj = true;
+        puntos_encuesta = 0;
     }
 
-    public int getTiempoEval() {
-        return tiempo_eval;
+    public int getTiempo() {
+        return tiempo;
     }
 
-    public void setTiempoEval(int tiempo_eval) {
-        this.tiempo_eval = tiempo_eval;
+    public void setTiempo(int tiempo_eval) {
+        this.tiempo = tiempo_eval;
     }
 
-    public int getPuntosEval() {
-        return puntos_eval;
+    public int getPuntos() {
+        if (evaluacion) {
+            return puntos_eval;
+        }
+        return puntos_encuesta;
     }
 
-    public void setPuntosEval(int puntos_eval) {
-        this.puntos_eval = puntos_eval;
+    public void aumentarPuntos() {
+        if (evaluacion) {
+            this.puntos_eval++;
+        } else {
+            this.puntos_encuesta++;
+        }
     }
-    
+
     public Encuesta getSelected() {
         return selected;
     }
@@ -93,29 +104,50 @@ public class EncuestaController extends Controller implements Serializable {
         this.pasoActivo = pasoActivo;
     }
 
-    public boolean relojEvalDetenido() {
-        return detener_relojEval;
+    public boolean relojDetenido() {
+        return detener_reloj;
     }
 
-    public void arrancarRelojEval() {
-        detener_relojEval = false;
+    public void arrancarReloj() {
+        detener_reloj = false;
     }
 
-    public void detenerRelojEval() {
-        detener_relojEval = true;
+    public void detenerReloj() {
+        detener_reloj = true;
     }
-    
-    public void incrementTiempoEval() {
-        tiempo_eval++;
-        if (tiempo_eval > 15) {
-            tiempo_eval = 0;
-            if (puntos_eval > 0) {
-                puntos_eval--;
+
+    public void incrementTiempo() {
+        tiempo++;
+        if (tiempo > 15) {
+            tiempo = 0;
+            if (evaluacion) {
+                if (puntos_eval > 0) {
+                    puntos_eval--;
+                } else {
+                }
             } else {
-
+                if (puntos_encuesta > 0) {
+                    puntos_encuesta--;
+                } else {
+                }
             }
         }
     }
+
+    public void incrementPuntaje() {
+        detener_reloj = !detener_reloj;
+        System.out.println("mostrar_reloj: " + detener_reloj);
+        System.out.println("tiempo: " + tiempo);
+    }
+    
+    public boolean isEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(boolean isEvaluacion) {
+        this.evaluacion = isEvaluacion;
+    }
+    
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
@@ -144,8 +176,7 @@ public class EncuestaController extends Controller implements Serializable {
     public void finalizarEncuesta() {
         String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
         selected.setPersonalidad(personalidad);
-        int puntaje = getRespuestaAmbienteController().getPuntos();
-        selected.setPuntajeEncuesta(puntaje);
+        selected.setPuntajeEncuesta(puntos_encuesta);
         selected.setPuntajeEvaluacion(puntos_eval);
         update();
     }
@@ -167,7 +198,8 @@ public class EncuestaController extends Controller implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         pasoActivo = 0;
-        detener_relojEval = true;
+        detener_reloj = true;
+        puntos_encuesta = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();

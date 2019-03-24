@@ -48,8 +48,8 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
-    private int tiempo;
-    private int puntos;
+//    private int tiempo;
+//    private int puntos;
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
     private List<String> images;
@@ -59,8 +59,8 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private boolean finalizo;
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
-    private boolean isEvaluacion;
-    boolean detener_reloj;
+//    private boolean isEvaluacion;
+//    boolean detener_reloj;
 
     public RespuestaAmbienteController() {
         tamGrupo = 6;
@@ -69,26 +69,18 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         listaResultadosPorAmbiente = null;
 //        listaValoresAmbiente = null;
         pasoActual = 0;
-        puntos = 0;
-        detener_reloj = true;
+//        puntos = 0;
+//        detener_reloj = true;
     }
 
     public void reiniciar() {
         pasoActual = 0;
-        puntos = 0;
+//        puntos = 0;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
 //        listaValoresAmbiente = null;
-        isEvaluacion = false;
-        detener_reloj = true;
-    }
-
-    public boolean isIsEvaluacion() {
-        return isEvaluacion;
-    }
-
-    public void setIsEvaluacion(boolean isEvaluacion) {
-        this.isEvaluacion = isEvaluacion;
+        setEvaluacion(false);
+//        detener_reloj = true;
     }
 
     public BarChartModel getGraficoModelo() {
@@ -144,22 +136,6 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return images;
     }
 
-    public int getTiempo() {
-        return tiempo;
-    }
-
-    public void setTiempo(int tiempo) {
-        this.tiempo = tiempo;
-    }
-
-    public int getPuntos() {
-        return puntos;
-    }
-
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
-    }
-
     public int getPasoActual() {
         return pasoActual;
     }
@@ -204,8 +180,24 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public void volverAEncuesta() {
-        isEvaluacion = false;
-        arrancarReloj();
+        setEvaluacion(false);
+        getEncuestaController().setTiempo(0);
+    }
+
+    public void setTiempo(int tiempo) {
+        getEncuestaController().setTiempo(tiempo);
+    }
+
+    public void aumentarPuntos() {
+        getEncuestaController().aumentarPuntos();
+    }
+
+    public boolean isEvaluacion() {
+        return getEncuestaController().isEvaluacion();
+    }
+
+    public void setEvaluacion(boolean isEvaluacion) {
+        getEncuestaController().setEvaluacion(isEvaluacion);
     }
 
     public int siguientePaso() {
@@ -217,14 +209,14 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }// @end
         if ((pasoActual + 1) % intervaloEvaluacion == 0) {
             detenerReloj();
-            isEvaluacion = true;
-            System.out.println("reloj: "+relojDetenido());
+            setEvaluacion(true);
+//            System.out.println("reloj: "+relojDetenido());
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }
         pasoActual += 1;
         grupo = getGrupoItems(pasoActual + 1);
-        tiempo = 0;
+        this.setTiempo(0);
         return pasoActual;
     }
 
@@ -251,47 +243,47 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
         cantidadRespuestas[indice]++;
         if (cantidadRespuestas[indice] == 1) {
-            tiempo = 0;
-            puntos++;
+            setTiempo(0);
+            aumentarPuntos();
         }
     }
 
-    public boolean relojDetenido() {
-        return detener_reloj;
-    }
-
-    public void arrancarReloj() {
-        detener_reloj = false;
-    }
-
+//    public boolean relojDetenido() {
+//        return detener_reloj;
+//    }
+//
+//    public void arrancarReloj() {
+//        detener_reloj = false;
+//    }
     public void detenerReloj() {
-        detener_reloj = true;
+        getEncuestaController().detenerReloj();
+//        detener_reloj = true;
     }
 
-    public void incrementPuntaje() {
-        detener_reloj = !detener_reloj;
-        puntos++;
-        tiempo++;
-        System.out.println("mostrar_reloj: " + detener_reloj);
-        System.out.println("puntos: " + puntos);
-        System.out.println("tiempo: " + tiempo);
-    }
-
-    public void incrementJuego() {
-        tiempo++;
-        if (tiempo > 15) {
-            tiempo = 0;
-            if (puntos > 0) {
-                puntos--;
-            } else {
-
-            }
-        }
-    }
-
+//    public void incrementPuntaje() {
+//        detener_reloj = !detener_reloj;
+//        puntos++;
+//        tiempo++;
+//        System.out.println("mostrar_reloj: " + detener_reloj);
+//        System.out.println("puntos: " + puntos);
+//        System.out.println("tiempo: " + tiempo);
+//    }
+//    public void incrementJuego() {
+//        invre
+//        tiempo++;
+//        if (tiempo > 15) {
+//            tiempo = 0;
+//            if (puntos > 0) {
+//                puntos--;
+//            } else {
+//
+//            }
+//        }
+//    }
     public void casiFinaliza() {
-        isEvaluacion = true;
+        setEvaluacion(true);
         reinicioPasoActualEvaluacion();
+        detenerReloj();
         getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
     }
 

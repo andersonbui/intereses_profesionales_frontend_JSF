@@ -197,6 +197,13 @@ public abstract class Controller implements Serializable {
         AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
         return areaEncuestaController;
     }
+    
+    public EncuestaController getEncuestaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
+        return encuestaController;
+    }
 
     public AreaController getAreaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

@@ -6,6 +6,8 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.Usuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,12 +32,14 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> {
         super(Estudiante.class);
     }
 
-    public Estudiante findPorIdUsuario(Integer idUsuario) {
-        Query query = em.createNamedQuery("Estudiante.findPorIdUsuario");
-        query.setParameter("idUsuario", idUsuario);
-        Estudiante estud = (Estudiante) query.getResultList().get(0);
-        if (estud != null) {
-            return estud;
+    public Estudiante findPorPersona(Persona persona) {
+        Query query = em.createNamedQuery("Estudiante.findPorPersona");
+        query.setParameter("persona", persona);
+        if (!query.getResultList().isEmpty()) {
+            Estudiante estud = (Estudiante) query.getResultList().get(0);
+            if (estud != null) {
+                return estud;
+            }
         }
         return null;
     }

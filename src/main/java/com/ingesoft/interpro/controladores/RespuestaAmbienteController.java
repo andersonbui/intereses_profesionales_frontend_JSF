@@ -248,38 +248,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
     }
 
-//    public boolean relojDetenido() {
-//        return detener_reloj;
-//    }
-//
-//    public void arrancarReloj() {
-//        detener_reloj = false;
-//    }
     public void detenerReloj() {
         getEncuestaController().detenerReloj();
-//        detener_reloj = true;
     }
 
-//    public void incrementPuntaje() {
-//        detener_reloj = !detener_reloj;
-//        puntos++;
-//        tiempo++;
-//        System.out.println("mostrar_reloj: " + detener_reloj);
-//        System.out.println("puntos: " + puntos);
-//        System.out.println("tiempo: " + tiempo);
-//    }
-//    public void incrementJuego() {
-//        invre
-//        tiempo++;
-//        if (tiempo > 15) {
-//            tiempo = 0;
-//            if (puntos > 0) {
-//                puntos--;
-//            } else {
-//
-//            }
-//        }
-//    }
     public void casiFinaliza() {
         setEvaluacion(true);
         reinicioPasoActualEvaluacion();
@@ -297,7 +269,6 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public int finalizarEncuesta(ActionEvent actionEvent) {
-//        grupo = getGrupoItems(pasoActual + 1);
         for (RespuestaAmbiente respuesta : grupo) {
             getFacade().edit(respuesta);
         }

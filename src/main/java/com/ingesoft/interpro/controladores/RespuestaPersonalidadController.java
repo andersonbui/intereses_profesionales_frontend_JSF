@@ -144,7 +144,6 @@ public class RespuestaPersonalidadController extends Controller implements Seria
     }
 
     public String finalizarEncuesta() {
-//        grupo = getGrupoItems(pasoActual + 1);
         for (RespuestaPersonalidad respuesta : grupo) {
             getFacade().edit(respuesta);
         }
@@ -218,17 +217,13 @@ public class RespuestaPersonalidadController extends Controller implements Seria
     }
 
     public List<Integer> getGrupos() {
-        //System.out.println("Hola mundo");
         List<Integer> gruposPreguntas = new ArrayList<>();
         items = getItems();
-//        System.out.println("items: " + items);
         numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-//        numGrupos = 3;
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
-        //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
 
@@ -288,7 +283,6 @@ public class RespuestaPersonalidadController extends Controller implements Seria
 
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
-//            System.out.println("encuesta: " + encuesta);
             Random rand = new Random(Calendar.getInstance().getTimeInMillis());
             for (RespuestaPersonalidad item : items) {
                 item.setRespuesta(1 + rand.nextInt(5));

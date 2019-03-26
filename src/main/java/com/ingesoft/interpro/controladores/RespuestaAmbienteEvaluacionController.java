@@ -67,7 +67,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     int cont;
     int indiceActual;
     boolean respuesta;
-    int puntosPreguntaAmbiente = 0;
+//    int puntosPreguntaAmbiente = 0;
     int contCorrect;
     int contCorrectImg;
 
@@ -75,6 +75,8 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     int[] vecIdPreguntas = {1, 2, 5, 13, 14, 37, 38, 61, 39, 86, 40, 42, 43, 45, 48, 72, 31, 32, 43, 44, 73, 75, 78, 130, 139, 158, 160, 162, 167, 165};
     int[] correctas = {5, 39, 42, 31, 130, 167};
     private boolean isEvaluacionImagenes;
+    int contadorRespuestas;
+    boolean[] respuestas;
 
     public RespuestaAmbienteEvaluacionController() {
         cont = 0;
@@ -87,6 +89,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         indiceActual = 0;
         tipoAmbiente = 0;
         isEvaluacionImagenes = false;
+        contadorRespuestas = 0;
 
     }
 
@@ -193,9 +196,9 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         puntos = 0;
         gruposPreguntas = null;
         indiceActual = 0;
-        puntosPreguntaAmbiente = 0;
         isEvaluacionImagenes = false;
         contCorrect = 0;
+        contadorRespuestas = 0;
     }
 
     public int[] getVecIdImages() {
@@ -212,14 +215,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 
     public void setRespuesta(boolean respuesta) {
         this.respuesta = respuesta;
-    }
-
-    public int getPuntosPreguntaAmbiente() {
-        return puntosPreguntaAmbiente;
-    }
-
-    public void setPuntosPreguntaAmbiente(int puntosPreguntaAmbiente) {
-        this.puntosPreguntaAmbiente = puntosPreguntaAmbiente;
     }
 
     public int getIndiceActual() {
@@ -274,50 +269,59 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
     }
 
-    public void comprobarRespuesta(int id) {
+    public String claseCorrecta(int id) {
+        if (contCorrectImg > 0) {
+            return selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id) ? " btn-success " : " btn-danger ";
+        }
+        return " btn-primary ";
+    }
+
+    public void comprobarRespuesta(int id) throws InterruptedException {
         if (selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id)) {
             respuesta = true;
             if (contCorrectImg == 0) {
-                puntosPreguntaAmbiente++;
+                getEncuestaController().aumentarPuntos();
+                getEncuestaController().setTiempo(0);
                 contCorrectImg++;
             }
             System.out.println("Respuesta correcta:" + respuesta);
         } else {
             respuesta = false;
-            puntosPreguntaAmbiente--;
             System.out.println("Respuesta incorrecta:" + respuesta);
         }
         buttonAction(respuesta);
+        contadorRespuestas++;
+        if (contadorRespuestas == 3) {
+            Thread.sleep(3000);
+            previousImagen();
+            contadorRespuestas = 0;
+        }
     }
 
     public void comprobarRespuestaSeleccion(PreguntaAmbiente item) {
 //        int amb = item.getIdTipoAmbiente().getIdTipoAmbiente();
-        System.out.println("Correctas: " + correctas[cont]);
-        System.out.println("IDDDDtipoAmbiente: " + item.getIdPreguntaAmbiente());
+//        System.out.println("Correctas: " + correctas[cont]);
+//        System.out.println("IDDDDtipoAmbiente: " + item.getIdPreguntaAmbiente());
 
         if (item.getIdPreguntaAmbiente().equals(correctas[cont - 1])) {
             respuesta = true;
             if (contCorrect == 0) {
-                puntosPreguntaAmbiente++;
+                getEncuestaController().aumentarPuntos();
+                getEncuestaController().setTiempo(0);
+//                puntosPreguntaAmbiente++;
                 contCorrect++;
             }
             System.out.println("Respuesta correcta:" + respuesta);
         } else {
             respuesta = false;
-            puntosPreguntaAmbiente--;
+//            puntosPreguntaAmbiente--;
             System.out.println("Respuesta incorrecta:" + respuesta);
         }
         buttonAction(respuesta);
     }
 
-    public void incrementEvaluacion() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        number++;
-        requestContext.execute("PF('knob').setValue(" + number + ")");
-        if (number > 10) {
-            number = 0;
-            puntosPreguntaAmbiente--;
-        }
+    public void incrementTiempo() {
+        getEncuestaController().incrementTiempo();
     }
 
     public PreguntaAmbiente getSelectedPregunta() {

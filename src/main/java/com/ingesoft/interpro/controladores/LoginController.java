@@ -8,6 +8,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -101,7 +102,7 @@ public class LoginController extends Controller implements Serializable {
     public boolean permisoEstudiante() {
         for (GrupoUsuario grupo : grupos) {
             String nombreGrupo = grupo.getTipoUsuario().getTipo();
-            if(nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)){
+            if (nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)) {
                 return true;
             }
         }
@@ -111,7 +112,10 @@ public class LoginController extends Controller implements Serializable {
     public String utimoGrado() {
         Estudiante estudiante = getEstudianteController().obtenerEstudiante(personaActual);
         if (estudiante != null) {
-            return getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante()).getGrado().getCurso();
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
+            if (estudianteGrado != null) {
+                return estudianteGrado.getGrado().getCurso();
+            }
         }
         return "";
     }
@@ -239,11 +243,9 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public void guardarEnProceso() throws IOException {
-        // @desarrollo
-//        if (!Utilidades.esDesarrollo()) {
-            getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
-//        }
+        getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
         PersonaController personaController = getPersonaController();
+        
         personaController.updateConUsuarioEstudiante();
 
         String ruta = Vistas.inicio();

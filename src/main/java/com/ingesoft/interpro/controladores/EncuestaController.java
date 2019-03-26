@@ -139,7 +139,7 @@ public class EncuestaController extends Controller implements Serializable {
         System.out.println("mostrar_reloj: " + detener_reloj);
         System.out.println("tiempo: " + tiempo);
     }
-    
+
     public boolean isEvaluacion() {
         return evaluacion;
     }
@@ -147,7 +147,7 @@ public class EncuestaController extends Controller implements Serializable {
     public void setEvaluacion(boolean isEvaluacion) {
         this.evaluacion = isEvaluacion;
     }
-    
+
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
@@ -214,30 +214,32 @@ public class EncuestaController extends Controller implements Serializable {
         Persona persona = loginController.getPersonaActual();
         System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = getEstudianteController().getEstudiantePorIdUsuario(usu.getIdUsuario());
-            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
+            Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
             if (estudianteGrado == null) {
-                System.out.println("Este estudiante no tiene EstudianteGrado");
-            }
-            selected = new Encuesta();
-            initializeEmbeddableKey();
-            selected.setFecha(new Date());
-            selected.setEstudianteGrado(estudianteGrado);
-            selected.setIdEncuesta(getIdEncuesta());
+                System.out.println();
+                JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
+            } else {
+                selected = new Encuesta();
+                initializeEmbeddableKey();
+                selected.setFecha(new Date());
+                selected.setEstudianteGrado(estudianteGrado);
+                selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
 //            selected.setEstudianteGrado(estudianteGrado);
-            System.out.println("antes encuesta creada: " + selected);
+                System.out.println("antes encuesta creada: " + selected);
 //            selected = getEncuesta(selected.toString());
-            System.out.println("despues encuesta creada: " + selected);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+                System.out.println("despues encuesta creada: " + selected);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
-            // @desarrollo
-            if (Utilidades.esDesarrollo()) {
-                selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+                // @desarrollo
+                if (Utilidades.esDesarrollo()) {
+                    selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+                }
+                create();
+
+                AreaController areaController = getAreaController();
+                areaController.inicializar();
             }
-            create();
-
-            AreaController areaController = getAreaController();
-            areaController.inicializar();
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();

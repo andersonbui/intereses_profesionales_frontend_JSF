@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.facades;
 
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -31,9 +32,9 @@ public class EstudianteGradoFacade extends AbstractFacade<EstudianteGrado> {
         super(EstudianteGrado.class);
     }
     
-    public List<EstudianteGrado> buscarPorIdEstudiante(Integer idEstudiante) {
-        Query query = em.createNamedQuery("EstudianteGrado.findByIdEstudiante");
-        query.setParameter("idEstudiante", idEstudiante);
+    public List<EstudianteGrado> buscarPorIdEstudiante(Estudiante estudiante) {
+        Query query = em.createNamedQuery("EstudianteGrado.findByEstudiante");
+        query.setParameter("estudiante", estudiante);
         List<EstudianteGrado> lista = query.getResultList();
         if (lista != null) {
             return lista;

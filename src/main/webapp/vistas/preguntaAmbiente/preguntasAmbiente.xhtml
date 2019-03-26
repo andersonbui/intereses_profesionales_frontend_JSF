@@ -46,10 +46,10 @@
                                      onclick="PF('instruccionesEvaluacionDialog').hide();" />
                 </p:dialog>
             </h:form>
-           
+
             <h:outputScript rendered="#{!respuestaAmbienteController.isEvaluacion()}">
                 $(document).ready(function () {
-                    PF('instruccionesAmbienteDialog').show();
+                PF('instruccionesAmbienteDialog').show();
                 });
             </h:outputScript>
             <h:form id="PreguntaAmbienteForm"  style="display: block;">
@@ -76,7 +76,7 @@
                             <p:panel id="id_panel_encueeta_ambiente" header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion()}">
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">
-                                    <p:column id="pregunta#{item.preguntaAmbiente.idPreguntaAmbiente}">
+                                    <p:column >
                                         <div style="#{respuestaAmbienteController.claseNoSeleccionada(item)}">
                                             <div  style="background-color:#{respuestaAmbienteController.obtenerColor(item.preguntaAmbiente.idTipoAmbiente.tipo)}; height: 200px; width: 100%; ">
                                                 <p:graphicImage title="#{respuestaAmbienteController.obtenerEnunciado(item)}" 
@@ -132,113 +132,119 @@
                                 </h:panelGroup>
                             </p:panel>
                             <!--  ____________________________________ EVALUACION ________________________________  -->
-                            <p:panel header="Preguntas de ambiente" id="id_panelEvaluacion"
-                                     rendered="#{(respuestaAmbienteController.isEvaluacion() and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)) or respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">
+                            <!--                            <p:panel id="id_panelEvaluacion"
+                                                                 rendered="{(respuestaAmbienteController.isEvaluacion() and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)) or respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">-->
 
-                                <p:panel  rendered="#{respuestaAmbienteController.isEvaluacion() and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}" >
-                                    <p:panel header="Definicion del ambiente" rendered="#{respuestaAmbienteEvaluacionController.pasoActual == -1}">
-                                        <script>
-                                            PF('instruccionesEvaluacionDialog').show();
-                                        </script>
-                                        <h:form>
-                                            <b><h:outputText value="#{respuestaAmbienteEvaluacionController.definicion}" escape="false"  ></h:outputText></b>
-                                        </h:form>
-                                    </p:panel>
-                                    <p:panel header="Pregunta ambiente"  rendered="#{respuestaAmbienteEvaluacionController.pasoActual != -1}">  
-                                        <!--                                    <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
-                                                                            <p:outputLabel id="puntosPreguntaAmbiente" value="{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>-->
-                                        <h:form>
-                                            <!--                                        <p><b>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta: </b></p><br/>-->
-                                            <h4><h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText></h4>
-                                            <center>
-                                                <p:panelGrid columns="1" layout="grid">
-                                                    <ui:repeat value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente}" var="item">
-                                                        <p:commandButton class="tamano-boton-pregunta" 
-                                                                         value="#{item.enunciado}" 
-                                                                         actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuestaSeleccion(item)}" 
-                                                                         id="opcion" update=":growl, @form, :PreguntaAmbienteForm"/><br/>
-                                                    </ui:repeat>
-                                                </p:panelGrid>
-                                            </center>
-                                        </h:form>
-                                    </p:panel>
-
-                                    <h:panelGroup  style="background-color: black;" >
-                                        <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
-                                                         update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
-                                        </p:commandButton>
-                                        <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
-                                                         update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
-                                        </p:commandButton>
-                                        <p:commandButton class="float-r" value="Finalizar" ajax="true" 
-                                                         actionListener="#{respuestaAmbienteEvaluacionController.cambiarEvaluacionDeImagenes()}"
-                                                         update=":PreguntaAmbienteForm, @form" 
-                                                         rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
-                                        </p:commandButton>
-                                    </h:panelGroup>
+                            <p:panel  rendered="#{respuestaAmbienteController.isEvaluacion() and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}" >
+                                <p:panel header="Definicion del ambiente" rendered="#{respuestaAmbienteEvaluacionController.pasoActual == -1}">
+                                    <script>
+                                        PF('instruccionesEvaluacionDialog').show();
+                                    </script>
+                                    <h:form>
+                                        <b><h:outputText value="#{respuestaAmbienteEvaluacionController.definicion}" escape="false"  ></h:outputText></b>
+                                    </h:form>
                                 </p:panel>
-                                <p:panel header="Preguntas de ambiente" rendered="#{respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">
-                                    <p:panel header="Pregunta ambiente"  >  
-                                        <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
-                                        <p:outputLabel value="#{encuestaController.puntos}" style=" width: 300px; font-size: 8px; padding: 12px"/>
-                                        <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
+                                <p:panel header="Evaluacion ambiente"  rendered="#{respuestaAmbienteEvaluacionController.pasoActual != -1}">  
+                                    <!--                                    <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
+                                                                        <p:outputLabel id="puntosPreguntaAmbiente" value="{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}" style=" width: 300px; font-size: 8px; padding: 12px"/>-->
+                                    <h:form>
+                                        <!--                                        <p><b>Lea con atención el siguiente enunciado y seleccione la respuesta que considere correcta: </b></p><br/>-->
+                                        <h4><h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText></h4>
+                                        <center>
+                                            <p:panelGrid columns="1" layout="grid">
+                                                <ui:repeat value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente}" var="item">
+                                                    <p:commandButton class="tamano-boton-pregunta" 
+                                                                     value="#{item.enunciado}" 
+                                                                     actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuestaSeleccion(item)}" 
+                                                                     id="opcion" update=":growl, @form, :PreguntaAmbienteForm"/><br/>
+                                                </ui:repeat>
+                                            </p:panelGrid>
+                                        </center>
+                                    </h:form>
+                                </p:panel>
 
-                                        <div>
-                                            <div class="contenedor-boton">
-                                                <p:commandButton class="btn btn-8 btn-8g" 
-                                                                 action="#{respuestaAmbienteEvaluacionController.previousImagen}" 
-                                                                 update=" @form"
-                                                                 value="Anterior" id="next" style="margin-bottom: 5px" disabled="false"/>
-                                                <p:commandButton class="btn btn-8 btn-8g" 
-                                                                 action="#{respuestaAmbienteEvaluacionController.nextImagen}" 
-                                                                 update=" @form"
-                                                                 value="Siguiente" id="prev" style="margin-bottom: 5px"/>
-                                            </div>
+                                <h:panelGroup  style="background-color: black;" >
+                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
+                                                     update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" 
+                                                     actionListener="#{respuestaAmbienteEvaluacionController.cambiarEvaluacionDeImagenes()}"
+                                                     update=":PreguntaAmbienteForm, @form" 
+                                                     rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
+                                    </p:commandButton>
+                                </h:panelGroup>
+                            </p:panel>
+                            <p:panel  rendered="#{respuestaAmbienteEvaluacionController.isEvaluacionImagenes}">
+                                <p:panel  >  
+                                    <p:outputLabel value="Evaluación: " style="font-size: 30px; font-weight:bold;"/>
+                                    <p:outputLabel value="#{encuestaController.puntos}" style=" width: 300px; font-size: 8px; padding: 12px"/>
+                                    <h3>Asocie las siguiente imágenes de acuerdo al ambiente que visualizó en la siguiente secciones </h3>
 
-                                            <div class="contenedor-img" id="imagen1">
-                                                <p:graphicImage 
-                                                    name="#{respuestaAmbienteEvaluacionController.obtenerImagenActual()}" 
-                                                    style="width:350px; height: 300px"/>
-                                            </div>
-
-                                            <div class="contenedor-pregunta">
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Realista" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(1)}" 
-                                                                 id="realista" update=":growl, @form" /><br/>
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Investigativo" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(2)}"
-                                                                 id="investigativo" update=":growl, @form"/><br/>
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Artístico" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(3)}"
-                                                                 id="artistico" update=":growl, @form"/><br/>
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Social" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(4)}"
-                                                                 id="social" update=":growl, @form"/><br/>
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Emprendedor" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(5)}"
-                                                                 id="emprendedor" update=":growl, @form"/><br/> 
-                                                <p:commandButton class="btn btn-8 btn-8g" value="Convencional" 
-                                                                 actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(6)}"
-                                                                 id="convencional" update=":growl, @form"/>
-                                            </div>
+                                    <div>
+                                        <div class="contenedor-boton">
+                                            <p:commandButton class="btn btn-8 btn-8g"
+                                                             action="#{respuestaAmbienteEvaluacionController.previousImagen}" 
+                                                             update=" @form"
+                                                             value="Anterior" id="next" style="margin-bottom: 5px" disabled="false"/>
+                                            <p:commandButton class="btn btn-8 btn-8g" 
+                                                             action="#{respuestaAmbienteEvaluacionController.nextImagen}" 
+                                                             update=" @form"
+                                                             value="Siguiente" id="prev" style="margin-bottom: 5px"/>
                                         </div>
 
-                                    </p:panel>
-                                    <!--</h:form>-->
+                                        <div class="contenedor-img" id="imagen1">
+                                            <p:graphicImage 
+                                                name="#{respuestaAmbienteEvaluacionController.obtenerImagenActual()}" 
+                                                style="width:350px; height: 300px"/>
+                                        </div>
 
-                                    <h:panelGroup  style="background-color: black;" >
-                                        <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
-                                                         update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
-                                        </p:commandButton>
-                                        <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
-                                                         update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
-                                        </p:commandButton>
-                                        <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
-                                                         update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
-                                        </p:commandButton>
-                                    </h:panelGroup>
-                                </p:panel> 
+                                        <div class="contenedor-pregunta">
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(1)}" 
+                                                           value="Realista" style="margin-top:10px; color: white;  width:200px;" 
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(1)}" 
+                                                           id="realista" update=":growl, @form" /><br/>
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(2)}" 
+                                                           value="Investigativo" style="margin-top:10px; color: white;  width:200px;" 
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(2)}" 
+                                                           id="investigativo" update=":growl, @form"/><br/>
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(3)}" 
+                                                           value="Artístico" style="margin-top:10px; color: white;  width:200px;" 
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(3)}" 
+                                                           id="artistico" update=":growl, @form"/><br/>
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(4)}" 
+                                                           value="Social" style="margin-top:10px; color: white;  width:200px;" 
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(4)}" 
+                                                           id="social" update=":growl, @form"/><br/>
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(5)}"
+                                                           value="Emprendedor" style="margin-top:10px; color: white;  width:200px;"
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(5)}"
+                                                           id="emprendedor" update=":growl, @form"/><br/> 
+                                            <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(6)}"
+                                                           value="Convencional" style="margin-top:10px; color: white;  width:200px;"
+                                                           actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(6)}"
+                                                           id="convencional" update=":growl, @form"/>
+                                        </div>
+                                    </div>
+
+                                </p:panel>
+                                <!--</h:form>-->
+
+                                <h:panelGroup  style="background-color: black;" >
+                                    <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteEvaluacionController.siguientePaso}"
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteEvaluacionController.pasoActual eq -1}" >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
+                                                     update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
+                                    </p:commandButton>
+                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
+                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
+                                    </p:commandButton>
+                                </h:panelGroup>
                             </p:panel> 
+                            <!--</p:panel>--> 
 
                         </h:panelGrid>
                         <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{respuestaAmbienteController.esUltimoPaso()}" >

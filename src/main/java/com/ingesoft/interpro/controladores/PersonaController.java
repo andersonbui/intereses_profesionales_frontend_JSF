@@ -96,7 +96,7 @@ public class PersonaController extends Controller implements Serializable {
         Usuario usuario = usuarioController.prepareCreate();
 
         selected = new Persona();
-        usuario.setClave("Ninguna");
+        usuario.setClave("12345");
         selected.setIdUsuario(usuario);
 
         getDepartamentoController().setSelected(null);
@@ -118,14 +118,17 @@ public class PersonaController extends Controller implements Serializable {
         if (selected != null) {
             EstudianteController estudianteController = getEstudianteController();
             selected.getEstudianteList().size();
-            System.out.println("lista estudiantes: " + estudianteController.isEstudiante(persona));
             if (estudianteController.isEstudiante(persona)) {
 //                Estudiante estudiante = selected.getEstudianteList().get(0);
-                Estudiante estudiante = estudianteController.getEstudiantePorIdUsuario(selected.getIdUsuario().getIdUsuario());
-            System.out.println("es estudiantes: " + estudiante);
-                estudianteController.setSelected(estudiante);
+                Estudiante estudiante = estudianteController.getEstudiantePorPersona(selected);
+                if (estudiante == null && selected.getIdUsuario().getEstado().equals(UsuarioController.EN_PROCESO)) {
+                    estudiante = estudianteController.prepareCreate();
+                } else {
+                    estudianteController.setSelected(estudiante);
+                }
+                System.out.println("estudiante: " + estudiante);
                 EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
-                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante());
+                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante);
                 if (estudianteGrado == null) {
                     estudianteGrado = getEstudianteGradoController().prepareCreate();
                     estudianteGrado.setEstudiante(estudiante);
@@ -167,6 +170,7 @@ public class PersonaController extends Controller implements Serializable {
         //guardar en la base de datos y refrescar cambios en app
         create();
         Usuario un_usuario = selected.getIdUsuario();
+        System.out.println("un usuario: " + un_usuario);
         un_usuario.setTokenAcesso(Utilidades.generarToken("" + un_usuario.getIdUsuario()));
         un_usuario.setFechaCreacion(new Date());
         un_usuario.setFechaExpiracionToken(Utilidades.getFechaExpiracion());
@@ -175,8 +179,10 @@ public class PersonaController extends Controller implements Serializable {
         getUsuarioController().update();
 
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
-        grupoUsuarioController.getSelected().setUsuario(selected.getIdUsuario().getUsuario());
-        grupoUsuarioController.getSelected().setUsuario1(selected.getIdUsuario());
+        GrupoUsuario gusuario = grupoUsuarioController.getSelected();
+        System.out.println("idusuario: " + selected.getIdUsuario());
+        gusuario.setUsuario(selected.getIdUsuario().getUsuario());
+        gusuario.setUsuario1(selected.getIdUsuario());
         Utilidades.enviarCorreoDeRegistro(un_usuario.getUsuario(), un_usuario.getTokenAcesso());
         grupoUsuarioController.create();
         return null;
@@ -203,12 +209,13 @@ public class PersonaController extends Controller implements Serializable {
         Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
         UsuarioController usuarioController = getUsuarioController();
         usuarioController.update();
-        if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
+        boolean isEst = getEstudianteController().isEstudiante(perso);
+        System.out.println("updateConUsuarioEstudiante.esEstudiante: " + isEst);
+        if (isEst) {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
             getEstudianteGradoController().create();
         }
-
     }
 
     public void destroy() {

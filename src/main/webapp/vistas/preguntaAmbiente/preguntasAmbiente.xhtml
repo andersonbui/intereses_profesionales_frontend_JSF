@@ -72,7 +72,7 @@
                                             value="#{encuestaController.tiempo}" height="70px" />
                                 </h:panelGroup>
                             </div>
-                            <p:commandButton actionListener="#{encuestaController.incrementPuntaje()}" update="@form" />
+                            <p:commandButton actionListener="#{encuestaController.incrementPuntaje()}" update="@form" value="Detener reloj" rendered="#{encuestaController.esDesarrollo()}" />
                             <p:panel id="id_panel_encueeta_ambiente" header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion()}">
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">

@@ -64,7 +64,8 @@ public class LoginController extends Controller implements Serializable {
     public LoginController() {
         logueado = false;
     }
-
+    // facebook retorna esta url:
+    // http://localhost:8080/login_facebook/faces/redirectHome.xhtml?code=AQB8jDsjmeQAmh1WfV6V-Y0AjaMV303zLKqyW0yX9qDxFn3RoIJwGx4KYe_L1W-inqEQ4Z3GbggcDAe5t5v3mio97T1zHKM4VP--rrtkFgll846nZc9rkTJ6G_Wzbel8LsCHTj-aEkPKseodH6r3c_D6qIlGRsujFy4nyVF5K8cSqOSj63H8moOj9aebqTvwMz8GVdqoLGD6Gl0w9PK2XcRSvIawlbYOSes2uOE19kFVDu1BO9d1wfEpTJ4jha6BxTybyyYAmfPEtAKZBlngkXOdPAVpgHTPBToZOImYBAZxQbnfYM-56senFwrza2WxMMZUmO-G28KNHd-jRUnXbEhf#_=_
     public void conectar() {
         Properties prop = System.getProperties();
         prop.put("graph.facebook.com.consumer_key", "329124954489538");

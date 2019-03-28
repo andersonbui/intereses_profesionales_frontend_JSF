@@ -28,10 +28,11 @@
                             <div style="width: 100%; display: table; padding: 0px 100px;" >
                                 <div  class="float-l">
                                     <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
-                                    <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                                    <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                 </div>
                                 <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                    <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.disminuirPuntaje}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
+                                    <p:poll id="timeJuego" interval="1" listener="#{encuestaController.incrementTiempo()}" 
+                                            update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
                                     <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
                                 </h:panelGroup>
                             </div>

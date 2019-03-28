@@ -58,6 +58,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     List<TipoAmbiente> listaTipoAmbienteItem;
     private boolean isEvaluacion;
     int activeIndex = 0;
+    static int MAX_RESPUESTAS_IMAGEN;
 
     String definicion;
     String enunciado;
@@ -90,6 +91,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         tipoAmbiente = 0;
         isEvaluacionImagenes = false;
         contadorRespuestas = 0;
+        MAX_RESPUESTAS_IMAGEN = 3;
 
     }
 
@@ -199,6 +201,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         isEvaluacionImagenes = false;
         contCorrect = 0;
         contadorRespuestas = 0;
+        respuestas = new boolean[6];
     }
 
     public int[] getVecIdImages() {
@@ -246,6 +249,8 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         System.out.println("next");
         System.out.println(indiceActual);
         contCorrectImg = 0;
+        respuestas = new boolean[6];
+        contadorRespuestas = 0;
     }
 
     public void previousImagen() {
@@ -269,11 +274,19 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
     }
 
+    public boolean botonImagenDesactivado(int id) {
+        return respuestas[id - 1];
+    }
+
     public String claseCorrecta(int id) {
         if (contCorrectImg > 0) {
             return selectedPregunta.getIdTipoAmbiente().getIdTipoAmbiente().equals(id) ? " btn-success " : " btn-danger ";
         }
-        return " btn-primary ";
+        return respuestas[id - 1] ? " btn-danger " : " btn-primary ";
+    }
+
+    public boolean maxRespuestasImagen() {
+        return contadorRespuestas >= MAX_RESPUESTAS_IMAGEN || contCorrectImg > 0;
     }
 
     public void comprobarRespuesta(int id) throws InterruptedException {
@@ -291,10 +304,13 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
         buttonAction(respuesta);
         contadorRespuestas++;
-        if (contadorRespuestas == 3) {
-            Thread.sleep(3000);
-            previousImagen();
-            contadorRespuestas = 0;
+        respuestas[id - 1] = true;
+        if (contadorRespuestas >= MAX_RESPUESTAS_IMAGEN || contCorrectImg > 0) {
+            for (int i = 0; i < respuestas.length; i++) {
+                respuestas[i] = true;
+            }
+//            Thread.sleep(3000);
+//            nextImagen();
         }
     }
 

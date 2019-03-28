@@ -188,10 +188,12 @@
                                             <p:commandButton class="btn btn-8 btn-8g"
                                                              action="#{respuestaAmbienteEvaluacionController.previousImagen}" 
                                                              update=" @form"
-                                                             value="Anterior" id="next" style="margin-bottom: 5px" disabled="false"/>
+                                                             disabled="true"
+                                                             value="Anterior" id="next" style="margin-bottom: 5px" />
                                             <p:commandButton class="btn btn-8 btn-8g" 
                                                              action="#{respuestaAmbienteEvaluacionController.nextImagen}" 
                                                              update=" @form"
+                                                             disabled="#{!respuestaAmbienteEvaluacionController.maxRespuestasImagen()}"
                                                              value="Siguiente" id="prev" style="margin-bottom: 5px"/>
                                         </div>
 
@@ -204,26 +206,32 @@
                                         <div class="contenedor-pregunta">
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(1)}" 
                                                            value="Realista" style="margin-top:10px; color: white;  width:200px;" 
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(1)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(1)}" 
                                                            id="realista" update=":growl, @form" /><br/>
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(2)}" 
                                                            value="Investigativo" style="margin-top:10px; color: white;  width:200px;" 
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(2)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(2)}" 
                                                            id="investigativo" update=":growl, @form"/><br/>
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(3)}" 
                                                            value="Artístico" style="margin-top:10px; color: white;  width:200px;" 
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(3)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(3)}" 
                                                            id="artistico" update=":growl, @form"/><br/>
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(4)}" 
                                                            value="Social" style="margin-top:10px; color: white;  width:200px;" 
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(4)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(4)}" 
                                                            id="social" update=":growl, @form"/><br/>
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(5)}"
                                                            value="Emprendedor" style="margin-top:10px; color: white;  width:200px;"
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(5)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(5)}"
                                                            id="emprendedor" update=":growl, @form"/><br/> 
                                             <p:commandLink class="btn btn-8 btn-8g #{respuestaAmbienteEvaluacionController.claseCorrecta(6)}"
                                                            value="Convencional" style="margin-top:10px; color: white;  width:200px;"
+                                                           disabled="#{respuestaAmbienteEvaluacionController.botonImagenDesactivado(6)}"
                                                            actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuesta(6)}"
                                                            id="convencional" update=":growl, @form"/>
                                         </div>

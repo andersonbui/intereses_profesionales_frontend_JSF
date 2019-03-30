@@ -55,7 +55,6 @@
             <h:form id="PreguntaAmbienteForm"  style="display: block;">
                 <center>
                     <div id="display">
-                        <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
                             <div style="width: 100%; display: table; padding: 10px 100px;" >
                                 <div class="float-l">
                                     <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
@@ -67,11 +66,11 @@
                                             listener="#{encuestaController.incrementTiempo()}"
                                             update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
                                             stop="#{encuestaController.relojDetenido()}" />
-                                    <!--stop="{respuestaAmbienteController.relojDetenido()}" />-->
                                     <p:knob min="0" max="15" widgetVar="knob" 
                                             value="#{encuestaController.tiempo}" height="70px" />
                                 </h:panelGroup>
                             </div>
+                        <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
                             <p:commandButton actionListener="#{encuestaController.incrementPuntaje()}" update="@form" value="Detener reloj" rendered="#{encuestaController.esDesarrollo()}" />
                             <p:panel id="id_panel_encueeta_ambiente" header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion()}">
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
@@ -193,7 +192,7 @@
                                             <p:commandButton class="btn btn-8 btn-8g" 
                                                              action="#{respuestaAmbienteEvaluacionController.nextImagen}" 
                                                              update=" @form"
-                                                             disabled="#{!respuestaAmbienteEvaluacionController.maxRespuestasImagen()}"
+                                                             disabled="#{(!respuestaAmbienteEvaluacionController.maxRespuestasImagen() or !respuestaAmbienteEvaluacionController.hayMasImagenes()) and !encuestaController.esDesarrollo() }"
                                                              value="Siguiente" id="prev" style="margin-bottom: 5px"/>
                                         </div>
 
@@ -247,8 +246,9 @@
                                     <p:commandButton class="float-r" value="Volver a Encuesta" ajax="true" actionListener="#{respuestaAmbienteController.volverAEncuesta()}"
                                                      update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
                                     </p:commandButton>
-                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
-                                                     update=":PreguntaAmbienteForm, @form" rendered="#{respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}" >
+                                    <p:commandButton class="float-r" value="Finalizar" ajax="true" action="#{encuestaController.detenerReloj()}" actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
+                                                     update=":PreguntaAmbienteForm, @form" 
+                                                     rendered="#{(respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1) and !respuestaAmbienteEvaluacionController.hayMasImagenes()) or encuestaController.esDesarrollo()}" >
                                     </p:commandButton>
                                 </h:panelGroup>
                             </p:panel> 
@@ -289,9 +289,9 @@
                                         <p:column >
                                             <div style="height:200px">
                                                 <h5>Su puntaje de juego y evaluación fue: </h5>
-                                                <p:outputLabel value="Juegos: #{respuestaAmbienteController.puntos}"/>
+                                                <p:outputLabel value="Juegos: #{encuestaController.puntosEncuesta}"/>
                                                 <br/>
-                                                <p:outputLabel value="Evaluación: #{respuestaAmbienteEvaluacionController.puntosPreguntaAmbiente}"/><br/>
+                                                <p:outputLabel value="Evaluación: #{encuestaController.puntosEval}"/><br/>
                                             </div>
                                             <p:commandButton value="Siguiente encuesta" ajax="true" style="float:right;" class="btn"
                                                              action="#{encuestaController.pasoPreguntasPersonalidad()}"

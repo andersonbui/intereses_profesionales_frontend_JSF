@@ -21,7 +21,25 @@
             }
         </style>
         <ui:define name="content">
-            <h:form id="PreguntaCreatePersonalidadForm" >
+            <h:form >
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog" modal="true" height="170" closable="false" >
+                    <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
+
+                            Cada calificación de los temas que mas te guste.</p></b>
+
+                    <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
+                                     actionListener="#{encuestaController.arrancarReloj()}" 
+                                     onclick="PF('instruccionesPersonalidadDialog').hide();" />
+
+                </p:dialog>
+            </h:form>
+            <h:outputScript >
+                $(document).ready(function () {
+                PF('instruccionesPersonalidadDialog').show();
+                });
+            </h:outputScript>
+            <h:form id="PreguntaPersonalidadForm" >
+
                 <div id="display">
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaPersonalidadController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
@@ -63,13 +81,13 @@
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >
                             <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
                             </p:commandButton>
                             <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
                             <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
                     </h:panelGroup>
@@ -98,10 +116,10 @@
                         <h:panelGroup  style="background-color: black; display: block;" >
                             <p:commandButton class="float-l" value="anterior" ajax="true" 
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
-                                             update=":PreguntaCreatePersonalidadForm, @form" >
+                                             update=":PreguntaPersonalidadForm, @form" >
                             </p:commandButton>
                             <!--                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                                                         update=":PreguntaCreatePersonalidadForm, @form" >
+                                                                         update=":PreguntaPersonalidadForm, @form" >
                                                         </p:commandButton>-->
                         </h:panelGroup>
                     </h:panelGroup>

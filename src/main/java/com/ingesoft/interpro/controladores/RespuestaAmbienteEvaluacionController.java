@@ -274,6 +274,10 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         }
     }
 
+    public boolean hayMasImagenes(){
+        return indiceActual < vecIdImages.length;
+    }
+    
     public boolean botonImagenDesactivado(int id) {
         return respuestas[id - 1];
     }

@@ -68,6 +68,14 @@ public class EncuestaController extends Controller implements Serializable {
         return puntos_encuesta;
     }
 
+    public int getPuntosEval() {
+        return puntos_eval;
+    }
+
+    public int getPuntosEncuesta() {
+        return puntos_encuesta;
+    }
+
     public void aumentarPuntos() {
         if (evaluacion) {
             this.puntos_eval++;

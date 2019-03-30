@@ -56,8 +56,8 @@ public class LoginController extends Controller implements Serializable {
     boolean logueado;
     private List<GrupoUsuario> grupos;
 
-    private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
-    private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
+    private final String mainURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+    private final String redirectURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
     //private final String redirectURL = "http://www.codewebpro.com/blog";
     private final String provider = "facebook";
 
@@ -66,10 +66,14 @@ public class LoginController extends Controller implements Serializable {
     }
     // facebook retorna esta url:
     // http://localhost:8080/login_facebook/faces/redirectHome.xhtml?code=AQB8jDsjmeQAmh1WfV6V-Y0AjaMV303zLKqyW0yX9qDxFn3RoIJwGx4KYe_L1W-inqEQ4Z3GbggcDAe5t5v3mio97T1zHKM4VP--rrtkFgll846nZc9rkTJ6G_Wzbel8LsCHTj-aEkPKseodH6r3c_D6qIlGRsujFy4nyVF5K8cSqOSj63H8moOj9aebqTvwMz8GVdqoLGD6Gl0w9PK2XcRSvIawlbYOSes2uOE19kFVDu1BO9d1wfEpTJ4jha6BxTybyyYAmfPEtAKZBlngkXOdPAVpgHTPBToZOImYBAZxQbnfYM-56senFwrza2WxMMZUmO-G28KNHd-jRUnXbEhf#_=_
+    // ayuda: https://www.programcreek.com/java-api-examples/?code=3pillarlabs/socialauth/socialauth-master/socialauth-seam/src/main/java/org/brickred/socialauth/seam/SocialAuth.java#
+    //https://www.javatips.net/api/socialauth-master/socialauth/src/main/java/org/brickred/socialauth/SocialAuthConfig.java
     public void conectar() {
         Properties prop = System.getProperties();
-        prop.put("graph.facebook.com.consumer_key", "329124954489538");
-        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
+        prop.put("graph.facebook.com.consumer_key", "888552118157045");
+        prop.put("graph.facebook.com.consumer_secret", "5e82acaaf355f650cb0b79a61cef555c");
+//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
+//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
         prop.put("graph.facebook.com.custom_permissions", "public_profile,email");
 
         SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();

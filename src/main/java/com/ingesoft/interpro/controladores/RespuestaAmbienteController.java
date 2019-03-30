@@ -500,7 +500,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             System.out.println("encuesta: " + encuesta);
             Random rand = new Random(Calendar.getInstance().getTimeInMillis());
             for (RespuestaAmbiente item : items) {
-//                item.setRespuesta((float) valores[rand.nextInt(3)]);
+                item.setRespuesta((float) valores[rand.nextInt(3)]);
             }
         }// @end
         listaResultadosPorAmbiente = null;

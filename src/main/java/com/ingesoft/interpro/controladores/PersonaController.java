@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
@@ -10,6 +11,7 @@ import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PersonaFacade;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -35,7 +37,7 @@ public class PersonaController extends Controller implements Serializable {
     private boolean editar;
 
     public PersonaController() {
-        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_ESPERA};
+        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO};
     }
 
     public boolean isEditar() {
@@ -94,7 +96,7 @@ public class PersonaController extends Controller implements Serializable {
         Usuario usuario = usuarioController.prepareCreate();
 
         selected = new Persona();
-        usuario.setClave("Ninguna");
+        usuario.setClave("12345");
         selected.setIdUsuario(usuario);
 
         getDepartamentoController().setSelected(null);
@@ -115,16 +117,23 @@ public class PersonaController extends Controller implements Serializable {
         editar = true;
         if (selected != null) {
             EstudianteController estudianteController = getEstudianteController();
-            if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
-                Estudiante estudiante = selected.getEstudianteList().get(0);
-                estudianteController.setSelected(estudiante);
+            selected.getEstudianteList().size();
+            if (estudianteController.isEstudiante(persona)) {
+//                Estudiante estudiante = selected.getEstudianteList().get(0);
+                Estudiante estudiante = estudianteController.getEstudiantePorPersona(selected);
+                if (estudiante == null && selected.getIdUsuario().getEstado().equals(UsuarioController.EN_PROCESO)) {
+                    estudiante = estudianteController.prepareCreate();
+                } else {
+                    estudianteController.setSelected(estudiante);
+                }
+                System.out.println("estudiante: " + estudiante);
                 EstudianteGradoController estudianteGradoController = getEstudianteGradoController();
-                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante());
-                if(estudianteGrado == null) {
+                EstudianteGrado estudianteGrado = estudianteGradoController.obtenerUltimoEstudianteGrado(estudiante);
+                if (estudianteGrado == null) {
                     estudianteGrado = getEstudianteGradoController().prepareCreate();
                     estudianteGrado.setEstudiante(estudiante);
                 }
-                System.out.println("estudianteGrado: "+estudianteGrado.getGrado());
+                System.out.println("estudianteGrado: " + estudianteGrado.getGrado());
             } else {
                 estudianteController.setSelected(null);
             }
@@ -135,7 +144,7 @@ public class PersonaController extends Controller implements Serializable {
                 deptoController.setSelected(null);
                 getPaisController().setSelected(null);
             }
-
+            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
             UsuarioController usuarioController = getUsuarioController();
             usuarioController.setSelected(selected.getIdUsuario());
 
@@ -145,28 +154,46 @@ public class PersonaController extends Controller implements Serializable {
         return selected;
     }
 
-    public Persona createPorOtro() {
+    /**
+     * Usado para crear un usuario desde una cuenta de docente o administrador
+     *
+     * @return
+     */
+    public Persona crearPorAdminDocente() {
         LoginController loginController = getLoginController();
         if (loginController.getActual() == null) {
             if (!loginController.isDocente()) {
                 return null;
             }
         }
-        Persona perso = create();
+        selected.setEmail(selected.getIdUsuario().getUsuario());
+        //guardar en la base de datos y refrescar cambios en app
+        create();
+        Usuario un_usuario = selected.getIdUsuario();
+        System.out.println("un usuario: " + un_usuario);
+        un_usuario.setTokenAcesso(Utilidades.generarToken("" + un_usuario.getIdUsuario()));
+        un_usuario.setFechaCreacion(new Date());
+        un_usuario.setFechaExpiracionToken(Utilidades.getFechaExpiracion());
+        un_usuario.setClave(Utilidades.sha256(un_usuario.getClave()));
+        getUsuarioController().setSelected(un_usuario);
+        getUsuarioController().update();
 
         GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
-        grupoUsuarioController.getSelected().setUsuario(perso.getIdUsuario().getUsuario());
-        grupoUsuarioController.getSelected().setUsuario1(perso.getIdUsuario());
+        GrupoUsuario gusuario = grupoUsuarioController.getSelected();
+        System.out.println("idusuario: " + selected.getIdUsuario());
+        gusuario.setUsuario(selected.getIdUsuario().getUsuario());
+        gusuario.setUsuario1(selected.getIdUsuario());
+        Utilidades.enviarCorreoDeRegistro(un_usuario.getUsuario(), un_usuario.getTokenAcesso());
         grupoUsuarioController.create();
-        return create();
+        return null;
     }
 
     private Persona create() {
-        Persona perso = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
+        selected = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
-        return perso;
+        return selected;
     }
 
     public Persona createParaRegistrar() {
@@ -174,20 +201,21 @@ public class PersonaController extends Controller implements Serializable {
         return perso;
     }
 
-    public void update() {
-        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+    public Persona update() {
+        return (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 
     public void updateConUsuarioEstudiante() {
         Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
         UsuarioController usuarioController = getUsuarioController();
         usuarioController.update();
-        if (selected.getEstudianteList() != null && !selected.getEstudianteList().isEmpty()) {
+        boolean isEst = getEstudianteController().isEstudiante(perso);
+        System.out.println("updateConUsuarioEstudiante.esEstudiante: " + isEst);
+        if (isEst) {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
             getEstudianteGradoController().create();
         }
-
     }
 
     public void destroy() {
@@ -227,6 +255,10 @@ public class PersonaController extends Controller implements Serializable {
 
     public Persona getPersona(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public Persona getPersona(Usuario id) {
+        return getFacade().findPorIdUsuario(id);
     }
 
     public List<Persona> getItemsAvailableSelectMany() {

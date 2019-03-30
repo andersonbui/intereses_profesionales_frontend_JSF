@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,6 +30,16 @@ public class PersonaFacade extends AbstractFacade<Persona> {
 
     public PersonaFacade() {
         super(Persona.class);
+    }
+       
+    public Persona findPorIdUsuario(Usuario idUsuario){
+        Query query = em.createNamedQuery("Persona.findPorIdUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        List<Persona> personas = query.getResultList();
+        if (personas != null && !personas.isEmpty()) {
+            return personas.get(0);
+        }
+        return null;
     }
     
     public List findAllByInstitucion(Integer idInstitucion){

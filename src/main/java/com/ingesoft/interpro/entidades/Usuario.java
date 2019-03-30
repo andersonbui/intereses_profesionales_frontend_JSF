@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado")
     , @NamedQuery(name = "Usuario.findByFechaCreacion", query = "SELECT u FROM Usuario u WHERE u.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "Usuario.findByTokenAcesso", query = "SELECT u FROM Usuario u WHERE u.tokenAcesso = :tokenAcesso")
-    , @NamedQuery(name = "Usuario.findByFechaExpiracionToken", query = "SELECT u FROM Usuario u WHERE u.fechaExpiracionToken = :fechaExpiracionToken")})
+    , @NamedQuery(name = "Usuario.findByFechaExpiracionToken", query = "SELECT u FROM Usuario u WHERE u.fechaExpiracionToken = :fechaExpiracionToken")
+    , @NamedQuery(name = "Usuario.esTipoUsuario", query = "SELECT u FROM Usuario u LEFT JOIN u.grupoUsuarioList AS gu WHERE gu.tipoUsuario.tipo = :tipo AND u.idUsuario = :idUsuario")
+})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

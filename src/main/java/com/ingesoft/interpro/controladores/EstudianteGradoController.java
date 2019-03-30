@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGradoPK;
 import com.ingesoft.interpro.facades.EstudianteGradoFacade;
 
@@ -113,8 +114,9 @@ public class EstudianteGradoController implements Serializable {
         }
     }
 
-    public EstudianteGrado obtenerUltimoEstudianteGrado(int idEstudiante) {
-        List<EstudianteGrado> lista = getFacade().buscarPorIdEstudiante(idEstudiante);
+    public EstudianteGrado obtenerUltimoEstudianteGrado(Estudiante estudiante) {
+        selected = null;
+        List<EstudianteGrado> lista = getFacade().buscarPorIdEstudiante(estudiante);
         if (!lista.isEmpty()) {
             selected = lista.get(0);
         }

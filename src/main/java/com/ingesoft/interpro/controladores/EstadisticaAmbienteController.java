@@ -11,6 +11,7 @@ import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,11 +31,12 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "estadisticaAmbienteController")
 @SessionScoped
-public class EstadisticaAmbienteController implements Serializable {
+public class EstadisticaAmbienteController extends Controller implements Serializable {
 
     Institucion institucion;
     Grado grado;
     Estudiante estudiante;
+    Encuesta encuesta;
     Date fechaInicio;
     Date fechafin;
     private String string_grafico;
@@ -60,10 +62,17 @@ public class EstadisticaAmbienteController implements Serializable {
     public void setTiempo(String tiempo) {
         this.tiempo = tiempo;
     }
-    
-    
+
     public void reiniciar() {
 
+    }
+
+    public Encuesta getEncuesta() {
+        return encuesta;
+    }
+
+    public void setEncuesta(Encuesta encuesta) {
+        this.encuesta = encuesta;
     }
 
     public Institucion getInstitucion() {
@@ -143,8 +152,15 @@ public class EstadisticaAmbienteController implements Serializable {
     public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
+        return cargarGraficoResultadoEncuesta(opcion);
+    }
+
+    public String cargarGraficoResultadoEncuesta(int opcion) {
         List<ResultadoPorAmbiente> listaResultados = null;
         switch (opcion) {
+            case 1111:
+                listaResultados = resultadosPorEncuesta(encuesta);
+                break;
             case 111:
                 listaResultados = resultadosPorEstudiante(estudiante);
                 break;
@@ -160,7 +176,7 @@ public class EstadisticaAmbienteController implements Serializable {
         }
 
         if (listaResultados != null && !listaResultados.isEmpty()) {
-            Datos[] listaBarras = null;
+            Datos[] listaBarras;
             listaBarras = promedioResultados(listaResultados);
             System.out.println("listaBarras: ");
             System.out.println(listaBarras);
@@ -255,9 +271,9 @@ public class EstadisticaAmbienteController implements Serializable {
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
                 List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
-                for (Encuesta encuesta : listaEncuestas) {
+                for (Encuesta una_encuesta : listaEncuestas) {
 
-                    List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+                    List<ResultadoPorAmbiente> listaResultadosPorAmbiente = una_encuesta.getResultadoPorAmbienteList();
                     if (listaResultadosPorAmbiente.isEmpty()) {
                         continue;
                     }
@@ -265,6 +281,26 @@ public class EstadisticaAmbienteController implements Serializable {
                 }
             }
             return listaResultados;
+        }
+        return null;
+    }
+
+    public List<ResultadoPorAmbiente> resultadosPorEncuesta(Encuesta encuesta) {
+        System.out.println("resultadosPorEncuesta: " + encuesta);
+        if (encuesta != null) {
+            List<ResultadoPorAmbiente> listaResultados = getResultadoPorAmbienteController().getItemsPorEncuesta(encuesta.getIdEncuesta());
+            return listaResultados;
+//            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+//            List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+//            System.out.println("listaResultadosPorAmbiente: " + listaResultadosPorAmbiente);
+//            for (ResultadoPorAmbiente resultadoPorAmbiente : listaResultadosPorAmbiente) {
+//                System.out.println("res: " + resultadoPorAmbiente.toString());
+//            }
+//            System.out.println("listaResultadosPorAmbiente.isEmpty(): "+listaResultadosPorAmbiente.isEmpty());
+//            if (!listaResultadosPorAmbiente.isEmpty()) {
+//                listaResultados.addAll(listaResultadosPorAmbiente);
+//                return listaResultados;
+//            }
         }
         return null;
     }
@@ -347,6 +383,11 @@ public class EstadisticaAmbienteController implements Serializable {
             listaDato.valor /= listaResultadosPorAmbiente.size();
         }
         return listaDatos;
+    }
+
+    @Override
+    protected AbstractFacade getFacade() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public class Datos {

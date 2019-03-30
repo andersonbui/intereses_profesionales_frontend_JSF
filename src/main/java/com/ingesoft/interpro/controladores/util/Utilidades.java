@@ -9,7 +9,9 @@ import com.ingesoft.interpro.entidades.Persona;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 import javax.faces.context.FacesContext;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -23,6 +25,20 @@ import javax.mail.internet.MimeMessage;
  * @author debian
  */
 public class Utilidades {
+
+    public static Date getFechaExpiracion() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 10);
+        return calendar.getTime();
+    }
+
+    public static String generarToken(String userid) {
+        String rtoken = UUID.randomUUID().toString().toUpperCase()
+                + userid
+                + Calendar.getInstance().getTimeInMillis();
+        rtoken = rtoken.replace('-', '0');
+        return rtoken;
+    }
 
     public static void enviarCorreoDeRegistro(String destino, String token) {
         Utilidades.enviarCorreo(destino,
@@ -109,11 +125,11 @@ public class Utilidades {
         }
         return vectorA;
     }
-    
-    public static boolean esDesarrollo(){
+
+    public static boolean esDesarrollo() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String myConstantValue = ctx.getExternalContext().getInitParameter("javax.faces.PROJECT_STAGE");
-        System.out.println("myConstantValue: "+myConstantValue);
+        System.out.println("myConstantValue: " + myConstantValue);
         return "Development".equals(myConstantValue);
     }
 }

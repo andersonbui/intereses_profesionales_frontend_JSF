@@ -28,7 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
     , @NamedQuery(name = "GrupoUsuario.findByUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario = :usuario")
     , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")
-    , @NamedQuery(name = "GrupoUsuario.findByIdTipoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idTipoUsuario = :idTipoUsuario")})
+    , @NamedQuery(name = "GrupoUsuario.findByIdTipoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idTipoUsuario = :idTipoUsuario")
+    , @NamedQuery(name = "GrupoUsuario.findPorUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario1 = :usuario")
+})
 public class GrupoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -109,7 +111,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + " ]";
+        return "GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + "tipoUsuario=" + this.tipoUsuario + " ]";
     }
     
 }

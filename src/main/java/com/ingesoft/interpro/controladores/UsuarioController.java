@@ -65,8 +65,8 @@ public class UsuarioController extends Controller implements Serializable {
     public Usuario prepareCreate() {
         selected = new Usuario();
         initializeEmbeddableKey();
-        GrupoUsuario grupoUsuario = getGrupoUsuarioController().prepareCreate();
-
+        getGrupoUsuarioController().prepareCreate();
+        selected.setEstado(EN_ESPERA);
         return selected;
     }
 
@@ -102,7 +102,11 @@ public class UsuarioController extends Controller implements Serializable {
         }
         return items;
     }
-
+ 
+    public boolean esEstudiante(java.lang.Integer idUsuario) {
+        return getFacade().esEstudiante(idUsuario);
+    }
+    
     public Usuario getUsuario(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -110,6 +114,11 @@ public class UsuarioController extends Controller implements Serializable {
     public Usuario obtUsuarioPorToken(String token) {
         return getFacade().obtUsuarioPorToken(token);
     }
+    
+    public Usuario obtUsuarioPorEmail(String email) {
+        return getFacade().obtUsuarioPorEmail(email);
+    }
+    
     public List<Usuario> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

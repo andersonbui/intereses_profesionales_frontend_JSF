@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,7 +63,7 @@ public class Encuesta implements Serializable {
     private List<AreaEncuesta> areaEncuestaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaAmbiente> respuestaAmbienteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta", fetch=FetchType.EAGER)
     private List<ResultadoPorAmbiente> resultadoPorAmbienteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPorPersonalidad> respuestaPorPersonalidadList;
@@ -76,6 +77,10 @@ public class Encuesta implements Serializable {
     private EstudianteGrado estudianteGrado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
+    @Column(name = "puntajeEncuesta")
+    private Integer puntajeEncuesta;
+    @Column(name = "puntajeEvaluacion")
+    private Integer puntajeEvaluacion;
 
     public Encuesta() {
     }
@@ -174,6 +179,22 @@ public class Encuesta implements Serializable {
         this.respuestaPersonalidadList = respuestaPersonalidadList;
     }
 
+
+    public Integer getPuntajeEncuesta() {
+        return puntajeEncuesta;
+    }
+
+    public void setPuntajeEncuesta(Integer puntajeEncuesta) {
+        this.puntajeEncuesta = puntajeEncuesta;
+    }
+
+    public Integer getPuntajeEvaluacion() {
+        return puntajeEvaluacion;
+    }
+
+    public void setPuntajeEvaluacion(Integer puntajeEvaluacion) {
+        this.puntajeEvaluacion = puntajeEvaluacion;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

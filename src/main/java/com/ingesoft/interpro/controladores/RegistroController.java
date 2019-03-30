@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
@@ -17,11 +18,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELResolver;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -47,8 +47,9 @@ public class RegistroController extends Controller implements Serializable {
 
     @EJB
     UsuarioFacade ejbFacade;
-
-    private Usuario actual;
+    private Usuario selected;
+    
+//    private Usuario actual;
     private SocialAuthManager socialManager;
     private Profile profile;
     String codigo;
@@ -114,19 +115,17 @@ public class RegistroController extends Controller implements Serializable {
             fechaExpiracion.setTime(fechaExp);
             boolean antes = fechaActual.before(fechaExpiracion);
             if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
-                Persona persona = unusuario.getPersonaList().get(0);
-                if (getEstudianteController().isEstudiante(persona)) {
+                Persona persona = getPersonaController().getPersona(unusuario);
+                
+                if (getUsuarioController().esEstudiante(unusuario.getIdUsuario())) {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
-                    estudianteController.getSelected().setIdPersona(unusuario.getPersonaList().get(0));
+                    estudianteController.getSelected().setIdPersona(persona);
                     estudianteController.create();
-
-                    unusuario.setEstado(UsuarioController.EN_PROCESO);
-                    UsuarioController usuarioController = getUsuarioController();
-                    usuarioController.setSelected(unusuario);
-                    usuarioController.create();
-
                 }
+                unusuario.setEstado(UsuarioController.EN_PROCESO);
+                selected = unusuario;
+                this.create();
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
                 return;
             }
@@ -170,13 +169,13 @@ public class RegistroController extends Controller implements Serializable {
         this.codigo = codigo;
     }
 
-    public Usuario getActual() {
-        return actual;
-    }
-
-    public void setActual(Usuario actual) {
-        this.actual = actual;
-    }
+//    public Usuario getActual() {
+//        return actual;
+//    }
+//
+//    public void setActual(Usuario actual) {
+//        this.actual = actual;
+//    }
 
     public Usuario getUsuario(java.lang.Integer id) {
         return getFacade().find(id);
@@ -186,6 +185,9 @@ public class RegistroController extends Controller implements Serializable {
         return ejbFacade;
     }
 
+    public void create() {
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"), selected);
+    }
     public void registrarse(ActionEvent e) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage msg;
@@ -194,8 +196,7 @@ public class RegistroController extends Controller implements Serializable {
             codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
 
             if (codInstitucion != null) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DAY_OF_MONTH, 10);
+                
                 // Crear persona
                 PersonaController personaController = getPersonaController();
                 Persona unaPersona = personaController.prepareCreateParaRegistrar();
@@ -205,13 +206,13 @@ public class RegistroController extends Controller implements Serializable {
                 unaPersona.getIdUsuario().setUsuario(getUsuario());
                 unaPersona.getIdUsuario().setFechaCreacion(new Date());
                 unaPersona.getIdUsuario().setTokenAcesso("");
-                unaPersona.getIdUsuario().setFechaExpiracionToken(calendar.getTime());
+                unaPersona.getIdUsuario().setFechaExpiracionToken(Utilidades.getFechaExpiracion());
                 unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
                 unaPersona = personaController.createParaRegistrar();
                 // TODO : falta enviar mensaje por usuario repetido
                 UsuarioController usuarioController = getUsuarioController();
                 Usuario unusuario = unaPersona.getIdUsuario();
-                unusuario.setTokenAcesso(generarToken("" + unusuario.getIdUsuario()));
+                unusuario.setTokenAcesso(Utilidades.generarToken("" + unusuario.getIdUsuario()));
                 usuarioController.setSelected(unusuario);
                 usuarioController.update();
                 // Crear grupo usuario
@@ -240,25 +241,19 @@ public class RegistroController extends Controller implements Serializable {
 
     }
 
-    public String generarToken(String userid) {
-        String rtoken = UUID.randomUUID().toString().toUpperCase()
-                + userid
-                + Calendar.getInstance().getTimeInMillis();
-        rtoken = rtoken.replace('-', '0');
-        return rtoken;
-    }
+
 
     public void enviarMensaje() {
-//        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+        Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
-        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getContextName());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestPathInfo());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestServletPath());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getRequestScheme());
+//        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().getResponseContentType());
 //        System.out.println("ruta: " + FacesContext.getCurrentInstance().getExternalContext().get);
     }
 

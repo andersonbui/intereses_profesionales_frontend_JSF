@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
 import java.io.Serializable;
@@ -159,8 +160,10 @@ public class EstudianteController extends Controller implements Serializable {
     }
 
     public boolean isEstudiante(Persona persona) {
-        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+//        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
+        List<GrupoUsuario> listaGU = getGrupoUsuarioController().getGruposUsuario(persona.getIdUsuario());
         for (GrupoUsuario grupoUsuario : listaGU) {
+            System.out.println("grupoUsuario: "+grupoUsuario);
             if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
                 return true;
             }
@@ -192,8 +195,8 @@ public class EstudianteController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
-    public Estudiante getEstudiantePorIdUsuario(java.lang.Integer idUsuario) {
-        return getFacade().findPorIdUsuario(idUsuario);
+    public Estudiante getEstudiantePorPersona(Persona persona) {
+        return getFacade().findPorPersona(persona);
     }
 
     public List<Estudiante> getItemsAvailableSelectMany() {

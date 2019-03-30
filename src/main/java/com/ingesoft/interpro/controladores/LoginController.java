@@ -8,6 +8,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -15,6 +16,7 @@ import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.ejb.EJB;
@@ -52,21 +54,26 @@ public class LoginController extends Controller implements Serializable {
     String usuario;
     String password;
     boolean logueado;
-    private GrupoUsuario grupo;
+    private List<GrupoUsuario> grupos;
 
-    private final String mainURL = "http://localhost:8080/login_facebook/faces/index.xhtml";
-    private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
+    private final String mainURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+    private final String redirectURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
     //private final String redirectURL = "http://www.codewebpro.com/blog";
     private final String provider = "facebook";
 
     public LoginController() {
         logueado = false;
     }
-
+    // facebook retorna esta url:
+    // http://localhost:8080/login_facebook/faces/redirectHome.xhtml?code=AQB8jDsjmeQAmh1WfV6V-Y0AjaMV303zLKqyW0yX9qDxFn3RoIJwGx4KYe_L1W-inqEQ4Z3GbggcDAe5t5v3mio97T1zHKM4VP--rrtkFgll846nZc9rkTJ6G_Wzbel8LsCHTj-aEkPKseodH6r3c_D6qIlGRsujFy4nyVF5K8cSqOSj63H8moOj9aebqTvwMz8GVdqoLGD6Gl0w9PK2XcRSvIawlbYOSes2uOE19kFVDu1BO9d1wfEpTJ4jha6BxTybyyYAmfPEtAKZBlngkXOdPAVpgHTPBToZOImYBAZxQbnfYM-56senFwrza2WxMMZUmO-G28KNHd-jRUnXbEhf#_=_
+    // ayuda: https://www.programcreek.com/java-api-examples/?code=3pillarlabs/socialauth/socialauth-master/socialauth-seam/src/main/java/org/brickred/socialauth/seam/SocialAuth.java#
+    //https://www.javatips.net/api/socialauth-master/socialauth/src/main/java/org/brickred/socialauth/SocialAuthConfig.java
     public void conectar() {
         Properties prop = System.getProperties();
-        prop.put("graph.facebook.com.consumer_key", "329124954489538");
-        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
+        prop.put("graph.facebook.com.consumer_key", "888552118157045");
+        prop.put("graph.facebook.com.consumer_secret", "5e82acaaf355f650cb0b79a61cef555c");
+//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
+//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
         prop.put("graph.facebook.com.custom_permissions", "public_profile,email");
 
         SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();
@@ -94,18 +101,26 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean isEstudiante() {
-        return getEstudianteController().isEstudiante(personaActual);
+        return getUsuarioController().esEstudiante(actual.getIdUsuario());
     }
 
     public boolean permisoEstudiante() {
-        String nombreGrupo = grupo.getTipoUsuario().getTipo();
-        return nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE);
+        for (GrupoUsuario grupo : grupos) {
+            String nombreGrupo = grupo.getTipoUsuario().getTipo();
+            if (nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String utimoGrado() {
         Estudiante estudiante = getEstudianteController().obtenerEstudiante(personaActual);
         if (estudiante != null) {
-            return getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante.getIdEstudiante()).getGrado().getCurso();
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
+            if (estudianteGrado != null) {
+                return estudianteGrado.getGrado().getCurso();
+            }
         }
         return "";
     }
@@ -204,7 +219,7 @@ public class LoginController extends Controller implements Serializable {
                 Map<String, Object> sessionMap = external.getSessionMap();
                 sessionMap.put("usuario", actual);
                 System.out.println("estado usuari: " + actual.getEstado());
-                grupo = actual.getGrupoUsuarioList().get(0);
+                grupos = getGrupoUsuarioController().getGruposUsuario(actual);
             }
             context.addMessage(null, msg);
         } else {
@@ -215,9 +230,8 @@ public class LoginController extends Controller implements Serializable {
             actual = ejbFacade.buscarPorUsuario(nombreUsuario);
         }
         if (actual != null) {
-            GrupoUsuario gtu = actual.getGrupoUsuarioList().get(0);
-            if (gtu != null) {
-                personaActual = actual.getPersonaList().get(0);
+            if (grupos != null && !grupos.isEmpty()) {
+                personaActual = getPersonaController().getPersona(actual);
                 if (UsuarioController.EN_PROCESO.equals(actual.getEstado())) {
                     PersonaController personaController = getPersonaController();
                     personaController.prepareUpdate(personaActual);
@@ -234,11 +248,9 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public void guardarEnProceso() throws IOException {
-        // @desarrollo
-        if (!Utilidades.esDesarrollo()) {
-            getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
-        }
+        getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
         PersonaController personaController = getPersonaController();
+        
         personaController.updateConUsuarioEstudiante();
 
         String ruta = Vistas.inicio();
@@ -250,7 +262,7 @@ public class LoginController extends Controller implements Serializable {
     public void eliminarSesion() {
         actual = null;
         personaActual = null;
-        grupo = null;
+        grupos = null;
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
         logueado = false;

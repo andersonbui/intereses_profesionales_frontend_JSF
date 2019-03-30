@@ -7,6 +7,7 @@ import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -37,11 +38,50 @@ public class EncuestaController extends Controller implements Serializable {
     private Encuesta selected;
     private int pasoActivo;
 
+    private boolean evaluacion;
+    private int tiempo;
+    private int puntos_eval;
+    private int puntos_encuesta;
+    boolean detener_reloj;
+
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
     }
-    
+
     public EncuestaController() {
+        detener_reloj = true;
+        puntos_encuesta = 0;
+    }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo_eval) {
+        this.tiempo = tiempo_eval;
+    }
+
+    public int getPuntos() {
+        if (evaluacion) {
+            return puntos_eval;
+        }
+        return puntos_encuesta;
+    }
+
+    public int getPuntosEval() {
+        return puntos_eval;
+    }
+
+    public int getPuntosEncuesta() {
+        return puntos_encuesta;
+    }
+
+    public void aumentarPuntos() {
+        if (evaluacion) {
+            this.puntos_eval++;
+        } else {
+            this.puntos_encuesta++;
+        }
     }
 
     public Encuesta getSelected() {
@@ -72,6 +112,50 @@ public class EncuestaController extends Controller implements Serializable {
         this.pasoActivo = pasoActivo;
     }
 
+    public boolean relojDetenido() {
+        return detener_reloj;
+    }
+
+    public void arrancarReloj() {
+        detener_reloj = false;
+    }
+
+    public void detenerReloj() {
+        detener_reloj = true;
+    }
+
+    public void incrementTiempo() {
+        tiempo++;
+        if (tiempo > 15) {
+            tiempo = 0;
+            if (evaluacion) {
+                if (puntos_eval > 0) {
+                    puntos_eval--;
+                } else {
+                }
+            } else {
+                if (puntos_encuesta > 0) {
+                    puntos_encuesta--;
+                } else {
+                }
+            }
+        }
+    }
+
+    public void incrementPuntaje() {
+        detener_reloj = !detener_reloj;
+        System.out.println("mostrar_reloj: " + detener_reloj);
+        System.out.println("tiempo: " + tiempo);
+    }
+
+    public boolean isEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(boolean isEvaluacion) {
+        this.evaluacion = isEvaluacion;
+    }
+
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
@@ -85,20 +169,26 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void pasoResumen() throws IOException {
         this.pasoActivo = 3;
+        actualizarSelected();
+        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
+        estadisticaAmbienteController.setEncuesta(selected);
+        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
     }
 
     public void finalizar() throws IOException {
         this.pasoActivo = 0;
-        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.verPaginaPrincipal());
+        FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
     }
 
-    public void finalizarEncuesta( ) {
+    public void finalizarEncuesta() {
         String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
         selected.setPersonalidad(personalidad);
+        selected.setPuntajeEncuesta(puntos_encuesta);
+        selected.setPuntajeEvaluacion(puntos_eval);
         update();
     }
-    
+
     public int getIdEncuesta() {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
@@ -116,10 +206,12 @@ public class EncuestaController extends Controller implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         pasoActivo = 0;
+        detener_reloj = true;
+        puntos_encuesta = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();
-        
+
         // @TODO : Falta obtener el usuario
 //        FacesContext facesContext = FacesContext.getCurrentInstance();
 //        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
@@ -127,32 +219,35 @@ public class EncuestaController extends Controller implements Serializable {
 //        areaEncuestaController.prepararParaEncuesta();
         LoginController loginController = getLoginController();
         Usuario usu = loginController.getActual();
+        Persona persona = loginController.getPersonaActual();
         System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = usu.getPersonaList().get(0).getEstudianteList().get(0);
-            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud.getIdEstudiante());
+            Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
             if (estudianteGrado == null) {
-                System.out.println("Este estudiante no tiene EstudianteGrado");
-            }
-            selected = new Encuesta();
-            initializeEmbeddableKey();
-            selected.setFecha(new Date());
-            selected.setEstudianteGrado(estudianteGrado);
-            selected.setIdEncuesta(getIdEncuesta());
+                System.out.println();
+                JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
+            } else {
+                selected = new Encuesta();
+                initializeEmbeddableKey();
+                selected.setFecha(new Date());
+                selected.setEstudianteGrado(estudianteGrado);
+                selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
 //            selected.setEstudianteGrado(estudianteGrado);
-            System.out.println("antes encuesta creada: " + selected);
+                System.out.println("antes encuesta creada: " + selected);
 //            selected = getEncuesta(selected.toString());
-            System.out.println("despues encuesta creada: " + selected);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+                System.out.println("despues encuesta creada: " + selected);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
-            // @desarrollo
-            if (Utilidades.esDesarrollo()) {
-                selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+                // @desarrollo
+                if (Utilidades.esDesarrollo()) {
+                    selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+                }
+                create();
+
+                AreaController areaController = getAreaController();
+                areaController.inicializar();
             }
-            create();
-            
-            AreaController areaController = getAreaController();
-            areaController.inicializar();
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
@@ -162,7 +257,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public String resultado_personalidad(int i) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad=selected.getPersonalidad();
+        String result_personalidad = selected.getPersonalidad();
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -172,7 +267,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public String resultado_personalidad_descripcion(int i) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad=selected.getPersonalidad();
+        String result_personalidad = selected.getPersonalidad();
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {
             return null;
@@ -209,7 +304,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
+        selected = (Encuesta) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
     }
 
     public void destroy() {

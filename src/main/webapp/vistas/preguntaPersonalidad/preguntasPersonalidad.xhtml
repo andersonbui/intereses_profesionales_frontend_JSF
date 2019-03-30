@@ -21,17 +21,36 @@
             }
         </style>
         <ui:define name="content">
-            <h:form id="PreguntaCreatePersonalidadForm" >
+            <h:form >
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog" modal="true" height="170" closable="false" >
+                    <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
+
+                            Cada calificación de los temas que mas te guste.</p></b>
+
+                    <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
+                                     actionListener="#{encuestaController.arrancarReloj()}" 
+                                     onclick="PF('instruccionesPersonalidadDialog').hide();" />
+
+                </p:dialog>
+            </h:form>
+            <h:outputScript >
+                $(document).ready(function () {
+                PF('instruccionesPersonalidadDialog').show();
+                });
+            </h:outputScript>
+            <h:form id="PreguntaPersonalidadForm" >
+
                 <div id="display">
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaPersonalidadController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
                             <div style="width: 100%; display: table; padding: 0px 100px;" >
                                 <div  class="float-l">
                                     <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
-                                    <h:outputText id="puntos_id" value="#{respuestaAmbienteController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                                    <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                                 </div>
                                 <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                    <p:poll id="timeJuego" interval="1" listener="#{respuestaAmbienteController.incrementJuego}" update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
+                                    <p:poll id="timeJuego" interval="1" listener="#{encuestaController.incrementTiempo()}" 
+                                            update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
                                     <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
                                 </h:panelGroup>
                             </div>
@@ -49,7 +68,7 @@
                                                 <f:selectItem itemLabel="3" itemValue='3' />
                                                 <f:selectItem itemLabel="4" itemValue='4' />    
                                                 <f:selectItem itemLabel="5" itemValue='5' />
-                                                <p:ajax event="click" listener="#{respuestaPersonalidadController.accion(item)}" />
+                                                <p:ajax event="click" listener="#{respuestaPersonalidadController.seleccionarPunto(item)}" />
                                             </p:selectOneRadio>
                                         </p:column>
                                         <p:column style=" font-size: 18px; font-weight:bold; color: black">
@@ -62,13 +81,13 @@
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >
                             <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
                             </p:commandButton>
                             <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
                             <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
-                                              update=":PreguntaCreatePersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
+                                              update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
                     </h:panelGroup>
@@ -97,10 +116,10 @@
                         <h:panelGroup  style="background-color: black; display: block;" >
                             <p:commandButton class="float-l" value="anterior" ajax="true" 
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
-                                             update=":PreguntaCreatePersonalidadForm, @form" >
+                                             update=":PreguntaPersonalidadForm, @form" >
                             </p:commandButton>
                             <!--                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                                                         update=":PreguntaCreatePersonalidadForm, @form" >
+                                                                         update=":PreguntaPersonalidadForm, @form" >
                                                         </p:commandButton>-->
                         </h:panelGroup>
                     </h:panelGroup>

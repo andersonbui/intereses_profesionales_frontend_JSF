@@ -5,6 +5,8 @@
  */
 package com.ingesoft.interpro.facades;
 
+import com.ingesoft.interpro.controladores.TipoUsuarioController;
+import com.ingesoft.interpro.controladores.UsuarioController;
 import com.ingesoft.interpro.entidades.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -31,6 +33,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
 
+    public boolean esEstudiante(int idUsuario) {
+        return esTipoUsuario(idUsuario, UsuarioController.TIPO_ESTUDIANTE);
+    }
+    
+    public boolean esTipoUsuario(int idUsuario, String tipo) {
+        Query query = em.createNamedQuery("Usuario.esTipoUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        query.setParameter("tipo", tipo);
+        List<Usuario> usuarios = query.getResultList();
+        if (usuarios != null && !usuarios.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
     public Usuario buscarPorUsuario(String name) {
         Query query = em.createNamedQuery("Usuario.findByUsuario");
         query.setParameter("usuario", name);
@@ -45,6 +61,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public Usuario obtUsuarioPorToken(String token) {
         Query query = em.createNamedQuery("Usuario.findByTokenAcesso");
         query.setParameter("tokenAcesso", token);
+        List<Usuario> usuarios = query.getResultList();
+        if (usuarios != null && !usuarios.isEmpty()) {
+            Usuario findUsuario = (Usuario) usuarios.get(0);
+            if (findUsuario != null) {
+                return findUsuario;
+            }
+        }
+        return null;
+
+    }
+    
+    public Usuario obtUsuarioPorEmail(String email) {
+        Query query = em.createNamedQuery("Usuario.findByUsuario");
+        query.setParameter("usuario", email);
         List<Usuario> usuarios = query.getResultList();
         if (usuarios != null && !usuarios.isEmpty()) {
             Usuario findUsuario = (Usuario) usuarios.get(0);

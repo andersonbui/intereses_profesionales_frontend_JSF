@@ -6,9 +6,12 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -24,7 +27,17 @@ public class GrupoUsuarioFacade extends AbstractFacade<GrupoUsuario> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
+       
+    public List<GrupoUsuario> getGruposUsuario(Usuario idUsuario){
+        Query query = em.createNamedQuery("GrupoUsuario.findPorUsuario");
+        query.setParameter("usuario", idUsuario);
+        List<GrupoUsuario> grupos = query.getResultList();
+        if (grupos != null && !grupos.isEmpty()) {
+            return grupos;
+        }
+        return null;
+    }
+    
     public GrupoUsuarioFacade() {
         super(GrupoUsuario.class);
     }

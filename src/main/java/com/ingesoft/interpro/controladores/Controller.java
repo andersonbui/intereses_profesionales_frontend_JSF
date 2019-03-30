@@ -171,6 +171,12 @@ public abstract class Controller implements Serializable {
         RespuestaAmbienteController respuestaAmbienteController = (RespuestaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
         return respuestaAmbienteController;
     }
+    public EstadisticaAmbienteController getEstadisticaAmbienteController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaAmbienteController estadisticaAmbienteController = (EstadisticaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaAmbienteController");
+        return estadisticaAmbienteController;
+    }
     public RespuestaPersonalidadController getRespuestaPersonalidadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -190,6 +196,13 @@ public abstract class Controller implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
         return areaEncuestaController;
+    }
+    
+    public EncuestaController getEncuestaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
+        return encuestaController;
     }
 
     public AreaController getAreaController() {

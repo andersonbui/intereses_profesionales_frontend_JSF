@@ -18,7 +18,7 @@
                 color: #222222;
                 border-color: #d6d6d6;
                 /* with the exported variables from Nova and Luna Themes*/
-                border-color: var(--input-border-color, #d6d6d6);
+                /*border-color: var(--input-border-color, #d6d6d6);*/
             }
 
             .white-button.ui-button.ui-state-default:enabled:hover, 
@@ -27,7 +27,7 @@
                 border-color: #ccc;
                 color: #373a3c;
                 /* with the exported variables from Nova and Luna Themes*/
-                border-color: var(--input-hover-border-color, #ccc);
+                /*border-color: var(--input-hover-border-color, #ccc);*/
             }
 
             .green-button.ui-button.ui-state-default {
@@ -80,8 +80,11 @@
                                          label="username"  value="#{registroController.usuario}" 
                                          placeholder="Ingrese su correo electr&oacute;nico"  
                                          required="true" 
+                                         validator="existeEmailValidator"
                                          requiredMessage="Es necesario ingresar un correo electr&oacute;nico"
-                                         />
+                                         >
+                                <f:validator validatorId="emailValidator" />
+                            </p:inputText>
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" >
                             <p:password id="password" 
@@ -107,7 +110,8 @@
                         </div>
 
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
-                                          actionListener="#{registroController.registrarse}"  update="@form,growl"  value="Registrate">
+                                          actionListener="#{registroController.registrarse}"  
+                                          update="@form,growl"  value="Registrate">
                         </p:commandButton>
 
                         <div class="text-center p-t-57 p-b-20" >

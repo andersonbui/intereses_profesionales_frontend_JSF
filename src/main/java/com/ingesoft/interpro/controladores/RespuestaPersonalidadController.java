@@ -31,7 +31,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaPersonalidadController")
 @SessionScoped
-public class RespuestaPersonalidadController implements Serializable {
+public class RespuestaPersonalidadController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaPersonalidadFacade ejbFacade;
@@ -43,7 +43,7 @@ public class RespuestaPersonalidadController implements Serializable {
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
-    int [] vecContPersonalidad;
+    int[] vecContRespuestasPersonalidad;
 
     public RespuestaPersonalidadController() {
         tamGrupo = 4;
@@ -76,7 +76,8 @@ public class RespuestaPersonalidadController implements Serializable {
         selected.setRespuestaPersonalidadPK(new com.ingesoft.interpro.entidades.RespuestaPersonalidadPK());
     }
 
-    private RespuestaPersonalidadFacade getFacade() {
+    @Override
+    protected RespuestaPersonalidadFacade getFacade() {
         return ejbFacade;
     }
 
@@ -143,7 +144,6 @@ public class RespuestaPersonalidadController implements Serializable {
     }
 
     public String finalizarEncuesta() {
-//        grupo = getGrupoItems(pasoActual + 1);
         for (RespuestaPersonalidad respuesta : grupo) {
             getFacade().edit(respuesta);
         }
@@ -190,19 +190,19 @@ public class RespuestaPersonalidadController implements Serializable {
     private String obtenerPersonalidad(Elemento[] valores) {
         String personalidad = "";
         String perso;
-        
+
         perso = valores[2].tipoPer.getTipo();
-        personalidad += (valores[2].valor <= 24) ? perso.charAt(0): perso.charAt(1);
-        
+        personalidad += (valores[2].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
+
         perso = valores[3].tipoPer.getTipo();
-        personalidad += (valores[3].valor <= 24) ? perso.charAt(0): perso.charAt(1);
-        
+        personalidad += (valores[3].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
+
         perso = valores[1].tipoPer.getTipo();
-        personalidad += (valores[1].valor <= 24) ? perso.charAt(0): perso.charAt(1);
-        
+        personalidad += (valores[1].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
+
         perso = valores[0].tipoPer.getTipo();
-        personalidad += (valores[0].valor <= 24) ? perso.charAt(0): perso.charAt(1);
-        System.out.println("personalidad: "+personalidad);
+        personalidad += (valores[0].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
+        System.out.println("personalidad: " + personalidad);
         return personalidad;
     }
 
@@ -217,17 +217,13 @@ public class RespuestaPersonalidadController implements Serializable {
     }
 
     public List<Integer> getGrupos() {
-        //System.out.println("Hola mundo");
         List<Integer> gruposPreguntas = new ArrayList<>();
         items = getItems();
-//        System.out.println("items: " + items);
         numGrupos = items.size() / tamGrupo;
         numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-//        numGrupos = 3;
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
-        //System.out.println("gruposPreguntas: " + gruposPreguntas);
         return gruposPreguntas;
     }
 
@@ -258,13 +254,14 @@ public class RespuestaPersonalidadController implements Serializable {
         return listaRespuestas;
     }
 
-//    public class RespuestaPersonalidadAux{
-//        RespuestaPersonalidad respuestaPersonalidad;
-//        
-//    }
-
-    public void accion(RespuestaPersonalidad indice){
-        System.out.println("hola accion;"+indice);
+    public void seleccionarPunto(RespuestaPersonalidad respuestaPersonalidad) {
+        int posicion = respuestaPersonalidad.getPreguntaPersonalidad().getOrden() - 1;
+        if (vecContRespuestasPersonalidad[posicion] == 0) {
+            getEncuestaController().aumentarPuntos();
+            getEncuestaController().setTiempo(0);//Number(0);
+        }
+        vecContRespuestasPersonalidad[posicion]++;
+        System.out.println("hola accion;" + respuestaPersonalidad);
     }
 
     public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
@@ -272,6 +269,7 @@ public class RespuestaPersonalidadController implements Serializable {
         System.out.println("preguntas: " + preguntas);
         EncuestaAcutal = encuesta;
         items = new ArrayList<>(preguntas.size());
+        vecContRespuestasPersonalidad = new int[preguntas.size()];
         for (PreguntaPersonalidad pregunta : preguntas) {
             selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
             selected.setPreguntaPersonalidad(pregunta);
@@ -279,12 +277,15 @@ public class RespuestaPersonalidadController implements Serializable {
             items.add(selected);
         }
 
+        for (int i = 0; i < vecContRespuestasPersonalidad.length; i++) {
+            vecContRespuestasPersonalidad[i] = 0;
+        }
+
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
-//            System.out.println("encuesta: " + encuesta);
             Random rand = new Random(Calendar.getInstance().getTimeInMillis());
             for (RespuestaPersonalidad item : items) {
-                item.setRespuesta(1+rand.nextInt(5));
+                item.setRespuesta(1 + rand.nextInt(5));
             }
         }// @end
         getGrupos();

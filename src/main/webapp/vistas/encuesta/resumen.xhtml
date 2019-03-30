@@ -9,12 +9,30 @@
         <ui:define name="content">
             <h:form>
                 
-            esta es una bienvenida a la encuesta
+                <h:body id='divgrafico' >
+                        <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
+                            <script>
+                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                            </script>
+                            <div style="height: 300px; width: 700px;" >
+                                <canvas id="myChart" width="700" height="300"></canvas>
+                            </div>
+                        </p:panelGrid>
+                </h:body>
                 <p:commandButton value="Finalizar" ajax="true"
                                  action="#{encuestaController.finalizar()}"
                                  > 
                 </p:commandButton>
             </h:form>
+            <script type="text/javascript">
+                function graficar(json) {
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+                        var myChart = new Chart(ctx, json);
+                    }
+                }
+            </script>
         </ui:define>
     </ui:composition>
 

@@ -300,9 +300,9 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
                 getEncuestaController().aumentarPuntos();
                 getEncuestaController().setTiempo(0);
                 contCorrectImg++;
-                if (indiceActual < vecIdImages.length - 1) {
-                    indiceActual++;
-                }
+//                if (indiceActual < vecIdImages.length - 1) {
+//                    nextImagen();
+//                }
             }
             System.out.println("Respuesta correcta:" + respuesta);
         } else {

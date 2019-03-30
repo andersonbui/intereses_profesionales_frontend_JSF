@@ -186,6 +186,7 @@ public class EncuestaController extends Controller implements Serializable {
         selected.setPersonalidad(personalidad);
         selected.setPuntajeEncuesta(puntos_encuesta);
         selected.setPuntajeEvaluacion(puntos_eval);
+        detenerReloj();
         update();
     }
 

@@ -18,16 +18,18 @@
 
         <ui:define name="content">       
             <p:dialog header="Encuesta intereses profesionales" widgetVar="instruccionesEncuestaDialog" modal="true" height="170">
-                <b><p>Para iniciar su identificación de perfil por favor dar click en el boton Realizar encuesta</p></b>
+                <center><h5>Para realizar su encuesta dele click en el boton "realizar encuesta"</h5></center>
                 <h:form>
-                    <center><p:commandButton value="Realizar encuesta" action="#{encuestaController.prepararYCrear}"></p:commandButton></center>
+                    <center><p:commandButton value="Continuar" onclick="PF('instruccionesEncuestaDialog').hide()"></p:commandButton></center>
                 </h:form>
             </p:dialog>
             <center><div><p:graphicImage style="width: 200px;" name="img/interpro.png"/><br/>
                     <h3>Bienvenido al sitio, aquí podrá identificar sus intereses profesionales y <br/>
                         personalidad.<br/>
                         ¡Disfrute la encuesta aprendiendo, ganando y compartiendo!</h3></div></center>
-            Si desea realizar su encuesta para dele click en el boton "realizar encuesta"
+            <h:form>
+                <center><p:commandButton value="Realizar encuesta" action="#{encuestaController.prepararYCrear}"></p:commandButton></center>
+            </h:form>
             <script>
                 $(document).ready(function () {
                     PF('instruccionesEncuestaDialog').show();

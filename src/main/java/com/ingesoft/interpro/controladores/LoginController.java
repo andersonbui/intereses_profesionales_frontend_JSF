@@ -199,47 +199,54 @@ public class LoginController extends Controller implements Serializable {
         HttpServletRequest req = (HttpServletRequest) external.getRequest();
         Map<String, Object> sessionMap = external.getSessionMap();
         String session = (String) sessionMap.get("u5u4ri0");
+        System.out.println("este es el resultado: "+session);
         FacesMessage msg;
-        Principal principal;
         String ruta = Vistas.inicio();
-        if (req.getUserPrincipal() == null) {
-            try {
+        String nomUsuario;
+//        if (req.getUserPrincipal() == null) {
+        try {
+            if (session == null || "".equals(session)) {
+                Principal principal;
                 req.login(this.usuario, this.password);
                 System.out.println("inicio de sesion con usuario: " + usuario + "; clave: " + password);
                 logueado = true;
                 principal = req.getUserPrincipal();
-                actual = ejbFacade.buscarPorUsuario(principal.getName());
-            } catch (ServletException e) {
-//                e.printStackTrace();
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
-                logueado = false;
-                context.addMessage(null, msg);
-                return;
-            }
-            System.out.println("estado usuari: " + actual);
-//                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
-            if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
-                System.out.println("estado usuari: " + actual.getEstado());
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta no ha sido activado. Por favor revise su bandeja de correo");
-                eliminarSesion();
-            } else if (UsuarioController.INAACTIVO.equals(actual.getEstado())) {
-                System.out.println("estado usuari: " + actual.getEstado());
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta fue desactivado. Por favor comuniquese con el administrador.");
-                eliminarSesion();
-            } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
+                nomUsuario = principal.getName();
                 sessionMap.put("u5u4ri0", principal.getName());
-                System.out.println("estado usuari: " + actual.getEstado());
-                grupos = getGrupoUsuarioController().getGruposUsuario(actual);
+            } else {
+                nomUsuario = session;
             }
+            actual = ejbFacade.buscarPorUsuario(nomUsuario);
+        } catch (ServletException e) {
+//                e.printStackTrace();
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
+            logueado = false;
             context.addMessage(null, msg);
-        } else {
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Que alegria, Has vuelto", this.usuario);
-            context.addMessage(null, msg);
-            logueado = true;
-            String nombreUsuario = req.getUserPrincipal().getName();
-            actual = ejbFacade.buscarPorUsuario(nombreUsuario);
+            return;
         }
+        System.out.println("estado usuari: " + actual);
+//                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
+        if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
+            System.out.println("estado usuari: " + actual.getEstado());
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta no ha sido activado. Por favor revise su bandeja de correo");
+            eliminarSesion();
+        } else if (UsuarioController.INAACTIVO.equals(actual.getEstado())) {
+            System.out.println("estado usuari: " + actual.getEstado());
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta fue desactivado. Por favor comuniquese con el administrador.");
+            eliminarSesion();
+        } else {
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
+            System.out.println("estado usuari: " + actual.getEstado());
+            grupos = getGrupoUsuarioController().getGruposUsuario(actual);
+        }
+        context.addMessage(null, msg);
+//        } else {
+//            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Que alegria, Has vuelto", this.usuario);
+//            context.addMessage(null, msg);
+//            logueado = true;
+//            String nombreUsuario = req.getUserPrincipal().getName();
+//            actual = ejbFacade.buscarPorUsuario(nombreUsuario);
+//        }
         if (actual != null) {
             if (grupos != null && !grupos.isEmpty()) {
                 personaActual = getPersonaController().getPersona(actual);

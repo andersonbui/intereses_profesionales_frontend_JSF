@@ -36,7 +36,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public boolean esEstudiante(int idUsuario) {
         return esTipoUsuario(idUsuario, UsuarioController.TIPO_ESTUDIANTE);
     }
-    
+
     public boolean esTipoUsuario(int idUsuario, String tipo) {
         Query query = em.createNamedQuery("Usuario.esTipoUsuario");
         query.setParameter("idUsuario", idUsuario);
@@ -47,12 +47,16 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return false;
     }
+
     public Usuario buscarPorUsuario(String name) {
         Query query = em.createNamedQuery("Usuario.findByUsuario");
         query.setParameter("usuario", name);
-        Usuario findUsuario = (Usuario) query.getResultList().get(0);
-        if (findUsuario != null) {
-            return findUsuario;
+        List lista = query.getResultList();
+        if (!lista.isEmpty()) {
+            Usuario findUsuario = (Usuario) lista.get(0);
+            if (findUsuario != null) {
+                return findUsuario;
+            }
         }
         return null;
 
@@ -71,7 +75,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return null;
 
     }
-    
+
     public Usuario obtUsuarioPorEmail(String email) {
         Query query = em.createNamedQuery("Usuario.findByUsuario");
         query.setParameter("usuario", email);

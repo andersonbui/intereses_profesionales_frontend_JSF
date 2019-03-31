@@ -55,21 +55,21 @@
             <h:form id="PreguntaAmbienteForm"  style="display: block;">
                 <center>
                     <div id="display">
-                            <div style="width: 100%; display: table; padding: 10px 100px;" >
-                                <div class="float-l">
-                                    <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
-                                    <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
-                                </div>
-                                <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
-                                <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                    <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
-                                            listener="#{encuestaController.incrementTiempo()}"
-                                            update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
-                                            stop="#{encuestaController.relojDetenido()}" />
-                                    <p:knob min="0" max="15" widgetVar="knob" 
-                                            value="#{encuestaController.tiempo}" height="70px" />
-                                </h:panelGroup>
+                        <div style="width: 100%; display: table; padding: 10px 100px;" >
+                            <div class="float-l">
+                                <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
+                                <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                             </div>
+                            <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
+                            <h:panelGroup id="grupoTimeJuego" class="float-r">
+                                <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
+                                        listener="#{encuestaController.incrementTiempo()}"
+                                        update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
+                                        stop="#{encuestaController.relojDetenido()}" />
+                                <p:knob min="0" max="15" widgetVar="knob" 
+                                        value="#{encuestaController.tiempo}" height="70px" />
+                            </h:panelGroup>
+                        </div>
                         <h:panelGrid class="panel-preguntas-ambiente"  rendered="#{!respuestaAmbienteController.esUltimoPaso()}">
                             <p:commandButton actionListener="#{encuestaController.incrementPuntaje()}" update="@form" value="Detener reloj" rendered="#{encuestaController.esDesarrollo()}" />
                             <p:panel id="id_panel_encueeta_ambiente" header="Preguntas de ambiente" rendered="#{!respuestaAmbienteController.isEvaluacion()}">
@@ -151,11 +151,13 @@
                                         <h4><h:outputText value="#{respuestaAmbienteEvaluacionController.enunciado}" escape="false"  ></h:outputText></h4>
                                         <center>
                                             <p:panelGrid columns="1" layout="grid">
-                                                <ui:repeat value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente}" var="item">
-                                                    <p:commandButton class="tamano-boton-pregunta" 
-                                                                     value="#{item.enunciado}" 
-                                                                     actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuestaSeleccion(item)}" 
-                                                                     id="opcion" update=":growl, @form, :PreguntaAmbienteForm"/><br/>
+                                                <ui:repeat value="#{respuestaAmbienteEvaluacionController.listaPreguntasAmbiente}" var="item" >
+                                                    <p:commandLink class=" btn btn-8 btn-8g  #{respuestaAmbienteEvaluacionController.claseRepuestaACorrecta(item)}" 
+                                                                   value="#{item.enunciado}" 
+                                                                   disabled="#{respuestaAmbienteEvaluacionController.botonRespuestaDesactivado(item)}"
+                                                                   style="margin:10px 0px; color: white;  width:400px;" 
+                                                                   actionListener="#{respuestaAmbienteEvaluacionController.comprobarRespuestaSeleccion(item)}" 
+                                                                   id="opcion" update=":growl, @form, :PreguntaAmbienteForm"/><br/>
                                                 </ui:repeat>
                                             </p:panelGrid>
                                         </center>

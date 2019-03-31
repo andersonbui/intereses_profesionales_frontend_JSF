@@ -196,7 +196,6 @@ public class RegistroController extends Controller implements Serializable {
             codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
 
             if (codInstitucion != null) {
-                
                 // Crear persona
                 PersonaController personaController = getPersonaController();
                 Persona unaPersona = personaController.prepareCreateParaRegistrar();

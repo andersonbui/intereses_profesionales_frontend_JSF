@@ -19,14 +19,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -116,8 +114,9 @@ public class EncuestaController extends Controller implements Serializable {
         return detener_reloj;
     }
 
-    public void arrancarReloj() {
+    public EncuestaController arrancarReloj() {
         detener_reloj = false;
+        return this;
     }
 
     public void detenerReloj() {

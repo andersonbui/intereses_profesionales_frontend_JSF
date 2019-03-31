@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -57,6 +58,18 @@ public class PreguntaAmbiente implements Serializable {
     @JoinColumn(name = "idTipoAmbiente", referencedColumnName = "idTipoAmbiente")
     @ManyToOne(optional = false)
     private TipoAmbiente idTipoAmbiente;
+
+    @Transient Boolean seleccionado;
+
+    @XmlTransient
+    public Boolean getSeleccionado() {
+        return seleccionado;
+    }
+
+    @XmlTransient
+    public void setSeleccionado(boolean seleccionado) {
+        this.seleccionado = seleccionado;
+    }
 
     public PreguntaAmbiente() {
     }
@@ -138,5 +151,5 @@ public class PreguntaAmbiente implements Serializable {
     public String toString() {
         return "PreguntaAmbiente[ idPreguntaAmbiente=" + idPreguntaAmbiente + " ]";
     }
-    
+
 }

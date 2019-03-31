@@ -16,7 +16,7 @@
     <h:body>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
-                <h:form class="login100-form validate-form">
+                <h:form class="login100-form validate-form" rendered="#{!loginController.logueado()}">
 
                     <p:growl id="growl" showDetail="true"/>
                     <span class="login100-form-title p-b-37" >
@@ -68,7 +68,38 @@
                         <h:commandLink action="#{loginController.salir()}" styleClass="btn btn-primary" value="Salir" />			
                     </h:panelGrid>
                 </h:form>
-                <script type="text/javascript"> 
+
+                <h:form rendered="#{loginController.logueado()}">
+                    <p:growl id="growl" showDetail="true"/>
+                    <span class="login100-form-title p-b-37" >
+                        Continuar sesion?
+                    </span>
+                    <p:panelGrid  columns="1" styleClass="panelgrid" class="transparentBackground" columnClasses="centered" >
+                        <h:panelGroup style="display:block; text-align:center">
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Usted tiene una sesión iniciada"/>
+                                    <p:outputLabel value="¿Desea continuar con esta sesión?"/>
+                                </p:column>
+                                <p:column><br></br></p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                                     value="Si" actionListener="#{loginController.login}"
+                                                     oncomplete="manejarLogin(xhr, status, args)"
+                                                     />
+                                    <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                                     value="No" action="#{loginController.salir()}"
+                                                     ajax="false"
+                                                     />
+                                </p:column>
+                            </p:row>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </h:form>
+                <script type="text/javascript">
                     //<![CDATA[ 
                     //oncomplete="manejarLogin(xhr, status, args)" 
                     function manejarLogin(xhr, status, args) {

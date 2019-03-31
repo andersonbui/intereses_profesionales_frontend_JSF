@@ -64,6 +64,7 @@ public class LoginController extends Controller implements Serializable {
     public LoginController() {
         logueado = false;
     }
+
     // facebook retorna esta url:
     // http://localhost:8080/login_facebook/faces/redirectHome.xhtml?code=AQB8jDsjmeQAmh1WfV6V-Y0AjaMV303zLKqyW0yX9qDxFn3RoIJwGx4KYe_L1W-inqEQ4Z3GbggcDAe5t5v3mio97T1zHKM4VP--rrtkFgll846nZc9rkTJ6G_Wzbel8LsCHTj-aEkPKseodH6r3c_D6qIlGRsujFy4nyVF5K8cSqOSj63H8moOj9aebqTvwMz8GVdqoLGD6Gl0w9PK2XcRSvIawlbYOSes2uOE19kFVDu1BO9d1wfEpTJ4jha6BxTybyyYAmfPEtAKZBlngkXOdPAVpgHTPBToZOImYBAZxQbnfYM-56senFwrza2WxMMZUmO-G28KNHd-jRUnXbEhf#_=_
     // ayuda: https://www.programcreek.com/java-api-examples/?code=3pillarlabs/socialauth/socialauth-master/socialauth-seam/src/main/java/org/brickred/socialauth/seam/SocialAuth.java#
@@ -179,6 +180,14 @@ public class LoginController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
+    public boolean logueado() {
+        ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest req = (HttpServletRequest) external.getRequest();
+        Map<String, Object> sessionMap = external.getSessionMap();
+        String session = (String) sessionMap.get("u5u4ri0");
+        return session != null;
+    }
+
     @Override
     public UsuarioFacade getFacade() {
         return ejbFacade;
@@ -186,15 +195,19 @@ public class LoginController extends Controller implements Serializable {
 
     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
+        ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest req = (HttpServletRequest) external.getRequest();
+        Map<String, Object> sessionMap = external.getSessionMap();
+        String session = (String) sessionMap.get("u5u4ri0");
         FacesMessage msg;
+        Principal principal;
         String ruta = Vistas.inicio();
         if (req.getUserPrincipal() == null) {
             try {
                 req.login(this.usuario, this.password);
                 System.out.println("inicio de sesion con usuario: " + usuario + "; clave: " + password);
                 logueado = true;
-                Principal principal = req.getUserPrincipal();
+                principal = req.getUserPrincipal();
                 actual = ejbFacade.buscarPorUsuario(principal.getName());
             } catch (ServletException e) {
 //                e.printStackTrace();
@@ -215,9 +228,7 @@ public class LoginController extends Controller implements Serializable {
                 eliminarSesion();
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
-                ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
-                Map<String, Object> sessionMap = external.getSessionMap();
-                sessionMap.put("usuario", actual);
+                sessionMap.put("u5u4ri0", principal.getName());
                 System.out.println("estado usuari: " + actual.getEstado());
                 grupos = getGrupoUsuarioController().getGruposUsuario(actual);
             }
@@ -250,7 +261,7 @@ public class LoginController extends Controller implements Serializable {
     public void guardarEnProceso() throws IOException {
         getUsuarioController().getSelected().setEstado(UsuarioController.ACTIVO);
         PersonaController personaController = getPersonaController();
-        
+
         personaController.updateConUsuarioEstudiante();
 
         String ruta = Vistas.inicio();
@@ -282,7 +293,4 @@ public class LoginController extends Controller implements Serializable {
         return "";
     }
 
-    public boolean logueado() {
-        return logueado;
-    }
 }

@@ -202,7 +202,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public int siguientePaso() {
         System.out.println("siguientes paso: " + pasoActual);
-        int intervaloEvaluacion = 6;
+        int intervaloEvaluacion = 5;
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
             intervaloEvaluacion = 3;

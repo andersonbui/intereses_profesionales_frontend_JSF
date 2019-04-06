@@ -208,6 +208,7 @@ public class EncuestaController extends Controller implements Serializable {
         pasoActivo = 0;
         detener_reloj = true;
         puntos_encuesta = 0;
+        puntos_eval = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();

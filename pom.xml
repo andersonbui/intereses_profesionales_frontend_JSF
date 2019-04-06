@@ -129,16 +129,18 @@
             <version>4.15</version>
             <type>jar</type>
         </dependency>
-<!--        <dependency>
-            <groupId>mineriaBayes</groupId>
-            <artifactId>mineriaBayes</artifactId>
-            <version>1</version>
-            <scope>runtime</scope>
-        </dependency>-->
+
         <dependency>
             <groupId>be.ceau</groupId>
             <artifactId>chart</artifactId>
             <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mineriabayes</groupId>
+            <artifactId>mineriabayes</artifactId>
+            <version>1</version>
+            <scope>runtime</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

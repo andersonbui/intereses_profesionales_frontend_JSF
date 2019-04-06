@@ -57,7 +57,8 @@
                     <div id="display">
                         <div style="width: 100%; display: table; padding: 10px 100px;" >
                             <div class="float-l">
-                                <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
+                                <p:outputLabel value="Puntos de juego:  " rendered="#{!respuestaAmbienteController.isEvaluacion()}" style=" font-size: 30px; font-weight:bold;"/>
+                                <p:outputLabel value="Puntos de evaluacion:  " rendered="#{respuestaAmbienteController.isEvaluacion()}" style=" font-size: 30px; font-weight:bold;"/>
                                 <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
                             </div>
                             <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
@@ -189,12 +190,12 @@
                                             <p:commandButton class="btn btn-8 btn-8g"
                                                              action="#{respuestaAmbienteEvaluacionController.previousImagen}" 
                                                              update=" @form"
-                                                             disabled="true"
+                                                             rendered="false"
                                                              value="Anterior" id="next" style="margin-bottom: 5px" />
                                             <p:commandButton class="btn btn-8 btn-8g" 
                                                              action="#{respuestaAmbienteEvaluacionController.nextImagen}" 
                                                              update=" @form"
-                                                             disabled="#{(!respuestaAmbienteEvaluacionController.maxRespuestasImagen() or !respuestaAmbienteEvaluacionController.hayMasImagenes()) and !encuestaController.esDesarrollo() }"
+                                                             disabled="#{(!respuestaAmbienteEvaluacionController.maxRespuestasImagen() or !respuestaAmbienteEvaluacionController.hayMasImagenes()) and (!respuestaAmbienteEvaluacionController.hayMasImagenes() or !encuestaController.esDesarrollo())}"
                                                              value="Siguiente" id="prev" style="margin-bottom: 5px"/>
                                         </div>
 
@@ -254,7 +255,7 @@
                                                      action="#{encuestaController.detenerReloj()}" 
                                                      actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
                                                      update=":PreguntaAmbienteForm, @form" 
-                                                     rendered="#{(respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1) and !respuestaAmbienteEvaluacionController.hayMasImagenes()) or encuestaController.esDesarrollo()}" >
+                                                     rendered="#{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or encuestaController.esDesarrollo()}" >
                                     </p:commandButton>
                                 </h:panelGroup>
                             </p:panel> 

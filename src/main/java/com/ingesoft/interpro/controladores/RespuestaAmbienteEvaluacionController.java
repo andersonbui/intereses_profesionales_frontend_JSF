@@ -137,7 +137,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 //    public List<RespuestaAmbiente> getGrupo() {
 //        return grupo;
 //    }
-
     public List<String> getImages() {
         return images;
     }
@@ -185,14 +184,13 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
         contGrupo = 0;
         pasoActual = -1;
         puntos = 0;
-//        gruposPreguntas = null;
         indiceActual = 0;
         isEvaluacionImagenes = false;
         contCorrect = 0;
         contadorRespuestasImagenes = 0;
         contadorRespuestasPreguntas = 0;
+        contCorrectImg = 0;
         respuestasImagenes = new boolean[6];
-//        respuestasPreguntas = new boolean[6];
     }
 
     public int[] getVecIdImages() {
@@ -268,7 +266,7 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
     }
 
     public boolean hayMasImagenes() {
-        return indiceActual < vecIdImages.length;
+        return indiceActual < vecIdImages.length - 1;
     }
 
     public boolean botonImagenDesactivado(int id) {
@@ -387,7 +385,6 @@ public class RespuestaAmbienteEvaluacionController extends Controller implements
 //        }
 //        return listaRespuestas;
 //    }
-
     public String obtenerImagenActual() {
         selectedPregunta = getPreguntaAmbiente(vecIdImages[indiceActual]);
         String url = Variables.ubicacionImagenes + this.selectedPregunta.getUrlImagen();

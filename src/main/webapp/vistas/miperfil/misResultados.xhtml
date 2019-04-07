@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/principal.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:outputScript library="js" name="Chart.js"/>
+            <h:form id="EstadisticaForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" id="id_selects">
+
+                        <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
+                        <p:selectOneMenu id="id_select_institucion" 
+                                         value="#{misResultadosController.encuesta}" 
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+
+                            <f:selectItem itemLabel="#{bundle.SelectTodos}" value="#{null}"/>
+                            <f:selectItems value="#{encuestaController.listarEncuestasSelected(estudianteController.selected)}"
+                                           var="encuesta"
+                                           itemLabel="#{encuesta.fecha}"
+                                           itemValue="#{encuesta}"/>
+                            <f:ajax render="id_selects" listener="#{misResultadosController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{misResultadosController.cargarGraficoMisResultado()}"
+                                     value="cargar" 
+                                     update="grafica,:growl,display,divgrafico">
+                    </p:commandButton>
+                    <h:body id='divgrafico' >
+                        <p:panelGrid id="grafica"  rendered="#{misResultadosController.getGraficoModelo() != null}">
+                            <script>
+                                graficar(#{misResultadosController.getGraficoModelo()});
+                            </script>
+                            <div style="height: 300px; width: 700px;" >
+                                <canvas id="myChart" width="700" height="300"></canvas>
+                            </div>
+                        </p:panelGrid>
+                    </h:body>
+                </h:panelGroup>
+            </h:form>
+            <script type="text/javascript">
+                function graficar(json) {
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+                        var myChart = new Chart(ctx, json);
+                    }
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+
+</html>

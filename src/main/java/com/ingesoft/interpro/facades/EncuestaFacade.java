@@ -6,6 +6,8 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Estudiante;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,9 +35,19 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
     public Integer autogenerarIdEncuesta() {
         Query query = em.createNamedQuery("Encuesta.maxIdEncuesta");
         Integer estud = (Integer) query.getSingleResult();
-        System.out.println("maxIdEncuesta: "+estud);
+        System.out.println("maxIdEncuesta: " + estud);
         if (estud != null) {
-            return estud+1;
+            return estud + 1;
+        }
+        return null;
+    }
+
+    public List<Encuesta> buscarPorEstudiante(Estudiante estudiante) {
+        Query query = em.createNamedQuery("Encuesta.findByEstudiante");
+        query.setParameter("estudiante", estudiante);
+        List<Encuesta> lista = query.getResultList();
+        if (!lista.isEmpty()) {
+            return lista;
         }
         return null;
     }

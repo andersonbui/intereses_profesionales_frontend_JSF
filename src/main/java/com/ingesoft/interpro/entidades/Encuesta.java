@@ -42,7 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
     , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
-    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")})
+    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")
+    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudianteGrado.estudiante = :estudiante")
+})
 public class Encuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;

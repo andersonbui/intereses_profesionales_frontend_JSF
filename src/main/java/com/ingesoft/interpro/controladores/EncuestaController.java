@@ -81,7 +81,9 @@ public class EncuestaController extends Controller implements Serializable {
             this.puntos_encuesta++;
         }
     }
-
+    public List<Encuesta> listarEncuestasSelected(Estudiante estudiante){
+        return getFacade().buscarPorEstudiante(estudiante);
+    }
     public Encuesta getSelected() {
         return selected;
     }

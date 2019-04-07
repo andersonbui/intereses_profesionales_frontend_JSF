@@ -7,7 +7,6 @@ package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Persona;
-import com.ingesoft.interpro.entidades.Usuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

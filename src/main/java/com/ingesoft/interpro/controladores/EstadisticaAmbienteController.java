@@ -155,6 +155,16 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         return cargarGraficoResultadoEncuesta(opcion);
     }
 
+    public String cargarGraficoResultadoEncuesta(Encuesta encuesta) {
+        this.encuesta = encuesta;
+        return cargarGraficoResultadoEncuesta(1111);
+    }
+
+    public String cargarGraficoResultadoEncuestaEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+        return cargarGraficoResultadoEncuesta(111);
+    }
+
     public String cargarGraficoResultadoEncuesta(int opcion) {
         List<ResultadoPorAmbiente> listaResultados = null;
         switch (opcion) {

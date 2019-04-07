@@ -94,7 +94,7 @@
                         </p:submenu>
                         <p:submenu label="Encuesta" rendered="#{loginController.estudiante}">
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
-                            <p:menuitem value="Ver mis resultados" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Ver mis resultados" outcome="#{misResultadosController.verMisResultados(loginController.personaActual)}" />
                         </p:submenu>
                         <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
                             <p:menuitem value="Por Institucion"  icon="ui-icon-home" />

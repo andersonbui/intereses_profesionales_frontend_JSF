@@ -74,4 +74,7 @@ public class Vistas implements Serializable {
         return ruta;
     }
 
+    public static String misResultados(){
+        return "/vistas/miperfil/misResultados.xhtml";
+    }
 }

@@ -103,7 +103,7 @@
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
                             <p:menuitem value="una cosa"  />
-                            <p:menuitem value="Generar mineria" action="#{mineriaController.sacarDatos}" />
+                            <p:menuitem value="Generar mineria" action="#{mineriaController.entrenarModelo()}" />
                             <p:menuitem value="otra cosa"  />
                         </p:submenu>
                         

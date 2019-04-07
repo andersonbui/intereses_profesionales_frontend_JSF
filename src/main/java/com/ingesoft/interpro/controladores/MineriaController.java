@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -34,7 +36,7 @@ public class MineriaController implements Serializable {
         camposActivos.put("p_convencional", true);
     }
     Map<String, Boolean> camposActivos;
-    String nombreArchivo = "mineria.arff";
+    String archivo_de_instancias = "mineria.arff";
     public static String nombreModelo = "modelo.min";
     public static String atributo_clase = "ingenieria";
 
@@ -52,11 +54,11 @@ public class MineriaController implements Serializable {
             + "\n"
             + "@data\n";
 
-    public void sacarDatos() {
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+    public boolean sacarDatos() {
 //        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
 //                getValue(facesContext.getELContext(), null, "loginController");
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
 
         EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "encuestaController");
@@ -66,9 +68,9 @@ public class MineriaController implements Serializable {
         // para indicar si algo salio mal en los campos obtenidos
         boolean algoMal = false;
 
-        System.out.println("Archivo generado: " + nombreArchivo);
+        System.out.println("Archivo generado: " + archivo_de_instancias);
         EscribirArchivo ea = new EscribirArchivo();
-        ea.abrir(nombreArchivo);
+        ea.abrir(archivo_de_instancias);
         ea.escribir(cabecera);
         for (Encuesta encuesta : encuestas) {
             sb = new StringBuilder();
@@ -113,6 +115,84 @@ public class MineriaController implements Serializable {
 //        requestContext.execute("PF('#molestia').setvalue('carambas');");
 //        requestContext.execute("PF('dlg1').show();");
         System.out.println("llego hasta aqui");
+        return true;
+    }
+
+    public boolean obtenerDatos2() {
+
+        List<String> lInstancias = new ArrayList<>();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "encuestaController");
+        List<Encuesta> encuestas = encuestaController.getItems();
+        String ingenieria = "";
+        // para indicar si algo salio mal en los campos obtenidos
+
+        System.out.println("Archivo generado: " + archivo_de_instancias);
+        EscribirArchivo ea = new EscribirArchivo();
+        ea.abrir(archivo_de_instancias);
+        ea.escribir(cabecera);
+
+        String[] valores = null;
+        String un_registro;
+        int cont;
+        for (Encuesta encuesta : encuestas) {
+            valores = new String[9];
+            cont = 0;
+            String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
+            if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
+                continue;
+            }
+
+            long anos = obtenerEdad(encuesta);
+            if (anos == 0 || !camposActivos.get("edad")) {
+                continue;
+            }
+
+            if (encuesta.getIdAreaProfesional() == null) {
+//                continue;
+            } else {
+                ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
+            }
+            valores[cont++] = sexo;
+            valores[cont++] = "" + anos;
+            valores[cont++] = ingenieria;
+            if (encuesta.getResultadoPorAmbienteList().isEmpty()) {
+                continue;
+            }
+            for (ResultadoPorAmbiente resultAmbi : encuesta.getResultadoPorAmbienteList()) {
+                valores[cont++] = "" + resultAmbi.getValor();
+            }
+
+            un_registro = registroMineria(valores);
+            lInstancias.add(un_registro);
+        }
+        String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, archivo_de_instancias);
+        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
+        System.out.println("llego hasta aqui");
+        return true;
+    }
+
+    public String crearArchivoInstancia(List<String> registros, String archivo_instancia) {
+        EscribirArchivo ea = new EscribirArchivo();
+        ea.abrir(archivo_de_instancias);
+        ea.escribir(cabecera);
+        for (String registro : registros) {
+            ea.escribir(registro);
+        }
+        ea.terminar();
+        return ea.getNombre();
+    }
+
+    public void entrenarModelo() throws IOException {
+        if (obtenerDatos2()) {
+            Mineria mineria = new Mineria();
+            mineria.entrenar(nombreModelo, archivo_de_instancias, atributo_clase);
+        }
     }
 
     public String registroMineria(String[] registro) {
@@ -140,18 +220,19 @@ public class MineriaController implements Serializable {
         return fechaNacim.get(Calendar.YEAR) - inicial.get(Calendar.YEAR);
     }
 
-    public void crearArchivoInstancia(List<String> atributo_instancia, String archivo_instancia) {
-
-    }
-
-    public void predecir(String[] registro) throws IOException {
+    public String predecir(String[] registro) {
         Mineria mineria = new Mineria();
         String archivo_instancia = "archivo_instancia.arff";
-        mineria.entrenar(nombreModelo, nombreArchivo, atributo_clase);
         List<String> instancia = new ArrayList<>();
         instancia.add(registroMineria(registro));
         crearArchivoInstancia(instancia, archivo_instancia);
-        mineria.predecir(nombreModelo, archivo_instancia);
+        String result = null;
+        try {
+            result = mineria.predecir(nombreModelo, archivo_instancia);
+        } catch (IOException ex) {
+            Logger.getLogger(MineriaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
 }

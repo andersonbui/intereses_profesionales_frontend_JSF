@@ -3,7 +3,10 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.EscribirArchivo;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
+import com.interpro.mineria.Mineria;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +35,9 @@ public class MineriaController implements Serializable {
     }
     Map<String, Boolean> camposActivos;
     String nombreArchivo = "mineria.arff";
+    public static String nombreModelo = "modelo.min";
+    public static String atributo_clase = "ingenieria";
+
     String cabecera = "@relation areasdeconocimiento\n"
             + "\n"
             + "@attribute sexo {F,M}\n"
@@ -47,9 +53,10 @@ public class MineriaController implements Serializable {
             + "@data\n";
 
     public void sacarDatos() {
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "loginController");
+//        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
+//                getValue(facesContext.getELContext(), null, "loginController");
 
         EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "encuestaController");
@@ -99,13 +106,22 @@ public class MineriaController implements Serializable {
 //        facesContext.addMessage(null, new FacesMessage("You can't delete it.","archivo: "));
 //        facesContext.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
 //facesContext.getApplication().getELResolver()
-        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");  
-        RequestContext requestContext  = RequestContext.getCurrentInstance();
-        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>"+ea.getNombre()));
+        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + ea.getNombre()));
 //        requestContext.openDialog("este es otro mensaje");
 //        requestContext.execute("PF('#molestia').setvalue('carambas');");
 //        requestContext.execute("PF('dlg1').show();");
         System.out.println("llego hasta aqui");
+    }
+
+    public String registroMineria(String[] registro) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(registro[0]);
+        for (int i = 1; i < registro.length; i++) {
+            sb.append(",").append(registro[i]);
+        }
+        return sb.toString();
     }
 
     private Integer obtenerEdad(Encuesta encuesta) {
@@ -118,9 +134,24 @@ public class MineriaController implements Serializable {
         Date dateAnos = new Date(diferencia);
         Calendar inicial = Calendar.getInstance();
         inicial.setTime(new Date((long) 0));
-        
+
         Calendar fechaNacim = Calendar.getInstance();
         fechaNacim.setTime(dateAnos);
-        return fechaNacim.get(Calendar.YEAR)- inicial.get(Calendar.YEAR);
+        return fechaNacim.get(Calendar.YEAR) - inicial.get(Calendar.YEAR);
     }
+
+    public void crearArchivoInstancia(List<String> atributo_instancia, String archivo_instancia) {
+
+    }
+
+    public void predecir(String[] registro) throws IOException {
+        Mineria mineria = new Mineria();
+        String archivo_instancia = "archivo_instancia.arff";
+        mineria.entrenar(nombreModelo, nombreArchivo, atributo_clase);
+        List<String> instancia = new ArrayList<>();
+        instancia.add(registroMineria(registro));
+        crearArchivoInstancia(instancia, archivo_instancia);
+        mineria.predecir(nombreModelo, archivo_instancia);
+    }
+
 }

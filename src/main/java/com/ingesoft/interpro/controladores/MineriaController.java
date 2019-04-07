@@ -18,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.apache.avalon.framework.parameters.ParameterException;
 import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "mineriaController")
@@ -54,70 +55,6 @@ public class MineriaController implements Serializable {
             + "\n"
             + "@data\n";
 
-    public boolean sacarDatos() {
-//        LoginController loginController = (LoginController) facesContext.getApplication().getELResolver().
-//                getValue(facesContext.getELContext(), null, "loginController");
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "encuestaController");
-        List<Encuesta> encuestas = encuestaController.getItems();
-        StringBuilder sb = null;
-        String ingenieria = "";
-        // para indicar si algo salio mal en los campos obtenidos
-        boolean algoMal = false;
-
-        System.out.println("Archivo generado: " + archivo_de_instancias);
-        EscribirArchivo ea = new EscribirArchivo();
-        ea.abrir(archivo_de_instancias);
-        ea.escribir(cabecera);
-        for (Encuesta encuesta : encuestas) {
-            sb = new StringBuilder();
-            String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
-            if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
-                continue;
-            }
-
-            long anos = obtenerEdad(encuesta);
-            if (anos == 0 || !camposActivos.get("edad")) {
-                continue;
-            }
-
-            if (encuesta.getIdAreaProfesional() == null) {
-//                continue;
-            } else {
-                ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
-            }
-
-            sb.append(sexo);
-            sb.append(",");
-            sb.append(anos);
-            sb.append(",");
-            sb.append(ingenieria);
-            if (encuesta.getResultadoPorAmbienteList().isEmpty()) {
-                continue;
-            }
-            for (ResultadoPorAmbiente resultAmbi : encuesta.getResultadoPorAmbienteList()) {
-                sb.append(",");
-                sb.append(resultAmbi.getValor());
-            }
-            ea.escribir(sb.toString());
-        }
-        ea.terminar();
-//        facesContext.addMessage(null, new FacesMessage("You can't delete it.","archivo: "));
-//        facesContext.addMessage("hola2", new FacesMessage("You can't delete it.","archivo: "+ea.getNombre()));
-//facesContext.getApplication().getELResolver()
-        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + ea.getNombre()));
-//        requestContext.openDialog("este es otro mensaje");
-//        requestContext.execute("PF('#molestia').setvalue('carambas');");
-//        requestContext.execute("PF('dlg1').show();");
-        System.out.println("llego hasta aqui");
-        return true;
-    }
-
     public boolean obtenerDatos2() {
 
         List<String> lInstancias = new ArrayList<>();
@@ -139,33 +76,10 @@ public class MineriaController implements Serializable {
         String un_registro;
         int cont;
         for (Encuesta encuesta : encuestas) {
-            valores = new String[9];
-            cont = 0;
-            String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
-            if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
+            valores = obtenerDatosUnaEncuesta(encuesta);
+            if (valores == null) {
                 continue;
             }
-
-            long anos = obtenerEdad(encuesta);
-            if (anos == 0 || !camposActivos.get("edad")) {
-                continue;
-            }
-
-            if (encuesta.getIdAreaProfesional() == null) {
-//                continue;
-            } else {
-                ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
-            }
-            valores[cont++] = sexo;
-            valores[cont++] = "" + anos;
-            valores[cont++] = ingenieria;
-            if (encuesta.getResultadoPorAmbienteList().isEmpty()) {
-                continue;
-            }
-            for (ResultadoPorAmbiente resultAmbi : encuesta.getResultadoPorAmbienteList()) {
-                valores[cont++] = "" + resultAmbi.getValor();
-            }
-
             un_registro = registroMineria(valores);
             lInstancias.add(un_registro);
         }
@@ -175,6 +89,41 @@ public class MineriaController implements Serializable {
         requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
         System.out.println("llego hasta aqui");
         return true;
+    }
+
+    public String[] obtenerDatosUnaEncuesta(Encuesta encuesta) {
+        if (encuesta == null) {
+            throw new IllegalArgumentException("encuesta debe ser diferente de null");
+        }
+        String[] valores = new String[9];
+        int cont = 0;
+        String ingenieria = null;
+        cont = 0;
+        String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
+        if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
+            return null;
+        }
+
+        long anos = obtenerEdad(encuesta);
+        if (anos == 0 || !camposActivos.get("edad")) {
+            return null;
+        }
+
+        if (encuesta.getIdAreaProfesional() == null) {
+//                continue;
+        } else {
+            ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
+        }
+        valores[cont++] = sexo;
+        valores[cont++] = "" + anos;
+        valores[cont++] = ingenieria;
+        if (encuesta.getResultadoPorAmbienteList().isEmpty()) {
+            return null;
+        }
+        for (ResultadoPorAmbiente resultAmbi : encuesta.getResultadoPorAmbienteList()) {
+            valores[cont++] = "" + resultAmbi.getValor();
+        }
+        return valores;
     }
 
     public String crearArchivoInstancia(List<String> registros, String archivo_instancia) {

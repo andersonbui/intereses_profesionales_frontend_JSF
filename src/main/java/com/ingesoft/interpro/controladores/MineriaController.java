@@ -18,7 +18,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import org.apache.avalon.framework.parameters.ParameterException;
 import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "mineriaController")
@@ -64,24 +63,16 @@ public class MineriaController implements Serializable {
         EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "encuestaController");
         List<Encuesta> encuestas = encuestaController.getItems();
-        String ingenieria = "";
         // para indicar si algo salio mal en los campos obtenidos
-
         System.out.println("Archivo generado: " + archivo_de_instancias);
-        EscribirArchivo ea = new EscribirArchivo();
-        ea.abrir(archivo_de_instancias);
-        ea.escribir(cabecera);
 
         String[] valores = null;
-        String un_registro;
-        int cont;
         for (Encuesta encuesta : encuestas) {
             valores = obtenerDatosUnaEncuesta(encuesta);
             if (valores == null) {
                 continue;
             }
-            un_registro = registroMineria(valores);
-            lInstancias.add(un_registro);
+            lInstancias.add(registroMineria(valores));
         }
         String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, archivo_de_instancias);
         facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");

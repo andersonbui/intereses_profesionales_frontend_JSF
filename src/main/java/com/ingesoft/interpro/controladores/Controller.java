@@ -59,6 +59,13 @@ public abstract class Controller implements Serializable {
         return persona;
     }
 
+    public MineriaController getMineriaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        MineriaController mineriaController = (MineriaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "mineriaController");
+        return mineriaController;
+    }
+
     public UsuarioController getUsuarioController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UsuarioController usuarioController = (UsuarioController) facesContext.getApplication().getELResolver().
@@ -171,12 +178,14 @@ public abstract class Controller implements Serializable {
         RespuestaAmbienteController respuestaAmbienteController = (RespuestaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
         return respuestaAmbienteController;
     }
+
     public EstadisticaAmbienteController getEstadisticaAmbienteController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EstadisticaAmbienteController estadisticaAmbienteController = (EstadisticaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaAmbienteController");
         return estadisticaAmbienteController;
     }
+
     public RespuestaPersonalidadController getRespuestaPersonalidadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -197,7 +206,7 @@ public abstract class Controller implements Serializable {
         AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
         return areaEncuestaController;
     }
-    
+
     public EncuestaController getEncuestaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();

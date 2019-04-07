@@ -8,6 +8,8 @@ import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -55,6 +57,16 @@ public class MisReultadosController extends Controller implements Serializable {
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
         }
         return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
+    }
+
+    public String prediccion() {
+        String prediccion = null;
+        if (encuesta != null) {
+            MineriaController mineriaController = getMineriaController();
+            String[] datos = mineriaController.obtenerDatosUnaEncuesta(encuesta);
+            prediccion = mineriaController.predecir(datos);
+        }
+        return prediccion;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.EscribirArchivo;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import com.interpro.mineria.Mineria;
 import java.io.IOException;
 import java.io.Serializable;
@@ -22,7 +23,13 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "mineriaController")
 @SessionScoped
-public class MineriaController implements Serializable {
+public class MineriaController extends Controller implements Serializable {
+
+    
+    Map<String, Boolean> camposActivos;
+    String archivo_de_instancias = "mineria.arff";
+    public static String nombreModelo = "modelo.min";
+    public static String atributo_clase = "ingenieria";
 
     public MineriaController() {
         camposActivos = new HashMap<>();
@@ -35,11 +42,6 @@ public class MineriaController implements Serializable {
         camposActivos.put("p_emprendedor", true);
         camposActivos.put("p_convencional", true);
     }
-    Map<String, Boolean> camposActivos;
-    String archivo_de_instancias = "mineria.arff";
-    public static String nombreModelo = "modelo.min";
-    public static String atributo_clase = "ingenieria";
-
     String cabecera = "@relation areasdeconocimiento\n"
             + "\n"
             + "@attribute sexo {F,M}\n"
@@ -67,22 +69,7 @@ public class MineriaController implements Serializable {
         facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
-        System.out.println("llego hasta aqui");
         return true;
-    }
-
-    public String guardarDatosEncuestas(List<Encuesta> encuestas, String nombre_archivo) {
-        List<String> lInstancias = new ArrayList<>();
-        String[] valores = null;
-        for (Encuesta encuesta : encuestas) {
-            valores = obtenerDatosUnaEncuesta(encuesta);
-            if (valores == null) {
-                continue;
-            }
-            lInstancias.add(registroMineria(valores));
-        }
-        String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, nombre_archivo);
-        return nombreArchivoCompleto;
     }
 
     public String[] obtenerDatosUnaEncuesta(Encuesta encuesta) {
@@ -119,10 +106,25 @@ public class MineriaController implements Serializable {
         }
         return valores;
     }
+    
+    public String guardarDatosEncuestas(List<Encuesta> encuestas, String nombre_archivo) {
+        List<String> lInstancias = new ArrayList<>();
+        String[] valores = null;
+        for (Encuesta encuesta : encuestas) {
+            valores = obtenerDatosUnaEncuesta(encuesta);
+            if (valores == null) {
+                continue;
+            }
+            lInstancias.add(registroMineria(valores));
+        }
+        String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, nombre_archivo);
+        return nombreArchivoCompleto;
+    }
+
 
     public String crearArchivoInstancia(List<String> registros, String archivo_instancia) {
         EscribirArchivo ea = new EscribirArchivo();
-        ea.abrir(archivo_de_instancias);
+        ea.abrir(archivo_instancia);
         ea.escribir(cabecera);
         for (String registro : registros) {
             ea.escribir(registro);
@@ -138,7 +140,7 @@ public class MineriaController implements Serializable {
         }
     }
 
-    public String registroMineria(String[] registro) {
+    private String registroMineria(String[] registro) {
         StringBuilder sb = new StringBuilder();
         sb.append(registro[0]);
         for (int i = 1; i < registro.length; i++) {
@@ -176,6 +178,11 @@ public class MineriaController implements Serializable {
             Logger.getLogger(MineriaController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+
+    @Override
+    protected AbstractFacade getFacade() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

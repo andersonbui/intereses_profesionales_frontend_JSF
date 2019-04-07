@@ -54,10 +54,7 @@ public class MineriaController implements Serializable {
             + "\n"
             + "@data\n";
 
-    public boolean obtenerDatos2() {
-
-        List<String> lInstancias = new ArrayList<>();
-
+    public boolean guardarDatosParaEntrenamiento() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         EncuestaController encuestaController = (EncuestaController) facesContext.getApplication().getELResolver().
@@ -65,7 +62,17 @@ public class MineriaController implements Serializable {
         List<Encuesta> encuestas = encuestaController.getItems();
         // para indicar si algo salio mal en los campos obtenidos
         System.out.println("Archivo generado: " + archivo_de_instancias);
+        String nombreArchivoCompleto = guardarDatosEncuestas(encuestas, archivo_de_instancias);
 
+        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
+        System.out.println("llego hasta aqui");
+        return true;
+    }
+
+    public String guardarDatosEncuestas(List<Encuesta> encuestas, String nombre_archivo) {
+        List<String> lInstancias = new ArrayList<>();
         String[] valores = null;
         for (Encuesta encuesta : encuestas) {
             valores = obtenerDatosUnaEncuesta(encuesta);
@@ -74,12 +81,8 @@ public class MineriaController implements Serializable {
             }
             lInstancias.add(registroMineria(valores));
         }
-        String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, archivo_de_instancias);
-        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
-        System.out.println("llego hasta aqui");
-        return true;
+        String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, nombre_archivo);
+        return nombreArchivoCompleto;
     }
 
     public String[] obtenerDatosUnaEncuesta(Encuesta encuesta) {
@@ -129,7 +132,7 @@ public class MineriaController implements Serializable {
     }
 
     public void entrenarModelo() throws IOException {
-        if (obtenerDatos2()) {
+        if (guardarDatosParaEntrenamiento()) {
             Mineria mineria = new Mineria();
             mineria.entrenar(nombreModelo, archivo_de_instancias, atributo_clase);
         }

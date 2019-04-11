@@ -302,7 +302,7 @@ public class EstadisticaPersonalidadController implements Serializable {
         }
         Datos[] listaDatos = new Datos[6];
         Datos datos;
-        System.out.println("result: " + listaResultadosPorAmbiente);
+//        System.out.println("result: " + listaResultadosPorAmbiente);
         for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
             int tipo = result.getTipoAmbiente().getIdTipoAmbiente();
             if (listaDatos[tipo - 1] == null) {

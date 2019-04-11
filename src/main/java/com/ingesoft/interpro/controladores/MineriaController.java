@@ -5,9 +5,11 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import com.interpro.mineria.Mineria;
+import com.interpro.mineria.Resultado;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +27,6 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class MineriaController extends Controller implements Serializable {
 
-    
     Map<String, Boolean> camposActivos;
     String archivo_de_instancias = "mineria.arff";
     public static String nombreModelo = "modelo.min";
@@ -106,7 +107,7 @@ public class MineriaController extends Controller implements Serializable {
         }
         return valores;
     }
-    
+
     public String guardarDatosEncuestas(List<Encuesta> encuestas, String nombre_archivo) {
         List<String> lInstancias = new ArrayList<>();
         String[] valores = null;
@@ -120,7 +121,6 @@ public class MineriaController extends Controller implements Serializable {
         String nombreArchivoCompleto = crearArchivoInstancia(lInstancias, nombre_archivo);
         return nombreArchivoCompleto;
     }
-
 
     public String crearArchivoInstancia(List<String> registros, String archivo_instancia) {
         EscribirArchivo ea = new EscribirArchivo();
@@ -165,17 +165,27 @@ public class MineriaController extends Controller implements Serializable {
         return fechaNacim.get(Calendar.YEAR) - inicial.get(Calendar.YEAR);
     }
 
-    public String predecir(String[] registro) {
-        Mineria mineria = new Mineria();
-        String archivo_instancia = "archivo_instancia.arff";
-        List<String> instancia = new ArrayList<>();
-        instancia.add(registroMineria(registro));
-        crearArchivoInstancia(instancia, archivo_instancia);
-        String result = null;
-        try {
-            result = mineria.predecir(nombreModelo, archivo_instancia);
-        } catch (IOException ex) {
-            Logger.getLogger(MineriaController.class.getName()).log(Level.SEVERE, null, ex);
+    public String predecir(Encuesta encuesta) {
+        String[] registro = obtenerDatosUnaEncuesta(encuesta);
+        String result = "Ningun dato";
+        if (registro != null) {
+            Mineria mineria = new Mineria();
+            String archivo_instancia = "archivo_instancia.arff";
+            List<String> instancia = new ArrayList<>();
+            instancia.add(registroMineria(registro));
+            archivo_instancia = crearArchivoInstancia(instancia, archivo_instancia);
+            Resultado resultadoMin = null;
+            resultadoMin = mineria.predecir(nombreModelo, archivo_instancia);
+            if (resultadoMin != null) {
+                result = " ";
+                System.out.println("resultado mineria: " + resultadoMin.getResultados());
+                for (String[] resultado : resultadoMin.getResultados()) {
+                    System.out.println("resultado mineria: " + Arrays.toString(resultado));
+//                result = resultado[0] + " : " + String.format("%.2f", Double.parseDouble(resultado[1])) + " %\n";
+                    result += resultado[0] + " : " + resultado[1] + " % -- \n";
+                }
+            }
+            return result;
         }
         return result;
     }

@@ -145,8 +145,8 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void incrementPuntaje() {
         detener_reloj = !detener_reloj;
-        System.out.println("mostrar_reloj: " + detener_reloj);
-        System.out.println("tiempo: " + tiempo);
+//        System.out.println("mostrar_reloj: " + detener_reloj);
+//        System.out.println("tiempo: " + tiempo);
     }
 
     public boolean isEvaluacion() {

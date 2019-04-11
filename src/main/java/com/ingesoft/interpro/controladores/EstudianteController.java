@@ -200,8 +200,8 @@ public class EstudianteController extends Controller implements Serializable {
     }
 
     public Estudiante getEstudiantePorPersona(Persona persona) {
-        System.out.println("persona: " + persona);
-        System.out.println("getFacade(): " + getFacade());
+//        System.out.println("persona: " + persona);
+//        System.out.println("getFacade(): " + getFacade());
         return getFacade().findPorPersona(persona);
     }
 

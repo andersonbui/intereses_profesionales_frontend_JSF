@@ -44,7 +44,7 @@ public class MisReultadosController extends Controller implements Serializable {
         if (string_grafico == null) {
             string_grafico = cargarGraficoMisResultado();
         }
-        System.out.println("getGraficoModelo: " + string_grafico);
+//        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
 
@@ -60,11 +60,10 @@ public class MisReultadosController extends Controller implements Serializable {
     }
 
     public String prediccion() {
+        MineriaController mineriaController = getMineriaController();
         String prediccion = null;
         if (encuesta != null) {
-            MineriaController mineriaController = getMineriaController();
-            String[] datos = mineriaController.obtenerDatosUnaEncuesta(encuesta);
-            prediccion = mineriaController.predecir(datos);
+            prediccion = mineriaController.predecir(encuesta);
         }
         return prediccion;
     }

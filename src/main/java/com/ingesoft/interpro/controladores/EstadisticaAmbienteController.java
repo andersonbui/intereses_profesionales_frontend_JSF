@@ -145,7 +145,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     }
 
     public String getGraficoModelo() {
-        System.out.println("getGraficoModelo: " + string_grafico);
+//        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
 
@@ -188,8 +188,8 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         if (listaResultados != null && !listaResultados.isEmpty()) {
             Datos[] listaBarras;
             listaBarras = promedioResultados(listaResultados);
-            System.out.println("listaBarras: ");
-            System.out.println(listaBarras);
+//            System.out.println("listaBarras: ");
+//            System.out.println(listaBarras);
             string_grafico = obtenerGrafico(listaBarras);
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -372,7 +372,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         }
         Datos[] listaDatos = new Datos[6];
         Datos datos;
-        System.out.println("result: " + listaResultadosPorAmbiente);
+//        System.out.println("result: " + listaResultadosPorAmbiente);
         for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
             int tipo = result.getTipoAmbiente().getIdTipoAmbiente();
             if (listaDatos[tipo - 1] == null) {

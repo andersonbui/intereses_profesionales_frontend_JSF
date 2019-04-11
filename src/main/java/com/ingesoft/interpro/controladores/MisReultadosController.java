@@ -48,19 +48,27 @@ public class MisReultadosController extends Controller implements Serializable {
         return string_grafico;
     }
 
+    /**
+     * Carga las encuestas para los resultados de anbiente y personalidad
+     * @return 
+     */
     public String cargarGraficoMisResultado() {
+        EncuestaController encuestaController = getEncuestaController();
+        encuestaController.setSelected(encuesta);
         EstudianteController estudianteController = getEstudianteController();
         estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
 //        estudianteController.setEncuesta(estudiante);
         if (encuesta != null) {
             System.out.println("cargarGraficoMisResultado encuesta ");
+            List<Encuesta> encuestas = new ArrayList();
+            encuestas.add(encuesta);
+            encuestaController.setItems(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
+        } else {
+            encuestaController.setItems(encuestaController.listarEncuestasSelected(estudiante));
+            return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
-        return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
     }
-    
-//    public String getOpt(){
-//    }
 
     public String prediccion() {
         MineriaController mineriaController = getMineriaController();

@@ -81,9 +81,49 @@ public class EncuestaController extends Controller implements Serializable {
             this.puntos_encuesta++;
         }
     }
-    public List<Encuesta> listarEncuestasSelected(Estudiante estudiante){
+
+    public List<Encuesta> listarEncuestasSelected(Estudiante estudiante) {
         return getFacade().buscarPorEstudiante(estudiante);
     }
+
+    public double promedioPuntajeEncuesta() {
+        if (items != null && !items.isEmpty()) {
+            int cantidad = 0;
+            double suma = 0;
+            for (Encuesta item : items) {
+                if (item != null && item.getPuntajeEncuesta() != null) {
+                    suma += item.getPuntajeEncuesta();
+                    cantidad++;
+                }
+            }
+            if (cantidad != 0) {
+                return suma / cantidad;
+            }
+        }
+        return 0;
+    }
+
+    public double promedioPuntajeEvaluacion() {
+        if (items != null && !items.isEmpty()) {
+            int cantidad = 0;
+            double suma = 0;
+            for (Encuesta item : items) {
+                if (item != null && item.getPuntajeEncuesta() != null) {
+                    suma += item.getPuntajeEvaluacion();
+                    cantidad++;
+                }
+            }
+            if (cantidad != 0) {
+                return suma / cantidad;
+            }
+        }
+        return 0;
+    }
+
+    public void setItems(List<Encuesta> items) {
+        this.items = items;
+    }
+
     public Encuesta getSelected() {
         return selected;
     }

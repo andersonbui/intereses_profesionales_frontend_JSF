@@ -37,21 +37,11 @@
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico,idpersonalidad">
                     </p:commandButton>
-                    <h:body id='divgrafico' >
-                        <p:panelGrid id="grafica"  rendered="#{misResultadosController.getGraficoModelo() != null}">
-                            <script>
-                                graficar(#{misResultadosController.getGraficoModelo()});
-                            </script>
-                            <div style="height: 300px; width: 700px;" >
-                                <canvas id="myChart" width="700" height="300"></canvas>
-                            </div>
-                        </p:panelGrid>
-                    </h:body>
-                    <p:outputLabel value="Ingeniero: "></p:outputLabel>
-                    <p:outputLabel value="#{misResultadosController.prediccion()}"></p:outputLabel>
                     <br/>
-                    <h:body id='idpersonalidad' rendered="#{encuestaController.selected != null and encuestaController.selected.personalidad != null}" >
-                        <center>
+                    <h:body id='idpersonalidad'  rendered="#{encuestaController.selected != null and encuestaController.selected.personalidad != null}" >
+
+                        <h1 style="text-align: center;" value="">Personalidad: #{encuestaController.selected.personalidad}</h1>
+                        <center class="grupo-img-personalidad">
                             <c:forEach begin="0" end="3" var="index">
                                 <div class="personalidad">
                                     <div>
@@ -64,6 +54,28 @@
                             </c:forEach>
                         </center>
                     </h:body>
+                    <br/>
+                    <div class="row">
+                        <div>
+                            <h:body id='divgrafico' >
+                                <p:panelGrid id="grafica"  rendered="#{misResultadosController.getGraficoModelo() != null}">
+                                    <script>
+                                            graficar(#{misResultadosController.getGraficoModelo()});
+                                    </script>
+                                    <div style="height: 300px; width: 700px;" >
+                                        <canvas id="myChart" width="700" height="300"></canvas>
+                                    </div>
+                                </p:panelGrid>
+                            </h:body>
+                        </div>
+                        <div>
+                            <p:outputLabel value="Puntaje encuesta: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
+                            <br/>
+                            <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
+                            <br/>
+                            <p:outputLabel value="Ingeniero: #{misResultadosController.prediccion()}"></p:outputLabel>
+                        </div>
+                    </div>
                 </h:panelGroup>
             </h:form>
             <script type="text/javascript">

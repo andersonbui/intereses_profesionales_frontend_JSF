@@ -58,6 +58,9 @@ public class MisReultadosController extends Controller implements Serializable {
         }
         return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
     }
+    
+//    public String getOpt(){
+//    }
 
     public String prediccion() {
         MineriaController mineriaController = getMineriaController();
@@ -74,6 +77,7 @@ public class MisReultadosController extends Controller implements Serializable {
     }
 
     public String verMisResultados(Persona persona) {
+        getEncuestaController().setSelected(encuesta);
         getEstudianteController().cargarSelectedPorPersona(persona);
         return Vistas.misResultados();
     }

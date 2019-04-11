@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/principal.xhtml">
         <ui:define name="title">
@@ -34,7 +35,7 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{misResultadosController.cargarGraficoMisResultado()}"
                                      value="cargar" 
-                                     update="grafica,:growl,display,divgrafico">
+                                     update="grafica,:growl,display,divgrafico,idpersonalidad">
                     </p:commandButton>
                     <h:body id='divgrafico' >
                         <p:panelGrid id="grafica"  rendered="#{misResultadosController.getGraficoModelo() != null}">
@@ -48,6 +49,21 @@
                     </h:body>
                     <p:outputLabel value="Ingeniero: "></p:outputLabel>
                     <p:outputLabel value="#{misResultadosController.prediccion()}"></p:outputLabel>
+                    <br/>
+                    <h:body id='idpersonalidad' rendered="#{encuestaController.selected != null and encuestaController.selected.personalidad != null}" >
+                        <center>
+                            <c:forEach begin="0" end="3" var="index">
+                                <div class="personalidad">
+                                    <div>
+                                        <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" class="img_personalidad" style="" />   
+                                    </div>
+                                    <div>
+                                        <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" class="txt_personalidad" />
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </center>
+                    </h:body>
                 </h:panelGroup>
             </h:form>
             <script type="text/javascript">

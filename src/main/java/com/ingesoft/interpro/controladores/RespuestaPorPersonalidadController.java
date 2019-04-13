@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.facades.RespuestaPorPersonalidadFacade;
 
 import java.io.Serializable;
@@ -110,6 +111,10 @@ public class RespuestaPorPersonalidadController implements Serializable {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
+    }
+
+    public List<RespuestaPorPersonalidad> buscarRespuestaPorPersonalidadPorEncuesta(Encuesta encuesta) {
+        return getFacade().buscarRespuestaPorPersonalidadPorEncuesta(encuesta);
     }
 
     public RespuestaPorPersonalidad getRespuestaPorPersonalidad(com.ingesoft.interpro.entidades.RespuestaPorPersonalidadPK id) {

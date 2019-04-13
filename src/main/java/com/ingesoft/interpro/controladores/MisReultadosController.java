@@ -23,6 +23,8 @@ public class MisReultadosController extends Controller implements Serializable {
     private Encuesta encuesta;
     private String string_grafico;
 
+    private String personalidad;
+
     public MisReultadosController() {
 
     }
@@ -68,8 +70,11 @@ public class MisReultadosController extends Controller implements Serializable {
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
         } else {
             List<Encuesta> encuestas = encuestaController.listarEncuestasSelected(estudiante);
+            if (encuestas == null) {
+                return "";
+            }
             encuestaController.setItems(encuestas);
-            personalidad = calculoPersonalidad(encuestas);
+            personalidad = encuestaController.obtenerPromedioPersonalidad(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
     }
@@ -82,8 +87,6 @@ public class MisReultadosController extends Controller implements Serializable {
         }
         return prediccion;
     }
-
-    private String personalidad;
 
     public String getPersonalidad() {
         return personalidad;
@@ -100,7 +103,4 @@ public class MisReultadosController extends Controller implements Serializable {
         return Vistas.misResultados();
     }
 
-    private String calculoPersonalidad(List<Encuesta> encuestas) {
-        return getEncuestaController().obtenerPromedioPersonalidad(encuestas);
-    }
 }

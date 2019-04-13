@@ -5,10 +5,14 @@
  */
 package com.ingesoft.interpro.facades;
 
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +32,16 @@ public class RespuestaPorPersonalidadFacade extends AbstractFacade<RespuestaPorP
     public RespuestaPorPersonalidadFacade() {
         super(RespuestaPorPersonalidad.class);
     }
-    
+
+    public List<RespuestaPorPersonalidad> buscarRespuestaPorPersonalidadPorEncuesta(Encuesta encuesta) {
+        Query query = em.createNamedQuery("RespuestaPorPersonalidad.buscarRespuestaPorPersonalidadPorEncuesta");
+        query.setParameter("encuesta", encuesta);
+        if (!query.getResultList().isEmpty()) {
+            List<RespuestaPorPersonalidad> lista = query.getResultList();
+            if (!lista.isEmpty()) {
+                return lista;
+            }
+        }
+        return null;
+    }
 }

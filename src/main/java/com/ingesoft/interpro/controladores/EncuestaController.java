@@ -227,7 +227,6 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void finalizarEncuesta() {
         getRespuestaPersonalidadController().finalizarEncuesta();
-        selected = this.getEncuesta(selected.getIdEncuesta());
         String personalidad = obtenerPersonalidad(selected);
         selected.setPersonalidad(personalidad);
         selected.setPuntajeEncuesta(puntos_encuesta);
@@ -257,7 +256,8 @@ public class EncuestaController extends Controller implements Serializable {
 //        return personalidad;
 //    }
     private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
-        List<RespuestaPorPersonalidad> lista = encuestaAcutal.getRespuestaPorPersonalidadList();
+        
+        List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
         if (lista == null) {
             return null;
         }
@@ -315,6 +315,9 @@ public class EncuestaController extends Controller implements Serializable {
                     valores[i].puntaje += valoresaux[i].puntaje;
                 }
             }
+        }
+        if (cont_encuestaPerson == 0) {
+            return "";
         }
         // promedio
         for (int i = 0; i < valores.length; i++) {

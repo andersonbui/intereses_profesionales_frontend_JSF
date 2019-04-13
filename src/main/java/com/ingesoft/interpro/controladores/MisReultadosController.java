@@ -50,7 +50,8 @@ public class MisReultadosController extends Controller implements Serializable {
 
     /**
      * Carga las encuestas para los resultados de anbiente y personalidad
-     * @return 
+     *
+     * @return
      */
     public String cargarGraficoMisResultado() {
         EncuestaController encuestaController = getEncuestaController();
@@ -62,10 +63,13 @@ public class MisReultadosController extends Controller implements Serializable {
             System.out.println("cargarGraficoMisResultado encuesta ");
             List<Encuesta> encuestas = new ArrayList();
             encuestas.add(encuesta);
+            personalidad = encuesta.getPersonalidad();
             encuestaController.setItems(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
         } else {
-            encuestaController.setItems(encuestaController.listarEncuestasSelected(estudiante));
+            List<Encuesta> encuestas = encuestaController.listarEncuestasSelected(estudiante);
+            encuestaController.setItems(encuestas);
+            personalidad = calculoPersonalidad(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
     }
@@ -79,6 +83,12 @@ public class MisReultadosController extends Controller implements Serializable {
         return prediccion;
     }
 
+    private String personalidad;
+
+    public String getPersonalidad() {
+        return personalidad;
+    }
+
     @Override
     protected AbstractFacade getFacade() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -88,5 +98,9 @@ public class MisReultadosController extends Controller implements Serializable {
         getEncuestaController().setSelected(encuesta);
         getEstudianteController().cargarSelectedPorPersona(persona);
         return Vistas.misResultados();
+    }
+
+    private String calculoPersonalidad(List<Encuesta> encuestas) {
+        return getEncuestaController().obtenerPromedioPersonalidad(encuestas);
     }
 }

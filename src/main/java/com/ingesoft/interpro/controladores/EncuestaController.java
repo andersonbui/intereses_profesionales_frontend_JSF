@@ -8,6 +8,7 @@ import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class EncuestaController extends Controller implements Serializable {
     private List<Encuesta> items = null;
     private Encuesta selected;
     private int pasoActivo;
+
+    int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
 
     private boolean evaluacion;
     private int tiempo;
@@ -223,12 +226,115 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void finalizarEncuesta() {
-        String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
+        getRespuestaPersonalidadController().finalizarEncuesta();
+        selected = this.getEncuesta(selected.getIdEncuesta());
+        String personalidad = obtenerPersonalidad(selected);
         selected.setPersonalidad(personalidad);
         selected.setPuntajeEncuesta(puntos_encuesta);
         selected.setPuntajeEvaluacion(puntos_eval);
         detenerReloj();
         update();
+    }
+
+//    private String obtenerPersonalidad(Encuesta encuestaAcutal) {
+//        List<RespuestaPorPersonalidad> lista = encuestaAcutal.getRespuestaPorPersonalidadList();
+//
+//        RespuestaPorPersonalidad[] valores = new RespuestaPorPersonalidad[4];
+//        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
+//            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
+//            valores[indice] = respuestaPorPersonalidad;
+//        }
+//        String personalidad = "";
+//        String perso;
+//        int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
+//
+//        for (int indice : ORDEN_RESPUESTA_PERSONALIDAD) {
+//            perso = valores[indice].getTipoPersonalidad().getTipo();
+//            personalidad += (valores[indice].getPuntaje() <= 24) ? perso.charAt(0) : perso.charAt(1);
+//        }
+//
+//        System.out.println("personalidad: " + personalidad);
+//        return personalidad;
+//    }
+    private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
+        List<RespuestaPorPersonalidad> lista = encuestaAcutal.getRespuestaPorPersonalidadList();
+        if (lista == null) {
+            return null;
+        }
+        if (lista.size() != ORDEN_RESPUESTA_PERSONALIDAD.length) {
+            System.out.println("lista getRespuestaPorPersonalidadList: " + lista.size());
+            return null;
+        }
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
+            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
+            valores[indice] = new ElementoPersonalidad();
+            valores[indice].puntaje = respuestaPorPersonalidad.getPuntaje();
+            valores[indice].tipo = respuestaPorPersonalidad.getTipoPersonalidad().getTipo();
+        }
+
+        ElementoPersonalidad[] valoresAux = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (int i = 0; i < ORDEN_RESPUESTA_PERSONALIDAD.length; i++) {
+            valoresAux[i] = valores[ORDEN_RESPUESTA_PERSONALIDAD[i]];
+        }
+        return valoresAux;
+    }
+
+    private String obtenerPersonalidad(Encuesta encuesta) {
+        ElementoPersonalidad[] valores = obtenerValores(encuesta);
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+
+    /**
+     *
+     * @param encuestas
+     * @return
+     */
+    public String obtenerPromedioPersonalidad(List<Encuesta> encuestas) {
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        int cont_encuestaPerson = 0;
+        for (int i = 0; i < valores.length; i++) {
+            valores[i] = new ElementoPersonalidad();
+            valores[i].puntaje = 0;
+        }
+        // suma
+        for (Encuesta encuesta : encuestas) {
+            ElementoPersonalidad[] valoresaux = obtenerValores(encuesta);
+            if (valoresaux != null) {
+                cont_encuestaPerson++;
+                for (int i = 0; i < valoresaux.length; i++) {
+                    valores[i].tipo = valoresaux[i].tipo;
+                    valores[i].puntaje += valoresaux[i].puntaje;
+                }
+            }
+        }
+        // promedio
+        for (int i = 0; i < valores.length; i++) {
+            valores[i].puntaje /= cont_encuestaPerson;
+        }
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+
+    public class ElementoPersonalidad {
+
+        public String tipo;
+        public int puntaje;
     }
 
     public int getIdEncuesta() {
@@ -298,9 +404,10 @@ public class EncuestaController extends Controller implements Serializable {
 
     }
 
-    public String resultado_personalidad(int i) {
+    public String resultado_personalidad(int i, String personalidad) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad = selected.getPersonalidad();
+//        String result_personalidad = selected.getPersonalidad();
+        String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -308,9 +415,10 @@ public class EncuestaController extends Controller implements Serializable {
 
     }
 
-    public String resultado_personalidad_descripcion(int i) {
+    public String resultado_personalidad_descripcion(int i, String personalidad) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad = selected.getPersonalidad();
+//        String result_personalidad = selected.getPersonalidad();
+        String result_personalidad = personalidad;
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {
             return null;

@@ -166,6 +166,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     }
 
     public String cargarGraficoResultadoEncuesta(int opcion) {
+        string_grafico = null;
         List<ResultadoPorAmbiente> listaResultados = null;
         switch (opcion) {
             case 1111:
@@ -181,7 +182,6 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
                 listaResultados = resultadosAmbientePorInstitucion(institucion);
                 break;
             default:
-                string_grafico = null;
                 System.out.println("opcion incorrecta");
         }
 

@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
         <meta charset="UTF-8"></meta>
@@ -62,7 +63,7 @@
                                                 <f:selectItem itemLabel="M" itemValue='M' />
                                                 <f:selectItem itemLabel="F" itemValue='F' />
                                             </p:selectOneRadio>
-                                            
+
                                             <p:outputLabel  style="font-weight:bold; color: black;"  value="#{bundle.UsuarioLabel_Usuario}" for="id_email"/>
                                             <p:inputText id="id_email" value="#{personaController.selected.idUsuario.usuario}" readonly="true"
                                                          required="true" type="email" title="#{bundle.ViewPersonaTitle_idUsuario}">
@@ -145,6 +146,7 @@
                                             <p:selectOneMenu filter="false" id="estrato" value="#{estudianteController.selected.estrato}" 
                                                              required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_estrato}">
                                                 <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                                <f:selectItem itemLabel="0" itemValue="0"/>
                                                 <f:selectItem itemLabel="1" itemValue="1"/>
                                                 <f:selectItem itemLabel="2" itemValue="2"/>
                                                 <f:selectItem itemLabel="3" itemValue="3"/>
@@ -152,30 +154,35 @@
                                                 <f:selectItem itemLabel="5" itemValue="5"/>
                                                 <f:selectItem itemLabel="6" itemValue="6"/>
                                             </p:selectOneMenu>
-
                                             <p:outputLabel style="font-weight:bold; color: black;" value="¿Cuantos viven con usted?" for="cuantosViven" />
-                                            <p:selectOneMenu filter="false" id="cuantosViven" value="#{estudianteController.selected.cuantosViven}" 
-                                                             required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosViven}">
+                                            <p:selectOneMenu filter="false" id="cuantosViven"
+                                                             value="#{estudianteController.selected.cuantosViven}" 
+                                                             required="true" 
+                                                             immediate="true" 
+                                                             requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosViven}">
                                                 <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                                <f:selectItem itemLabel="0" itemValue="0"/>
                                                 <f:selectItem itemLabel="1" itemValue="1"/>
                                                 <f:selectItem itemLabel="2" itemValue="2"/>
                                                 <f:selectItem itemLabel="3" itemValue="3"/>
                                                 <f:selectItem itemLabel="4" itemValue="4"/>
                                                 <f:selectItem itemLabel="5" itemValue="5"/>
                                                 <f:selectItem itemLabel="6" itemValue="6"/>
-                                                <f:selectItem itemLabel="más de 6..." itemValue="7"/>
+                                                <f:selectItem itemLabel="más de 6..." itemValue="7"/>                                                                                       
+                                                <f:ajax render="PerfilEditForm:cuantosTrabajan" />
                                             </p:selectOneMenu>
 
                                             <p:outputLabel style="font-weight:bold; color: black;" value="¿Cuántos trabajan?" for="cuantosTrabajan" />
-                                            <p:selectOneMenu filter="false" id="cuantosTrabajan" value="#{estudianteController.selected.cuantosTrabajan}" 
-                                                             required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosTrabajan}">
+                                            <p:selectOneMenu filter="false" id="cuantosTrabajan" 
+                                                             value="#{estudianteController.selected.cuantosTrabajan}" 
+                                                             required="true" 
+                                                             immediate="true" 
+                                                             requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosTrabajan}">
                                                 <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
-                                                <f:selectItem itemLabel="1" itemValue="1"/>
-                                                <f:selectItem itemLabel="2" itemValue="2"/>
-                                                <f:selectItem itemLabel="3" itemValue="3"/>
-                                                <f:selectItem itemLabel="4" itemValue="4"/>
-                                                <f:selectItem itemLabel="5" itemValue="5"/>
-                                                <f:selectItem itemLabel="6" itemValue="6"/>
+
+                                                <c:forEach begin="0" end="#{estudianteController.selected.cuantosViven}" var="index">
+                                                    <f:selectItem itemLabel="#{index}" itemValue="#{index}"/>
+                                                </c:forEach>
                                             </p:selectOneMenu>
 
                                             <p:outputLabel style="font-weight:bold; color: black;" value="Grado" for="idSelectGrado" />
@@ -189,8 +196,7 @@
                                                                var="grado"
                                                                itemValue="#{grado}"
                                                                itemLabel="#{grado.curso}"
-                                                               />                                                                                              
-                                                <f:ajax render="@form" />
+                                                               />       
                                             </p:selectOneMenu>
                                         </p:panelGrid>
                                     </p:panel></center>

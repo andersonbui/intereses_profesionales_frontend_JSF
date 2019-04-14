@@ -18,9 +18,12 @@
         <ui:define name="content">
             <h:form >
                 <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog" modal="true" height="170" closable="false" >
-                    <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
-
-                            Cada calificación de los temas que mas te guste.</p></b>
+                    <p> Identifique la característica de personalidad más acorde para usted seleccionando
+                        la opción de más hacia la izquierda o más hacia a la derecha.
+                    </p>
+                    <b> Con cada elección gana un punto de juego, para ello usted tendrá un temporizador de 15 segundos 
+                        para realizar esta actividad, cada vez que agote 15 segundos pierde un punto de juego.
+                    </b>
 
                     <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
                                      actionListener="#{encuestaController.arrancarReloj()}" 

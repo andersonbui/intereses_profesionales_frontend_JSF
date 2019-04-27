@@ -19,6 +19,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,6 +33,7 @@ import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
+import org.brickred.socialauth.util.AccessGrant;
 import org.brickred.socialauth.util.SocialAuthUtil;
 import org.primefaces.context.RequestContext;
 
@@ -70,23 +73,48 @@ public class LoginController extends Controller implements Serializable {
     // ayuda: https://www.programcreek.com/java-api-examples/?code=3pillarlabs/socialauth/socialauth-master/socialauth-seam/src/main/java/org/brickred/socialauth/seam/SocialAuth.java#
     //https://www.javatips.net/api/socialauth-master/socialauth/src/main/java/org/brickred/socialauth/SocialAuthConfig.java
     public void conectar() {
-        Properties prop = System.getProperties();
-        prop.put("graph.facebook.com.consumer_key", "888552118157045");
-        prop.put("graph.facebook.com.consumer_secret", "5e82acaaf355f650cb0b79a61cef555c");
-//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
-//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
-        prop.put("graph.facebook.com.custom_permissions", "public_profile,email");
 
-        SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();
         try {
-            socialConfig.load(prop);
-            socialManager = new SocialAuthManager();
-            socialManager.setSocialAuthConfig(socialConfig);
+            socialManager = getFacebookManager();
             String URLRetorno = socialManager.getAuthenticationUrl(provider, redirectURL);
+            System.out.println("URLRetorno: " + socialManager.getSocialAuthConfig());
+            System.out.println("URLRetorno: " + URLRetorno);
+
             FacesContext.getCurrentInstance().getExternalContext().redirect(URLRetorno);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setCode(String code) {
+        System.out.println("code: " + code);
+        if (!"".equals(code)) {
+            try {
+                //        socialManager = new SocialAuthManager();
+                AccessGrant ag = socialManager.createAccessGrant(provider, code, redirectURL);
+                System.out.println("getSecret: " + ag.getPermission());
+                System.out.println("getSecret: " + ag.getPermission().getScope());
+                System.out.println("getSecret: " + ag.getSecret());
+                System.out.println("getProviderId: " + ag.getProviderId());
+                System.out.println("getAttributes: " + ag.getAttributes());
+                System.out.println("getSocialAuthConfig: " + socialManager.getSocialAuthConfig());
+                AuthProvider ap = socialManager.connect(ag);
+                System.out.println("connect: " + ap.getProviderId());
+                System.out.println("getCurrentAuthProvider: " + socialManager.getCurrentAuthProvider().getUserProfile());
+
+                System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
+                System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
+                System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
+            } catch (Exception ex) {
+                System.out.println("ningun codigo");
+//                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public String getCode() {
+        System.out.println("code: ");
+        return "";
     }
 
     public Persona getPersonaActual() {
@@ -199,7 +227,7 @@ public class LoginController extends Controller implements Serializable {
         HttpServletRequest req = (HttpServletRequest) external.getRequest();
         Map<String, Object> sessionMap = external.getSessionMap();
         String session = (String) sessionMap.get("u5u4ri0");
-        System.out.println("este es el resultado: "+session);
+        System.out.println("este es el resultado: " + session);
         FacesMessage msg;
         String ruta = Vistas.inicio();
         String nomUsuario;

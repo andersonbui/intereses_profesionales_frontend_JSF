@@ -96,15 +96,13 @@
                             <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
                             <p:menuitem value="Ver mis resultados" outcome="#{misResultadosController.verMisResultados(loginController.personaActual)}" />
                         </p:submenu>
-                        <p:submenu label="Estadisticas"  rendered="#{loginController.isDocente()}">
+                        <p:submenu label="Estadisticas"  rendered="">
+                        </p:submenu>
+                        <p:submenu label="Administracion" rendered="#{loginController.isDocente()}">
                             <p:menuitem value="Estadisticas" outcome="/vistas/encuesta/Estadistica.xhtml" />
+                            <p:menuitem value="Generar mineria" rendered="#{loginController.isAdmin()}" action="#{mineriaController.entrenarModelo()}" />
                         </p:submenu>
-                        <p:submenu label="Administracion" rendered="#{loginController.isAdmin()}">
-                            <p:menuitem value="una cosa"  />
-                            <p:menuitem value="Generar mineria" action="#{mineriaController.entrenarModelo()}" />
-                            <p:menuitem value="otra cosa"  />
-                        </p:submenu>
-                        
+
                         <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >
                             <p:menuitem value="Usuarios" outcome="/vistas/persona/List.xhtml" />
                             <p:menuitem value="Area" outcome="/vistas/area/List.xhtml"  rendered="#{loginController.isAdmin()}" />
@@ -120,7 +118,7 @@
                             <p:menuitem value="pais" outcome="/vistas/pais/List.xhtml" />
                             <p:menuitem value="Encuesta" outcome="/vistas/encuesta/List.xhtml" />
                         </p:submenu>
-                        
+
                         <p:submenu label="Gestion datos" rendered="#{false}" >
                             <p:menuitem value="Pregunta"  action="#{encuestaController.prepararYCrear}"/>
                             <p:menuitem value="Usuario" outcome="/vistas/usuario/List.xhtml" />

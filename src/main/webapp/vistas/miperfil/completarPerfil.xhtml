@@ -145,7 +145,7 @@
                                             <p:outputLabel style="font-weight:bold; color: black;" value="Nivel de SISBEN o Estrato:" for="estrato" />
                                             <p:selectOneMenu filter="false" id="estrato" value="#{estudianteController.selected.estrato}" 
                                                              required="true" requiredMessage="#{bundle.CreateNotaRequiredMessage_estrato}">
-                                                <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                                <f:selectItem itemLabel="Seleccione..." itemValue= "-1"/>
                                                 <f:selectItem itemLabel="0" itemValue="0"/>
                                                 <f:selectItem itemLabel="1" itemValue="1"/>
                                                 <f:selectItem itemLabel="2" itemValue="2"/>
@@ -160,7 +160,7 @@
                                                              required="true" 
                                                              immediate="true" 
                                                              requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosViven}">
-                                                <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                                <f:selectItem itemLabel="Seleccione..." itemValue= "-1"/>
                                                 <f:selectItem itemLabel="0" itemValue="0"/>
                                                 <f:selectItem itemLabel="1" itemValue="1"/>
                                                 <f:selectItem itemLabel="2" itemValue="2"/>
@@ -178,7 +178,7 @@
                                                              required="true" 
                                                              immediate="true" 
                                                              requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosTrabajan}">
-                                                <f:selectItem itemLabel="Seleccione..." itemValue= "0"/>
+                                                <f:selectItem itemLabel="Seleccione..." itemValue= "-1"/>
 
                                                 <c:forEach begin="0" end="#{estudianteController.selected.cuantosViven}" var="index">
                                                     <f:selectItem itemLabel="#{index}" itemValue="#{index}"/>

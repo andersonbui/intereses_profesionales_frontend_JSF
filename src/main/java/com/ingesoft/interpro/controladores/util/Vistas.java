@@ -61,20 +61,29 @@ public class Vistas implements Serializable {
     }
 
     public static String completarPerfil() {
-        ruta = rutaGeneral +  "/vistas/miperfil/completarPerfil.xhtml";
+        ruta = rutaGeneral + "/vistas/miperfil/completarPerfil.xhtml";
         return ruta;
     }
+
     public static String login() {
-        ruta = rutaGeneral +  "/login.xhtml";
+        ruta = rutaGeneral + "/login.xhtml";
         return ruta;
     }
 
     public static String inicio() {
-        ruta = rutaGeneral +  "/vistas/inicio.xhtml";
+        ruta = rutaGeneral + "/vistas/inicio.xhtml";
         return ruta;
     }
 
-    public static String misResultados(){
+    public static String misResultados() {
         return "/vistas/miperfil/misResultados.xhtml";
+    }
+
+    public static String urlRegistroFacebook() {
+        return "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/registro.xhtml";
+    }
+    
+    public static String completarRegistroFacebook() {
+        return "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/completarRegistroFacebook.xhtml";
     }
 }

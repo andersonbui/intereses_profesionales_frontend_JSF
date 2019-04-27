@@ -17,18 +17,24 @@
         </style>
         <ui:define name="content">
             <h:form >
-                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog" modal="true" height="170" closable="false" >
-                    <p> Identifique la característica de personalidad más acorde para usted seleccionando
-                        la opción de más hacia la izquierda o más hacia a la derecha.
-                    </p>
-                    <b> Con cada elección gana un punto de juego, para ello usted tendrá un temporizador de 15 segundos 
-                        para realizar esta actividad, cada vez que agote 15 segundos pierde un punto de juego.
-                    </b>
-
-                    <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
-                                     actionListener="#{encuestaController.arrancarReloj()}" 
-                                     onclick="PF('instruccionesPersonalidadDialog').hide();" />
-
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog"
+                          modal="true" height="250" closable="false" style="padding:10px 40px;" >
+                    <div style="font-size:1.2em">
+                        <p> Usted ahora se encuentra en la encuesta de personalidad, en ella usted debe escoger la puntuación<br/>
+                            más aproximada a las dos afirmaciones presentadas de acuerdo a su personalidad.<br/>
+                        </p>
+                        <p> 
+                            Si considera que su personalidad está definida por la afirmación de la izquierda debería<br/>
+                            escoger 1, o si está definida más por la de la derecha debería escoger 5, pero si no sabe<br/>
+                            si es la de la izquierda o la de la derecha, puede escoger entre 2 a 4<br/>
+                        </p>
+                        <br/>
+                    </div>
+                    <div style="width:80px; margin:auto">
+                        <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
+                                         actionListener="#{encuestaController.arrancarReloj()}" 
+                                         onclick="PF('instruccionesPersonalidadDialog').hide();" />
+                    </div>
                 </p:dialog>
             </h:form>
             <h:outputScript >

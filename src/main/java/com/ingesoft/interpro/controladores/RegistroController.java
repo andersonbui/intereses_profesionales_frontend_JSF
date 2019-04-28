@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,16 +24,12 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpServletRequest;
 import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
-import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.util.AccessGrant;
-import org.brickred.socialauth.util.SocialAuthUtil;
 
 /**
  *
@@ -74,7 +68,6 @@ public class RegistroController extends Controller implements Serializable {
 
     public void registroFacebook() {
         provider = "facebook";
-
         try {
             socialManager = getFacebookManager();
             String URLRetorno = socialManager.getAuthenticationUrl(provider, Vistas.urlRegistroFacebook());
@@ -93,7 +86,6 @@ public class RegistroController extends Controller implements Serializable {
         System.out.println("code: " + code);
         if (!"".equals(code)) {
             try {
-
                 AccessGrant ag = socialManager.createAccessGrant(provider, code, Vistas.urlRegistroFacebook());
                 System.out.println("getSecret: " + ag.getPermission());
                 System.out.println("getSecret: " + ag.getPermission().getScope());
@@ -108,7 +100,6 @@ public class RegistroController extends Controller implements Serializable {
                 System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
                 System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
                 System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
-
                 // Datos de la cuenta
                 password = ap.getProviderId();
                 usuario = ap.getUserProfile().getEmail();
@@ -127,6 +118,7 @@ public class RegistroController extends Controller implements Serializable {
         estadoUsuario = UsuarioController.EN_PROCESO;
         if (un_usuario != null) {
             continuarCreacionUsuario(un_usuario);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.login());
         }
     }
 
@@ -175,6 +167,7 @@ public class RegistroController extends Controller implements Serializable {
                     estudianteController.create();
                 }
                 unusuario.setEstado(estadoUsuario);
+                estadoUsuario = null;
                 selected = unusuario;
                 this.create();
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");

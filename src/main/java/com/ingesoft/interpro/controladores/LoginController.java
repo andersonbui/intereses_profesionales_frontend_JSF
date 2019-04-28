@@ -111,7 +111,7 @@ public class LoginController extends Controller implements Serializable {
                 login();
             } catch (Exception ex) {
                 System.out.println("ningun codigo");
-//                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

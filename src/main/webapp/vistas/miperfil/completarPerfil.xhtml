@@ -180,7 +180,7 @@
                                                              requiredMessage="#{bundle.CreateNotaRequiredMessage_cuantosTrabajan}">
                                                 <f:selectItem itemLabel="Seleccione..." itemValue= "-1"/>
 
-                                                <c:forEach begin="0" end="#{estudianteController.selected.cuantosViven}" var="index">
+                                                <c:forEach rendered="#{estudianteController.selected.cuantosViven!=null}" begin="0" end="#{estudianteController.selected.cuantosViven}" var="index">
                                                     <f:selectItem itemLabel="#{index}" itemValue="#{index}"/>
                                                 </c:forEach>
                                             </p:selectOneMenu>

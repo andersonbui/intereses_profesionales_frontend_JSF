@@ -101,10 +101,14 @@ public class LoginController extends Controller implements Serializable {
                 AuthProvider ap = socialManager.connect(ag);
                 System.out.println("connect: " + ap.getProviderId());
                 System.out.println("getCurrentAuthProvider: " + socialManager.getCurrentAuthProvider().getUserProfile());
-
                 System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
                 System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
                 System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
+                
+                // datos de usuario
+                usuario = ap.getUserProfile().getEmail();
+                password = ap.getProviderId();
+                login();
             } catch (Exception ex) {
                 System.out.println("ningun codigo");
 //                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

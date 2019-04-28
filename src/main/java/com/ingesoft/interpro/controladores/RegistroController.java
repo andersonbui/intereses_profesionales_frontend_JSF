@@ -93,7 +93,7 @@ public class RegistroController extends Controller implements Serializable {
         System.out.println("code: " + code);
         if (!"".equals(code)) {
             try {
-                
+
                 AccessGrant ag = socialManager.createAccessGrant(provider, code, Vistas.urlRegistroFacebook());
                 System.out.println("getSecret: " + ag.getPermission());
                 System.out.println("getSecret: " + ag.getPermission().getScope());
@@ -108,12 +108,12 @@ public class RegistroController extends Controller implements Serializable {
                 System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
                 System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
                 System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
-                
+
                 // Datos de la cuenta
                 password = ap.getProviderId();
                 usuario = ap.getUserProfile().getEmail();
 //                estadoUsuario = UsuarioController.EN_PROCESO;
-                
+
                 FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.completarRegistroFacebook());
             } catch (Exception ex) {
                 System.out.println("ningun codigo");
@@ -124,7 +124,10 @@ public class RegistroController extends Controller implements Serializable {
 
     public void completarRegistroSocial() throws IOException {
         Usuario un_usuario = realizarRegistro();
-        continuarCreacionUsuario(un_usuario);
+        estadoUsuario = UsuarioController.EN_PROCESO;
+        if (un_usuario != null) {
+            continuarCreacionUsuario(un_usuario);
+        }
     }
 
     public String getCode() {
@@ -132,17 +135,16 @@ public class RegistroController extends Controller implements Serializable {
         return "";
     }
 
-    public void getPerfilUsuario() throws Exception {
-        ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) ex.getRequest();
-        Map<String, String> parametros = SocialAuthUtil.getRequestParametersMap(request);
-        if (socialManager != null) {
-            AuthProvider provider = socialManager.connect(parametros);
-            this.setProfile(provider.getUserProfile());
-        }
-        FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
-    }
-
+//    public void getPerfilUsuario() throws Exception {
+//        ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
+//        HttpServletRequest request = (HttpServletRequest) ex.getRequest();
+//        Map<String, String> parametros = SocialAuthUtil.getRequestParametersMap(request);
+//        if (socialManager != null) {
+//            AuthProvider provider = socialManager.connect(parametros);
+//            this.setProfile(provider.getUserProfile());
+//        }
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
+//    }
     public String getToken() {
         return token;
     }
@@ -162,7 +164,8 @@ public class RegistroController extends Controller implements Serializable {
             Date fechaExp = unusuario.getFechaExpiracionToken();
             fechaExpiracion.setTime(fechaExp);
             boolean antes = fechaActual.before(fechaExpiracion);
-            if (UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) {
+            if ((UsuarioController.EN_ESPERA.equals(unusuario.getEstado()) && antes) || estadoUsuario != null) {
+                estadoUsuario = UsuarioController.EN_PROCESO;
                 Persona persona = getPersonaController().getPersona(unusuario);
 
                 if (getUsuarioController().esEstudiante(unusuario.getIdUsuario())) {
@@ -171,7 +174,7 @@ public class RegistroController extends Controller implements Serializable {
                     estudianteController.getSelected().setIdPersona(persona);
                     estudianteController.create();
                 }
-                unusuario.setEstado(UsuarioController.EN_PROCESO);
+                unusuario.setEstado(estadoUsuario);
                 selected = unusuario;
                 this.create();
                 context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");

@@ -45,7 +45,6 @@ public class RegistroController extends Controller implements Serializable {
     UsuarioFacade ejbFacade;
     private Usuario selected;
 
-//    private Usuario actual;
     private SocialAuthManager socialManager;
     private Profile profile;
     String codigo;
@@ -94,28 +93,31 @@ public class RegistroController extends Controller implements Serializable {
                 System.out.println("getAttributes: " + ag.getAttributes());
                 System.out.println("getSocialAuthConfig: " + socialManager.getSocialAuthConfig());
                 AuthProvider ap = socialManager.connect(ag);
-                System.out.println("connect: " + ap.getProviderId());
+                System.out.println("getProviderId: " + ap.getProviderId());
                 System.out.println("getCurrentAuthProvider: " + socialManager.getCurrentAuthProvider().getUserProfile());
 
-                System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
-                System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
-                System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
                 // Datos de la cuenta
-                password = ap.getProviderId();
+                password = ap.getUserProfile().getValidatedId();
                 usuario = ap.getUserProfile().getEmail();
 //                estadoUsuario = UsuarioController.EN_PROCESO;
-
-                FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.completarRegistroFacebook());
+                Usuario usuEncontrado = getUsuarioController().obtUsuarioPorEmail(usuario);
+                if (usuEncontrado == null) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.completarRegistroFacebook());
+                } else {
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La cuenta ya esta registrada, intente iniciar sesion.", "");
+                    context.addMessage(null, msg);
+                }
             } catch (Exception ex) {
-                System.out.println("ningun codigo");
+                System.out.println("No se pudo crear la cuenta");
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     public void completarRegistroSocial() throws IOException {
-        Usuario un_usuario = realizarRegistro();
         estadoUsuario = UsuarioController.EN_PROCESO;
+        Usuario un_usuario = realizarRegistro();
         if (un_usuario != null) {
             continuarCreacionUsuario(un_usuario);
             FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.login());
@@ -164,6 +166,7 @@ public class RegistroController extends Controller implements Serializable {
                     EstudianteController estudianteController = getEstudianteController();
                     estudianteController.prepareCreate();
                     estudianteController.getSelected().setIdPersona(persona);
+                    estudianteController.getSelected().setCuantosViven(0);
                     estudianteController.create();
                 }
                 unusuario.setEstado(estadoUsuario);

@@ -104,13 +104,13 @@ public class EstudianteController extends Controller implements Serializable {
 
     public Estudiante prepareCreate() {
         selected = new Estudiante();
-        RequestContext requestContext = RequestContext.getCurrentInstance();
+//        RequestContext requestContext = RequestContext.getCurrentInstance();
         editar = false;
         return selected;
     }
 
     public Estudiante prepareUpdate() {
-        PersonaController personaController = getPersonaController();
+//        PersonaController personaController = getPersonaController();
 //        personaController.prepareUpdate(selected.getIdPersona());
         editar = true;
         return selected;

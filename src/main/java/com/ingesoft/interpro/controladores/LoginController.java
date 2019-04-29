@@ -109,6 +109,7 @@ public class LoginController extends Controller implements Serializable {
                 usuario = ap.getUserProfile().getEmail();
                 password = ap.getProviderId();
                 login();
+                FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
             } catch (Exception ex) {
                 System.out.println("ningun codigo");
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

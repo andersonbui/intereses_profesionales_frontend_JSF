@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
@@ -33,8 +34,8 @@ public abstract class Controller implements Serializable {
 
     protected SocialAuthManager getFacebookManager() {
         Properties prop = System.getProperties();
-        prop.put("graph.facebook.com.consumer_key", "888552118157045");
-        prop.put("graph.facebook.com.consumer_secret", "5e82acaaf355f650cb0b79a61cef555c");
+        prop.put("graph.facebook.com.consumer_key", CredencialesGF.keyFacebook);
+        prop.put("graph.facebook.com.consumer_secret", CredencialesGF.secretFacebook);
 //        prop.put("graph.facebook.com.consumer_key", "329124954489538");
 //        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
         prop.put("graph.facebook.com.custom_permissions", "public_profile,email");
@@ -52,7 +53,29 @@ public abstract class Controller implements Serializable {
         }
         return null;
     }
-    
+
+    protected SocialAuthManager getGoogleManager() {
+        Properties prop = System.getProperties();
+        prop.put("graph.google.com.consumer_key", CredencialesGF.keyGoogle);
+        prop.put("graph.google.com.consumer_secret", CredencialesGF.secretGoogle);
+//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
+//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
+        prop.put("graph.google.com.custom_permissions", "public_profile,email");
+
+        SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();
+
+        try {
+            socialConfig.load(prop);
+            SocialAuthManager socialManager;
+            socialManager = new SocialAuthManager();
+            socialManager.setSocialAuthConfig(socialConfig);
+            return socialManager;
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
         Object persona = null;
         if (selected != null) {

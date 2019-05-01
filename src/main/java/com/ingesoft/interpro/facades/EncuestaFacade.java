@@ -51,4 +51,18 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
         }
         return null;
     }
+
+    public Encuesta encuestaSinTerminar(Estudiante estudiante) {
+
+        List<Encuesta> lista = buscarPorEstudiante(estudiante);
+        if (!lista.isEmpty()) {
+            for (Encuesta encuesta : lista) {
+               //encuesta.getEstado() == null || 
+                if ("SINTERMINAR".equals(encuesta.getEstado())) {
+                    return encuesta;
+                }
+            }
+        }
+        return null;
+    }
 }

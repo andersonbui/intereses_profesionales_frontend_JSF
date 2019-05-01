@@ -26,6 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -35,6 +36,7 @@ public class EncuestaController extends Controller implements Serializable {
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
     private List<Encuesta> items = null;
     private Encuesta selected;
+    private Encuesta sinterminar;
     private int pasoActivo;
 
     int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
@@ -256,7 +258,7 @@ public class EncuestaController extends Controller implements Serializable {
 //        return personalidad;
 //    }
     private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
-        
+
         List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
         if (lista == null) {
             return null;
@@ -340,6 +342,16 @@ public class EncuestaController extends Controller implements Serializable {
         public int puntaje;
     }
 
+    public void tomarEncuestaSinTerminar() {
+        System.out.println("tomando encuesta sin terminar");
+        selected = sinterminar;
+        sinterminar = null;
+    }
+
+    private void obtenerEncuestaSinTerminar(Estudiante estudiante) {
+        sinterminar = getFacade().encuestaSinTerminar(estudiante);
+    }
+
     public int getIdEncuesta() {
         Integer valor = ejbFacade.autogenerarIdEncuesta();
         return valor == null ? 1 : valor;
@@ -350,12 +362,34 @@ public class EncuestaController extends Controller implements Serializable {
         return selected;
     }
 
+    public void crearEncuesta() {
+        selected = new Encuesta();
+        selected.setFecha(new Date());
+        System.out.println("se creo nueva id encuesta");
+        selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
+    }
+
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
      * @throws java.io.IOException
      */
     public void prepararYCrear() throws IOException {
+        LoginController loginController = getLoginController();
+        Usuario usu = loginController.getActual();
+        Persona persona = loginController.getPersonaActual();
+        Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
+        obtenerEncuestaSinTerminar(estud);
+        System.out.println("verificar encuesta");
+        if (selected == null) {
+            System.out.println("encuesta null");
+            if (sinterminar != null) {
+                System.out.println("encontro sinterminar");
+                RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.execute("PF('dialog_encuesta_no_terminada').show()");
+            }
+            return;
+        }
         pasoActivo = 0;
         detener_reloj = true;
         puntos_encuesta = 0;
@@ -364,35 +398,21 @@ public class EncuestaController extends Controller implements Serializable {
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();
 
-        // @TODO : Falta obtener el usuario
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-//        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
-//        areaEncuestaController.prepararParaEncuesta();
-        LoginController loginController = getLoginController();
-        Usuario usu = loginController.getActual();
-        Persona persona = loginController.getPersonaActual();
-        System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
             if (estudianteGrado == null) {
-                System.out.println();
+                System.out.println("No hay grado alguno para este estudiante");
                 JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
             } else {
-                selected = new Encuesta();
                 initializeEmbeddableKey();
-                selected.setFecha(new Date());
-                selected.setEstudianteGrado(estudianteGrado);
-                selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
-//            selected.setEstudianteGrado(estudianteGrado);
-                System.out.println("antes encuesta creada: " + selected);
-//            selected = getEncuesta(selected.toString());
-                System.out.println("despues encuesta creada: " + selected);
+                if (selected.getEstudianteGrado() == null) {
+                    System.out.println("se asigno estudiante grado a encuesta");
+                    selected.setEstudianteGrado(estudianteGrado);
+                }
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
                 // @desarrollo
-                if (Utilidades.esDesarrollo()) {
+                if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
                     selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
                 }
                 create();
@@ -404,7 +424,6 @@ public class EncuestaController extends Controller implements Serializable {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
         }
-
     }
 
     public String resultado_personalidad(int i, String personalidad) {

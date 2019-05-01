@@ -23,6 +23,29 @@
                     <center><p:commandButton value="Continuar" onclick="PF('instruccionesEncuestaDialog').hide()"></p:commandButton></center>
                 </h:form>
             </p:dialog>
+            <p:dialog header="Instrucciones de juego" widgetVar="dialog_encuesta_no_terminada"
+                      modal="true" height="200" closable="true" style="padding:10px 40px;" >
+                <div style="font-size:1.2em">
+                    <p> Tienes una encuesta pendiente
+                    </p>
+                    <p> 
+                        Quieres reanudar la anterior encuesta o empezar una nueva?
+                    </p>
+                    <br/>
+                </div>
+                <div style="width:80px; margin:auto">
+                    <h:form>
+                        <p:commandButton value="Reanudar encuesta" update="@form" ajax="true" 
+                                         action="#{encuestaController.prepararYCrear()}" 
+                                         actionListener="#{encuestaController.tomarEncuestaSinTerminar()}" 
+                                         onclick="PF('dialog_encuesta_no_terminada').hide();" />
+                        <p:commandButton value="Crear nueva"  ajax="true" 
+                                         action="#{encuestaController.prepararYCrear()}" 
+                                         actionListener="#{encuestaController.crearEncuesta()}" 
+                                         onclick="PF('dialog_encuesta_no_terminada').hide();" />
+                    </h:form>
+                </div>
+            </p:dialog>
             <center><div><p:graphicImage style="width: 200px;" name="img/interpro.png"/><br/>
                     <h3>Bienvenido al sitio, aquí podrá identificar sus intereses profesionales y <br/>
                         personalidad.<br/>

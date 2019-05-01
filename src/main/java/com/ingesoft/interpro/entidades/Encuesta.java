@@ -83,6 +83,9 @@ public class Encuesta implements Serializable {
     private Integer puntajeEncuesta;
     @Column(name = "puntajeEvaluacion")
     private Integer puntajeEvaluacion;
+    @Size(max = 15)
+    @Column(name = "estado")
+    private String estado;
 
     public Encuesta() {
     }
@@ -94,6 +97,14 @@ public class Encuesta implements Serializable {
     public Encuesta(Integer idEncuesta, Date fecha) {
         this.idEncuesta = idEncuesta;
         this.fecha = fecha;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Integer getIdEncuesta() {

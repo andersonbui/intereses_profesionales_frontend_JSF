@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,9 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AreaEncuesta.findAll", query = "SELECT a FROM AreaEncuesta a")
-    , @NamedQuery(name = "AreaEncuesta.findByIdArea", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idArea = :idArea")
+    , @NamedQuery(name = "AreaEncuesta.findByPosicion", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.posicion = :posicion")
     , @NamedQuery(name = "AreaEncuesta.findByIdEncuesta", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idEncuesta = :idEncuesta")
-    , @NamedQuery(name = "AreaEncuesta.findByPosicion", query = "SELECT a FROM AreaEncuesta a WHERE a.posicion = :posicion")
+    , @NamedQuery(name = "AreaEncuesta.findByIdArea", query = "SELECT a FROM AreaEncuesta a WHERE a.idArea = :idArea")
     , @NamedQuery(name = "AreaEncuesta.findByGusto", query = "SELECT a FROM AreaEncuesta a WHERE a.gusto = :gusto")
     , @NamedQuery(name = "AreaEncuesta.findByIdTipoEleccionMateria", query = "SELECT a FROM AreaEncuesta a WHERE a.areaEncuestaPK.idTipoEleccionMateria = :idTipoEleccionMateria")})
 public class AreaEncuesta implements Serializable {
@@ -36,8 +38,10 @@ public class AreaEncuesta implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AreaEncuestaPK areaEncuestaPK;
-    @Column(name = "posicion")
-    private Short posicion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idArea")
+    private int idArea;
     @Size(max = 45)
     @Column(name = "gusto")
     private String gusto;
@@ -58,8 +62,8 @@ public class AreaEncuesta implements Serializable {
         this.areaEncuestaPK = areaEncuestaPK;
     }
 
-    public AreaEncuesta(int idArea, int idEncuesta, int idTipoEleccionMateria) {
-        this.areaEncuestaPK = new AreaEncuestaPK(idArea, idEncuesta, idTipoEleccionMateria);
+    public AreaEncuesta(short posicion, int idEncuesta, int idTipoEleccionMateria) {
+        this.areaEncuestaPK = new AreaEncuestaPK(posicion, idEncuesta, idTipoEleccionMateria);
     }
 
     public AreaEncuestaPK getAreaEncuestaPK() {
@@ -70,12 +74,12 @@ public class AreaEncuesta implements Serializable {
         this.areaEncuestaPK = areaEncuestaPK;
     }
 
-    public Short getPosicion() {
-        return posicion;
+    public int getIdArea() {
+        return idArea;
     }
 
-    public void setPosicion(Short posicion) {
-        this.posicion = posicion;
+    public void setIdArea(int idArea) {
+        this.idArea = idArea;
     }
 
     public String getGusto() {

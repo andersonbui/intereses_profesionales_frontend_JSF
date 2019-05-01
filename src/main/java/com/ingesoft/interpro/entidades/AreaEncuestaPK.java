@@ -19,9 +19,9 @@ import javax.validation.constraints.NotNull;
 public class AreaEncuestaPK implements Serializable {
 
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "idArea")
-    private int idArea;
+    @NotNull    
+    @Column(name = "posicion")
+    private Short posicion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idEncuesta")
@@ -36,22 +36,22 @@ public class AreaEncuestaPK implements Serializable {
 
     /**
      *
-     * @param idArea
+     * @param posicion
      * @param idEncuesta
      * @param idTipoEleccionMateria
      */
-    public AreaEncuestaPK(int idArea, int idEncuesta, int idTipoEleccionMateria) {
-        this.idArea = idArea;
+    public AreaEncuestaPK(short posicion, int idEncuesta, int idTipoEleccionMateria) {
+        this.posicion = posicion;
         this.idEncuesta = idEncuesta;
         this.idTipoEleccionMateria = idTipoEleccionMateria;
     }
 
-    public int getIdArea() {
-        return idArea;
+    public int getPosicion() {
+        return posicion;
     }
 
-    public void setIdArea(int idArea) {
-        this.idArea = idArea;
+    public void setPosicion(short posicion) {
+        this.posicion = posicion;
     }
 
     public int getIdEncuesta() {
@@ -73,7 +73,7 @@ public class AreaEncuestaPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idArea;
+        hash += (int) posicion;
         hash += (int) idEncuesta;
         hash += (int) idTipoEleccionMateria;
         return hash;
@@ -86,7 +86,7 @@ public class AreaEncuestaPK implements Serializable {
             return false;
         }
         AreaEncuestaPK other = (AreaEncuestaPK) object;
-        if (this.idArea != other.idArea) {
+        if (this.posicion != other.posicion) {
             return false;
         }
         if (this.idEncuesta != other.idEncuesta) {
@@ -100,7 +100,7 @@ public class AreaEncuestaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "AreaEncuestaPK[ idArea=" + idArea + ", idEncuesta=" + idEncuesta + ", idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
+        return "AreaEncuestaPK[ posicion=" + posicion + ", idEncuesta=" + idEncuesta + ", idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
     }
 
 }

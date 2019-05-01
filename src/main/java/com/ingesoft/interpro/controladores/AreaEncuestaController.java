@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.AreaEncuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Area;
+import com.ingesoft.interpro.entidades.AreaEncuestaPK;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.TipoEleccionMateria;
 import com.ingesoft.interpro.facades.AreaEncuestaFacade;
@@ -29,14 +30,11 @@ public class AreaEncuestaController extends Controller implements Serializable {
     private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;
     private List<AreaEncuesta> items = null;
     private AreaEncuesta selected;
-    private int contadorPaso;
 
     public AreaEncuestaController() {
-        contadorPaso = 0;
     }
 
     public void inicializar() {
-        contadorPaso = 0;
     }
 
     public AreaEncuesta getSelected() {
@@ -49,7 +47,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
 
     @Override
     protected void setEmbeddableKeys() {
-        selected.getAreaEncuestaPK().setIdArea(selected.getArea().getIdArea());
+//        selected.getAreaEncuestaPK().setIdArea(selected.getArea().getIdArea());
         selected.getAreaEncuestaPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
         selected.getAreaEncuestaPK().setIdTipoEleccionMateria(selected.getTipoEleccionMateria().getIdTipoEleccionMateria());
     }
@@ -90,22 +88,24 @@ public class AreaEncuestaController extends Controller implements Serializable {
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
     }
 
-    protected void almacenarAreasEncuesta(Area[] areasmenos, Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria) {
-        for (int i = 0; i < areasmenos.length; i++) {
-            Area area = areasmenos[i];
-            prepareCreate();
+    protected void almacenarAreasEncuesta(Area[] areas, Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria) {
+        for (int i = 0; i < areas.length; i++) {
+            Area area = areas[i];
+            selected = obtenerAreaEncuesta(encuesta, tipoEleccionMateria, (short) i);
             selected.setArea(area);
-            selected.setEncuesta(encuesta);
-            selected.setPosicion((short) i);
-            selected.setTipoEleccionMateria(tipoEleccionMateria);
             create();
         }
     }
 
-    public void actualizar() {
-//        for (AreaEncuesta item : items) {
-//            getFacade().edit(item);
-//        }
+    public AreaEncuesta obtenerAreaEncuesta(Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria, short posicion) {
+        AreaEncuesta areaEncuesta = getAreaEncuesta(new AreaEncuestaPK(posicion, encuesta.getIdEncuesta(), tipoEleccionMateria.getIdTipoEleccionMateria()));
+        if (areaEncuesta == null) {
+            prepareCreate();
+            selected.setEncuesta(encuesta);
+            selected.getAreaEncuestaPK().setPosicion((short) posicion);
+            selected.setTipoEleccionMateria(tipoEleccionMateria);
+        }
+        return areaEncuesta;
     }
 
     public AreaEncuesta obtenerItem(int index) {
@@ -170,7 +170,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
             com.ingesoft.interpro.entidades.AreaEncuestaPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
             key = new com.ingesoft.interpro.entidades.AreaEncuestaPK();
-            key.setIdArea(Integer.parseInt(values[0]));
+            key.setPosicion(Short.parseShort(values[0]));
             key.setIdEncuesta(Integer.parseInt(values[1]));
             key.setIdTipoEleccionMateria(Integer.parseInt(values[2]));
             return key;
@@ -178,7 +178,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
 
         String getStringKey(com.ingesoft.interpro.entidades.AreaEncuestaPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdArea());
+            sb.append(value.getPosicion());
             sb.append(SEPARATOR);
             sb.append(value.getIdEncuesta());
             sb.append(SEPARATOR);

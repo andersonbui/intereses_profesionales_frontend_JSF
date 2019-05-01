@@ -21,7 +21,7 @@ public class AreaEncuestaPK implements Serializable {
     @Basic(optional = false)
     @NotNull    
     @Column(name = "posicion")
-    private Short posicion;
+    private short posicion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idEncuesta")

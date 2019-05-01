@@ -20,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -52,8 +53,10 @@ public class Estudiante implements Serializable {
     @Size(max = 2)
     @Column(name = "estrato")
     private String estrato;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "cuantosViven")
-    private Integer cuantosViven;
+    private int cuantosViven;
     @Column(name = "cuantosTrabajan")
     private Integer cuantosTrabajan;
     @Column(name = "viveConPadres")
@@ -92,11 +95,11 @@ public class Estudiante implements Serializable {
         this.estrato = estrato;
     }
 
-    public Integer getCuantosViven() {
+    public int getCuantosViven() {
         return cuantosViven;
     }
 
-    public void setCuantosViven(Integer cuantosViven) {
+    public void setCuantosViven(int cuantosViven) {
         this.cuantosViven = cuantosViven;
     }
 

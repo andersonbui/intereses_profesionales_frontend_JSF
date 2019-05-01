@@ -6,7 +6,6 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,16 +36,12 @@ public class AreaEncuesta implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AreaEncuestaPK areaEncuestaPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idArea")
-    private int idArea;
     @Size(max = 45)
     @Column(name = "gusto")
     private String gusto;
-    @JoinColumn(name = "idArea", referencedColumnName = "idArea", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Area area;
+    @JoinColumn(name = "idArea", referencedColumnName = "idArea")
+    @ManyToOne
+    private Area idArea;
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta encuesta;
@@ -74,14 +68,6 @@ public class AreaEncuesta implements Serializable {
         this.areaEncuestaPK = areaEncuestaPK;
     }
 
-    public int getIdArea() {
-        return idArea;
-    }
-
-    public void setIdArea(int idArea) {
-        this.idArea = idArea;
-    }
-
     public String getGusto() {
         return gusto;
     }
@@ -90,12 +76,12 @@ public class AreaEncuesta implements Serializable {
         this.gusto = gusto;
     }
 
-    public Area getArea() {
-        return area;
+    public Area getIdArea() {
+        return idArea;
     }
 
-    public void setArea(Area area) {
-        this.area = area;
+    public void setIdArea(Area idArea) {
+        this.idArea = idArea;
     }
 
     public Encuesta getEncuesta() {
@@ -138,5 +124,5 @@ public class AreaEncuesta implements Serializable {
     public String toString() {
         return "AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
     }
-
+    
 }

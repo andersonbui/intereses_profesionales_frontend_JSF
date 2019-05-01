@@ -92,7 +92,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
         for (int i = 0; i < areas.length; i++) {
             Area area = areas[i];
             selected = obtenerAreaEncuesta(encuesta, tipoEleccionMateria, (short) i);
-            selected.setArea(area);
+            selected.setIdArea(area);
             create();
         }
     }

@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class AreaEncuestaPK implements Serializable {
 
     @Basic(optional = false)
-    @NotNull    
+    @NotNull
     @Column(name = "posicion")
     private short posicion;
     @Basic(optional = false)
@@ -46,20 +46,20 @@ public class AreaEncuestaPK implements Serializable {
         this.idTipoEleccionMateria = idTipoEleccionMateria;
     }
 
-    public int getPosicion() {
-        return posicion;
-    }
-
-    public void setPosicion(short posicion) {
-        this.posicion = posicion;
-    }
-
     public int getIdEncuesta() {
         return idEncuesta;
     }
 
     public void setIdEncuesta(int idEncuesta) {
         this.idEncuesta = idEncuesta;
+    }
+
+    public short getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(short posicion) {
+        this.posicion = posicion;
     }
 
     public int getIdTipoEleccionMateria() {
@@ -100,7 +100,7 @@ public class AreaEncuestaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "AreaEncuestaPK[ posicion=" + posicion + ", idEncuesta=" + idEncuesta + ", idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
+        return "com.ingesoft.interpro.entidades.AreaEncuestaPK[ idEncuesta=" + idEncuesta + ", posicion=" + posicion + ", idTipoEleccionMateria=" + idTipoEleccionMateria + " ]";
     }
-
+    
 }

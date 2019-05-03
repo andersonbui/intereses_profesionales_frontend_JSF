@@ -43,21 +43,23 @@ public class AreaController implements Serializable {
         itemsNota = new Area[3];
 
         // si encuesta esta reanudada
-        if (Utilidades.esDesarrollo()) {
+        if (selected != null) {
             List<AreaEncuesta> areas = selected.getAreaEncuestaList();
-//            System.out.println("inicializando: " + areas);
+            System.out.println("reanudando areas: " + areas);
             for (AreaEncuesta area : areas) {
-                int idTipo = area.getTipoEleccionMateria().getIdTipoEleccionMateria();
-                switch (idTipo) {
-                    case 1:
-                        itemsMenos[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
-                        break;
-                    case 2:
-                        itemsMas[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
-                        break;
-                    case 3:
-                        itemsNota[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
-                        break;
+                if (area.getTipoEleccionMateria() != null) {
+                    int idTipo = area.getTipoEleccionMateria().getIdTipoEleccionMateria();
+                    switch (idTipo) {
+                        case 1:
+                            itemsMenos[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                        case 2:
+                            itemsMas[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                        case 3:
+                            itemsNota[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                    }
                 }
             }
         }

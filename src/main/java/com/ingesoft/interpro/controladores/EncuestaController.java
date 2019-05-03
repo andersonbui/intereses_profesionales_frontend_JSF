@@ -387,8 +387,10 @@ public class EncuestaController extends Controller implements Serializable {
                 System.out.println("encontro sinterminar");
                 RequestContext requestContext = RequestContext.getCurrentInstance();
                 requestContext.execute("PF('dialog_encuesta_no_terminada').show()");
+                return;
+            } else {
+                crearEncuesta();
             }
-            return;
         }
         pasoActivo = 0;
         detener_reloj = true;
@@ -418,7 +420,9 @@ public class EncuestaController extends Controller implements Serializable {
                 create();
 
                 AreaController areaController = getAreaController();
-                areaController.inicializar();
+
+                areaController.inicializar(selected);
+
             }
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");

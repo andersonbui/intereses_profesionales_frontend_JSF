@@ -55,9 +55,6 @@ public class RegistroController extends Controller implements Serializable {
     String token;
     String estadoUsuario;
 
-    private final String mainURL = "http://interpro.com:8080/login_facebook/faces/index.xhtml";
-    private final String redirectURL = "http://localhost:8080/login_facebook/faces/redirectHome.xhtml";
-    //private final String redirectURL = "http://www.codewebpro.com/blog";
     private String provider;
 
     public RegistroController() {

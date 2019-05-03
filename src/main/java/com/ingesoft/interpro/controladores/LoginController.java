@@ -59,8 +59,8 @@ public class LoginController extends Controller implements Serializable {
     boolean logueado;
     private List<GrupoUsuario> grupos;
 
-    private final String mainURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
-    private final String redirectURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+//    private final String mainURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+//    private final String redirectURL;
     //private final String redirectURL = "http://www.codewebpro.com/blog";
     private final String provider = "facebook";
 
@@ -68,15 +68,13 @@ public class LoginController extends Controller implements Serializable {
         logueado = false;
     }
 
-    // facebook retorna esta url:
-    // http://localhost:8080/login_facebook/faces/redirectHome.xhtml?code=AQB8jDsjmeQAmh1WfV6V-Y0AjaMV303zLKqyW0yX9qDxFn3RoIJwGx4KYe_L1W-inqEQ4Z3GbggcDAe5t5v3mio97T1zHKM4VP--rrtkFgll846nZc9rkTJ6G_Wzbel8LsCHTj-aEkPKseodH6r3c_D6qIlGRsujFy4nyVF5K8cSqOSj63H8moOj9aebqTvwMz8GVdqoLGD6Gl0w9PK2XcRSvIawlbYOSes2uOE19kFVDu1BO9d1wfEpTJ4jha6BxTybyyYAmfPEtAKZBlngkXOdPAVpgHTPBToZOImYBAZxQbnfYM-56senFwrza2WxMMZUmO-G28KNHd-jRUnXbEhf#_=_
-    // ayuda: https://www.programcreek.com/java-api-examples/?code=3pillarlabs/socialauth/socialauth-master/socialauth-seam/src/main/java/org/brickred/socialauth/seam/SocialAuth.java#
+    // facebook 
     //https://www.javatips.net/api/socialauth-master/socialauth/src/main/java/org/brickred/socialauth/SocialAuthConfig.java
     public void conectar() {
 
         try {
             socialManager = getFacebookManager();
-            String URLRetorno = socialManager.getAuthenticationUrl(provider, redirectURL);
+            String URLRetorno = socialManager.getAuthenticationUrl(provider, Vistas.loginCompleta());
             System.out.println("URLRetorno: " + socialManager.getSocialAuthConfig());
             System.out.println("URLRetorno: " + URLRetorno);
 
@@ -91,7 +89,7 @@ public class LoginController extends Controller implements Serializable {
         if (!"".equals(code)) {
             try {
                 //        socialManager = new SocialAuthManager();
-                AccessGrant ag = socialManager.createAccessGrant(provider, code, redirectURL);
+                AccessGrant ag = socialManager.createAccessGrant(provider, code, Vistas.loginCompleta());
                 System.out.println("getSecret: " + ag.getPermission());
                 System.out.println("getSecret: " + ag.getPermission().getScope());
                 System.out.println("getSecret: " + ag.getSecret());
@@ -104,15 +102,20 @@ public class LoginController extends Controller implements Serializable {
                 System.out.println("getCountry: " + socialManager.getCurrentAuthProvider().getUserProfile().getCountry());
                 System.out.println("getGender: " + socialManager.getCurrentAuthProvider().getUserProfile().getGender());
                 System.out.println("getFirstName: " + socialManager.getCurrentAuthProvider().getUserProfile().getFirstName()); //2354393101295069
-                
+
                 // datos de usuario
                 usuario = ap.getUserProfile().getEmail();
                 password = ap.getProviderId();
-                login();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
+                if (login()) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
+                }
             } catch (Exception ex) {
-                System.out.println("ningun codigo");
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("no se pudo iniciar sesion");
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                FacesMessage msg = new FacesMessage("Primero registrese, por favor.");
+                context.addMessage(null, msg);
+//                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -139,10 +142,12 @@ public class LoginController extends Controller implements Serializable {
     }
 
     public boolean permisoEstudiante() {
-        for (GrupoUsuario grupo : grupos) {
-            String nombreGrupo = grupo.getTipoUsuario().getTipo();
-            if (nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)) {
-                return true;
+        if (grupos != null) {
+            for (GrupoUsuario grupo : grupos) {
+                String nombreGrupo = grupo.getTipoUsuario().getTipo();
+                if (nombreGrupo.equals(UsuarioController.TIPO_ESTUDIANTE) || nombreGrupo.equals(UsuarioController.TIPO_ADMINISTRADOR) || nombreGrupo.equals(UsuarioController.TIPO_DOCENTE)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -163,20 +168,19 @@ public class LoginController extends Controller implements Serializable {
         return getEstudianteController().esDocente(personaActual) || getEstudianteController().esAdmin(personaActual);
     }
 
-    public void getPerfilUsuario() throws Exception {
-        ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) ex.getRequest();
-
-        Map<String, String> parametros = SocialAuthUtil.getRequestParametersMap(request);
-
-        if (socialManager != null) {
-            AuthProvider provider = socialManager.connect(parametros);
-            this.setProfile(provider.getUserProfile());
-        }
-
-        FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
-    }
-
+//    public void getPerfilUsuario() throws Exception {
+//        ExternalContext ex = FacesContext.getCurrentInstance().getExternalContext();
+//        HttpServletRequest request = (HttpServletRequest) ex.getRequest();
+//
+//        Map<String, String> parametros = SocialAuthUtil.getRequestParametersMap(request);
+//
+//        if (socialManager != null) {
+//            AuthProvider provider = socialManager.connect(parametros);
+//            this.setProfile(provider.getUserProfile());
+//        }
+//
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(mainURL);
+//    }
     public Profile getProfile() {
         return profile;
     }
@@ -216,6 +220,8 @@ public class LoginController extends Controller implements Serializable {
     public boolean logueado() {
         ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest req = (HttpServletRequest) external.getRequest();
+//        System.out.println("getLocalAddr:"+ Vistas.getIP());
+
         Map<String, Object> sessionMap = external.getSessionMap();
         String session = (String) sessionMap.get("u5u4ri0");
         return session != null;
@@ -226,7 +232,7 @@ public class LoginController extends Controller implements Serializable {
         return ejbFacade;
     }
 
-    public void login() throws IOException {
+    public boolean login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest req = (HttpServletRequest) external.getRequest();
@@ -255,7 +261,7 @@ public class LoginController extends Controller implements Serializable {
             msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
             logueado = false;
             context.addMessage(null, msg);
-            return;
+            return false;
         }
         System.out.println("estado usuari: " + actual);
 //                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
@@ -295,7 +301,9 @@ public class LoginController extends Controller implements Serializable {
                     RequestContext.getCurrentInstance().addCallbackParam("view", ruta);
                 }
             }
+            return true;
         }
+        return false;
     }
 
     public void guardarEnProceso() throws IOException {

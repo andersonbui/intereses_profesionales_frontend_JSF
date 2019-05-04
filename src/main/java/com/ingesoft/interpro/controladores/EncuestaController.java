@@ -43,8 +43,6 @@ public class EncuestaController extends Controller implements Serializable {
 
     private boolean evaluacion;
     private int tiempo;
-    private int puntos_eval;
-    private int puntos_encuesta;
     boolean detener_reloj;
 
     public boolean esDesarrollo() {
@@ -53,7 +51,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public EncuestaController() {
         detener_reloj = true;
-        puntos_encuesta = 0;
+//        setPuntos_encuesta(0);
     }
 
     public int getTiempo() {
@@ -66,24 +64,32 @@ public class EncuestaController extends Controller implements Serializable {
 
     public int getPuntos() {
         if (evaluacion) {
-            return puntos_eval;
+            return getPuntos_eval();
         }
-        return puntos_encuesta;
+        return getPuntos_encuesta();
     }
 
-    public int getPuntosEval() {
-        return puntos_eval;
+    public void setPuntos_eval(int puntos_eval) {
+        selected.setPuntajeEvaluacion(puntos_eval);
     }
 
-    public int getPuntosEncuesta() {
-        return puntos_encuesta;
+    public void setPuntos_encuesta(int puntos_encuesta) {
+        selected.setPuntajeEncuesta(puntos_encuesta);
+    }
+
+    public int getPuntos_eval() {
+        return selected.getPuntajeEvaluacion();
+    }
+
+    public int getPuntos_encuesta() {
+        return selected.getPuntajeEncuesta();
     }
 
     public void aumentarPuntos() {
         if (evaluacion) {
-            this.puntos_eval++;
+            setPuntos_eval(getPuntos_eval() + 1);
         } else {
-            this.puntos_encuesta++;
+            setPuntos_encuesta(getPuntos_encuesta() + 1);
         }
     }
 
@@ -175,17 +181,21 @@ public class EncuestaController extends Controller implements Serializable {
         if (tiempo > 15) {
             tiempo = 0;
             if (evaluacion) {
-                if (puntos_eval > 0) {
-                    puntos_eval--;
+                if (getPuntos_eval() > 0) {
+                    setPuntos_eval(getPuntos_eval() - 1);
                 } else {
                 }
             } else {
-                if (puntos_encuesta > 0) {
-                    puntos_encuesta--;
+                if (getPuntos_encuesta() > 0) {
+                    setPuntos_encuesta(getPuntos_encuesta() - 1);
                 } else {
                 }
             }
         }
+    }
+
+    public void disminuirPuntosEncuesta() {
+
     }
 
     public void incrementPuntaje() {
@@ -231,8 +241,8 @@ public class EncuestaController extends Controller implements Serializable {
         getRespuestaPersonalidadController().finalizarEncuesta();
         String personalidad = obtenerPersonalidad(selected);
         selected.setPersonalidad(personalidad);
-        selected.setPuntajeEncuesta(puntos_encuesta);
-        selected.setPuntajeEvaluacion(puntos_eval);
+        selected.setPuntajeEncuesta(getPuntos_encuesta());
+        selected.setPuntajeEvaluacion(getPuntos_eval());
         detenerReloj();
         update();
     }
@@ -367,6 +377,8 @@ public class EncuestaController extends Controller implements Serializable {
         selected.setFecha(new Date());
         System.out.println("se creo nueva id encuesta");
         selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
+        setPuntos_encuesta(0);
+        setPuntos_eval(0);
     }
 
     /**
@@ -394,8 +406,6 @@ public class EncuestaController extends Controller implements Serializable {
         }
         pasoActivo = 0;
         detener_reloj = true;
-        puntos_encuesta = 0;
-        puntos_eval = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();

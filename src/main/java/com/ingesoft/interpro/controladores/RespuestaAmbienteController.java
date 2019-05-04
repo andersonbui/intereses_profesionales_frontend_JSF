@@ -55,7 +55,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private List<String> images;
 //    private List<Character> listaValoresAmbiente;
     private List<RespuestaAmbiente> grupo = null;
-    Encuesta EncuestaAcutal;
+//    Encuesta EncuestaAcutal;
     private boolean finalizo;
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
@@ -73,6 +73,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 //        detener_reloj = true;
     }
 
+    public Encuesta getEncuestaAcutal() {
+        return getEncuestaController().getSelected();
+    }
+
     public void reiniciar() {
         pasoActual = 0;
 //        puntos = 0;
@@ -85,11 +89,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public BarChartModel getGraficoModelo() {
         graficoModelo = new BarChartModel();
-        EncuestaAcutal = grupo.get(0).getEncuesta();
+//        EncuestaAcutal = grupo.get(0).getEncuesta(); ERROR
         ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
 
         if (listaResultadosPorAmbiente == null) {
-            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(getEncuestaAcutal().getIdEncuesta());
         }
         int i = 0;
         ChartSeries barra = null;
@@ -315,7 +319,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         for (int i = 0; i < valores.length; i++) {
             resultadoPorAmbienteController.prepareCreate();
             resultadoPorAmbienteController.getSelected().setValor((float) valores[i].valor);
-            resultadoPorAmbienteController.getSelected().setEncuesta(EncuestaAcutal);
+            resultadoPorAmbienteController.getSelected().setEncuesta(getEncuestaAcutal());
             resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
             resultadoPorAmbienteController.create();
         }
@@ -440,7 +444,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getItems();
         // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
-            HiloGuardado hilo = new HiloGuardado(grupo);
+            HiloGuardado hilo = new HiloGuardado(grupo,FacesContext.getCurrentInstance());
             hilo.start();
         }
         List<RespuestaAmbiente> listaRespuestas = null;
@@ -470,15 +474,15 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return listaRespuestas;
     }
 
-    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
+    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas) {
 
         gruposPreguntas = null;
-        EncuestaAcutal = encuesta;
+        Encuesta encuesta = getEncuestaAcutal();
         finalizo = false;
         // PRUEBAS
         double[] valores = {0.0, 0.5, 1.0};
         List<RespuestaAmbiente> items_recuperados = encuesta.getRespuestaAmbienteList();
-        if(items_recuperados != null && !items_recuperados.isEmpty()) {
+        if (items_recuperados != null && !items_recuperados.isEmpty()) {
 //            getEncuestaController().asignarPuntosEncuesta(encuesta.getPuntajeEncuesta());
         }
         items = new ArrayList<>(preguntas.size());
@@ -524,9 +528,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public class HiloGuardado extends Thread {
 
         private final List<RespuestaAmbiente> itemsRespuestas;
+        FacesContext facesContext;
 
-        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas) {
+        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas, FacesContext facesContext) {
             this.itemsRespuestas = itemsRespuestas;
+            this.facesContext = facesContext;
         }
 
         @Override
@@ -534,6 +540,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             for (RespuestaAmbiente respuesta : itemsRespuestas) {
                 getFacade().edit(respuesta);
             }
+            ELResolver elResolver = facesContext.getApplication().getELResolver();
+            EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
+            encuestaController.update();
+//            EncuestaAcutal = encuestaController.getSelected();
             System.out.println("----Termino de guardar Respuestas");
         }
 

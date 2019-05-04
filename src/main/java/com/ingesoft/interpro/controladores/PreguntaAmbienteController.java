@@ -67,10 +67,10 @@ public class PreguntaAmbienteController extends Controller implements Serializab
         return selected;
     }
 
-    public void preparePreguntas(Usuario usuario, Encuesta encuesta) {
+    public void preparePreguntas(Usuario usuario) {
         RespuestaAmbienteController respuestaController = getRespuestaAmbienteController();
         getItems();
-        respuestaController.prepararRespuestas(items, encuesta);
+        respuestaController.prepararRespuestas(items);
     }
     
     public void create() {

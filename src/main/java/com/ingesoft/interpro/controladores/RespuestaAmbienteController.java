@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -444,7 +445,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getItems();
         // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
-            HiloGuardado hilo = new HiloGuardado(grupo,FacesContext.getCurrentInstance());
+            HiloGuardado hilo = new HiloGuardado(grupo,getEncuestaController());
             hilo.start();
         }
         List<RespuestaAmbiente> listaRespuestas = null;
@@ -528,11 +529,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public class HiloGuardado extends Thread {
 
         private final List<RespuestaAmbiente> itemsRespuestas;
-        FacesContext facesContext;
+        EncuestaController encuestaController;
 
-        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas, FacesContext facesContext) {
+        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas, EncuestaController encuestaController) {
             this.itemsRespuestas = itemsRespuestas;
-            this.facesContext = facesContext;
+            this.encuestaController = encuestaController;
         }
 
         @Override
@@ -540,9 +541,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             for (RespuestaAmbiente respuesta : itemsRespuestas) {
                 getFacade().edit(respuesta);
             }
-            ELResolver elResolver = facesContext.getApplication().getELResolver();
-            EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
-            encuestaController.update();
+            encuestaController.getFacade().edit(encuestaController.getSelected());
 //            EncuestaAcutal = encuestaController.getSelected();
             System.out.println("----Termino de guardar Respuestas");
         }

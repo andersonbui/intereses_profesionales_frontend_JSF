@@ -62,7 +62,7 @@ public class AreaController implements Serializable {
                     }
                 }
             }
-        }
+        } else 
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
             List<Area> areas = getItems();

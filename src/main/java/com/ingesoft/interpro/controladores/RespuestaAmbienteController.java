@@ -477,16 +477,24 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         finalizo = false;
         // PRUEBAS
         double[] valores = {0.0, 0.5, 1.0};
-
+        List<RespuestaAmbiente> items_recuperados = encuesta.getRespuestaAmbienteList();
+        if(items_recuperados != null && !items_recuperados.isEmpty()) {
+//            getEncuestaController().asignarPuntosEncuesta(encuesta.getPuntajeEncuesta());
+        }
         items = new ArrayList<>(preguntas.size());
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
             selected.setRespuesta(Float.NaN);
+            if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                int indice = items_recuperados.indexOf(selected);
+                if (indice >= 0) {
+                    selected.setRespuesta(items_recuperados.get(indice).getRespuesta());
+                }
+            }
             items.add(selected);
         }
-
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
             System.out.println("encuesta: " + encuesta);

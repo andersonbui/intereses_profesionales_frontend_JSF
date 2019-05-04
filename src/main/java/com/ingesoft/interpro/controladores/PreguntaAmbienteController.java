@@ -29,7 +29,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "preguntaAmbienteController")
 @SessionScoped
-public class PreguntaAmbienteController implements Serializable {
+public class PreguntaAmbienteController extends Controller implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,13 +49,15 @@ public class PreguntaAmbienteController implements Serializable {
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private PreguntaAmbienteFacade getFacade() {
+    @Override
+    protected PreguntaAmbienteFacade getFacade() {
         return ejbFacade;
     }
 
@@ -66,26 +68,24 @@ public class PreguntaAmbienteController implements Serializable {
     }
 
     public void preparePreguntas(Usuario usuario, Encuesta encuesta) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        RespuestaAmbienteController respuestaController = (RespuestaAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
+        RespuestaAmbienteController respuestaController = getRespuestaAmbienteController();
         getItems();
         respuestaController.prepararRespuestas(items, encuesta);
     }
     
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"),selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteUpdated"),selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteDeleted"),selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -99,33 +99,6 @@ public class PreguntaAmbienteController implements Serializable {
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
-    }
 
     public PreguntaAmbiente getPreguntaAmbiente(java.lang.Integer id) {
         return getFacade().find(id);

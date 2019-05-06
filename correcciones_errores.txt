@@ -1,0 +1,8 @@
+#########################
+# Client not authorized for this invocation
+
+
+#########################
+# solucion
+
+Cache de navegador, inicie sesion en una ventana privada o borre todo el cache del navegador

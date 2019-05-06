@@ -29,19 +29,17 @@
                     <p> Tienes una encuesta pendiente
                     </p>
                     <p> 
-                        Quieres reanudar la anterior encuesta o empezar una nueva?
+                        Se va a reanudar a encuesta sin terminar
                     </p>
                     <br/>
                 </div>
                 <div style="width:80px; margin:auto">
                     <h:form>
-                        <p:commandButton value="Reanudar encuesta" update="@form" ajax="true" 
+                        <p:commandButton value="Reanudar" update="@form" ajax="true" 
                                          action="#{encuestaController.prepararYCrear()}" 
                                          actionListener="#{encuestaController.tomarEncuestaSinTerminar()}" 
                                          onclick="PF('dialog_encuesta_no_terminada').hide();" />
-                        <p:commandButton value="Crear nueva"  ajax="true" 
-                                         action="#{encuestaController.prepararYCrear()}" 
-                                         actionListener="#{encuestaController.crearEncuesta()}" 
+                        <p:commandButton value="Cancelar"  ajax="true" 
                                          onclick="PF('dialog_encuesta_no_terminada').hide();" />
                     </h:form>
                 </div>

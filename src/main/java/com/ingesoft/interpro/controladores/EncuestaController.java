@@ -267,6 +267,12 @@ public class EncuestaController extends Controller implements Serializable {
 //        System.out.println("personalidad: " + personalidad);
 //        return personalidad;
 //    }
+    
+    /**
+     *
+     * @param encuestaAcutal
+     * @return
+     */
     private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
 
         List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
@@ -292,6 +298,11 @@ public class EncuestaController extends Controller implements Serializable {
         return valoresAux;
     }
 
+    /**
+     *
+     * @param encuesta
+     * @return
+     */
     private String obtenerPersonalidad(Encuesta encuesta) {
         ElementoPersonalidad[] valores = obtenerValores(encuesta);
 

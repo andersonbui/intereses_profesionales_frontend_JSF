@@ -144,7 +144,7 @@ public class PersonaController extends Controller implements Serializable {
                 deptoController.setSelected(null);
                 getPaisController().setSelected(null);
             }
-            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+//            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
             UsuarioController usuarioController = getUsuarioController();
             usuarioController.setSelected(selected.getIdUsuario());
 

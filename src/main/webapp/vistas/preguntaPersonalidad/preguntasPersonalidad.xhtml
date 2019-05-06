@@ -8,11 +8,6 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/realizarEncuesta.xhtml">
-        <script>
-            window.sync = function (t) {
-                PF('knob').setValue(t.current);
-            };
-        </script> 
 
         <style type="text/css">
             .value {
@@ -22,15 +17,24 @@
         </style>
         <ui:define name="content">
             <h:form >
-                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog" modal="true" height="170" closable="false" >
-                    <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
-
-                            Cada calificación de los temas que mas te guste.</p></b>
-
-                    <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
-                                     actionListener="#{encuestaController.arrancarReloj()}" 
-                                     onclick="PF('instruccionesPersonalidadDialog').hide();" />
-
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog"
+                          modal="true" height="250" closable="false" style="padding:10px 40px;" >
+                    <div style="font-size:1.2em">
+                        <p> Usted ahora se encuentra en la encuesta de personalidad, en ella usted debe escoger la puntuación<br/>
+                            más aproximada a las dos afirmaciones presentadas de acuerdo a su personalidad.<br/>
+                        </p>
+                        <p> 
+                            Si considera que su personalidad está definida por la afirmación de la izquierda debería<br/>
+                            escoger 1, o si está definida más por la de la derecha debería escoger 5, pero si no sabe<br/>
+                            si es la de la izquierda o la de la derecha, puede escoger entre 2 a 4<br/>
+                        </p>
+                        <br/>
+                    </div>
+                    <div style="width:80px; margin:auto">
+                        <p:commandButton value="Aceptar" update="@form,PreguntaPersonalidadForm" ajax="true" 
+                                         actionListener="#{encuestaController.arrancarReloj()}" 
+                                         onclick="PF('instruccionesPersonalidadDialog').hide();" />
+                    </div>
                 </p:dialog>
             </h:form>
             <h:outputScript >
@@ -41,19 +45,23 @@
             <h:form id="PreguntaPersonalidadForm" >
 
                 <div id="display">
+                    <div style="width: 100%; display: table; padding: 10px 100px;" >
+                        <div class="float-l">
+                            <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
+                            <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                        </div>
+                        <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
+                        <h:panelGroup id="grupoTimeJuego" class="float-r">
+                            <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
+                                    listener="#{encuestaController.incrementTiempo()}"
+                                    update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
+                                    stop="#{encuestaController.relojDetenido()}" />
+                            <p:knob min="0" max="15" widgetVar="knob" 
+                                    value="#{encuestaController.tiempo}" height="70px" />
+                        </h:panelGroup>
+                    </div>
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaPersonalidadController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de personalidad uno">
-                            <div style="width: 100%; display: table; padding: 0px 100px;" >
-                                <div  class="float-l">
-                                    <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
-                                    <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
-                                </div>
-                                <h:panelGroup id="grupoTimeJuego" class="float-r">
-                                    <p:poll id="timeJuego" interval="1" listener="#{encuestaController.incrementTiempo()}" 
-                                            update="puntos_id" stop="#{respuestaAmbienteController.isEvaluacion and (!respuestaAmbienteEvaluacionController.isEvaluacionImagenes)}"/>
-                                    <p:knob  min="0" max="15" widgetVar="knob" disabled="true" value="0" height="70px" />
-                                </h:panelGroup>
-                            </div>
                             <h1><p:progressBar value="#{respuestaPersonalidadController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             <p:panelGrid id="panel" styleClass="panelgrid">
                                 <ui:repeat value="#{respuestaPersonalidadController.grupo}" var="item">
@@ -68,7 +76,7 @@
                                                 <f:selectItem itemLabel="3" itemValue='3' />
                                                 <f:selectItem itemLabel="4" itemValue='4' />    
                                                 <f:selectItem itemLabel="5" itemValue='5' />
-                                                <p:ajax event="click" listener="#{respuestaPersonalidadController.seleccionarPunto(item)}" />
+                                                <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{respuestaPersonalidadController.seleccionarPunto(item)}" />
                                             </p:selectOneRadio>
                                         </p:column>
                                         <p:column style=" font-size: 18px; font-weight:bold; color: black">
@@ -80,13 +88,13 @@
                             </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >
-                            <p:commandButton  class="float-l" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
+                            <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                               update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeAnteriorPaso()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
+                            <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
                                               update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
+                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
                                               update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
@@ -104,32 +112,34 @@
                                 <center><c:forEach begin="0" end="3" var="index">
                                         <div class="personalidad">
                                             <div>
-                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index)}" name="#{encuestaController.resultado_personalidad(index)}" class="img_personalidad" style="" />   
+                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" name="#{encuestaController.resultado_personalidad(index,encuestaController.selected.personalidad)}" class="img_personalidad" style="" />   
                                             </div>
                                             <div>
-                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index)}" class="txt_personalidad" />
+                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" class="txt_personalidad" />
                                             </div>
                                         </div>
                                     </c:forEach></center>
                             </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black; display: block;" >
-                            <p:commandButton class="float-l" value="anterior" ajax="true" 
+                            <p:commandButton class="float-l btn" value="anterior" ajax="true" 
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                              update=":PreguntaPersonalidadForm, @form" >
                             </p:commandButton>
-                            <!--                            <p:commandButton class="float-r" value="Guardar respuestas" ajax="true" 
-                                                                         update=":PreguntaPersonalidadForm, @form" >
-                                                        </p:commandButton>-->
+                            <p:commandButton value="Ver resumen de encuesta" ajax="true" style="float:right;" class="float-r btn"
+                                             action="#{encuestaController.pasoResumen()}"
+                                             rendered="#{respuestaPersonalidadController.esUltimoPaso()}"
+                                             > 
+                            </p:commandButton>
                         </h:panelGroup>
                     </h:panelGroup>
 
                 </div>
             </h:form>
             <h:form>
-                <p:commandButton value="Ver resumen de encuesta" ajax="true"
+                <p:commandButton value="Ver resumen de encuesta (Desarrollo)" ajax="true"
                                  action="#{encuestaController.pasoResumen()}"
-                                 rendered="#{encuestaController.esDesarrollo() or respuestaPersonalidadController.esUltimoPaso()}"
+                                 rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>
             </h:form>

@@ -8,17 +8,23 @@
     <h:head>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
         <meta charset="UTF-8"></meta>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
-        <title>Login Social com JSF</title>
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
+        <title>Interpro</title>
         <h:outputStylesheet library="css" name="util.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
     </h:head>
+    <f:metadata>
+        <f:viewParam name="code" value="#{loginController.code}"/>
+    </f:metadata>
     <h:body>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
-                <h:form class="login100-form validate-form">
+                <h:form class="login100-form validate-form" rendered="#{!loginController.logueado()}">
 
                     <p:growl id="growl" showDetail="true"/>
+                    <span style="color: blueviolet;" class="login100-form-title p-b-40" >
+                        <b>INTERPRO</b>
+                    </span>
                     <span class="login100-form-title p-b-37" >
                         Iniciar sesion
                     </span>
@@ -32,8 +38,8 @@
                             <p:password id="login-password" class="form-control"
                                         label="password" value="#{loginController.password}" />
                         </div>
-                        <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
-                        </label>
+                        <!--                        <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
+                                                </label>-->
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
                                           actionListener="#{loginController.login()}"  update="growl " value="Entrar"
                                           oncomplete="manejarLogin(xhr, status, args)" 
@@ -47,15 +53,15 @@
                             <h:commandLink class="login100-social-item bg1" action="#{loginController.conectar()}">
                                 <i class="fab fa-facebook-f" alt="f" ></i>
                             </h:commandLink >
-                            <h:commandLink class="login100-social-item  bg2" action="#{loginController.conectar()}" >
+                            <!--<h:commandLink class="login100-social-item  bg2" action="{loginController.conectar()}" >
                                 <i class="fab fa-google" alt="google" ></i>
                             </h:commandLink >
                             <a href="#" class="login100-social-item bg3">
                                 <i class="fab fa-twitter"></i>
-                            </a>
+                            </a>-->
                         </div>
 
-                        <dir class="text-center">
+                        <dir class="text-center" style="margin-top: 20px;">
                             <b>No tienes una cuenta? </b><br/>
                             <p:link outcome="/registro.xhtml" class="txt2 hov1" >Crea cuenta</p:link>
                         </dir>
@@ -68,7 +74,38 @@
                         <h:commandLink action="#{loginController.salir()}" styleClass="btn btn-primary" value="Salir" />			
                     </h:panelGrid>
                 </h:form>
-                <script type="text/javascript"> 
+
+                <h:form rendered="#{loginController.logueado()}">
+                    <p:growl id="growl" showDetail="true"/>
+                    <span class="login100-form-title p-b-37" >
+                        Continuar sesion?
+                    </span>
+                    <p:panelGrid  columns="1" styleClass="panelgrid" class="transparentBackground" columnClasses="centered" >
+                        <h:panelGroup style="display:block; text-align:center">
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Usted tiene una sesión iniciada"/>
+                                    <p:outputLabel value="¿Desea continuar con esta sesión?"/>
+                                </p:column>
+                                <p:column><br></br></p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                                     value="Si" actionListener="#{loginController.login}"
+                                                     oncomplete="manejarLogin(xhr, status, args)"
+                                                     />
+                                    <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
+                                                     value="No" action="#{loginController.salir()}"
+                                                     ajax="false"
+                                                     />
+                                </p:column>
+                            </p:row>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </h:form>
+                <script type="text/javascript">
                     //<![CDATA[ 
                     //oncomplete="manejarLogin(xhr, status, args)" 
                     function manejarLogin(xhr, status, args) {

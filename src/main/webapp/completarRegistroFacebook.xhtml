@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      lang="es">
+    <h:head>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
+        <meta charset="UTF-8"></meta>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
+        <title>Registro Social com JSF</title>
+        <h:outputStylesheet library="css" name="util.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
+    </h:head>
+    <h:body>
+        <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
+            <div class="wrap-registro700 p-l-45 p-r-45 p-t-40 p-b-40" >
+                <p:growl id="growl" showDetail="true" autoUpdate="true"/>
+                <span class="login100-form-title p-b-37" >
+                    Registro
+                </span>
+                <div rendered="#{empty loginController.profile}">
+                    <h:form class="login100-form validate-form">
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese c&oacute;digo de registro">
+                            <p:inputText  id="login-codigo"  class="form-control"
+                                          label="codigo"  value="#{registroController.codigo}"  
+                                          placeholder="Ingrese un c&oacute;digo de registro" 
+                                          required="true"
+                                          requiredMessage="Es necesario ingresar un c&oacute;digo de registro"
+                                          />
+                            <span style="color:graytext; font-size: 0.8em;" >Si no tienes c&oacute;digo, solic&iacute;talo al administrador</span>
+                        </div>
+                        
+
+                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
+                                          actionListener="#{registroController.completarRegistroSocial()}"  
+                                          update="@form,growl"  value="Registrate">
+                        </p:commandButton>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

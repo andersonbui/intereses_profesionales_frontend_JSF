@@ -9,7 +9,7 @@
         <ui:define name="content">
             <h:form>
                 <p:wizard  widgetVar="perfilEstudianteWizard" showNavBar="true"  
-                           nextLabel="Siguiente" 
+                           nextLabel="Siguiente"  
                            backLabel="Anterior">
                     <p:tab id="areaProfesionalTab" title="Area profesinal">
                         <center>
@@ -45,7 +45,8 @@
                                 <p class="col-md-12"><b>Selecciona en orden descendente las materias que mas te gustan.</b><br/></p>
                                 <div class="row col-md-8 col-md-offset-2" >
                                     <div class="col-md-3">
-                                        <label style="font-weight:bold; color: black;" value="Materia 1 " for="materia1_mas" >Materia 1</label>
+                                        <label style="font-weight:bold; color: black;" 
+                                               value="Materia 1 " for="materia1_mas" >Materia 1</label>
                                     </div>
                                     <div class="col-md-9">
                                         <p:selectOneMenu filter="true" id="materia1_mas"  
@@ -224,18 +225,18 @@
                                     </div>
                                 </div>
                             </p:panel></center>
-                        <p:commandButton value="Siguiente encuesta" ajax="true"
+                        <p:commandButton value="Siguiente encuesta" ajax="true" class=" btn"
                                          action="#{encuestaController.pasoPreguntasAmbiente()}"
-                                         actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual, encuestaController.selected)}"
+                                         actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual)}"
                                          style="float:right;"
                                          > 
                         </p:commandButton>
                     </p:tab>
 
                 </p:wizard>
-                <p:commandButton value="Siguiente encuesta" ajax="true"
+                <p:commandButton value="Siguiente encuesta (Desarrollo)" ajax="true" 
                                  action="#{encuestaController.pasoPreguntasAmbiente()}"
-                                 actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual, encuestaController.selected)}"
+                                 actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual)}"
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

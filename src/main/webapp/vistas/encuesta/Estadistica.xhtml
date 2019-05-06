@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/principal.xhtml">
         <ui:define name="title">
@@ -63,16 +64,43 @@
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico">
                     </p:commandButton>
-                    <h:body id='divgrafico' >
-                        <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
-                            <script>
-                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
-                            </script>
-                            <div style="height: 300px; width: 700px;" >
-                                <canvas id="myChart" width="700" height="300"></canvas>
-                            </div>
-                        </p:panelGrid>
+                    <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
+
+                        <h1 style="text-align: center;" value="">Personalidad: #{estadisticaAmbienteController.personalidad}</h1>
+                        <center class="grupo-img-personalidad">
+                            <c:forEach begin="0" end="3" var="index">
+                                <div class="personalidad">
+                                    <div>
+                                        <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" 
+                                                        name="#{encuestaController.resultado_personalidad(index,estadisticaAmbienteController.personalidad)}" class="img_personalidad" style="" />   
+                                    </div>
+                                    <div>
+                                        <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" class="txt_personalidad" />
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </center>
                     </h:body>
+                    <br/>
+                    <div class="row">
+                        <div>
+                            <h:body id='divgrafico' >
+                                <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
+                                    <script>
+                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                                    </script>
+                                    <div style="height: 300px; width: 700px;" >
+                                        <canvas id="myChart" width="700" height="300"></canvas>
+                                    </div>
+                                </p:panelGrid>
+                            </h:body>
+                        </div>
+                        <div>
+                            <p:outputLabel value="Puntaje encuesta: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
+                            <br/>
+                            <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
+                        </div>
+                    </div>
                 </h:panelGroup>
             </h:form>
             <script type="text/javascript">

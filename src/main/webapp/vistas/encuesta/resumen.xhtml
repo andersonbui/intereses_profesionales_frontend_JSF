@@ -7,19 +7,33 @@
 
     <ui:composition template="/realizarEncuesta.xhtml">
         <ui:define name="content">
+
             <h:form>
-                
-                <h:body id='divgrafico' >
-                        <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
-                            <script>
-                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
-                            </script>
-                            <div style="height: 300px; width: 700px;" >
-                                <canvas id="myChart" width="700" height="300"></canvas>
-                            </div>
-                        </p:panelGrid>
-                </h:body>
-                <p:commandButton value="Finalizar" ajax="true"
+                <br/>
+                <div style="width:80%;margin-left:auto">
+                    <div class="row" style="margin:auto">
+                        <div >
+                            <div style="width:100%;text-align:center;font-weight:bold; font-size:x-large">
+                                <div>Puntaje encuesta:<br/> #{encuestaController.selected.puntajeEncuesta}</div>
+                                
+                                <div>Puntaje Evaluacion:<br/> #{encuestaController.selected.puntajeEvaluacion}</div>
+                            </div><br/>
+                            <h:body id='divgrafico' >
+                                <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
+                                    <script>
+                                        $(document).ready(function () {
+                                            graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                                        });
+                                    </script>
+                                    <div style="height: 300px; width: 700px;" >
+                                        <canvas id="myChart" width="700" height="300"></canvas>
+                                    </div>
+                                </p:panelGrid>
+                            </h:body>
+                        </div>
+                    </div>
+                </div>
+                <p:commandButton value="Finalizar" ajax="true" style="float:right;"
                                  action="#{encuestaController.finalizar()}"
                                  > 
                 </p:commandButton>

@@ -880,11 +880,16 @@ body {
 
 .personalidad {
     display: inline-block;
+    width: 24%;
+}
+
+.grupo-img-personalidad {
+    width:100%;
 }
 
 .img_personalidad {
-     height: 230px; 
-     width: 270px; 
+     height: 14vw; 
+     width: 80%; 
      padding: 10px; 
      margin: 0px 10px; 
      border:red ridge thick 

@@ -8,6 +8,7 @@ import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -19,14 +20,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -36,12 +36,13 @@ public class EncuestaController extends Controller implements Serializable {
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
     private List<Encuesta> items = null;
     private Encuesta selected;
+    private Encuesta sinterminar;
     private int pasoActivo;
+
+    int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
 
     private boolean evaluacion;
     private int tiempo;
-    private int puntos_eval;
-    private int puntos_encuesta;
     boolean detener_reloj;
 
     public boolean esDesarrollo() {
@@ -50,7 +51,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public EncuestaController() {
         detener_reloj = true;
-        puntos_encuesta = 0;
+//        setPuntos_encuesta(0);
     }
 
     public int getTiempo() {
@@ -63,25 +64,75 @@ public class EncuestaController extends Controller implements Serializable {
 
     public int getPuntos() {
         if (evaluacion) {
-            return puntos_eval;
+            return getPuntos_eval();
         }
-        return puntos_encuesta;
+        return getPuntos_encuesta();
     }
 
-    public int getPuntosEval() {
-        return puntos_eval;
+    public void setPuntos_eval(int puntos_eval) {
+        selected.setPuntajeEvaluacion(puntos_eval);
     }
 
-    public int getPuntosEncuesta() {
-        return puntos_encuesta;
+    public void setPuntos_encuesta(int puntos_encuesta) {
+        selected.setPuntajeEncuesta(puntos_encuesta);
+    }
+
+    public int getPuntos_eval() {
+        return selected.getPuntajeEvaluacion();
+    }
+
+    public int getPuntos_encuesta() {
+        return selected.getPuntajeEncuesta();
     }
 
     public void aumentarPuntos() {
         if (evaluacion) {
-            this.puntos_eval++;
+            setPuntos_eval(getPuntos_eval() + 1);
         } else {
-            this.puntos_encuesta++;
+            setPuntos_encuesta(getPuntos_encuesta() + 1);
         }
+    }
+
+    public List<Encuesta> listarEncuestasSelected(Estudiante estudiante) {
+        return getFacade().buscarPorEstudiante(estudiante);
+    }
+
+    public double promedioPuntajeEncuesta() {
+        if (items != null && !items.isEmpty()) {
+            int cantidad = 0;
+            double suma = 0;
+            for (Encuesta item : items) {
+                if (item != null && item.getPuntajeEncuesta() != null) {
+                    suma += item.getPuntajeEncuesta();
+                    cantidad++;
+                }
+            }
+            if (cantidad != 0) {
+                return suma / cantidad;
+            }
+        }
+        return 0;
+    }
+
+    public double promedioPuntajeEvaluacion() {
+        if (items != null && !items.isEmpty()) {
+            int cantidad = 0;
+            double suma = 0;
+            for (Encuesta item : items) {
+                if (item != null && item.getPuntajeEncuesta() != null) {
+                    suma += item.getPuntajeEvaluacion();
+                    cantidad++;
+                }
+            }
+            if (cantidad != 0) {
+                return suma / cantidad;
+            }
+        }
+        return 0;
+    }
+
+    public void setItems(List<Encuesta> items) {
+        this.items = items;
     }
 
     public Encuesta getSelected() {
@@ -116,8 +167,9 @@ public class EncuestaController extends Controller implements Serializable {
         return detener_reloj;
     }
 
-    public void arrancarReloj() {
+    public EncuestaController arrancarReloj() {
         detener_reloj = false;
+        return this;
     }
 
     public void detenerReloj() {
@@ -129,23 +181,27 @@ public class EncuestaController extends Controller implements Serializable {
         if (tiempo > 15) {
             tiempo = 0;
             if (evaluacion) {
-                if (puntos_eval > 0) {
-                    puntos_eval--;
+                if (getPuntos_eval() > 0) {
+                    setPuntos_eval(getPuntos_eval() - 1);
                 } else {
                 }
             } else {
-                if (puntos_encuesta > 0) {
-                    puntos_encuesta--;
+                if (getPuntos_encuesta() > 0) {
+                    setPuntos_encuesta(getPuntos_encuesta() - 1);
                 } else {
                 }
             }
         }
     }
 
+    public void disminuirPuntosEncuesta() {
+
+    }
+
     public void incrementPuntaje() {
         detener_reloj = !detener_reloj;
-        System.out.println("mostrar_reloj: " + detener_reloj);
-        System.out.println("tiempo: " + tiempo);
+//        System.out.println("mostrar_reloj: " + detener_reloj);
+//        System.out.println("tiempo: " + tiempo);
     }
 
     public boolean isEvaluacion() {
@@ -182,11 +238,139 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void finalizarEncuesta() {
-        String personalidad = getRespuestaPersonalidadController().finalizarEncuesta();
+        getRespuestaPersonalidadController().finalizarEncuesta();
+        String personalidad = obtenerPersonalidad(selected);
         selected.setPersonalidad(personalidad);
-        selected.setPuntajeEncuesta(puntos_encuesta);
-        selected.setPuntajeEvaluacion(puntos_eval);
+        selected.setPuntajeEncuesta(getPuntos_encuesta());
+        selected.setPuntajeEvaluacion(getPuntos_eval());
+        detenerReloj();
         update();
+    }
+
+//    private String obtenerPersonalidad(Encuesta encuestaAcutal) {
+//        List<RespuestaPorPersonalidad> lista = encuestaAcutal.getRespuestaPorPersonalidadList();
+//
+//        RespuestaPorPersonalidad[] valores = new RespuestaPorPersonalidad[4];
+//        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
+//            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
+//            valores[indice] = respuestaPorPersonalidad;
+//        }
+//        String personalidad = "";
+//        String perso;
+//        int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
+//
+//        for (int indice : ORDEN_RESPUESTA_PERSONALIDAD) {
+//            perso = valores[indice].getTipoPersonalidad().getTipo();
+//            personalidad += (valores[indice].getPuntaje() <= 24) ? perso.charAt(0) : perso.charAt(1);
+//        }
+//
+//        System.out.println("personalidad: " + personalidad);
+//        return personalidad;
+//    }
+    
+    /**
+     *
+     * @param encuestaAcutal
+     * @return
+     */
+    private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
+
+        List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
+        if (lista == null) {
+            return null;
+        }
+        if (lista.size() != ORDEN_RESPUESTA_PERSONALIDAD.length) {
+            System.out.println("lista getRespuestaPorPersonalidadList: " + lista.size());
+            return null;
+        }
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
+            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
+            valores[indice] = new ElementoPersonalidad();
+            valores[indice].puntaje = respuestaPorPersonalidad.getPuntaje();
+            valores[indice].tipo = respuestaPorPersonalidad.getTipoPersonalidad().getTipo();
+        }
+
+        ElementoPersonalidad[] valoresAux = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (int i = 0; i < ORDEN_RESPUESTA_PERSONALIDAD.length; i++) {
+            valoresAux[i] = valores[ORDEN_RESPUESTA_PERSONALIDAD[i]];
+        }
+        return valoresAux;
+    }
+
+    /**
+     *
+     * @param encuesta
+     * @return
+     */
+    private String obtenerPersonalidad(Encuesta encuesta) {
+        ElementoPersonalidad[] valores = obtenerValores(encuesta);
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+
+    /**
+     *
+     * @param encuestas
+     * @return
+     */
+    public String obtenerPromedioPersonalidad(List<Encuesta> encuestas) {
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        int cont_encuestaPerson = 0;
+        for (int i = 0; i < valores.length; i++) {
+            valores[i] = new ElementoPersonalidad();
+            valores[i].puntaje = 0;
+        }
+        // suma
+        for (Encuesta encuesta : encuestas) {
+            ElementoPersonalidad[] valoresaux = obtenerValores(encuesta);
+            if (valoresaux != null) {
+                cont_encuestaPerson++;
+                for (int i = 0; i < valoresaux.length; i++) {
+                    valores[i].tipo = valoresaux[i].tipo;
+                    valores[i].puntaje += valoresaux[i].puntaje;
+                }
+            }
+        }
+        if (cont_encuestaPerson == 0) {
+            return "";
+        }
+        // promedio
+        for (int i = 0; i < valores.length; i++) {
+            valores[i].puntaje /= cont_encuestaPerson;
+        }
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+
+    public class ElementoPersonalidad {
+
+        public String tipo;
+        public int puntaje;
+    }
+
+    public void tomarEncuestaSinTerminar() {
+        System.out.println("tomando encuesta sin terminar");
+        selected = sinterminar;
+        sinterminar = null;
+    }
+
+    private void obtenerEncuestaSinTerminar(Estudiante estudiante) {
+        sinterminar = getFacade().encuestaSinTerminar(estudiante);
     }
 
     public int getIdEncuesta() {
@@ -199,65 +383,78 @@ public class EncuestaController extends Controller implements Serializable {
         return selected;
     }
 
+    public void crearEncuesta() {
+        selected = new Encuesta();
+        selected.setFecha(new Date());
+        System.out.println("se creo nueva id encuesta");
+        selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
+        setPuntos_encuesta(0);
+        setPuntos_eval(0);
+    }
+
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
      * @throws java.io.IOException
      */
     public void prepararYCrear() throws IOException {
+        LoginController loginController = getLoginController();
+        Usuario usu = loginController.getActual();
+        Persona persona = loginController.getPersonaActual();
+        Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
+        obtenerEncuestaSinTerminar(estud);
+        System.out.println("verificar encuesta");
+        if (selected == null) {
+            System.out.println("encuesta null");
+            if (sinterminar != null) {
+                System.out.println("encontro sinterminar");
+                RequestContext requestContext = RequestContext.getCurrentInstance();
+                requestContext.execute("PF('dialog_encuesta_no_terminada').show()");
+                return;
+            } else {
+                crearEncuesta();
+            }
+        }
         pasoActivo = 0;
         detener_reloj = true;
-        puntos_encuesta = 0;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();
 
-        // @TODO : Falta obtener el usuario
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-//        AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elOtroResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
-//        areaEncuestaController.prepararParaEncuesta();
-        LoginController loginController = getLoginController();
-        Usuario usu = loginController.getActual();
-        Persona persona = loginController.getPersonaActual();
-        System.out.println("usuario: " + usu);
         try {
-            Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
             if (estudianteGrado == null) {
-                System.out.println();
+                System.out.println("No hay grado alguno para este estudiante");
                 JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
             } else {
-                selected = new Encuesta();
                 initializeEmbeddableKey();
-                selected.setFecha(new Date());
-                selected.setEstudianteGrado(estudianteGrado);
-                selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
-//            selected.setEstudianteGrado(estudianteGrado);
-                System.out.println("antes encuesta creada: " + selected);
-//            selected = getEncuesta(selected.toString());
-                System.out.println("despues encuesta creada: " + selected);
+                if (selected.getEstudianteGrado() == null) {
+                    System.out.println("se asigno estudiante grado a encuesta");
+                    selected.setEstudianteGrado(estudianteGrado);
+                }
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
                 // @desarrollo
-                if (Utilidades.esDesarrollo()) {
+                if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
                     selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
                 }
                 create();
 
                 AreaController areaController = getAreaController();
-                areaController.inicializar();
+
+                areaController.inicializar(selected);
+
             }
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
         }
-
     }
 
-    public String resultado_personalidad(int i) {
+    public String resultado_personalidad(int i, String personalidad) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad = selected.getPersonalidad();
+//        String result_personalidad = selected.getPersonalidad();
+        String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
 
@@ -265,9 +462,10 @@ public class EncuestaController extends Controller implements Serializable {
 
     }
 
-    public String resultado_personalidad_descripcion(int i) {
+    public String resultado_personalidad_descripcion(int i, String personalidad) {
 //        String result_personalidad = "IIEJ";
-        String result_personalidad = selected.getPersonalidad();
+//        String result_personalidad = selected.getPersonalidad();
+        String result_personalidad = personalidad;
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {
             return null;

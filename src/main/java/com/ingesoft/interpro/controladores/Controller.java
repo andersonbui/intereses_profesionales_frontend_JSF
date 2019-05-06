@@ -5,16 +5,20 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
+import org.brickred.socialauth.SocialAuthConfig;
+import org.brickred.socialauth.SocialAuthManager;
 
 /**
  *
@@ -26,6 +30,50 @@ public abstract class Controller implements Serializable {
 
     protected void setEmbeddableKeys() {
 
+    }
+
+    protected SocialAuthManager getFacebookManager() {
+        Properties prop = System.getProperties();
+        prop.put("graph.facebook.com.consumer_key", CredencialesGF.keyFacebook);
+        prop.put("graph.facebook.com.consumer_secret", CredencialesGF.secretFacebook);
+//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
+//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
+        prop.put("graph.facebook.com.custom_permissions", "public_profile,email");
+
+        SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();
+
+        try {
+            socialConfig.load(prop);
+            SocialAuthManager socialManager;
+            socialManager = new SocialAuthManager();
+            socialManager.setSocialAuthConfig(socialConfig);
+            return socialManager;
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    protected SocialAuthManager getGoogleManager() {
+        Properties prop = System.getProperties();
+        prop.put("graph.google.com.consumer_key", CredencialesGF.keyGoogle);
+        prop.put("graph.google.com.consumer_secret", CredencialesGF.secretGoogle);
+//        prop.put("graph.facebook.com.consumer_key", "329124954489538");
+//        prop.put("graph.facebook.com.consumer_secret", "4c5e659fd3792cd6acd10e07e67a1855");
+        prop.put("graph.google.com.custom_permissions", "public_profile,email");
+
+        SocialAuthConfig socialConfig = SocialAuthConfig.getDefault();
+
+        try {
+            socialConfig.load(prop);
+            SocialAuthManager socialManager;
+            socialManager = new SocialAuthManager();
+            socialManager.setSocialAuthConfig(socialConfig);
+            return socialManager;
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
@@ -57,6 +105,13 @@ public abstract class Controller implements Serializable {
             }
         }
         return persona;
+    }
+
+    public MineriaController getMineriaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        MineriaController mineriaController = (MineriaController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "mineriaController");
+        return mineriaController;
     }
 
     public UsuarioController getUsuarioController() {
@@ -171,17 +226,26 @@ public abstract class Controller implements Serializable {
         RespuestaAmbienteController respuestaAmbienteController = (RespuestaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
         return respuestaAmbienteController;
     }
+
     public EstadisticaAmbienteController getEstadisticaAmbienteController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EstadisticaAmbienteController estadisticaAmbienteController = (EstadisticaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaAmbienteController");
         return estadisticaAmbienteController;
     }
+
     public RespuestaPersonalidadController getRespuestaPersonalidadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         RespuestaPersonalidadController respuestaPersonalidadController = (RespuestaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPersonalidadController");
         return respuestaPersonalidadController;
+    }
+
+    public RespuestaPorPersonalidadController getRespuestaPorPersonalidadController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
+        return respuestaPorPersonalidadController;
     }
 
     public EvaluacionController getEvaluacionController() {
@@ -197,7 +261,7 @@ public abstract class Controller implements Serializable {
         AreaEncuestaController areaEncuestaController = (AreaEncuestaController) elResolver.getValue(facesContext.getELContext(), null, "areaEncuestaController");
         return areaEncuestaController;
     }
-    
+
     public EncuestaController getEncuestaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();

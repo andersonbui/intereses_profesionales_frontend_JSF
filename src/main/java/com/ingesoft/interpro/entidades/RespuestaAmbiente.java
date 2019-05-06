@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RespuestaAmbiente.findAll", query = "SELECT r FROM RespuestaAmbiente r")
     , @NamedQuery(name = "RespuestaAmbiente.findByIdPreguntasAmbiente", query = "SELECT r FROM RespuestaAmbiente r WHERE r.respuestaAmbientePK.idPreguntasAmbiente = :idPreguntasAmbiente")
     , @NamedQuery(name = "RespuestaAmbiente.findByIdEncuesta", query = "SELECT r FROM RespuestaAmbiente r WHERE r.respuestaAmbientePK.idEncuesta = :idEncuesta")
+    , @NamedQuery(name = "RespuestaAmbiente.findByEncuesta", query = "SELECT r FROM RespuestaAmbiente r WHERE r.encuesta = :encuesta")
     , @NamedQuery(name = "RespuestaAmbiente.findByRespuesta", query = "SELECT r FROM RespuestaAmbiente r WHERE r.respuesta = :respuesta")})
 public class RespuestaAmbiente implements Serializable {
 

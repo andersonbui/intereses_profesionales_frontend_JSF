@@ -42,7 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
     , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
-    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")})
+    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")
+    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudianteGrado.estudiante = :estudiante")
+})
 public class Encuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,6 +83,9 @@ public class Encuesta implements Serializable {
     private Integer puntajeEncuesta;
     @Column(name = "puntajeEvaluacion")
     private Integer puntajeEvaluacion;
+    @Size(max = 15)
+    @Column(name = "estado")
+    private String estado;
 
     public Encuesta() {
     }
@@ -92,6 +97,14 @@ public class Encuesta implements Serializable {
     public Encuesta(Integer idEncuesta, Date fecha) {
         this.idEncuesta = idEncuesta;
         this.fecha = fecha;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Integer getIdEncuesta() {

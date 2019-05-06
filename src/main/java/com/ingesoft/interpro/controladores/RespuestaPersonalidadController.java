@@ -143,7 +143,7 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         return pasoActual;
     }
 
-    public String finalizarEncuesta() {
+    public boolean finalizarEncuesta() {
         for (RespuestaPersonalidad respuesta : grupo) {
             getFacade().edit(respuesta);
         }
@@ -153,11 +153,12 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         return realizarEstadisticas();
     }
 
-    private String realizarEstadisticas() {
+    private boolean realizarEstadisticas() {
         // TODO falta esperar los hilos de guardado para despues realizar la estadistica
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
+        RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elOtroResolver.getValue(
+                facesContext.getELContext(), null, "respuestaPorPersonalidadController");
 
         Elemento[] valores = new Elemento[4];
 
@@ -184,30 +185,10 @@ public class RespuestaPersonalidadController extends Controller implements Seria
             respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
             respuestaPorPersonalidadController.create();
         }
-        return obtenerPersonalidad(valores);
+        return true;
     }
 
-    private String obtenerPersonalidad(Elemento[] valores) {
-        String personalidad = "";
-        String perso;
-
-        perso = valores[2].tipoPer.getTipo();
-        personalidad += (valores[2].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
-
-        perso = valores[3].tipoPer.getTipo();
-        personalidad += (valores[3].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
-
-        perso = valores[1].tipoPer.getTipo();
-        personalidad += (valores[1].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
-
-        perso = valores[0].tipoPer.getTipo();
-        personalidad += (valores[0].valor <= 24) ? perso.charAt(0) : perso.charAt(1);
-        System.out.println("personalidad: " + personalidad);
-        return personalidad;
-    }
-
-    private class Elemento {
-
+    public class Elemento {
         public TipoPersonalidad tipoPer;
         public int valor;
     }

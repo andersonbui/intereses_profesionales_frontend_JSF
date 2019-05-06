@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -55,7 +56,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private List<String> images;
 //    private List<Character> listaValoresAmbiente;
     private List<RespuestaAmbiente> grupo = null;
-    Encuesta EncuestaAcutal;
+//    Encuesta EncuestaAcutal;
     private boolean finalizo;
     private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
@@ -73,6 +74,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 //        detener_reloj = true;
     }
 
+    public Encuesta getEncuestaAcutal() {
+        return getEncuestaController().getSelected();
+    }
+
     public void reiniciar() {
         pasoActual = 0;
 //        puntos = 0;
@@ -85,11 +90,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public BarChartModel getGraficoModelo() {
         graficoModelo = new BarChartModel();
-        EncuestaAcutal = grupo.get(0).getEncuesta();
+//        EncuestaAcutal = grupo.get(0).getEncuesta(); ERROR
         ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
 
         if (listaResultadosPorAmbiente == null) {
-            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(EncuestaAcutal.getIdEncuesta());
+            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(getEncuestaAcutal().getIdEncuesta());
         }
         int i = 0;
         ChartSeries barra = null;
@@ -202,7 +207,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public int siguientePaso() {
         System.out.println("siguientes paso: " + pasoActual);
-        int intervaloEvaluacion = 6;
+        int intervaloEvaluacion = 5;
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
             intervaloEvaluacion = 3;
@@ -315,7 +320,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         for (int i = 0; i < valores.length; i++) {
             resultadoPorAmbienteController.prepareCreate();
             resultadoPorAmbienteController.getSelected().setValor((float) valores[i].valor);
-            resultadoPorAmbienteController.getSelected().setEncuesta(EncuestaAcutal);
+            resultadoPorAmbienteController.getSelected().setEncuesta(getEncuestaAcutal());
             resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
             resultadoPorAmbienteController.create();
         }
@@ -440,7 +445,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getItems();
         // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
-            HiloGuardado hilo = new HiloGuardado(grupo);
+            HiloGuardado hilo = new HiloGuardado(grupo, getEncuestaController());
             hilo.start();
         }
         List<RespuestaAmbiente> listaRespuestas = null;
@@ -470,23 +475,37 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return listaRespuestas;
     }
 
-    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas, Encuesta encuesta) {
-
+    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas) {
+        List<Integer> lindicesRecuperados = new ArrayList();
         gruposPreguntas = null;
-        EncuestaAcutal = encuesta;
+        Encuesta encuesta = getEncuestaAcutal();
         finalizo = false;
         // PRUEBAS
         double[] valores = {0.0, 0.5, 1.0};
-
+        List<RespuestaAmbiente> items_recuperados = obtenerTodosPorEncuesta(encuesta);
         items = new ArrayList<>(preguntas.size());
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
             selected.setEncuesta(encuesta);
             selected.setRespuesta(Float.NaN);
+            if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                int indice = items_recuperados.indexOf(selected);
+                if (indice >= 0) {
+                    int i = (pregunta.getOrden() - 1);
+//                    cantidadRespuestas[i]++;
+                    lindicesRecuperados.add(i);
+                    selected.setRespuesta(items_recuperados.get(indice).getRespuesta());
+                }
+            }
             items.add(selected);
         }
-
+        cantidadRespuestas = new int[items.size()];
+        
+        // desactivar puntaje a preguntas ya respondidas
+        for (int indi : lindicesRecuperados) {
+            cantidadRespuestas[indi]++;
+        }
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
             System.out.println("encuesta: " + encuesta);
@@ -496,9 +515,12 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             }
         }// @end
         listaResultadosPorAmbiente = null;
-        cantidadRespuestas = new int[items.size()];
         getGrupos();
-        pasoActual = 0;
+        if (items_recuperados != null && !items_recuperados.isEmpty()) {
+            pasoActual = (items_recuperados.size() / 6) - 1;
+        } else {
+            pasoActual = 0;
+        }
         grupo = getGrupoItems(pasoActual + 1);
         return items;
     }
@@ -516,9 +538,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public class HiloGuardado extends Thread {
 
         private final List<RespuestaAmbiente> itemsRespuestas;
+        EncuestaController encuestaController;
 
-        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas) {
+        public HiloGuardado(List<RespuestaAmbiente> itemsRespuestas, EncuestaController encuestaController) {
             this.itemsRespuestas = itemsRespuestas;
+            this.encuestaController = encuestaController;
         }
 
         @Override
@@ -526,6 +550,8 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             for (RespuestaAmbiente respuesta : itemsRespuestas) {
                 getFacade().edit(respuesta);
             }
+            encuestaController.getFacade().edit(encuestaController.getSelected());
+//            EncuestaAcutal = encuestaController.getSelected();
             System.out.println("----Termino de guardar Respuestas");
         }
 
@@ -543,6 +569,10 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return getFacade().find(id);
     }
 
+    public List<RespuestaAmbiente> obtenerTodosPorEncuesta(Encuesta encuesta) {
+        return getFacade().obtenerTodosPorEncuesta(encuesta);
+    }
+    
     public List<RespuestaAmbiente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

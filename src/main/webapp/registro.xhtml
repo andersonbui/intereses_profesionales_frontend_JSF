@@ -58,15 +58,18 @@
 
     </h:head>
     <h:body>
+        <f:metadata>
+            <f:viewParam name="code" value="#{registroController.code}"/>
+        </f:metadata>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
                 <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
                 <p:growl id="growl" showDetail="true" autoUpdate="true"/>
-                <h:form class="login100-form validate-form">
-                    <span class="login100-form-title p-b-37" >
-                        Registro
-                    </span>
-                    <div rendered="#{empty loginController.profile}">
+                <span class="login100-form-title p-b-37" >
+                    Registro
+                </span>
+                <div rendered="#{empty loginController.profile}">
+                    <h:form class="login100-form validate-form">
                         <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese c&oacute;digo de registro">
                             <p:inputText  id="login-codigo"  class="form-control"
                                           label="codigo"  value="#{registroController.codigo}"  
@@ -74,6 +77,7 @@
                                           required="true"
                                           requiredMessage="Es necesario ingresar un c&oacute;digo de registro"
                                           />
+                            <span style="color:graytext; font-size: 0.8em;" >Si no tienes c&oacute;digo, solic&iacute;talo al administrador</span>
                         </div>
                         <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electr&oacute;nico">
                             <p:inputText id="login-username"  class="form-control"
@@ -114,11 +118,14 @@
                                           update="@form,growl"  value="Registrate">
                         </p:commandButton>
 
-                        <div class="text-center p-t-57 p-b-20" >
-                            <b>O registrate con</b>
-                        </div>
+                    </h:form>
+                    <div class="text-center p-t-57 p-b-20" >
+                        <b>O registrate con</b>
+                    </div>
+
+                    <h:form>
                         <div class="flex-c p-b-20" >
-                            <h:commandLink class="login100-social-item bg1" action="#{loginController.conectar()}">
+                            <h:commandLink class="login100-social-item bg1" action="#{registroController.registroFacebook()}">
                                 <i class="fab fa-facebook-f" alt="f" ></i>
                             </h:commandLink >
                             <h:commandLink class="login100-social-item  bg2" action="#{loginController.conectar()}" >
@@ -128,21 +135,25 @@
                                 <i class="fab fa-twitter"></i>
                             </a>
                         </div>
+                    </h:form>
 
-                        <dir class="text-center">
-                            <b>¿Ya tienes una cuenta? </b><br/>
-                            <p:link outcome="/login.xhtml" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
-                        </dir>
-                    </div>
-                    <h:panelGrid rendered="#{not empty loginController.profile}">
-                        <h:graphicImage value="#{loginController.profile.profileImageURL}"
-                                        styleClass="media-object" />
+                    <dir class="text-center">
+                        <b>¿Ya tienes una cuenta? </b><br/>
+                        <p:link outcome="/login.xhtml" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
+                    </dir>
+                </div>
+                <h:panelGrid rendered="#{not empty loginController.profile}">
+                    <h:graphicImage value="#{loginController.profile.profileImageURL}"
+                                    styleClass="media-object" />
 
-                        <h3 class="media-heading" style="margin-left: 10px;">#{loginController.profile.fullName}</h3>
+                    <h3 class="media-heading" style="margin-left: 10px;">#{loginController.profile.fullName}</h3>
+
+                    <h:form>
                         <h:commandLink action="#{loginController.salir()}" styleClass="btn btn-primary" value="Salir" />			
-                    </h:panelGrid>
+                    </h:form>
 
-                </h:form>
+                </h:panelGrid>
+
 
             </div>
         </div>

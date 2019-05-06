@@ -44,7 +44,7 @@ public class Area implements Serializable {
     @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "area")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idArea")
     private List<AreaEncuesta> areaEncuestaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idArea")
     private List<Materia> materiaList;

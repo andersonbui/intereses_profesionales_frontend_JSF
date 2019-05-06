@@ -4,7 +4,6 @@ import be.ceau.chart.BarChart;
 import be.ceau.chart.color.Color;
 import be.ceau.chart.data.BarData;
 import be.ceau.chart.dataset.BarDataset;
-import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
@@ -15,12 +14,8 @@ import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -37,11 +32,15 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     Grado grado;
     Estudiante estudiante;
     Encuesta encuesta;
+    List<Encuesta> listaTotalEncuestas;
     Date fechaInicio;
     Date fechafin;
     private String string_grafico;
     String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
     List<Color> lista_colores;
+    String tiempo;
+
+    private String personalidad;
 
     public EstadisticaAmbienteController() {
         lista_colores = new ArrayList(6);
@@ -53,7 +52,10 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         lista_colores.add(new Color(0, 255, 0, 0.7));//verde-realista
 
     }
-    String tiempo;
+
+    public String getPersonalidad() {
+        return personalidad;
+    }
 
     public String getTiempo() {
         return tiempo;
@@ -145,17 +147,37 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     }
 
     public String getGraficoModelo() {
-        System.out.println("getGraficoModelo: " + string_grafico);
+//        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
 
     public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
-        return cargarGraficoResultadoEncuesta(opcion);
+        listaTotalEncuestas = new ArrayList();
+        EncuestaController encuestaController = getEncuestaController();
+//         getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
+
+        String result = cargarGraficoResultadoEncuesta(opcion);
+
+        encuestaController.setItems(listaTotalEncuestas);
+        personalidad = encuestaController.obtenerPromedioPersonalidad(listaTotalEncuestas);
+
+        return result;
+    }
+
+    public String cargarGraficoResultadoEncuesta(Encuesta encuesta) {
+        this.encuesta = encuesta;
+        return cargarGraficoResultadoEncuesta(1111);
+    }
+
+    public String cargarGraficoResultadoEncuestaEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+        return cargarGraficoResultadoEncuesta(111);
     }
 
     public String cargarGraficoResultadoEncuesta(int opcion) {
+        string_grafico = null;
         List<ResultadoPorAmbiente> listaResultados = null;
         switch (opcion) {
             case 1111:
@@ -171,15 +193,14 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
                 listaResultados = resultadosAmbientePorInstitucion(institucion);
                 break;
             default:
-                string_grafico = null;
                 System.out.println("opcion incorrecta");
         }
 
         if (listaResultados != null && !listaResultados.isEmpty()) {
             Datos[] listaBarras;
             listaBarras = promedioResultados(listaResultados);
-            System.out.println("listaBarras: ");
-            System.out.println(listaBarras);
+//            System.out.println("listaBarras: ");
+//            System.out.println(listaBarras);
             string_grafico = obtenerGrafico(listaBarras);
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -248,8 +269,8 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
             List<EstudianteGrado> listEstudianteGrado = un_grado.getEstudianteGradoList();
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
-
                 List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
+                listaTotalEncuestas.addAll(listaEncuestas);
                 for (Encuesta encuesta : listaEncuestas) {
 
                     List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
@@ -265,12 +286,16 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     }
 
     public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante) {
+        if (listaTotalEncuestas == null) {
+            listaTotalEncuestas = new ArrayList();
+        }
         if (un_estudiante != null) {
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
             List<EstudianteGrado> listEstudianteGrado = un_estudiante.getEstudianteGradoList();
             for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
                 List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
+                listaTotalEncuestas.addAll(listaEncuestas);
                 for (Encuesta una_encuesta : listaEncuestas) {
 
                     List<ResultadoPorAmbiente> listaResultadosPorAmbiente = una_encuesta.getResultadoPorAmbienteList();
@@ -287,20 +312,13 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
     public List<ResultadoPorAmbiente> resultadosPorEncuesta(Encuesta encuesta) {
         System.out.println("resultadosPorEncuesta: " + encuesta);
+        if (listaTotalEncuestas == null) {
+            listaTotalEncuestas = new ArrayList();
+        }
+        listaTotalEncuestas.add(encuesta);
         if (encuesta != null) {
             List<ResultadoPorAmbiente> listaResultados = getResultadoPorAmbienteController().getItemsPorEncuesta(encuesta.getIdEncuesta());
             return listaResultados;
-//            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
-//            List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
-//            System.out.println("listaResultadosPorAmbiente: " + listaResultadosPorAmbiente);
-//            for (ResultadoPorAmbiente resultadoPorAmbiente : listaResultadosPorAmbiente) {
-//                System.out.println("res: " + resultadoPorAmbiente.toString());
-//            }
-//            System.out.println("listaResultadosPorAmbiente.isEmpty(): "+listaResultadosPorAmbiente.isEmpty());
-//            if (!listaResultadosPorAmbiente.isEmpty()) {
-//                listaResultados.addAll(listaResultadosPorAmbiente);
-//                return listaResultados;
-//            }
         }
         return null;
     }
@@ -362,7 +380,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         }
         Datos[] listaDatos = new Datos[6];
         Datos datos;
-        System.out.println("result: " + listaResultadosPorAmbiente);
+//        System.out.println("result: " + listaResultadosPorAmbiente);
         for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
             int tipo = result.getTipoAmbiente().getIdTipoAmbiente();
             if (listaDatos[tipo - 1] == null) {

@@ -4,6 +4,8 @@ import com.ingesoft.interpro.entidades.Area;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
+import com.ingesoft.interpro.entidades.AreaEncuesta;
+import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.facades.AreaFacade;
 
 import java.io.Serializable;
@@ -35,14 +37,36 @@ public class AreaController implements Serializable {
     public AreaController() {
     }
 
-    public void inicializar(){
+    public void inicializar(Encuesta selected) {
         itemsMenos = new Area[3];
         itemsMas = new Area[3];
         itemsNota = new Area[3];
+
+        // si encuesta esta reanudada
+        if (selected != null) {
+            List<AreaEncuesta> areas = selected.getAreaEncuestaList();
+            System.out.println("reanudando areas: " + areas);
+            for (AreaEncuesta area : areas) {
+                if (area.getTipoEleccionMateria() != null) {
+                    int idTipo = area.getTipoEleccionMateria().getIdTipoEleccionMateria();
+                    switch (idTipo) {
+                        case 1:
+                            itemsMenos[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                        case 2:
+                            itemsMas[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                        case 3:
+                            itemsNota[area.getAreaEncuestaPK().getPosicion()] = area.getIdArea();
+                            break;
+                    }
+                }
+            }
+        } else 
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
-            List<Area> areas =  getItems();
-            System.out.println("inicializando: "+areas);
+            List<Area> areas = getItems();
+            System.out.println("inicializando: " + areas);
             itemsMenos[0] = areas.get(0);
             itemsMenos[1] = areas.get(1);
             itemsMenos[2] = areas.get(2);
@@ -54,7 +78,7 @@ public class AreaController implements Serializable {
             itemsNota[2] = areas.get(3);
         }
     }
-    
+
     public Area[] getItemsMenos() {
         return itemsMenos;
     }
@@ -103,11 +127,11 @@ public class AreaController implements Serializable {
         return selected;
     }
 
-    public boolean verificarSeleccion(Area area, Area areaActual, Area[] lista,  Area[] otraLista) {
+    public boolean verificarSeleccion(Area area, Area areaActual, Area[] lista, Area[] otraLista) {
         if (area.equals(areaActual)) {
             return false;
         }
-        if(otraLista != null && (area.equals(otraLista[0]) || area.equals(otraLista[1]) || area.equals(otraLista[2]))){
+        if (otraLista != null && (area.equals(otraLista[0]) || area.equals(otraLista[1]) || area.equals(otraLista[2]))) {
             return true;
         }
         if (area.equals(lista[0]) || area.equals(lista[1]) || area.equals(lista[2])) {

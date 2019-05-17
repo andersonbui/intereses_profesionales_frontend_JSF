@@ -272,9 +272,21 @@
 
                                     <p:row style="border:red ridge thick">
                                         <p:column width="50%">
-                                            <p:chart type="bar" model="#{respuestaAmbienteController.graficoModelo}" 
+                                            <h:body id='divgrafico' >
+                                                <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
+                                                    <script>
+                                                        $(document).ready(function () {
+                                                            graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                                                        });
+                                                    </script>
+                                                    <div style="height: 300px; width: 700px;" >
+                                                        <canvas id="myChart" width="700" height="300"></canvas>
+                                                    </div>
+                                                </p:panelGrid>
+                                            </h:body>
+<!--                                            <p:chart type="bar" model="{respuestaAmbienteController.graficoModelo}" 
                                                      style="height:250px;  text-align: center; "
-                                                     />
+                                                     />-->
                                         </p:column>
                                         <p:column>
                                             <h5>Los puntajes más altos para su perfil fueron: </h5>
@@ -296,9 +308,9 @@
                                         <p:column >
                                             <div style="height:200px">
                                                 <h5>Su puntaje de juego y evaluación fue: </h5>
-                                                <p:outputLabel value="Juegos: #{encuestaController.puntosEncuesta}"/>
+                                                <p:outputLabel value="Juegos: #{encuestaController.puntos_encuesta}"/>
                                                 <br/>
-                                                <p:outputLabel value="Evaluación: #{encuestaController.puntosEval}"/><br/>
+                                                <p:outputLabel value="Evaluación: #{encuestaController.puntos_eval}"/><br/>
                                             </div>
                                             <p:commandButton value="Siguiente encuesta" ajax="true" style="float:right;" class="btn float-r "
                                                              action="#{encuestaController.pasoPreguntasPersonalidad()}"
@@ -326,6 +338,15 @@
                                  > 
                 </p:commandButton>
             </h:form>
+             <script type="text/javascript">
+                function graficar(json) {
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+                        var myChart = new Chart(ctx, json);
+                    }
+                }
+            </script>
         </ui:define>
     </ui:composition>
 </html>

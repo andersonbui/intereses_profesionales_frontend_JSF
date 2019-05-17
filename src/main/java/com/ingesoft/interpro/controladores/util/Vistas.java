@@ -81,15 +81,19 @@ public class Vistas implements Serializable {
     }
 
     public static String urlRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/registro.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/registro.xhtml";
     }
 
     public static String completarRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/completarRegistroFacebook.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/completarRegistroFacebook.xhtml";
     }
 
     public static String loginCompleta() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/login.xhtml";
+    }
+
+    public static String urlCorreoRegistro(String token) {
+        return getProtocolo() + "://" + getIP() + ":" + getPort() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
     }
 
     public static String getIP() {

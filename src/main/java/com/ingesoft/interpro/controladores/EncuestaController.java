@@ -44,6 +44,7 @@ public class EncuestaController extends Controller implements Serializable {
     private boolean evaluacion;
     private int tiempo;
     boolean detener_reloj;
+    private final String ESTADO_FINALIZADA = "FINALIZADA";
 
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
@@ -51,7 +52,6 @@ public class EncuestaController extends Controller implements Serializable {
 
     public EncuestaController() {
         detener_reloj = true;
-//        setPuntos_encuesta(0);
     }
 
     public int getTiempo() {
@@ -82,6 +82,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public int getPuntos_encuesta() {
+        System.out.println("getPuntos_encuesta encuesta: " + selected);
         return selected.getPuntajeEncuesta();
     }
 
@@ -129,6 +130,18 @@ public class EncuestaController extends Controller implements Serializable {
             }
         }
         return 0;
+    }
+
+    public String prediccion() {
+        MineriaController mineriaController = getMineriaController();
+        String prediccion = null;
+        Encuesta encuesta = getSelected();
+        if (encuesta != null) {
+            prediccion = mineriaController.predecir(encuesta);
+            prediccion = prediccion.replaceAll("--", "\n");
+            System.out.println("prediccion: <" + prediccion + ">");
+        }
+        return prediccion;
     }
 
     public void setItems(List<Encuesta> items) {
@@ -200,8 +213,6 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void incrementPuntaje() {
         detener_reloj = !detener_reloj;
-//        System.out.println("mostrar_reloj: " + detener_reloj);
-//        System.out.println("tiempo: " + tiempo);
     }
 
     public boolean isEvaluacion() {
@@ -243,31 +254,11 @@ public class EncuestaController extends Controller implements Serializable {
         selected.setPersonalidad(personalidad);
         selected.setPuntajeEncuesta(getPuntos_encuesta());
         selected.setPuntajeEvaluacion(getPuntos_eval());
+        selected.setEstado(ESTADO_FINALIZADA);
         detenerReloj();
         update();
     }
 
-//    private String obtenerPersonalidad(Encuesta encuestaAcutal) {
-//        List<RespuestaPorPersonalidad> lista = encuestaAcutal.getRespuestaPorPersonalidadList();
-//
-//        RespuestaPorPersonalidad[] valores = new RespuestaPorPersonalidad[4];
-//        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
-//            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
-//            valores[indice] = respuestaPorPersonalidad;
-//        }
-//        String personalidad = "";
-//        String perso;
-//        int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
-//
-//        for (int indice : ORDEN_RESPUESTA_PERSONALIDAD) {
-//            perso = valores[indice].getTipoPersonalidad().getTipo();
-//            personalidad += (valores[indice].getPuntaje() <= 24) ? perso.charAt(0) : perso.charAt(1);
-//        }
-//
-//        System.out.println("personalidad: " + personalidad);
-//        return personalidad;
-//    }
-    
     /**
      *
      * @param encuestaAcutal
@@ -452,8 +443,6 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
-//        String result_personalidad = "IIEJ";
-//        String result_personalidad = selected.getPersonalidad();
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
@@ -463,8 +452,6 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad_descripcion(int i, String personalidad) {
-//        String result_personalidad = "IIEJ";
-//        String result_personalidad = selected.getPersonalidad();
         String result_personalidad = personalidad;
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {

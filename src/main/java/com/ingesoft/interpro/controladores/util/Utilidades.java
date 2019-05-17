@@ -45,8 +45,7 @@ public class Utilidades {
                 "Registro en Intereses profesionales",
                 "<br><b>Cordial Saludo \nEl registro en el sistema de intereses profesionalesfue exitoso</b><br/>"
                 + "Verifique su cuenta dando click al siguinte enlace "
-                + "http://" + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName()
-                + ":8080/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml?token=" + token + "");
+                + Vistas.urlCorreoRegistro(token));
 
     }
 

@@ -106,11 +106,11 @@ public class Vistas implements Serializable {
 //        System.out.println("RemoteHost:"+req.getRemoteHost());
         System.out.println("ServerName:" + req.getServerName());
 
-        if ("10.142.0.3".equals(ip)) {
-            return "35.243.252.249";
-        } else {
-            return req.getServerName();
-        }
+//        if ("10.142.0.3".equals(ip)) {
+//            return "35.243.252.249";
+//        } else {
+        return req.getServerName();
+//        }
     }
 
     public static String getProtocolo() {

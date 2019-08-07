@@ -237,16 +237,16 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
         pasoActual += 1;
         finalizo = true;
-        
+
         //System.out.println("Paso siguiente finalizar: " + pasoActual);
         // realizar estadistica de respuestas
         realizarEstadisticas();
         // preprara 
-        
+
         EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
         estadisticaAmbienteController.setEncuesta(getEncuestaAcutal());
         estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
-        
+
         // ordenar resultados de mayor a menor, para mostrarlos 3 primeros
         ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
 
@@ -259,7 +259,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
                 return -r1.getValor().compareTo(r2.getValor());
             }
         });
-        
+
         return pasoActual;
     }
 
@@ -479,7 +479,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             items.add(selected);
         }
         cantidadRespuestas = new int[items.size()];
-        
+
         // desactivar puntaje a preguntas ya respondidas
         for (int indi : lindicesRecuperados) {
             cantidadRespuestas[indi]++;
@@ -496,6 +496,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getGrupos();
         if (items_recuperados != null && !items_recuperados.isEmpty()) {
             pasoActual = (items_recuperados.size() / 6) - 1;
+            if (pasoActual > numGrupos) {
+                pasoActual = numGrupos - 1;
+            }
         } else {
             pasoActual = 0;
         }
@@ -550,7 +553,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public List<RespuestaAmbiente> obtenerTodosPorEncuesta(Encuesta encuesta) {
         return getFacade().obtenerTodosPorEncuesta(encuesta);
     }
-    
+
     public List<RespuestaAmbiente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

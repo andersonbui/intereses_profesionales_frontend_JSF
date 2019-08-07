@@ -81,19 +81,19 @@ public class Vistas implements Serializable {
     }
 
     public static String urlRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/registro.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/registro.xhtml";
     }
 
     public static String completarRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/completarRegistroFacebook.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/completarRegistroFacebook.xhtml";
     }
 
     public static String loginCompleta() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + rutaGeneral + "/login.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/login.xhtml";
     }
 
     public static String urlCorreoRegistro(String token) {
-        return getProtocolo() + "://" + getIP() + ":" + getPort() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
+        return getProtocolo() + "://" + getIP() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
     }
 
     public static String getIP() {
@@ -125,7 +125,8 @@ public class Vistas implements Serializable {
         System.out.println("protocolo:" + req.getRequestURI());
         System.out.println("protocolo:" + req.getContentType());
         System.out.println("protocolo:" + req.changeSessionId());
-        return req.getRequestURL().toString().split(":")[0];
+//        return req.getRequestURL().toString().split(":")[0];
+        return "https";
     }
 
     public static int getPort() {

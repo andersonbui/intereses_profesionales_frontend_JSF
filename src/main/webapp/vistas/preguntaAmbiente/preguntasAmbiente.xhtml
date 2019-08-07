@@ -127,7 +127,7 @@
                                                      rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.casiFinaliza()}"
-                                                     update="@form" rendered="#{respuestaAmbienteController.esPenultimoPaso()}" >
+                                                     update="@form" rendered="#{respuestaAmbienteController.esPenultimoPaso() or respuestaAmbienteController.getnombrePaso() > 99}" >
                                     </p:commandButton>
                                 </h:panelGroup>
                             </p:panel>

@@ -88,6 +88,15 @@ public class MisReultadosController extends Controller implements Serializable {
         return prediccion;
     }
 
+    public String datosRiasec() {
+        MineriaController mineriaController = getMineriaController();
+        String prediccion = null;
+        if (encuesta != null) {
+            prediccion = mineriaController.predecir(encuesta);
+        }
+        return prediccion;
+    }
+    
     public String getPersonalidad() {
         return personalidad;
     }

@@ -74,6 +74,21 @@
                             <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
                             <br/>
                             <p:outputLabel value="Ingeniero: #{misResultadosController.prediccion()}"></p:outputLabel>
+                            <h3>On-Demand Data</h3>
+                            <p:dataTable var="dato" value="#{datosRiasecController.items}" rows="20" paginator="true">
+                                <p:column headerText="idTipoAmbiente1" >
+                                    <h:outputText value="#{dato.idTipoAmbiente1}" />
+                                </p:column>
+                                <p:column headerText="idTipoAmbiente2" >
+                                    <h:outputText value="#{dato.idTipoAmbiente2}" />
+                                </p:column>
+                                <p:column headerText="idTipoAmbiente3">
+                                    <h:outputText value="#{dato.idTipoAmbiente3}" />
+                                </p:column>
+                                <p:column headerText="profesion" >
+                                    <h:outputText value="#{dato.profesion}" />
+                                </p:column>
+                            </p:dataTable>
                         </div>
                     </div>
                 </h:panelGroup>

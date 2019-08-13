@@ -4,6 +4,7 @@ import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.TipoAmbiente;
 import com.ingesoft.interpro.facades.DatosRiasecFacade;
 
 import java.io.Serializable;
@@ -98,6 +99,11 @@ public class DatosRiasecController implements Serializable {
             items = getFacade().findAll();
         }
 //        System.out.println("items riasec: " + items );
+        return items;
+    }
+
+    public List<DatosRiasec> getItemsByTiposAmbiente(TipoAmbiente amb1, TipoAmbiente amb2, TipoAmbiente amb3) {
+        List<DatosRiasec> items = getFacade().findByTiposAmbiente(amb1, amb2, amb3);
         return items;
     }
 

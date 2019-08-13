@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "DatosRiasec.findAll", query = "SELECT d FROM DatosRiasec d"),
     @NamedQuery(name = "DatosRiasec.findByIddatosRiasec", query = "SELECT d FROM DatosRiasec d WHERE d.iddatosRiasec = :iddatosRiasec"),
-    @NamedQuery(name = "DatosRiasec.findByProfesion", query = "SELECT d FROM DatosRiasec d WHERE d.profesion = :profesion")})
+    @NamedQuery(name = "DatosRiasec.findByProfesion", query = "SELECT d FROM DatosRiasec d WHERE d.profesion = :profesion"),
+    @NamedQuery(name = "DatosRiasec.findByTiposAmbiente", query = "SELECT DISTINCT d FROM DatosRiasec d WHERE d.idTipoAmbiente1 = :amb1 AND d.idTipoAmbiente2 = :amb2 AND d.idTipoAmbiente3 = :amb3")
+})
 public class DatosRiasec implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -106,6 +108,19 @@ public class DatosRiasec implements Serializable {
         return hash;
     }
 
+//    @Override
+//    public boolean equals(Object object) {
+//        // TODO: Warning - this method won't work in the case the id fields are not set
+//        if (!(object instanceof DatosRiasec)) {
+//            return false;
+//        }
+//        DatosRiasec other = (DatosRiasec) object;
+//        if ((this.iddatosRiasec == null && other.iddatosRiasec != null) || (this.iddatosRiasec != null && !this.iddatosRiasec.equals(other.iddatosRiasec))) {
+//            return false;
+//        }
+//        return true;
+//    }
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -113,7 +128,15 @@ public class DatosRiasec implements Serializable {
             return false;
         }
         DatosRiasec other = (DatosRiasec) object;
-        if ((this.iddatosRiasec == null && other.iddatosRiasec != null) || (this.iddatosRiasec != null && !this.iddatosRiasec.equals(other.iddatosRiasec))) {
+        if ((this.idTipoAmbiente1 == null && other.idTipoAmbiente1 != null) || 
+                (this.idTipoAmbiente2 == null && other.idTipoAmbiente2 != null) || 
+                (this.idTipoAmbiente3 == null && other.idTipoAmbiente3 != null) ||
+                (this.profesion == null && other.profesion != null) ||
+                (this.idTipoAmbiente1 != null && !this.idTipoAmbiente1.equals(other.idTipoAmbiente1)) ||
+                (this.idTipoAmbiente2 != null && !this.idTipoAmbiente2.equals(other.idTipoAmbiente2)) ||
+                (this.idTipoAmbiente3 != null && !this.idTipoAmbiente3.equals(other.idTipoAmbiente3)) ||
+                (this.profesion != null && !this.profesion.equals(other.profesion))
+            ) {
             return false;
         }
         return true;
@@ -123,5 +146,5 @@ public class DatosRiasec implements Serializable {
     public String toString() {
         return "iddatosRiasec=" + iddatosRiasec + "";
     }
-    
+
 }

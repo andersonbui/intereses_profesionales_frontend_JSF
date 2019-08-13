@@ -6,9 +6,12 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.DatosRiasec;
+import com.ingesoft.interpro.entidades.TipoAmbiente;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +31,16 @@ public class DatosRiasecFacade extends AbstractFacade<DatosRiasec> {
     public DatosRiasecFacade() {
         super(DatosRiasec.class);
     }
-    
+
+    public List<DatosRiasec> findByTiposAmbiente(TipoAmbiente amb1, TipoAmbiente amb2, TipoAmbiente amb3) {
+        Query query = em.createNamedQuery("DatosRiasec.findByTiposAmbiente");
+        query.setParameter("amb1", amb1);
+        query.setParameter("amb2", amb2);
+        query.setParameter("amb3", amb3);
+        List<DatosRiasec> lista = query.getResultList();
+        if (!lista.isEmpty()) {
+            return lista;
+        }
+        return null;
+    }
 }

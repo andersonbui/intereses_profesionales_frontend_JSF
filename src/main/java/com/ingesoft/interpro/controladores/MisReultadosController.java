@@ -97,53 +97,20 @@ public class MisReultadosController extends Controller implements Serializable {
 
     public List<DatosRiasec> datosRiasec() {
         if (listaresUnicos != null) {
+            System.out.println("listaresUnicos != null) : " + listaresUnicos);
             return listaresUnicos;
         }
-        EncuestaController encuestaController = getEncuestaController();
-        encuestaController.setSelected(encuesta);
-        EstudianteController estudianteController = getEstudianteController();
-        estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
-//        estudianteController.setEncuesta(estudiante);
-        String cadena = "";
-        DatosAmbiente[] datos = null;
+        System.out.println("encuesta : " + encuesta);
         if (encuesta != null) {
-            List<Encuesta> encuestas = new ArrayList();
-            encuestas.add(encuesta);
-            personalidad = encuesta.getPersonalidad();
-            encuestaController.setItems(encuestas);
-            datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(encuesta);
+            System.out.println("encuesta!= null : " + listaresUnicos);
+            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(encuesta);
         } else {
-            List<Encuesta> encuestas = encuestaController.listarEncuestasSelected(estudiante);
-            if (encuestas != null) {
-                encuestaController.setItems(encuestas);
-                personalidad = encuestaController.obtenerPromedioPersonalidad(encuestas);
-                datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(estudiante);
-            }
+            System.out.println("else : " + listaresUnicos);
+            EstudianteController estudianteController = getEstudianteController();
+            estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
+            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(estudiante);
         }
-        if (datos != null) {
-            List<DatosAmbiente> lista = Arrays.asList(datos);
-            // escoger los 3 de mas alto puntaje
-            Collections.sort(lista);
-            TipoAmbiente amb1 = lista.get(0).getTipoAmbiente();
-            TipoAmbiente amb2 = lista.get(1).getTipoAmbiente();
-            TipoAmbiente amb3 = lista.get(2).getTipoAmbiente();
-//        String cad = lista.get(0).getValor() + " - " + lista.get(1).getValor() + " - " + lista.get(2).getValor();
-            String ambientes = amb1 + " - " + amb2 + " - " + amb3;
-//        cadena = Arrays.toString(datos);
-//            System.out.println("cadenacadena = ambientes AMB1: " + amb1 + " AMB2: " + amb2 + " AMB3: " + amb3);
-
-            List<DatosRiasec> listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-            // Escoger solo los valores unicos
-            List<DatosRiasec> listaresUnicos = new ArrayList();
-            for (DatosRiasec datosR : listares) {
-                if (!listaresUnicos.contains(datosR)) {
-                    listaresUnicos.add(datosR);
-                }
-            }
-//            System.out.println("cadenacadena = listares " + listaresUnicos);
-            return listaresUnicos;
-        }
-        return null;
+        return listaresUnicos;
     }
 
     public String getPersonalidad() {
@@ -161,4 +128,17 @@ public class MisReultadosController extends Controller implements Serializable {
         return Vistas.misResultados();
     }
 
+    public List<DatosRiasec> datosRiasec2() {
+        if (listaresUnicos != null) {
+            return listaresUnicos;
+        }
+        EstudianteController estudianteController = getEstudianteController();
+        estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
+        if (encuesta != null) {
+            listaresUnicos = getEstadisticaAmbienteController().obtenerDatosRiasec(encuesta);
+        } else {
+            listaresUnicos = getEstadisticaAmbienteController().obtenerDatosRiasec(estudiante);
+        }
+        return listaresUnicos;
+    }
 }

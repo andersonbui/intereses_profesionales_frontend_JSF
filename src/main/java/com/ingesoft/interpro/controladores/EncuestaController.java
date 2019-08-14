@@ -226,6 +226,7 @@ public class EncuestaController extends Controller implements Serializable {
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
+        System.out.println("encuesta en pasoPreguntasAmbiente(): "+selected);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 

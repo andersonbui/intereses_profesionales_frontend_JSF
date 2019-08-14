@@ -294,9 +294,12 @@
                                                 <p:outputLabel value="#{item.tipoAmbiente.tipo}: "/>
                                                 <p:outputLabel value="#{item.valor}"/><br/>
                                             </ui:repeat>
-                                            <h5>El área de conocimiento seleccionada para su perfil es: </h5>
-                                            <p:outputLabel value="Ingeniería, Arquitectura y Urbanismo, Matemáticas y Ciencias Naturales "/><br/>
-
+                                            <h3>Profesiones Comunes para tus habilidades</h3>
+                                            <p:dataTable var="dato" value="#{estadisticaAmbienteController.getListaDatosRaisec()}" rows="5" paginator="true">
+                                                <p:column headerText="profesion" >
+                                                    <h:outputText value="#{dato.profesion}" />
+                                                </p:column>
+                                            </p:dataTable>
                                         </p:column>
                                     </p:row>
 

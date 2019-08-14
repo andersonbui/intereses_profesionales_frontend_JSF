@@ -246,6 +246,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
         estadisticaAmbienteController.setEncuesta(getEncuestaAcutal());
         estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
+        estadisticaAmbienteController.obtenerDatosRiasec(getEncuestaAcutal());
 
         // ordenar resultados de mayor a menor, para mostrarlos 3 primeros
         ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();

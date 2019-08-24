@@ -239,13 +239,34 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 //            System.out.println("cadenacadena = ambientes AMB1: " + amb1 + " AMB2: " + amb2 + " AMB3: " + amb3);
 
         List<DatosRiasec> listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-        // Escoger solo los valores unicos
         List<DatosRiasec> unaListaresUnicos = new ArrayList();
-        for (DatosRiasec datosR : listares) {
-            if (!unaListaresUnicos.contains(datosR)) {
-                unaListaresUnicos.add(datosR);
+        int tipo_original = amb3.getIdTipoAmbiente();
+        // Escoger solo los valores unicos
+        while (listares == null) {
+            System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
+            int tipoamb = amb3.getIdTipoAmbiente();
+            if (tipoamb > 0) {
+                tipoamb--;
+            } else {
+                tipoamb = 5;
+            }
+            if(tipoamb == tipo_original) {
+                break;
+            }
+            amb3 = getTipoAmbienteController().getTipoAmbiente(tipoamb);
+            listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
+            
+            System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
+        }
+
+        if (listares != null) {
+            for (DatosRiasec datosR : listares) {
+                if (!unaListaresUnicos.contains(datosR)) {
+                    unaListaresUnicos.add(datosR);
+                }
             }
         }
+
         return unaListaresUnicos;
     }
 
@@ -488,7 +509,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
             datos.setValor(datos.getValor() + (double) result.getValor());
         }
         for (DatosAmbiente listaDato : listaDatos) {
-            listaDato.setValor(listaDato.getValor() * 6  / listaResultadosPorAmbiente.size());
+            listaDato.setValor(listaDato.getValor() * 6 / listaResultadosPorAmbiente.size());
         }
         return listaDatos;
     }

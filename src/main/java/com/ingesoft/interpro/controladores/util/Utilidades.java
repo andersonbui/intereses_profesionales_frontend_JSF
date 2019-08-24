@@ -128,7 +128,7 @@ public class Utilidades {
     public static boolean esDesarrollo() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String myConstantValue = ctx.getExternalContext().getInitParameter("javax.faces.PROJECT_STAGE");
-        System.out.println("myConstantValue: " + myConstantValue);
+//        System.out.println("myConstantValue: " + myConstantValue);
         return "Development".equals(myConstantValue);
     }
 }

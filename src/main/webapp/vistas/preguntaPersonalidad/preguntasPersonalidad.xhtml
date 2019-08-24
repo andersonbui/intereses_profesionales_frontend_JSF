@@ -109,7 +109,8 @@
                                 <p:outputLabel value="Su personalidad es:" style="font-size: 30px; font-weight:bold;"/>
                                 <p:outputLabel style="font-size: 30px; font-weight:bold;"/>
                                 <p:outputLabel value="#{encuestaController.selected.personalidad}"/><br/> <br/>
-                                <center><c:forEach begin="0" end="3" var="index">
+                                <center>
+                                    <c:forEach begin="0" end="3" var="index">
                                         <div class="personalidad">
                                             <div>
                                                 <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" name="#{encuestaController.resultado_personalidad(index,encuestaController.selected.personalidad)}" class="img_personalidad" style="" />   
@@ -118,7 +119,8 @@
                                                 <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" class="txt_personalidad" />
                                             </div>
                                         </div>
-                                    </c:forEach></center>
+                                    </c:forEach>
+                                </center>
                             </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black; display: block;" >

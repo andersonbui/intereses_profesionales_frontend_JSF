@@ -1,14 +1,19 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.DatosAmbiente;
 import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.TipoAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -24,6 +29,7 @@ public class MisReultadosController extends Controller implements Serializable {
     private String string_grafico;
 
     private String personalidad;
+    List<DatosRiasec> listaresUnicos;
 
     public MisReultadosController() {
 
@@ -40,6 +46,7 @@ public class MisReultadosController extends Controller implements Serializable {
     public void reiniciarEstadistica() {
         System.out.println("reiniciando ...");
         string_grafico = null;
+        listaresUnicos = null;
     }
 
     public String getGraficoModelo() {
@@ -88,6 +95,24 @@ public class MisReultadosController extends Controller implements Serializable {
         return prediccion;
     }
 
+    public List<DatosRiasec> datosRiasec() {
+        if (listaresUnicos != null) {
+            System.out.println("listaresUnicos != null) : " + listaresUnicos);
+            return listaresUnicos;
+        }
+        System.out.println("encuesta : " + encuesta);
+        if (encuesta != null) {
+            System.out.println("encuesta!= null : " + listaresUnicos);
+            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(encuesta);
+        } else {
+            System.out.println("else : " + listaresUnicos);
+            EstudianteController estudianteController = getEstudianteController();
+            estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
+            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(estudiante);
+        }
+        return listaresUnicos;
+    }
+
     public String getPersonalidad() {
         return personalidad;
     }
@@ -103,4 +128,17 @@ public class MisReultadosController extends Controller implements Serializable {
         return Vistas.misResultados();
     }
 
+    public List<DatosRiasec> datosRiasec2() {
+        if (listaresUnicos != null) {
+            return listaresUnicos;
+        }
+        EstudianteController estudianteController = getEstudianteController();
+        estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
+        if (encuesta != null) {
+            listaresUnicos = getEstadisticaAmbienteController().obtenerDatosRiasec(encuesta);
+        } else {
+            listaresUnicos = getEstadisticaAmbienteController().obtenerDatosRiasec(estudiante);
+        }
+        return listaresUnicos;
+    }
 }

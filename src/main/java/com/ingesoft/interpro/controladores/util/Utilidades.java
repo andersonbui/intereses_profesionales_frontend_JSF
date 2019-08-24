@@ -45,8 +45,7 @@ public class Utilidades {
                 "Registro en Intereses profesionales",
                 "<br><b>Cordial Saludo \nEl registro en el sistema de intereses profesionalesfue exitoso</b><br/>"
                 + "Verifique su cuenta dando click al siguinte enlace "
-                + "http://" + FacesContext.getCurrentInstance().getExternalContext().getRequestServerName()
-                + ":8080/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml?token=" + token + "");
+                + Vistas.urlCorreoRegistro(token));
 
     }
 
@@ -129,7 +128,7 @@ public class Utilidades {
     public static boolean esDesarrollo() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String myConstantValue = ctx.getExternalContext().getInitParameter("javax.faces.PROJECT_STAGE");
-        System.out.println("myConstantValue: " + myConstantValue);
+//        System.out.println("myConstantValue: " + myConstantValue);
         return "Development".equals(myConstantValue);
     }
 }

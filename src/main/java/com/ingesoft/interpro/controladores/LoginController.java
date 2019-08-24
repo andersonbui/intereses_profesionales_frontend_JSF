@@ -5,7 +5,6 @@
  */
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
@@ -18,9 +17,6 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,10 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
-import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
 import org.brickred.socialauth.util.AccessGrant;
-import org.brickred.socialauth.util.SocialAuthUtil;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -59,9 +53,6 @@ public class LoginController extends Controller implements Serializable {
     boolean logueado;
     private List<GrupoUsuario> grupos;
 
-//    private final String mainURL = "http://localhost:8080/intereses_profesionales_frontend_JSF/faces/login.xhtml";
-//    private final String redirectURL;
-    //private final String redirectURL = "http://www.codewebpro.com/blog";
     private final String provider = "facebook";
 
     public LoginController() {
@@ -105,7 +96,7 @@ public class LoginController extends Controller implements Serializable {
 
                 // datos de usuario
                 usuario = ap.getUserProfile().getEmail();
-                password = ap.getProviderId();
+                password = ap.getUserProfile().getValidatedId();
                 if (login()) {
                     FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());
                 }

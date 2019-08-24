@@ -104,6 +104,7 @@ public class AreaEncuestaController extends Controller implements Serializable {
             selected.setEncuesta(encuesta);
             selected.getAreaEncuestaPK().setPosicion((short) posicion);
             selected.setTipoEleccionMateria(tipoEleccionMateria);
+            areaEncuesta = selected;
         }
         return areaEncuesta;
     }

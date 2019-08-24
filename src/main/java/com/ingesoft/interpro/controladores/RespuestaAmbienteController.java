@@ -49,29 +49,19 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
-//    private int tiempo;
-//    private int puntos;
     private int[] cantidadRespuestas;
     private List<Integer> gruposPreguntas;
     private List<String> images;
-//    private List<Character> listaValoresAmbiente;
     private List<RespuestaAmbiente> grupo = null;
-//    Encuesta EncuestaAcutal;
     private boolean finalizo;
-    private BarChartModel graficoModelo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
-//    private boolean isEvaluacion;
-//    boolean detener_reloj;
 
     public RespuestaAmbienteController() {
         tamGrupo = 6;
         numGrupos = 1;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
-//        listaValoresAmbiente = null;
         pasoActual = 0;
-//        puntos = 0;
-//        detener_reloj = true;
     }
 
     public Encuesta getEncuestaAcutal() {
@@ -80,41 +70,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public void reiniciar() {
         pasoActual = 0;
-//        puntos = 0;
         gruposPreguntas = null;
         listaResultadosPorAmbiente = null;
-//        listaValoresAmbiente = null;
         setEvaluacion(false);
-//        detener_reloj = true;
-    }
-
-    public BarChartModel getGraficoModelo() {
-        graficoModelo = new BarChartModel();
-//        EncuestaAcutal = grupo.get(0).getEncuesta(); ERROR
-        ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
-
-        if (listaResultadosPorAmbiente == null) {
-            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(getEncuestaAcutal().getIdEncuesta());
-        }
-        int i = 0;
-        ChartSeries barra = null;
-//        System.out.println("lista:" + listaResultadosPorAmbiente);
-        Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
-            @Override
-            public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
-                return -r1.getValor().compareTo(r2.getValor());
-            }
-        });
-        for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-            barra = new ChartSeries("ambiente:--");
-            barra.set(result.getTipoAmbiente().getTipo(), result.getValor());
-            barra.setLabel(result.getTipoAmbiente().getTipo());
-//            System.out.println("result:" + result.getValor());
-            graficoModelo.addSeries(barra);
-        }
-        graficoModelo.setSeriesColors("008000,FF0000,FFD42A,0000FF,FFFF00,00FFFF");
-        graficoModelo.setShowPointLabels(true);
-        return graficoModelo;
     }
 
     public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente() {
@@ -216,6 +174,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             detenerReloj();
             setEvaluacion(true);
 //            System.out.println("reloj: "+relojDetenido());
+
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }
@@ -262,6 +221,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         reinicioPasoActualEvaluacion();
         detenerReloj();
         getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
+        getEncuestaController().guardarSelected();
     }
 
     /**
@@ -279,9 +239,31 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }
         pasoActual += 1;
         finalizo = true;
-        System.out.println("Paso siguiente finalizar: " + pasoActual);
+
+        //System.out.println("Paso siguiente finalizar: " + pasoActual);
         // realizar estadistica de respuestas
         realizarEstadisticas();
+        
+        getEncuestaController().guardarSelected();
+        // preprara 
+        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
+        estadisticaAmbienteController.setEncuesta(getEncuestaAcutal());
+        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
+        estadisticaAmbienteController.obtenerDatosRiasec(getEncuestaAcutal());
+
+        // ordenar resultados de mayor a menor, para mostrarlos 3 primeros
+        ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
+
+        if (listaResultadosPorAmbiente == null) {
+            listaResultadosPorAmbiente = resultadoPorAmbienteController.getItemsPorEncuesta(getEncuestaAcutal().getIdEncuesta());
+        }
+        Collections.sort(listaResultadosPorAmbiente, new Comparator<ResultadoPorAmbiente>() {
+            @Override
+            public int compare(ResultadoPorAmbiente r1, ResultadoPorAmbiente r2) {
+                return -r1.getValor().compareTo(r2.getValor());
+            }
+        });
+
         return pasoActual;
     }
 
@@ -501,10 +483,13 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             items.add(selected);
         }
         cantidadRespuestas = new int[items.size()];
-        
+
         // desactivar puntaje a preguntas ya respondidas
         for (int indi : lindicesRecuperados) {
             cantidadRespuestas[indi]++;
+        }
+        if(encuesta.getPuntajeEncuesta() == null) {
+            encuesta.setPuntajeEncuesta(lindicesRecuperados.size());
         }
         // @desarrollo
         if (Utilidades.esDesarrollo()) {
@@ -518,6 +503,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getGrupos();
         if (items_recuperados != null && !items_recuperados.isEmpty()) {
             pasoActual = (items_recuperados.size() / 6) - 1;
+            if (pasoActual > numGrupos) {
+                pasoActual = numGrupos - 1;
+            }
         } else {
             pasoActual = 0;
         }
@@ -572,7 +560,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public List<RespuestaAmbiente> obtenerTodosPorEncuesta(Encuesta encuesta) {
         return getFacade().obtenerTodosPorEncuesta(encuesta);
     }
-    
+
     public List<RespuestaAmbiente> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

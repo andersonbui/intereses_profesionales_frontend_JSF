@@ -81,15 +81,19 @@ public class Vistas implements Serializable {
     }
 
     public static String urlRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/registro.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/registro.xhtml";
     }
 
     public static String completarRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/completarRegistroFacebook.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/completarRegistroFacebook.xhtml";
     }
 
     public static String loginCompleta() {
-        return getProtocolo() + "://" + Vistas.getIP() + ":" + getPort() + "/intereses_profesionales_frontend_JSF/faces/login.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/login.xhtml";
+    }
+
+    public static String urlCorreoRegistro(String token) {
+        return getProtocolo() + "://" + getIP() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
     }
 
     public static String getIP() {
@@ -102,11 +106,11 @@ public class Vistas implements Serializable {
 //        System.out.println("RemoteHost:"+req.getRemoteHost());
         System.out.println("ServerName:" + req.getServerName());
 
-        if ("10.142.0.3".equals(ip)) {
-            return "35.243.252.249";
-        } else {
-            return req.getServerName();
-        }
+//        if ("10.142.0.3".equals(ip)) {
+//            return "35.243.252.249";
+//        } else {
+        return req.getServerName();
+//        }
     }
 
     public static String getProtocolo() {
@@ -121,7 +125,8 @@ public class Vistas implements Serializable {
         System.out.println("protocolo:" + req.getRequestURI());
         System.out.println("protocolo:" + req.getContentType());
         System.out.println("protocolo:" + req.changeSessionId());
-        return req.getRequestURL().toString().split(":")[0];
+//        return req.getRequestURL().toString().split(":")[0];
+        return "https";
     }
 
     public static int getPort() {

@@ -114,6 +114,13 @@ public abstract class Controller implements Serializable {
         return mineriaController;
     }
 
+    public DatosRiasecController getDatosRiasecController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        DatosRiasecController datosRiasecController = (DatosRiasecController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "datosRiasecController");
+        return datosRiasecController;
+    }
+
     public UsuarioController getUsuarioController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UsuarioController usuarioController = (UsuarioController) facesContext.getApplication().getELResolver().

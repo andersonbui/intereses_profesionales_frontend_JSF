@@ -35,6 +35,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TipoAmbiente.findByDefinicion", query = "SELECT t FROM TipoAmbiente t WHERE t.definicion = :definicion")})
 public class TipoAmbiente implements Serializable {
 
+    @OneToMany(mappedBy = "idTipoAmbiente1")
+    private List<DatosRiasec> datosRiasecList;
+    @OneToMany(mappedBy = "idTipoAmbiente2")
+    private List<DatosRiasec> datosRiasecList1;
+    @OneToMany(mappedBy = "idTipoAmbiente3")
+    private List<DatosRiasec> datosRiasecList2;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -146,6 +153,33 @@ public class TipoAmbiente implements Serializable {
     @Override
     public String toString() {
         return "TipoAmbiente[ idTipoAmbiente=" + idTipoAmbiente + " ]";
+    }
+
+    @XmlTransient
+    public List<DatosRiasec> getDatosRiasecList() {
+        return datosRiasecList;
+    }
+
+    public void setDatosRiasecList(List<DatosRiasec> datosRiasecList) {
+        this.datosRiasecList = datosRiasecList;
+    }
+
+    @XmlTransient
+    public List<DatosRiasec> getDatosRiasecList1() {
+        return datosRiasecList1;
+    }
+
+    public void setDatosRiasecList1(List<DatosRiasec> datosRiasecList1) {
+        this.datosRiasecList1 = datosRiasecList1;
+    }
+
+    @XmlTransient
+    public List<DatosRiasec> getDatosRiasecList2() {
+        return datosRiasecList2;
+    }
+
+    public void setDatosRiasecList2(List<DatosRiasec> datosRiasecList2) {
+        this.datosRiasecList2 = datosRiasecList2;
     }
     
 }

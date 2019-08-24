@@ -174,6 +174,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             detenerReloj();
             setEvaluacion(true);
 //            System.out.println("reloj: "+relojDetenido());
+
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }
@@ -220,6 +221,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         reinicioPasoActualEvaluacion();
         detenerReloj();
         getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
+        getEncuestaController().guardarSelected();
     }
 
     /**
@@ -241,8 +243,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         //System.out.println("Paso siguiente finalizar: " + pasoActual);
         // realizar estadistica de respuestas
         realizarEstadisticas();
+        
+        getEncuestaController().guardarSelected();
         // preprara 
-
         EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
         estadisticaAmbienteController.setEncuesta(getEncuestaAcutal());
         estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
@@ -484,6 +487,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         // desactivar puntaje a preguntas ya respondidas
         for (int indi : lindicesRecuperados) {
             cantidadRespuestas[indi]++;
+        }
+        if(encuesta.getPuntajeEncuesta() == null) {
+            encuesta.setPuntajeEncuesta(lindicesRecuperados.size());
         }
         // @desarrollo
         if (Utilidades.esDesarrollo()) {

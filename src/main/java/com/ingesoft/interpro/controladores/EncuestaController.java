@@ -77,13 +77,21 @@ public class EncuestaController extends Controller implements Serializable {
         selected.setPuntajeEncuesta(puntos_encuesta);
     }
 
-    public int getPuntos_eval() {
-        return selected.getPuntajeEvaluacion();
+    public Integer getPuntos_eval() {
+        Integer valor = selected.getPuntajeEvaluacion();
+        if (valor != null) {
+            return valor;
+        }
+        return 0;
     }
 
-    public int getPuntos_encuesta() {
+    public Integer getPuntos_encuesta() {
         System.out.println("getPuntos_encuesta encuesta: " + selected);
-        return selected.getPuntajeEncuesta();
+        Integer valor = selected.getPuntajeEncuesta();
+        if (valor != null) {
+            return valor;
+        }
+        return 0;
     }
 
     public void aumentarPuntos() {
@@ -226,7 +234,7 @@ public class EncuestaController extends Controller implements Serializable {
     public void pasoPreguntasAmbiente() throws IOException {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
-        System.out.println("encuesta en pasoPreguntasAmbiente(): "+selected);
+        System.out.println("encuesta en pasoPreguntasAmbiente(): " + selected);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 
@@ -370,7 +378,11 @@ public class EncuestaController extends Controller implements Serializable {
         return valor == null ? 1 : valor;
     }
 
-    public Encuesta actualizarSelected() {
+    public void guardarSelected() {
+        getFacade().edit(getSelected());
+    }
+
+    private Encuesta actualizarSelected() {
         selected = getFacade().find(selected.getIdEncuesta());
         return selected;
     }

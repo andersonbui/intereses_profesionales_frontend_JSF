@@ -64,8 +64,9 @@
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico">
                     </p:commandButton>
+                    
                     <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
-
+                        
                         <h1 style="text-align: center;" value="">Personalidad: #{estadisticaAmbienteController.personalidad}</h1>
                         <center class="grupo-img-personalidad">
                             <c:forEach begin="0" end="3" var="index">
@@ -96,7 +97,7 @@
                             </h:body>
                         </div>
                         <div>
-                            <p:outputLabel value="Puntaje encuesta: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
+                            <p:outputLabel value="Puntaje de Juego: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
                             <br/>
                             <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
                         </div>

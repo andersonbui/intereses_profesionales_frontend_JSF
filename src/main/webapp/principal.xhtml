@@ -65,12 +65,13 @@
                                 </h:form> 
                             </ul>
                             <h:form class="form-inline my-2 my-lg-0">
-                                <!--                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                                <!--   <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
                                                                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-                                <ul class="navbar-nav mr-auto float-r"  style="">
+                                <p:link href="/faces/vistas/miperfil/VerPerfil.xhtml" style="padding: 0px 5px"><b>#{loginController.personaActual.email}</b></p:link>
+                                <ul class="navbar-nav mr-auto float-r"  style="margin: 0px 5px">
                                     <h:form class="float-r " >
                                         <li class="nav-item active">
-                                            <p:commandLink class="nav-link" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
+                                            <p:commandLink class="btn btn-outline-success my-2 my-sm-0" actionListener="#{loginController.salir()}" >Salir  <span class="sr-only">(current)</span></p:commandLink>
                                         </li>
                                     </h:form>
                                 </ul>
@@ -90,6 +91,7 @@
                     <p:growl id="messages" showDetail="true"/>
                     <p:menu style="width: 185px;">
                         <p:submenu label="Opciones" rendered="#{loginController.permisoEstudiante()}">
+                            <p:menuitem value="Inicio" outcome="/vistas/inicio.xhtml"/>
                             <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Encuesta" rendered="#{loginController.estudiante}">

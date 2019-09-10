@@ -257,11 +257,6 @@
                                                      update=":PreguntaAmbienteForm, @form" 
                                                      rendered="#{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or encuestaController.esDesarrollo()}" >
                                     </p:commandButton>
-                                     <p:commandButton class="float-r btn" value="Finalizar" ajax="true" 
-                                                     action="#{encuestaController.detenerReloj()}" 
-                                                     actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
-                                                     update=":PreguntaAmbienteForm, @form" >
-                                    </p:commandButton>
                                 </h:panelGroup>
                             </p:panel> 
                             <!--</p:panel>--> 

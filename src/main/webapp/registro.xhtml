@@ -109,18 +109,18 @@
                                         placeholder="Vuelva a ingresar su contrase&ntilde;a"  
                                         required="true"
                                         requiredMessage="Es necesario verificar la contrasen&ntilde;a"
-                                        validatorMessage="verificacion de codigo fallida."
+                                        validatorMessage="verificacion de c&oacute;digo fallida."
                                         />
                         </div>
 
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
                                           actionListener="#{registroController.registrarse}"  
-                                          update="@form,growl"  value="Registrate">
+                                          update="@form,growl"  value="Reg&iacute;strate">
                         </p:commandButton>
 
                     </h:form>
                     <div class="text-center p-t-57 p-b-20" >
-                        <b>O registrate con</b>
+                        <b>O reg&iacute;strate con</b>
                     </div>
 
                     <h:form>
@@ -128,12 +128,12 @@
                             <h:commandLink class="login100-social-item bg1" action="#{registroController.registroFacebook()}">
                                 <i class="fab fa-facebook-f" alt="f" ></i>
                             </h:commandLink >
-                            <h:commandLink class="login100-social-item  bg2" action="#{loginController.conectar()}" >
+<!--                            <h:commandLink class="login100-social-item  bg2" action="{loginController.conectar()}" >
                                 <i class="fab fa-google" alt="google" ></i>
                             </h:commandLink >
                             <a href="#" class="login100-social-item bg3">
                                 <i class="fab fa-twitter"></i>
-                            </a>
+                            </a>-->
                         </div>
                     </h:form>
 

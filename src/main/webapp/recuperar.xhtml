@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
         <meta charset="UTF-8"></meta>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
-        <title>Login Social com JSF</title>
+        <title>Recuperar contraseña</title>
         <h:outputStylesheet library="css" name="util.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
         <style type="text/css">    
@@ -66,20 +66,13 @@
                 <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
                 <p:growl id="growl" showDetail="true" autoUpdate="true"/>
                 <span class="login100-form-title p-b-37" >
-                    Registro
+                    Recuperar contraseña
                 </span>
                 <div rendered="#{empty loginController.profile}">
                     <h:form class="login100-form validate-form">
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese c&oacute;digo de registro">
-                            <p:inputText  id="login-codigo"  class="form-control"
-                                          label="codigo"  value="#{registroController.codigo}"  
-                                          placeholder="Ingrese un c&oacute;digo de registro" 
-                                          required="true"
-                                          requiredMessage="Es necesario ingresar un c&oacute;digo de registro"
-                                          />
-                            <span style="color:graytext; font-size: 0.8em;" >Si no tienes c&oacute;digo, solic&iacute;talo al administrador</span>
-                        </div>
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electr&oacute;nico">
+                        <span>Ingrese su correo electr&oacute;nico</span>
+                        <br/><br/>
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Correo electr&oacute;nico">
                             <p:inputText id="login-username"  class="form-control"
                                          label="username"  value="#{registroController.usuario}" 
                                          placeholder="Ingrese su correo electr&oacute;nico"  
@@ -90,55 +83,15 @@
                                 <f:validator validatorId="emailValidator" />
                             </p:inputText>
                         </div>
-                        <div class="wrap-input100 validate-input m-b-20" >
-                            <p:password id="password" 
-                                        class="form-control"  
-                                        match="password2"
-                                        label="password" 
-                                        value="#{registroController.password}" 
-                                        placeholder="Ingrese su contrase&ntilde;a" 
-                                        required="true" 
-                                        requiredMessage="Es necesario ingresar una contrase&ntilde;a"
-                                        />
-                        </div>
-                        <div class="wrap-input100 validate-input m-b-20" >
-                            <p:password id="password2" 
-                                        class="form-control"
-                                        label="password" 
-                                        value="#{registroController.password}" 
-                                        placeholder="Vuelva a ingresar su contrase&ntilde;a"  
-                                        required="true"
-                                        requiredMessage="Es necesario verificar la contrasen&ntilde;a"
-                                        validatorMessage="verificacion de c&oacute;digo fallida."
-                                        />
-                        </div>
 
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
-                                          actionListener="#{registroController.registrarse}"  
-                                          update="@form,growl"  value="Reg&iacute;strate">
+                                          actionListener="#{registroController.recuperar}"  
+                                          update="@form,growl"  value="Recuperar">
                         </p:commandButton>
 
                     </h:form>
-                    <div class="text-center p-t-57 p-b-20" >
-                        <b>O reg&iacute;strate con</b>
-                    </div>
-
-                    <h:form>
-                        <div class="flex-c p-b-20" >
-                            <h:commandLink class="login100-social-item bg1" action="#{registroController.registroFacebook()}">
-                                <i class="fab fa-facebook-f" alt="f" ></i>
-                            </h:commandLink >
-<!--                            <h:commandLink class="login100-social-item  bg2" action="{loginController.conectar()}" >
-                                <i class="fab fa-google" alt="google" ></i>
-                            </h:commandLink >
-                            <a href="#" class="login100-social-item bg3">
-                                <i class="fab fa-twitter"></i>
-                            </a>-->
-                        </div>
-                    </h:form>
-
+                   <br/>
                     <dir class="text-center">
-                        <b>¿Ya tienes una cuenta? </b><br/>
                         <p:link outcome="/login.xhtml" style="color:#0F91FF" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
                     </dir>
                 </div>

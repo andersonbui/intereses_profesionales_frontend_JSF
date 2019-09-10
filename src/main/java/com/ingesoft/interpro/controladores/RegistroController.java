@@ -245,6 +245,36 @@ public class RegistroController extends Controller implements Serializable {
 
     }
 
+    public void recuperar(ActionEvent e) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage msg;
+        try {
+            
+            UsuarioController usuarioController = getUsuarioController();
+            Usuario un_usuario  = usuarioController.obtUsuarioPorEmail(usuario);
+
+            if (un_usuario != null) {
+                // recuperar usuario
+                un_usuario.setTokenAcesso(Utilidades.generarToken("" + un_usuario.getIdUsuario()));
+                usuarioController.setSelected(un_usuario);
+                usuarioController.update();
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
+                // enviar email 
+                Utilidades.enviarCorreoDeRegistro(getUsuario(), un_usuario.getTokenAcesso());
+                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRecuperar.xhtml");
+//                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
+                //TODO
+            } else {
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Email no existe, por favor verifique.", "");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un Error, Intentalo mas tarde", "");
+        }
+        context.addMessage(null, msg);
+
+    }
+
     public Usuario realizarRegistro() {
         CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
         codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);

@@ -45,6 +45,8 @@
                                           oncomplete="manejarLogin(xhr, status, args)" 
                                           >
                         </p:commandButton>
+                        <br/><br/>
+                        <p:link outcome="/recuperar.xhtml" style="color:#0F91FF" >¿Olvidaste la contraseña?</p:link>
 
                         <div class="text-center p-t-57 p-b-20" >
                             <b>O inicia sesi&oacute;n con</b><br/>
@@ -63,7 +65,7 @@
 
                         <dir class="text-center" style="margin-top: 20px;">
                             <b>¿No tienes una cuenta? </b><br/>
-                            <p:link outcome="/registro.xhtml" class="txt2 hov1" >Registrate</p:link>
+                            <p:link outcome="/registro.xhtml" style="color:#0F91FF" class="txt2 hov1" >Registrate</p:link>
                         </dir>
                     </div>
                     <h:panelGrid rendered="#{not empty loginController.profile}">

@@ -42,6 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByFechaCreacion", query = "SELECT u FROM Usuario u WHERE u.fechaCreacion = :fechaCreacion")
     , @NamedQuery(name = "Usuario.findByTokenAcesso", query = "SELECT u FROM Usuario u WHERE u.tokenAcesso = :tokenAcesso")
     , @NamedQuery(name = "Usuario.findByFechaExpiracionToken", query = "SELECT u FROM Usuario u WHERE u.fechaExpiracionToken = :fechaExpiracionToken")
+    , @NamedQuery(name = "Usuario.findByTokenRecuperacion", query = "SELECT u FROM Usuario u WHERE u.tokenRecuperacion = :tokenRecuperacion")
+    , @NamedQuery(name = "Usuario.findByFechaExpTokenRecuperacion", query = "SELECT u FROM Usuario u WHERE u.fechaExpTokenRecuperacion = :fechaExpTokenRecuperacion")
     , @NamedQuery(name = "Usuario.esTipoUsuario", query = "SELECT u FROM Usuario u LEFT JOIN u.grupoUsuarioList AS gu WHERE gu.tipoUsuario.tipo = :tipo AND u.idUsuario = :idUsuario")
 })
 public class Usuario implements Serializable {
@@ -74,6 +76,12 @@ public class Usuario implements Serializable {
     @Column(name = "fechaExpiracionToken")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaExpiracionToken;
+    @Size(max = 200)
+    @Column(name = "tokenRecuperacion")
+    private String tokenRecuperacion;
+    @Column(name = "fechaExpTokenRecuperacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaExpTokenRecuperacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<Persona> personaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario1")
@@ -164,6 +172,22 @@ public class Usuario implements Serializable {
 
     public void setGrupoUsuarioList(List<GrupoUsuario> grupoUsuarioList) {
         this.grupoUsuarioList = grupoUsuarioList;
+    }
+
+    public String getTokenRecuperacion() {
+        return tokenRecuperacion;
+    }
+
+    public void setTokenRecuperacion(String tokenRecuperacion) {
+        this.tokenRecuperacion = tokenRecuperacion;
+    }
+
+    public Date getFechaExpTokenRecuperacion() {
+        return fechaExpTokenRecuperacion;
+    }
+
+    public void setFechaExpTokenRecuperacion(Date fechaExpTokenRecuperacion) {
+        this.fechaExpTokenRecuperacion = fechaExpTokenRecuperacion;
     }
 
     @Override

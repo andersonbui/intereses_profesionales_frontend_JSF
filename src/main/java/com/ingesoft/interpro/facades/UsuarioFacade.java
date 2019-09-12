@@ -75,6 +75,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return null;
 
     }
+    
+    public Usuario obtUsuarioPorTokenRecuperacion(String token) {
+        Query query = em.createNamedQuery("Usuario.findByTokenRecuperacion");
+        query.setParameter("tokenRecuperacion", token);
+        List<Usuario> usuarios = query.getResultList();
+        if (usuarios != null && !usuarios.isEmpty()) {
+            Usuario findUsuario = (Usuario) usuarios.get(0);
+            if (findUsuario != null) {
+                return findUsuario;
+            }
+        }
+        return null;
+
+    }
 
     public Usuario obtUsuarioPorEmail(String email) {
         Query query = em.createNamedQuery("Usuario.findByUsuario");

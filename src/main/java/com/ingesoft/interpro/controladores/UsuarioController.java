@@ -115,6 +115,10 @@ public class UsuarioController extends Controller implements Serializable {
         return getFacade().obtUsuarioPorToken(token);
     }
     
+    public Usuario obtUsuarioPorTokenRecuperacion(String token) {
+        return getFacade().obtUsuarioPorTokenRecuperacion(token);
+    }
+    
     public Usuario obtUsuarioPorEmail(String email) {
         return getFacade().obtUsuarioPorEmail(email);
     }

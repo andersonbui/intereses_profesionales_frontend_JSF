@@ -48,6 +48,14 @@ public class Utilidades {
                 + Vistas.urlCorreoRegistro(token));
 
     }
+    public static void enviarCorreoDeRecuperar(String destino, String token) {
+        Utilidades.enviarCorreo(destino,
+                "Sistema de recuperacion de suideal.co",
+                "<br><b>Usted ha solicitado recuperar su contrasena \n</b><br/>"
+                + "Recupere su contraseña dando click al siguiente enlace "
+                + Vistas.urlCorreoRecuperar(token));
+
+    }
 
     public static void enviarCorreoEdicion(Persona usu) {
 

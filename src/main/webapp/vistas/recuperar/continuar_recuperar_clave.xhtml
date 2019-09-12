@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
         <meta charset="UTF-8"></meta>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
-        <title>Recuperar contraseña</title>
+        <title>Login Social com JSF</title>
         <h:outputStylesheet library="css" name="util.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
         <style type="text/css">    
@@ -59,41 +59,48 @@
     </h:head>
     <h:body>
         <f:metadata>
-            <f:viewParam name="code" value="#{registroController.code}"/>
+            <f:viewParam name="token" value="#{recuperarController.token}"/>
         </f:metadata>
         <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
             <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
                 <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
                 <p:growl id="growl" showDetail="true" autoUpdate="true"/>
                 <span class="login100-form-title p-b-37" >
-                    Recuperar contraseña
+                    Recuperacion de contrasena
                 </span>
                 <div rendered="#{empty loginController.profile}">
                     <h:form class="login100-form validate-form">
-                        <span>Ingrese su correo electr&oacute;nico</span>
-                        <br/><br/>
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Correo electr&oacute;nico">
-                            <p:inputText id="login-username"  class="form-control"
-                                         label="username"  value="#{registroController.usuario}" 
-                                         placeholder="Ingrese su correo electr&oacute;nico"  
-                                         required="true" 
-                                         validator="existeEmailValidator"
-                                         requiredMessage="Es necesario ingresar un correo electr&oacute;nico"
-                                         >
-                                <f:validator validatorId="emailValidator" />
-                            </p:inputText>
+                        
+                        <div class="wrap-input100 validate-input m-b-20" >
+                            <p:password id="password" 
+                                        class="form-control"  
+                                        match="password2"
+                                        label="password" 
+                                        value="#{recuperarController.password}" 
+                                        placeholder="Ingrese su contrase&ntilde;a" 
+                                        required="true" 
+                                        requiredMessage="Es necesario ingresar una contrase&ntilde;a"
+                                        />
+                        </div>
+                        <div class="wrap-input100 validate-input m-b-20" >
+                            <p:password id="password2" 
+                                        class="form-control"
+                                        label="password" 
+                                        value="#{recuperarController.password}" 
+                                        placeholder="Vuelva a ingresar su contrase&ntilde;a"  
+                                        required="true"
+                                        requiredMessage="Es necesario verificar la contrasen&ntilde;a"
+                                        validatorMessage="verificacion de c&oacute;digo fallida."
+                                        />
                         </div>
 
                         <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
-                                          actionListener="#{registroController.recuperar}"  
-                                          update="@form,growl"  value="Recuperar">
+                                          actionListener="#{recuperarController.finalizarRecuperacionContrasena()}"  
+                                          update="@form,growl"  value="Reg&iacute;strate">
                         </p:commandButton>
 
                     </h:form>
-                   <br/>
-                    <dir class="text-center">
-                        <p:link outcome="/login.xhtml" style="color:#0F91FF" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
-                    </dir>
+
                 </div>
                 <h:panelGrid rendered="#{not empty loginController.profile}">
                     <h:graphicImage value="#{loginController.profile.profileImageURL}"

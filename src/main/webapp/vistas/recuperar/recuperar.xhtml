@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      lang="es">
+    <h:head>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"></link>
+        <meta charset="UTF-8"></meta>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"></link>
+        <title>Recuperar contraseña</title>
+        <h:outputStylesheet library="css" name="util.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
+        <style type="text/css">    
+            .white-button.ui-button.ui-state-default {
+                background-color: #ffffff;
+                color: #222222;
+                border-color: #d6d6d6;
+                /* with the exported variables from Nova and Luna Themes*/
+                /*border-color: var(--input-border-color, #d6d6d6);*/
+            }
+
+            .white-button.ui-button.ui-state-default:enabled:hover, 
+            .white-button.ui-button.ui-state-default:focus {
+                background-color: #f2f2f2;
+                border-color: #ccc;
+                color: #373a3c;
+                /* with the exported variables from Nova and Luna Themes*/
+                /*border-color: var(--input-hover-border-color, #ccc);*/
+            }
+
+            .green-button.ui-button.ui-state-default {
+                background-color: #5cb85c;
+                border-color: #5cb85c;
+                color: #fff;
+            }
+
+            .green-button.ui-button.ui-state-default:enabled:hover, 
+            .green-button.ui-button.ui-state-default:focus {
+                background-color: #4cae4c;
+                border-color: #5cb85c;
+            }
+
+            .red-button.ui-button.ui-state-default {
+                background-color: #d9534f;
+                border-color: #d9534f;
+                color: #fff;
+            }
+
+            .red-button.ui-button.ui-state-default:enabled:hover, 
+            .red-button.ui-button.ui-state-default:focus {
+                background-color: #d43f3a;
+                border-color: #d9534f;
+            }
+
+        </style>
+
+    </h:head>
+    <h:body>
+        <div class="container-login100" style="background-image: url('./resources/images/bg-01.jpg')" >
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
+                <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
+                <p:growl id="growl" showDetail="true" autoUpdate="true"/>
+                <span class="login100-form-title p-b-37" >
+                    Recuperar contraseña
+                </span>
+                <div rendered="#{empty loginController.profile}">
+                    <h:form class="login100-form validate-form">
+                        <span>Ingrese su correo electr&oacute;nico</span>
+                        <br/><br/>
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Correo electr&oacute;nico">
+                            <p:inputText id="email-recuperar"  class="form-control"
+                                         label="email"  
+                                         value="#{recuperarController.email}" 
+                                         placeholder="Ingrese su correo electr&oacute;nico"  
+                                         required="true" 
+                                         requiredMessage="Es necesario ingresar un correo electr&oacute;nico"
+                                         >
+                                
+                            </p:inputText>
+                        </div>
+
+                        <p:commandButton  id="btn-recuperar" class="container-login100-form-btn" type="submit" 
+                                          actionListener="#{recuperarController.recuperar}"  
+                                          update="@form,growl"  value="Recuperar">
+                        </p:commandButton>
+
+                    </h:form>
+                   <br/>
+                    <dir class="text-center">
+                        <p:link outcome="/login.xhtml" style="color:#0F91FF" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
+                    </dir>
+                </div>
+                <h:panelGrid rendered="#{not empty loginController.profile}">
+                    <h:graphicImage value="#{loginController.profile.profileImageURL}"
+                                    styleClass="media-object" />
+
+                    <h3 class="media-heading" style="margin-left: 10px;">#{loginController.profile.fullName}</h3>
+
+                    <h:form>
+                        <h:commandLink action="#{loginController.salir()}" styleClass="btn btn-primary" value="Salir" />			
+                    </h:form>
+
+                </h:panelGrid>
+
+
+            </div>
+        </div>
+    </h:body>
+</html>

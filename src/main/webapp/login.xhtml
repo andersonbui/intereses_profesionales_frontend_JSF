@@ -40,7 +40,7 @@
                         </div>
                         <!--                        <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
                                                 </label>-->
-                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
+                        <p:commandButton  id="btn-login" class="btn btn-primary  btn-lg btn-block" type="submit" 
                                           actionListener="#{loginController.login()}"  update="growl " value="Entrar"
                                           oncomplete="manejarLogin(xhr, status, args)" 
                                           >
@@ -80,7 +80,7 @@
                 <h:form rendered="#{loginController.logueado()}">
                     <p:growl id="growl" showDetail="true"/>
                     <span class="login100-form-title p-b-37" >
-                        ¿Continuar sesi&oacute;n?
+                        Se encontr&oacute; una sesi&oacute;n ya inciada.
                     </span>
                     <p:panelGrid  columns="1" styleClass="panelgrid" class="transparentBackground" columnClasses="centered" >
                         <h:panelGroup style="display:block; text-align:center">
@@ -95,11 +95,11 @@
                             <p:row>
                                 <p:column>
                                     <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
-                                                     value="S&iacute;" actionListener="#{loginController.login}"
+                                                     value="Continuar" actionListener="#{loginController.login}"
                                                      oncomplete="manejarLogin(xhr, status, args)"
                                                      />
                                     <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
-                                                     value="No" action="#{loginController.salir()}"
+                                                     value="Cerrar sesi&oacute;n" action="#{loginController.salir()}"
                                                      ajax="false"
                                                      />
                                 </p:column>

@@ -81,7 +81,7 @@
                             </p:inputText>
                         </div>
 
-                        <p:commandButton  id="btn-recuperar" class="container-login100-form-btn" type="submit" 
+                        <p:commandButton  id="btn-recuperar" class="btn container-login100-form-btn" type="submit" 
                                           actionListener="#{recuperarController.recuperar}"  
                                           update="@form,growl"  value="Recuperar">
                         </p:commandButton>
@@ -89,7 +89,7 @@
                     </h:form>
                    <br/>
                     <dir class="text-center">
-                        <p:link outcome="/login.xhtml" style="color:#0F91FF" class="txt2 hov1" >Inicia sesi&oacute;n</p:link>
+                        <p:link outcome="/login.xhtml" style="color:#0F91FF" class="txt2 hov1" >Iniciar sesi&oacute;n</p:link>
                     </dir>
                 </div>
                 <h:panelGrid rendered="#{not empty loginController.profile}">

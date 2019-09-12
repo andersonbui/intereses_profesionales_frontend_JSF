@@ -66,7 +66,7 @@
                 <!--<p:messages id="message" showDetail="true" autoUpdate="true" />-->
                 <p:growl id="growl" showDetail="true" autoUpdate="true"/>
                 <span class="login100-form-title p-b-37" >
-                    Recuperacion de contrasena
+                    Recuperaci&oacute;n de contrase&ntilde;a
                 </span>
                 <div rendered="#{empty loginController.profile}">
                     <h:form class="login100-form validate-form">
@@ -90,13 +90,13 @@
                                         placeholder="Vuelva a ingresar su contrase&ntilde;a"  
                                         required="true"
                                         requiredMessage="Es necesario verificar la contrasen&ntilde;a"
-                                        validatorMessage="verificacion de c&oacute;digo fallida."
+                                        validatorMessage="verificaci&oacute;n de c&oacute;digo fallida."
                                         />
                         </div>
 
-                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
+                        <p:commandButton  id="btn-login" class="btn container-login100-form-btn" type="submit" 
                                           actionListener="#{recuperarController.finalizarRecuperacionContrasena()}"  
-                                          update="@form,growl"  value="Reg&iacute;strate">
+                                          update="@form,growl"  value="Recuperar">
                         </p:commandButton>
 
                     </h:form>

@@ -7,6 +7,7 @@ package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.Utilidades;
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class RecuperarController extends Controller implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -86,8 +87,10 @@ public class RecuperarController extends Controller implements Serializable {
                 return;
             }
         }
-        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/recuperarTokenRechazado.xhtml");
         
+        getMensajeYLoginView().setMensaje("El token de recuperación de contraseña a acaducado.\n Inicie el proceso de recuperación de contraseña nuevamente");
+        context.getExternalContext().redirect(Vistas.urlMensaje());
+
     }
 
     public void finalizarRecuperacionContrasena() throws IOException {
@@ -106,11 +109,14 @@ public class RecuperarController extends Controller implements Serializable {
                 usuarioController.setSelected(usuario);
                 usuarioController.create();
 
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
+                getMensajeYLoginView().setMensaje("La contraseña se actualizó exitosamente. Puede iniciar sesión.");
+                context.getExternalContext().redirect(Vistas.urlMensaje());
                 return;
             }
         }
-        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/recuperarTokenRechazado.xhtml");
+
+        getMensajeYLoginView().setMensaje("El token de recuperación de contraseña a acaducado.\n Inicie el proceso de recuperación de contraseña nuevamente");
+        context.getExternalContext().redirect(Vistas.urlMensaje());
     }
 
     public UsuarioFacade getFacade() {
@@ -139,11 +145,8 @@ public class RecuperarController extends Controller implements Serializable {
                 // enviar email
                 Utilidades.enviarCorreoDeRecuperar(getEmail(), un_usuario.getTokenRecuperacion());
 
-                MensajeYLoginView mnsajeYLoginView = (MensajeYLoginView) context.getApplication().getELResolver().
-                        getValue(context.getELContext(), null, "mensajeYLoginView");
-                mnsajeYLoginView.setMensaje("Se le envió un correo con la información necesaria para recuperar su contraseña. Por favor revise su bandeja.");
-
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/mensaje.xhtml");
+                getMensajeYLoginView().setMensaje("Se le envió un correo con la información necesaria para recuperar su contraseña. Por favor revise su bandeja.");
+                context.getExternalContext().redirect(Vistas.urlMensaje());
 //                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
                 //TODO
             } else {

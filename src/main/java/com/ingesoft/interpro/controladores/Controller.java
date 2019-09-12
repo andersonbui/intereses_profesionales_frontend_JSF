@@ -127,6 +127,12 @@ public abstract class Controller implements Serializable {
                 getValue(facesContext.getELContext(), null, "usuarioController");
         return usuarioController;
     }
+    public MensajeYLoginView getMensajeYLoginView() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        MensajeYLoginView mnsajeYLoginView = (MensajeYLoginView) context.getApplication().getELResolver().
+                        getValue(context.getELContext(), null, "mensajeYLoginView");
+        return mnsajeYLoginView;
+    }
 
     public EstudianteController getEstudianteController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

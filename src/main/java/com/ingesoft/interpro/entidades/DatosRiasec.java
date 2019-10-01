@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DatosRiasec.findAll", query = "SELECT d FROM DatosRiasec d"),
     @NamedQuery(name = "DatosRiasec.findByIddatosRiasec", query = "SELECT d FROM DatosRiasec d WHERE d.iddatosRiasec = :iddatosRiasec"),
     @NamedQuery(name = "DatosRiasec.findByProfesion", query = "SELECT d FROM DatosRiasec d WHERE d.profesion = :profesion"),
-    @NamedQuery(name = "DatosRiasec.findByTiposAmbiente", query = "SELECT DISTINCT d FROM DatosRiasec d WHERE d.idTipoAmbiente1 = :amb1 AND d.idTipoAmbiente2 = :amb2 AND d.idTipoAmbiente3 = :amb3")
+    @NamedQuery(name = "DatosRiasec.findPorTipoAmbiente123", query = "SELECT DISTINCT d FROM DatosRiasec d WHERE d.idTipoAmbiente1 = :amb1 AND (d.idTipoAmbiente2 = :amb2  or d.idTipoAmbiente2 is null) AND (d.idTipoAmbiente3 = :amb3  or d.idTipoAmbiente3 is null)"),
+    @NamedQuery(name = "DatosRiasec.findPorTipoAmbiente12", query = "SELECT DISTINCT d FROM DatosRiasec d WHERE d.idTipoAmbiente1 = :amb1 AND (d.idTipoAmbiente2 = :amb2  or d.idTipoAmbiente2 is null) " ),
+    @NamedQuery(name = "DatosRiasec.findPorTipoAmbiente1", query = "SELECT DISTINCT d FROM DatosRiasec d WHERE d.idTipoAmbiente1 = :amb1 " )
 })
 public class DatosRiasec implements Serializable {
 

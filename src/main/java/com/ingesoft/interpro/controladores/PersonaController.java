@@ -201,6 +201,18 @@ public class PersonaController extends Controller implements Serializable {
         return perso;
     }
 
+    public Persona actualizarPerfil() {
+        selected.setEmail(selected.getIdUsuario().getUsuario());
+        UsuarioController usuarioController = getUsuarioController();
+        usuarioController.setSelected(selected.getIdUsuario());
+        usuarioController.update();
+//        getEstudianteGradoController().update();
+//        EstudianteController estudianteController = getEstudianteController();
+//        estudianteController.update();
+//        estudianteController.create();
+        return (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+    }
+
     public Persona update() {
         return (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }

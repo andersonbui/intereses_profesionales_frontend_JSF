@@ -128,7 +128,8 @@ public class EncuestaController extends Controller implements Serializable {
             int cantidad = 0;
             double suma = 0;
             for (Encuesta item : items) {
-                if (item != null && item.getPuntajeEncuesta() != null) {
+                
+                if (item != null && item.getPuntajeEvaluacion() != null) {
                     suma += item.getPuntajeEvaluacion();
                     cantidad++;
                 }
@@ -432,9 +433,9 @@ public class EncuestaController extends Controller implements Serializable {
                 JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
             } else {
                 initializeEmbeddableKey();
-                if (selected.getEstudianteGrado() == null) {
+                if (selected.getGrado() == null) {
                     System.out.println("se asigno estudiante grado a encuesta");
-                    selected.setEstudianteGrado(estudianteGrado);
+                    selected.setGrado(estudianteGrado.getGrado());
                 }
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
@@ -456,6 +457,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
+        System.out.println("resultado_personalidad/personalidad: "+personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);

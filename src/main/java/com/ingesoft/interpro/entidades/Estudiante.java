@@ -71,6 +71,9 @@ public class Estudiante implements Serializable {
     @JoinColumn(name = "idPersona", referencedColumnName = "idPersona")
     @ManyToOne(optional = false)
     private Persona idPersona;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudiante")
+    private List<Encuesta> encuestaList;
+
 
     public Estudiante() {
     }
@@ -150,6 +153,14 @@ public class Estudiante implements Serializable {
 
     public void setIdPersona(Persona idPersona) {
         this.idPersona = idPersona;
+    }
+
+    public List<Encuesta> getEncuestaList() {
+        return encuestaList;
+    }
+
+    public void setEncuestaList(List<Encuesta> encuestaList) {
+        this.encuestaList = encuestaList;
     }
 
     @Override

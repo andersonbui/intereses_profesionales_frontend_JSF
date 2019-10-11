@@ -52,6 +52,9 @@ public class Institucion implements Serializable {
     @Size(max = 45)
     @Column(name = "dane")
     private String dane;
+    @Size(max = 45)
+    @Column(name = "estado")
+    private String estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
     private List<CodigoInstitucion> codigoInstitucionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInstitucion")
@@ -96,6 +99,14 @@ public class Institucion implements Serializable {
 
     public void setDane(String dane) {
         this.dane = dane;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @XmlTransient

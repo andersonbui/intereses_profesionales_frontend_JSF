@@ -3,6 +3,8 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.interpro.facades.GradoFacade;
 
 import java.io.Serializable;
@@ -21,7 +23,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "gradoController")
 @SessionScoped
-public class GradoController implements Serializable {
+public class GradoController extends Controller {
 
     @EJB
     private com.ingesoft.interpro.facades.GradoFacade ejbFacade;
@@ -39,14 +41,7 @@ public class GradoController implements Serializable {
         this.selected = selected;
     }
 
-    protected void setEmbeddableKeys() {
-    }
-
     protected void initializeEmbeddableKey() {
-    }
-
-    private GradoFacade getFacade() {
-        return ejbFacade;
     }
 
     public Grado prepareCreate() {
@@ -56,18 +51,18 @@ public class GradoController implements Serializable {
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("GradoCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("GradoCreated"),selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("GradoUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("GradoUpdated"),selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("GradoDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("GradoDeleted"),selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -81,36 +76,18 @@ public class GradoController implements Serializable {
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
+    @Override
+    protected GradoFacade getFacade() {
+        return this.ejbFacade;
     }
-
+    
+    public List<Grado> getItems(Estudiante estudiante) {
+        items = getFacade().findPorInstitucion(estudiante.getIdPersona().getIdInstitucion());
+        return items;
+    }
+   
     public Grado getGrado(java.lang.Integer id) {
-        return getFacade().find(id);
+        return (Grado) getFacade().find(id);
     }
 
     public List<Grado> getItemsAvailableSelectMany() {
@@ -120,6 +97,7 @@ public class GradoController implements Serializable {
     public List<Grado> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
+
 
     @FacesConverter(forClass = Grado.class)
     public static class GradoControllerConverter implements Converter {

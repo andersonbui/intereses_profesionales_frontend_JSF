@@ -81,11 +81,16 @@ public class MineriaController extends Controller implements Serializable {
         int cont = 0;
         String ingenieria = null;
         cont = 0;
-        String sexo = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getSexo().toUpperCase();
+        String sexo = encuesta.getEstudianteGrado()
+                .getEstudiante().
+                getIdPersona().
+                getSexo();
+        
         if (sexo == null || "".equals(sexo) || !camposActivos.get("sexo")) {
             return null;
         }
 
+        sexo = sexo.toUpperCase();
         long anos = obtenerEdad(encuesta);
         if (anos == 0 || !camposActivos.get("edad")) {
             return null;

@@ -39,6 +39,8 @@
                     </p:commandButton>
                     <br/>
                     <h:body id='idpersonalidad'  rendered="#{misResultadosController.personalidad != null}" >
+                        <center><h3><b>Estimado estudiante #{loginController.personaActual.nombre} #{loginController.personaActual.apellido} los resultados para usted son: </b></h3></center>
+                        <br/>
 
                         <h1 style="text-align: center;" value="">Personalidad: #{misResultadosController.personalidad}</h1>
                         <center class="grupo-img-personalidad">

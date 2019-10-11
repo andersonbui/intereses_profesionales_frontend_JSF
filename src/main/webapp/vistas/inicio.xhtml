@@ -44,6 +44,23 @@
                     </h:form>
                 </div>
             </p:dialog>
+            <p:dialog header="Advertencia" widgetVar="dialog_modo_desarrollo"
+                      modal="true" height="200" closable="true" style="padding:10px 40px;" 
+                      rendered="#{encuestaController.esDesarrollo()}"
+                      >
+                <div style="font-size:1.2em">
+                    <p> 
+                        Esta aplicacion esta en modo desarrollo, por favor informar al administrador.
+                    </p>
+                    <br/>
+                </div>
+                <div style="width:80px; margin:auto">
+                    <h:form>
+                        <p:commandButton value="Aceptar"  ajax="true" 
+                                         onclick="PF('dialog_modo_desarrollo').hide();" />
+                    </h:form>
+                </div>
+            </p:dialog>
             <center><div><p:graphicImage style="width: 200px;" name="img/interpro.png"/><br/>
                     <h3>Bienvenido al sitio, aquí podrá identificar sus intereses profesionales y <br/>
                         personalidad.<br/>
@@ -54,6 +71,9 @@
             <script>
                 $(document).ready(function () {
                     PF('instruccionesEncuestaDialog').show();
+                });
+                $(document).ready(function () {
+                    PF('dialog_modo_desarrollo').show();
                 });
             </script> 
         </ui:define>

@@ -23,14 +23,14 @@
 
                     <p:growl id="growl" showDetail="true"/>
                     <span style="color: blueviolet;" class="login100-form-title p-b-40" >
-                        <b>INTERPRO</b>
+                        <b>SUIDEAL</b>
                     </span>
                     <span class="login100-form-title p-b-37" >
-                        Iniciar sesion
+                        Inicio de sesi&oacute;n
                     </span>
 
                     <div rendered="#{empty loginController.profile}">
-                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electronico">
+                        <div class="wrap-input100 validate-input m-b-20" data-validate="Ingrese su correo electr&oacute;nico">
                             <p:inputText id="login-username"  class="form-control"
                                          label="username"  value="#{loginController.usuario}" />
                         </div>
@@ -40,14 +40,16 @@
                         </div>
                         <!--                        <label> <input id="s" type="checkbox" name="remember" value="1" /> Recuerdame
                                                 </label>-->
-                        <p:commandButton  id="btn-login" class="container-login100-form-btn" type="submit" 
+                        <p:commandButton  id="btn-login" class="btn btn-primary  btn-lg btn-block" type="submit" 
                                           actionListener="#{loginController.login()}"  update="growl " value="Entrar"
                                           oncomplete="manejarLogin(xhr, status, args)" 
                                           >
                         </p:commandButton>
+                        <br/><br/>
+                        <p:link outcome="/vistas/recuperar/recuperar.xhtml" style="color:#0F91FF" >¿Olvidaste la contraseña?</p:link>
 
                         <div class="text-center p-t-57 p-b-20" >
-                            <b>O inicia sesion con</b><br/>
+                            <b>O inicia sesi&oacute;n con</b><br/>
                         </div>
                         <div class="flex-c p-b-20" >
                             <h:commandLink class="login100-social-item bg1" action="#{loginController.conectar()}">
@@ -62,8 +64,8 @@
                         </div>
 
                         <dir class="text-center" style="margin-top: 20px;">
-                            <b>No tienes una cuenta? </b><br/>
-                            <p:link outcome="/registro.xhtml" class="txt2 hov1" >Crea cuenta</p:link>
+                            <b>¿No tienes una cuenta? </b><br/>
+                            <p:link outcome="/registro.xhtml" style="color:#0F91FF" class="txt2 hov1" >Registrate</p:link>
                         </dir>
                     </div>
                     <h:panelGrid rendered="#{not empty loginController.profile}">
@@ -78,14 +80,14 @@
                 <h:form rendered="#{loginController.logueado()}">
                     <p:growl id="growl" showDetail="true"/>
                     <span class="login100-form-title p-b-37" >
-                        Continuar sesion?
+                        Se encontr&oacute; una sesi&oacute;n ya inciada.
                     </span>
                     <p:panelGrid  columns="1" styleClass="panelgrid" class="transparentBackground" columnClasses="centered" >
                         <h:panelGroup style="display:block; text-align:center">
                             <p:row>
                                 <p:column>
                                     <p:outputLabel value="Usted tiene una sesión iniciada"/>
-                                    <p:outputLabel value="¿Desea continuar con esta sesión?"/>
+                                    <p:outputLabel value="¿Desea continuar con esta sesi&oacute;n?"/>
                                 </p:column>
                                 <p:column><br></br></p:column>
                             </p:row>
@@ -93,11 +95,11 @@
                             <p:row>
                                 <p:column>
                                     <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
-                                                     value="Si" actionListener="#{loginController.login}"
+                                                     value="Continuar" actionListener="#{loginController.login}"
                                                      oncomplete="manejarLogin(xhr, status, args)"
                                                      />
                                     <p:commandButton style="background: gainsboro; width: 150px; color:#000000; font-weight: bold; "
-                                                     value="No" action="#{loginController.salir()}"
+                                                     value="Cerrar sesi&oacute;n" action="#{loginController.salir()}"
                                                      ajax="false"
                                                      />
                                 </p:column>

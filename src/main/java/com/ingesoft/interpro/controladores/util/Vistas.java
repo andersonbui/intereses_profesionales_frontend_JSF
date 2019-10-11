@@ -95,6 +95,13 @@ public class Vistas implements Serializable {
     public static String urlCorreoRegistro(String token) {
         return getProtocolo() + "://" + getIP() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
     }
+    public static String urlCorreoRecuperar(String token) {
+        return getProtocolo() + "://" + getIP() + rutaGeneral + "/vistas/recuperar/continuar_recuperar_clave.xhtml?token=" + token + "";
+    }
+    
+    public static String urlMensaje() {
+        return getProtocolo() + "://" + getIP() + rutaGeneral +"/mensaje.xhtml";
+    }
 
     public static String getIP() {
         ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();

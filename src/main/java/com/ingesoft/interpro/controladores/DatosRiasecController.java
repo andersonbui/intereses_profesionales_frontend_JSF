@@ -102,11 +102,6 @@ public class DatosRiasecController implements Serializable {
         return items;
     }
 
-    public List<DatosRiasec> getItemsByTiposAmbiente(TipoAmbiente amb1, TipoAmbiente amb2, TipoAmbiente amb3) {
-        List<DatosRiasec> items = getFacade().findByTiposAmbiente(amb1, amb2, amb3);
-        return items;
-    }
-
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -139,6 +134,19 @@ public class DatosRiasecController implements Serializable {
         return getFacade().find(id);
     }
 
+    public List<DatosRiasec> getItemsByTiposAmbiente(TipoAmbiente amb1, TipoAmbiente amb2, TipoAmbiente amb3) {
+        List<DatosRiasec> uitems = getFacade().buscarPorTiposAmbiente(amb1, amb2, amb3);
+        return uitems;
+    }
+    public List<DatosRiasec> getItemsByTiposAmbiente(TipoAmbiente amb1, TipoAmbiente amb2) {
+        List<DatosRiasec> uitems = getFacade().buscarPorTiposAmbiente(amb1, amb2);
+        return uitems;
+    }
+    public List<DatosRiasec> getItemsByTiposAmbiente(TipoAmbiente amb1) {
+        List<DatosRiasec> uitems = getFacade().buscarPorTiposAmbiente(amb1);
+        return uitems;
+    }
+    
     public List<DatosRiasec> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

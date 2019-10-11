@@ -227,37 +227,74 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         if (datos == null) {
             return null;
         }
-        List<DatosAmbiente> lista = Arrays.asList(datos);
+//        List<DatosAmbiente> lista = Arrays.asList(datos);
         // escoger los 3 de mas alto puntaje
-        Collections.sort(lista);
-        TipoAmbiente amb1 = lista.get(0).getTipoAmbiente();
-        TipoAmbiente amb2 = lista.get(1).getTipoAmbiente();
-        TipoAmbiente amb3 = lista.get(2).getTipoAmbiente();
+//        Collections.sort(lista);
+        // primer ambiente segura que esta
+        TipoAmbiente amb1 = null;
 //        String cad = lista.get(0).getValor() + " - " + lista.get(1).getValor() + " - " + lista.get(2).getValor();
-        String ambientes = amb1 + " - " + amb2 + " - " + amb3;
-//        cadena = Arrays.toString(datos);
-//            System.out.println("cadenacadena = ambientes AMB1: " + amb1 + " AMB2: " + amb2 + " AMB3: " + amb3);
+//        datos[1].setValor(0.0);
+//        datos[2].setValor(0.0);
+//        datos[3].setValor(0.0);
+//        datos[4].setValor(0.0);
+//        datos[5].setValor(0.0);
 
-        List<DatosRiasec> listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-        List<DatosRiasec> unaListaresUnicos = new ArrayList();
-        int tipo_original = amb3.getIdTipoAmbiente();
-        // Escoger solo los valores unicos
-        while (listares == null) {
-            System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
-            int tipoamb = amb3.getIdTipoAmbiente();
-            if (tipoamb > 0) {
-                tipoamb--;
-            } else {
-                tipoamb = 5;
+        for (DatosAmbiente undato : datos) {
+            if (amb1 == null || datos[undato.getTipoAmbiente().getIdTipoAmbiente() - 1].getValor() > datos[amb1.getIdTipoAmbiente() - 1].getValor()) {
+                amb1 = datos[undato.getTipoAmbiente().getIdTipoAmbiente() - 1].getTipoAmbiente();
             }
-            if(tipoamb == tipo_original) {
-                break;
-            }
-            amb3 = getTipoAmbienteController().getTipoAmbiente(tipoamb);
-            listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-            
-            System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
         }
+
+        List<DatosRiasec> listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1);
+        // segundo ambiente
+        TipoAmbiente amb2 = null;
+        double valorDato = 0;
+        double mayorValor = -10;
+        for (DatosRiasec undato : listares) {
+            if (undato.getIdTipoAmbiente2() == null) {
+                if (0 > mayorValor) {
+                    amb2 = null;
+                    mayorValor = 0;
+                }
+            } else {
+                valorDato = datos[undato.getIdTipoAmbiente2().getIdTipoAmbiente() - 1].getValor();
+                if (valorDato == 0) {
+                    valorDato = -1;
+                }
+                if ((mayorValor < 0 && amb2 == null) || valorDato > mayorValor) {
+                    amb2 = datos[undato.getIdTipoAmbiente2().getIdTipoAmbiente() - 1].getTipoAmbiente();
+                    mayorValor = valorDato;
+                }
+            }
+        }
+
+        listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2);
+        // tercer ambiente
+        TipoAmbiente amb3 = null;
+        mayorValor = -10;
+        for (DatosRiasec undato : listares) {
+            if (undato.getIdTipoAmbiente3() == null) {
+                if (0 > mayorValor) {
+                    amb3 = null;
+                    mayorValor = 0;
+                }
+            } else {
+                valorDato = datos[undato.getIdTipoAmbiente3().getIdTipoAmbiente() - 1].getValor();
+                if (valorDato == 0) {
+                    valorDato = -1;
+                }
+                if ((mayorValor < 0 && amb3 == null) || valorDato > mayorValor) {
+                    amb3 = datos[undato.getIdTipoAmbiente3().getIdTipoAmbiente() - 1].getTipoAmbiente();
+                    mayorValor = valorDato;
+                }
+            }
+        }
+
+        List<DatosRiasec> unaListaresUnicos = new ArrayList();
+        // Escoger solo los valores unicos
+        System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
+        listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
+        System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
 
         if (listares != null) {
             for (DatosRiasec datosR : listares) {

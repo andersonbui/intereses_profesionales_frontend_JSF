@@ -35,9 +35,34 @@
                                                            />
                                         </p:selectOneMenu>
                                     </div>
+                                    
+                                    <div class="col-md-3">
+                                        <p:outputLabel style="font-weight:bold; color: black;"
+                                                   rendered="#{loginController.isEstudiante()}"
+                                                   value="Grado" for="idSelectGrado" />
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <p:selectOneMenu id="idSelectGrado" 
+                                                         rendered="#{loginController.isEstudiante()}"
+                                                         immediate="true" filter="true" 
+                                                         value="#{gradoController.selected}" required="true" 
+                                                         requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
+                                            <f:selectItem itemLabel="Seleccione el grado" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{gradoController.getItemsInstitucionEstudiante(estudianteController.getEstudiantePorPersona(loginController.personaActual))}"
+                                                           var="grado"
+                                                           itemValue="#{grado}"
+                                                           itemLabel="#{grado.curso}"
+                                                           />
+                                            <f:ajax render="idSelectGrado" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                    
                                 </div>
                             </p:panel>
                         </center>
+                        
+                    
                     </p:tab>
                     <p:tab id="preferida" title="Materias de preferencia">
                         <center>

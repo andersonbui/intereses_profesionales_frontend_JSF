@@ -11,6 +11,7 @@ import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.CodigoInstitucion;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Persona;
+import com.ingesoft.interpro.entidades.TipoUsuario;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
 import java.io.IOException;
@@ -143,7 +144,8 @@ public class RegistroController extends Controller implements Serializable {
     public void setToken(String token) throws IOException {
         Usuario unusuario = getUsuarioController().obtUsuarioPorToken(token);
         continuarCreacionUsuario(unusuario);
-//        System.out.println("setToken: " + token);
+        System.out.println("unusuario: " + unusuario);
+        System.out.println("setToken: " + token);
         this.token = token;
     }
 
@@ -246,10 +248,43 @@ public class RegistroController extends Controller implements Serializable {
     }
 
     public Usuario realizarRegistro() {
-        CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
-        codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
+        System.out.println("codigo:<"+codigo+">");
+        if (codigo != null && !"".equals(codigo)) {
+            CodigoInstitucionController codigoInstitucionController = getCodigoInstitucionController();
+            codInstitucion = codigoInstitucionController.buscarPorCodigoActivacion(codigo);
+            if (codInstitucion != null) {
+                // Crear persona
+                PersonaController personaController = getPersonaController();
+                Persona unaPersona = personaController.prepareCreateParaRegistrar();
+                unaPersona.setEmail(getUsuario());
+                unaPersona.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+                unaPersona.getIdUsuario().setClave(Utilidades.sha256(getPassword()));
+                unaPersona.getIdUsuario().setUsuario(getUsuario());
+                unaPersona.getIdUsuario().setFechaCreacion(new Date());
+                unaPersona.getIdUsuario().setTokenAcesso("");
+                unaPersona.getIdUsuario().setFechaExpiracionToken(Utilidades.getFechaExpiracion());
+                unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
+                unaPersona = personaController.createParaRegistrar();
+                // TODO : falta enviar mensaje por usuario repetido
+                UsuarioController usuarioController = getUsuarioController();
+                Usuario unusuario = unaPersona.getIdUsuario();
+                unusuario.setTokenAcesso(Utilidades.generarToken("" + unusuario.getIdUsuario()));
+                usuarioController.setSelected(unusuario);
+                usuarioController.update();
+                // Crear grupo usuario
+                GrupoUsuarioController grupoUsuarioController = getGrupoUsuarioController();
+                GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
+                grupoUsuario.setUsuario1(unusuario);
+                grupoUsuario.setUsuario(unusuario.getUsuario());
+                grupoUsuario.setTipoUsuario(codInstitucion.getIdTipoUsuario());
+                grupoUsuarioController.create();
 
-        if (codInstitucion != null) {
+                //TODO
+                return unusuario;
+            } else {
+                return null;
+            }
+        } else {
             // Crear persona
             PersonaController personaController = getPersonaController();
             Persona unaPersona = personaController.prepareCreateParaRegistrar();
@@ -260,7 +295,7 @@ public class RegistroController extends Controller implements Serializable {
             unaPersona.getIdUsuario().setFechaCreacion(new Date());
             unaPersona.getIdUsuario().setTokenAcesso("");
             unaPersona.getIdUsuario().setFechaExpiracionToken(Utilidades.getFechaExpiracion());
-            unaPersona.setIdInstitucion(codInstitucion.getIdInstitucion());
+         
             unaPersona = personaController.createParaRegistrar();
             // TODO : falta enviar mensaje por usuario repetido
             UsuarioController usuarioController = getUsuarioController();
@@ -273,13 +308,11 @@ public class RegistroController extends Controller implements Serializable {
             GrupoUsuario grupoUsuario = grupoUsuarioController.prepareCreate();
             grupoUsuario.setUsuario1(unusuario);
             grupoUsuario.setUsuario(unusuario.getUsuario());
-            grupoUsuario.setTipoUsuario(codInstitucion.getIdTipoUsuario());
+            TipoUsuario tipo = getTipoUsuarioController().obtenerPorTipo(UsuarioController.TIPO_ESTUDIANTE);
+            grupoUsuario.setTipoUsuario(tipo);
             grupoUsuarioController.create();
-
             //TODO
             return unusuario;
-        } else {
-            return null;
         }
     }
 

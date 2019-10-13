@@ -430,25 +430,16 @@ public class EncuestaController extends Controller implements Serializable {
         getAreaEncuestaController().inicializar();
 
         try {
-//            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
-//            if (estudianteGrado == null) {
-//                System.out.println("No hay grado alguno para este estudiante");
-//                JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
-//            } else {
-                initializeEmbeddableKey();
-//                if (selected.getGrado() == null) {
-//                    System.out.println("se asigno estudiante grado a encuesta");
-//                    selected.setGrado(estudianteGrado.getGrado());
-//                }
-
-                // @desarrollo
-                if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
-                    selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
-                }
-                create();
-                AreaController areaController = getAreaController();
-                areaController.inicializar(selected);
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+            initializeEmbeddableKey();
+            selected.setEstudiante(estud);
+            // @desarrollo
+            if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
+                selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
+            }
+            create();
+            AreaController areaController = getAreaController();
+            areaController.inicializar(selected);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
 
 //            }
         } catch (Exception e) {

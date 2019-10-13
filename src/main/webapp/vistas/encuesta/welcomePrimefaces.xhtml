@@ -38,13 +38,13 @@
                                     
                                     <div class="col-md-3">
                                         <p:outputLabel style="font-weight:bold; color: black;"
-                                                   rendered="#{loginController.isEstudiante()}"
+                                                       rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
                                                    value="Grado" for="idSelectGrado" />
                                     </div>
 
                                     <div class="col-md-9">
                                         <p:selectOneMenu id="idSelectGrado" 
-                                                         rendered="#{loginController.isEstudiante()}"
+                                                         rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
                                                          immediate="true" filter="true" 
                                                          value="#{gradoController.selected}" required="true" 
                                                          requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">

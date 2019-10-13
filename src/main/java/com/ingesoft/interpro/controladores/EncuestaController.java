@@ -6,7 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
-import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.entidades.Usuario;
@@ -128,7 +128,8 @@ public class EncuestaController extends Controller implements Serializable {
             int cantidad = 0;
             double suma = 0;
             for (Encuesta item : items) {
-                if (item != null && item.getPuntajeEncuesta() != null) {
+                
+                if (item != null && item.getPuntajeEvaluacion() != null) {
                     suma += item.getPuntajeEvaluacion();
                     cantidad++;
                 }
@@ -235,6 +236,9 @@ public class EncuestaController extends Controller implements Serializable {
         this.pasoActivo = 1;
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
         System.out.println("encuesta en pasoPreguntasAmbiente(): " + selected);
+        Grado grado = getGradoController().getSelected();
+        selected.setGrado(grado);
+        update();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 
@@ -426,29 +430,18 @@ public class EncuestaController extends Controller implements Serializable {
         getAreaEncuestaController().inicializar();
 
         try {
-            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estud);
-            if (estudianteGrado == null) {
-                System.out.println("No hay grado alguno para este estudiante");
-                JsfUtil.addSuccessMessage("Usted no ha seleccionado su grado");
-            } else {
-                initializeEmbeddableKey();
-                if (selected.getEstudianteGrado() == null) {
-                    System.out.println("se asigno estudiante grado a encuesta");
-                    selected.setEstudianteGrado(estudianteGrado);
-                }
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
-
-                // @desarrollo
-                if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
-                    selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
-                }
-                create();
-
-                AreaController areaController = getAreaController();
-
-                areaController.inicializar(selected);
-
+            initializeEmbeddableKey();
+            selected.setEstudiante(estud);
+            // @desarrollo
+            if (Utilidades.esDesarrollo() && selected.getIdAreaProfesional() == null) {
+                selected.setIdAreaProfesional(getAreaProfesionalController().getItems().get(1));
             }
+            create();
+            AreaController areaController = getAreaController();
+            areaController.inicializar(selected);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+
+//            }
         } catch (Exception e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
             e.printStackTrace();
@@ -456,6 +449,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
+        System.out.println("resultado_personalidad/personalidad: "+personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);

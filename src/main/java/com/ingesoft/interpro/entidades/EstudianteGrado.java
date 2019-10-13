@@ -47,8 +47,6 @@ public class EstudianteGrado implements Serializable {
     private Grado grado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudianteGrado")
     private List<Nota> notaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estudianteGrado")
-    private List<Encuesta> encuestaList;
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
@@ -96,16 +94,7 @@ public class EstudianteGrado implements Serializable {
     public void setNotaList(List<Nota> notaList) {
         this.notaList = notaList;
     }
-
-    @XmlTransient
-    public List<Encuesta> getEncuestaList() {
-        return encuestaList;
-    }
-
-    public void setEncuestaList(List<Encuesta> encuestaList) {
-        this.encuestaList = encuestaList;
-    }
-
+    
     public Date getFecha() {
         return fecha;
     }

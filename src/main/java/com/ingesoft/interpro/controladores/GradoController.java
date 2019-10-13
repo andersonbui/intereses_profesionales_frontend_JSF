@@ -4,16 +4,13 @@ import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Estudiante;
-import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.interpro.facades.GradoFacade;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -81,7 +78,7 @@ public class GradoController extends Controller {
         return this.ejbFacade;
     }
     
-    public List<Grado> getItems(Estudiante estudiante) {
+    public List<Grado> getItemsInstitucionEstudiante(Estudiante estudiante) {
         items = getFacade().findPorInstitucion(estudiante.getIdPersona().getIdInstitucion());
         return items;
     }

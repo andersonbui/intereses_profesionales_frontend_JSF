@@ -81,8 +81,7 @@ public class MineriaController extends Controller implements Serializable {
         int cont = 0;
         String ingenieria = null;
         cont = 0;
-        String sexo = encuesta.getEstudianteGrado()
-                .getEstudiante().
+        String sexo = encuesta.getEstudiante().
                 getIdPersona().
                 getSexo();
         
@@ -156,7 +155,7 @@ public class MineriaController extends Controller implements Serializable {
 
     private Integer obtenerEdad(Encuesta encuesta) {
         Date fechaEnc = encuesta.getFecha();
-        Date fechaNac = encuesta.getEstudianteGrado().getEstudiante().getIdPersona().getFechaNacimiento();
+        Date fechaNac = encuesta.getEstudiante().getIdPersona().getFechaNacimiento();
         if (fechaEnc == null || fechaNac == null) {
             return 0;
         }

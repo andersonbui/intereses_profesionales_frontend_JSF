@@ -226,7 +226,7 @@ public class PersonaController extends Controller implements Serializable {
         if (isEst) {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
-            getEstudianteGradoController().create();
+//            getEstudianteGradoController().create();
         }
     }
 

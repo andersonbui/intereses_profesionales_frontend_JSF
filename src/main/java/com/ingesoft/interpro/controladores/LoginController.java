@@ -123,6 +123,9 @@ public class LoginController extends Controller implements Serializable {
     public void setPersonaActual(Persona personaActual) {
         this.personaActual = personaActual;
     }
+    public boolean usuarioEsDeInstitucion() {
+        return personaActual.getIdInstitucion() != null;
+    }
 
     public boolean isAdmin() {
         return getEstudianteController().esAdmin(personaActual);

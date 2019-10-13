@@ -43,7 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")
-    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudianteGrado.estudiante = :estudiante order by e.fecha asc")
+    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudiante = :estudiante order by e.fecha asc")
+    , @NamedQuery(name = "Encuesta.findByGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado order by e.fecha asc")
+    , @NamedQuery(name = "Encuesta.findByEstudianteGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado AND e.estudiante = :estudiante order by e.fecha asc")
 })
 public class Encuesta implements Serializable {
 
@@ -72,11 +74,15 @@ public class Encuesta implements Serializable {
     @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
     @ManyToOne
     private AreaProfesional idAreaProfesional;
-    @JoinColumns({
-        @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
-        , @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")})
+    
+    @JoinColumn(name = "idGrado", referencedColumnName = "idGrado")
     @ManyToOne(optional = false)
-    private EstudianteGrado estudianteGrado;
+    private Grado grado;
+    
+    @JoinColumn(name = "idEstudiante", referencedColumnName = "idEstudiante")
+    @ManyToOne(optional = false)
+    private Estudiante estudiante;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<RespuestaPersonalidad> respuestaPersonalidadList;
     @Column(name = "puntajeEncuesta")
@@ -175,14 +181,22 @@ public class Encuesta implements Serializable {
         this.idAreaProfesional = idAreaProfesional;
     }
 
-    public EstudianteGrado getEstudianteGrado() {
-        return estudianteGrado;
+    public Estudiante getEstudiante() {
+        return estudiante;
     }
 
-    public void setEstudianteGrado(EstudianteGrado estudianteGrado) {
-        this.estudianteGrado = estudianteGrado;
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
+    public Grado getGrado() {
+        return grado;
+    }
+
+    public void setGrado(Grado grado) {
+        this.grado = grado;
+    }
+    
     @XmlTransient
     public List<RespuestaPersonalidad> getRespuestaPersonalidadList() {
         return respuestaPersonalidadList;

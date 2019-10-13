@@ -54,11 +54,16 @@ public class Grado implements Serializable {
     @Size(max = 45)
     @Column(name = "grado")
     private String grado;
+    @Size(max = 45)
+    @Column(name = "estado")
+    private String estado;
     @JoinColumn(name = "idInstitucion", referencedColumnName = "idInstitucion")
     @ManyToOne(optional = false)
     private Institucion idInstitucion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
     private List<EstudianteGrado> estudianteGradoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grado")
+    private List<Encuesta> encuestaList;
 
     public Grado() {
     }
@@ -104,6 +109,14 @@ public class Grado implements Serializable {
         this.idInstitucion = idInstitucion;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @XmlTransient
     public List<EstudianteGrado> getEstudianteGradoList() {
         return estudianteGradoList;
@@ -111,6 +124,14 @@ public class Grado implements Serializable {
 
     public void setEstudianteGradoList(List<EstudianteGrado> estudianteGradoList) {
         this.estudianteGradoList = estudianteGradoList;
+    }
+
+    public List<Encuesta> getEncuestaList() {
+        return encuestaList;
+    }
+
+    public void setEncuestaList(List<Encuesta> encuestaList) {
+        this.encuestaList = encuestaList;
     }
 
     @Override

@@ -206,18 +206,15 @@ public class EstadisticaPersonalidadController implements Serializable {
     public List<ResultadoPorAmbiente> resultadosAmbientePorGrado(Grado un_grado) {
         if (un_grado != null) {
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
-            List<EstudianteGrado> listEstudianteGrado = un_grado.getEstudianteGradoList();
-            for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
-                List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
-                for (Encuesta encuesta : listaEncuestas) {
+            List<Encuesta> listaEncuestas = un_grado.getEncuestaList();
+            for (Encuesta encuesta : listaEncuestas) {
 
-                    List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
-                    if (listaResultadosPorAmbiente.isEmpty()) {
-                        continue;
-                    }
-                    listaResultados.addAll(listaResultadosPorAmbiente);
+                List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+                if (listaResultadosPorAmbiente.isEmpty()) {
+                    continue;
                 }
+                listaResultados.addAll(listaResultadosPorAmbiente);
             }
             return listaResultados;
         }
@@ -227,18 +224,15 @@ public class EstadisticaPersonalidadController implements Serializable {
     public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante) {
         if (un_estudiante != null) {
             List<ResultadoPorAmbiente> listaResultados = new ArrayList();
-            List<EstudianteGrado> listEstudianteGrado = un_estudiante.getEstudianteGradoList();
-            for (EstudianteGrado estudianteGrado : listEstudianteGrado) {
 
-                List<Encuesta> listaEncuestas = estudianteGrado.getEncuestaList();
-                for (Encuesta encuesta : listaEncuestas) {
+            List<Encuesta> listaEncuestas = un_estudiante.getEncuestaList();
+            for (Encuesta encuesta : listaEncuestas) {
 
-                    List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
-                    if (listaResultadosPorAmbiente.isEmpty()) {
-                        continue;
-                    }
-                    listaResultados.addAll(listaResultadosPorAmbiente);
+                List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+                if (listaResultadosPorAmbiente.isEmpty()) {
+                    continue;
                 }
+                listaResultados.addAll(listaResultadosPorAmbiente);
             }
             return listaResultados;
         }

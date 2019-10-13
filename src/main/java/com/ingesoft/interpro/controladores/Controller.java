@@ -76,7 +76,11 @@ public abstract class Controller implements Serializable {
         return null;
     }
 
-    protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected) {
+    protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected)  {
+        return persist(persistAction, successMessage, selected, true );
+    }
+    
+    protected Object persist(JsfUtil.PersistAction persistAction, String successMessage, Object selected, boolean mostrarmsg ) {
         Object persona = null;
         if (selected != null) {
             setEmbeddableKeys();
@@ -87,7 +91,9 @@ public abstract class Controller implements Serializable {
                     getFacade().remove(selected);
 //                    persona = selected;
                 }
-                JsfUtil.addSuccessMessage(successMessage);
+                if(mostrarmsg){
+                    JsfUtil.addSuccessMessage(successMessage);
+                }
             } catch (EJBException ex) {
                 String msg = "";
                 Throwable cause = ex.getCause();
@@ -95,9 +101,13 @@ public abstract class Controller implements Serializable {
                     msg = cause.getLocalizedMessage();
                 }
                 if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
+                    if(mostrarmsg){
+                        JsfUtil.addErrorMessage(msg);
+                    }
                 } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                    if(mostrarmsg){
+                        JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                    }
                 }
             } catch (Exception ex) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

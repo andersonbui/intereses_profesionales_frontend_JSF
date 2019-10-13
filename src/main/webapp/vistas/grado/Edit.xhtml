@@ -14,7 +14,7 @@
                     <p:panelGrid columns="2" rendered="#{gradoController.selected != null}">
                         <p:outputLabel value="#{bundle.EditGradoLabel_curso}" for="curso" />
                         <p:inputText id="curso" value="#{gradoController.selected.curso}" title="#{bundle.EditGradoTitle_curso}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_curso}"/>
-                        <p:outputLabel value="#{bundle.EditGradoLabel_grado}" for="grado" />
+                        <p:outputLabel value="#{bundle.Label_Grado}" for="grado" />
                         <p:inputText id="grado" value="#{gradoController.selected.grado}" title="#{bundle.EditGradoTitle_grado}" />
                         <p:outputLabel value="#{bundle.EditGradoLabel_idInstitucion}" for="idInstitucion" />
                         <p:selectOneMenu id="idInstitucion" value="#{gradoController.selected.idInstitucion}" required="true" requiredMessage="#{bundle.EditGradoRequiredMessage_idInstitucion}">

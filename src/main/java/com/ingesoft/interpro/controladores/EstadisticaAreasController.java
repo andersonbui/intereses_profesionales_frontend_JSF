@@ -17,8 +17,6 @@ import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -27,9 +25,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean(name = "estadisticaAmbienteController")
+@ManagedBean(name = "estadisticaAreasController")
 @SessionScoped
-public class EstadisticaAmbienteController extends Controller implements Serializable {
+public class EstadisticaAreasController extends Controller implements Serializable {
 
     Institucion institucion;
     Grado grado;
@@ -46,7 +44,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     List<DatosRiasec> listaDatosRaisec;
     private String personalidad;
 
-    public EstadisticaAmbienteController() {
+    public EstadisticaAreasController() {
         lista_colores = new ArrayList(6);
         lista_colores.add(new Color(255, 0, 0, 0.7));//rojo-investigativo
         lista_colores.add(new Color(0, 0, 255, 0.7));//azul-social

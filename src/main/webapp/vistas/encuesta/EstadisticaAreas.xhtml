@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/principal.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:outputScript library="js" name="Chart.js"/>
+            <h:form id="EstadisticaForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" id="id_selects">
+
+                        <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
+                        <p:selectOneMenu id="id_select_institucion" 
+                                         value="#{estadisticaAmbienteController.institucion}" 
+                                         required="true"
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
+                                           var="institucion"
+                                           itemLabel="#{institucion.nombre}"
+                                           itemValue="#{institucion}"/>
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_grado}" for="id_select_grado" />
+                        <p:selectOneMenu id="id_select_grado" 
+                                         value="#{estadisticaAmbienteController.grado}" 
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAmbienteController.institucion.gradoList}"
+                                           rendered="#{estadisticaAmbienteController.institucion!= null}"
+                                           var="grado"
+                                           itemLabel="#{grado.curso}"
+                                           itemValue="#{grado}"/>
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_estudiante}" for="id_select_estudiante" />
+                        <p:selectOneMenu id="id_select_estudiante" 
+                                         value="#{estadisticaAmbienteController.estudiante}" 
+                                         immediate="true" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAmbienteController.obternerEstudiante(estadisticaAmbienteController.grado)}"
+                                           rendered="#{estadisticaAmbienteController.grado != null}"
+                                           var="estudiante"
+                                           itemLabel="#{estudiante.idPersona.email}"
+                                           itemValue="#{estudiante}"/>
+                            <f:ajax listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{estadisticaAmbienteController.cargarGraficoResultadoAmbiente()}"
+                                     value="cargar" 
+                                     update="grafica,:growl,display,divgrafico">
+                    </p:commandButton>
+                    
+                    <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
+                        
+                        <h1 style="text-align: center;" value="">Personalidad: #{estadisticaAmbienteController.personalidad}</h1>
+                        <center class="grupo-img-personalidad">
+                            <c:forEach begin="0" end="3" var="index">
+                                <div class="personalidad">
+                                    <div>
+                                        <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" 
+                                                        name="#{encuestaController.resultado_personalidad(index,estadisticaAmbienteController.personalidad)}" class="img_personalidad" style="" />   
+                                    </div>
+                                    <div>
+                                        <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" class="txt_personalidad" />
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </center>
+                    </h:body>
+                    <br/>
+                    <div class="row">
+                        <div>
+                            <h:body id='divgrafico' >
+                                <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
+                                    <script>
+                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                                    </script>
+                                    <div style="height: 300px; width: 700px;" >
+                                        <canvas id="myChart" width="700" height="300"></canvas>
+                                    </div>
+                                </p:panelGrid>
+                            </h:body>
+                        </div>
+                        <div>
+                            <p:outputLabel value="Puntaje de Juego: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
+                            <br/>
+                            <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+            <script type="text/javascript">
+                function graficar(json) {
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+                        var myChart = new Chart(ctx, json);
+                    }
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+
+</html>

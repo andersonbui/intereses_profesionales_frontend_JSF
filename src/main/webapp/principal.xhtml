@@ -101,7 +101,8 @@
                         <p:submenu label="Estadisticas"  rendered="">
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isDocente()}">
-                            <p:menuitem value="Estadisticas" outcome="/vistas/encuesta/Estadistica.xhtml" />
+                            <p:menuitem value="Estadisticas Ambiente/Personalidad" outcome="/vistas/encuesta/Estadistica.xhtml" />
+                            <p:menuitem value="Estadisticas Areas" outcome="/vistas/encuesta/EstadisticaAreas.xhtml" />
                             <p:menuitem value="Generar mineria" rendered="#{loginController.isAdmin()}" action="#{mineriaController.entrenarModelo()}" />
                         </p:submenu>
 

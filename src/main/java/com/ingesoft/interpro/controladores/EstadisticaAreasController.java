@@ -4,15 +4,19 @@ import be.ceau.chart.BarChart;
 import be.ceau.chart.color.Color;
 import be.ceau.chart.data.BarData;
 import be.ceau.chart.dataset.BarDataset;
-import com.ingesoft.interpro.controladores.util.DatosAmbiente;
+import be.ceau.chart.options.BarOptions;
+import be.ceau.chart.options.scales.BarScale;
+import be.ceau.chart.options.scales.YAxis;
+import be.ceau.chart.options.ticks.LinearTicks;
+import com.ingesoft.interpro.controladores.util.DatosEleccionArea;
+import com.ingesoft.interpro.entidades.AreaEncuesta;
 import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
-import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
-import com.ingesoft.interpro.entidades.TipoAmbiente;
+import com.ingesoft.interpro.entidades.TipoEleccionMateria;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -37,21 +41,12 @@ public class EstadisticaAreasController extends Controller implements Serializab
     Date fechaInicio;
     Date fechafin;
     private String string_grafico;
-    String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
-    List<Color> lista_colores;
     String tiempo;
 
     List<DatosRiasec> listaDatosRaisec;
     private String personalidad;
 
     public EstadisticaAreasController() {
-        lista_colores = new ArrayList(6);
-        lista_colores.add(new Color(255, 0, 0, 0.7));//rojo-investigativo
-        lista_colores.add(new Color(0, 0, 255, 0.7));//azul-social
-        lista_colores.add(new Color(255, 170, 0, 0.7));//anaranjado-artistico
-        lista_colores.add(new Color(0, 255, 255, 0.7));//cyan-convencional
-        lista_colores.add(new Color(255, 255, 0, 0.7));//amarillo-emprendedor
-        lista_colores.add(new Color(0, 255, 0, 0.7));//verde-realista
 
     }
 
@@ -182,10 +177,10 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return cargarGraficoResultadoEncuesta(111);
     }
 
-    public DatosAmbiente[] cargarDatosResultadoPor(Estudiante estudiante) {
-        List<ResultadoPorAmbiente> listaResultados = null;
-        listaResultados = resultadosPorEstudiante(estudiante);
-        DatosAmbiente[] listaBarras = null;
+    public DatosEleccionArea[] cargarDatosResultadoPor(Estudiante estudiante) {
+        List<AreaEncuesta> listaResultados = null;
+        listaResultados = resultadosAreaEncuestaPorEstudiante(estudiante);
+        DatosEleccionArea[] listaBarras = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
 
             listaBarras = promedioResultados(listaResultados);
@@ -193,108 +188,10 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return listaBarras;
     }
 
-    public List<DatosRiasec> obtenerDatosRiasec(Encuesta encuesta) {
-        if (listaDatosRaisec != null) {
-            return listaDatosRaisec;
-        }
-        return listaDatosRaisec = generarDatosRiasec(encuesta);
-    }
-
-    public List<DatosRiasec> generarDatosRiasec(Encuesta encuesta) {
-        DatosAmbiente[] datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(encuesta);
-        return generarDatosRiasec(datos);
-    }
-
-    public List<DatosRiasec> obtenerDatosRiasec(Estudiante estudiante) {
-        if (listaDatosRaisec != null) {
-            return listaDatosRaisec;
-        }
-        return listaDatosRaisec = generarDatosRiasec(estudiante);
-    }
-
-    public List<DatosRiasec> generarDatosRiasec(Estudiante estudiante) {
-        DatosAmbiente[] datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(estudiante);
-        return generarDatosRiasec(datos);
-    }
-
-    public List<DatosRiasec> generarDatosRiasec(DatosAmbiente[] datos) {
-        if (datos == null) {
-            return null;
-        }
-        TipoAmbiente amb1 = null;
-
-        for (DatosAmbiente undato : datos) {
-            if (amb1 == null || datos[undato.getTipoAmbiente().getIdTipoAmbiente() - 1].getValor() > datos[amb1.getIdTipoAmbiente() - 1].getValor()) {
-                amb1 = datos[undato.getTipoAmbiente().getIdTipoAmbiente() - 1].getTipoAmbiente();
-            }
-        }
-
-        List<DatosRiasec> listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1);
-        // segundo ambiente
-        TipoAmbiente amb2 = null;
-        double valorDato = 0;
-        double mayorValor = -10;
-        for (DatosRiasec undato : listares) {
-            if (undato.getIdTipoAmbiente2() == null) {
-                if (0 > mayorValor) {
-                    amb2 = null;
-                    mayorValor = 0;
-                }
-            } else {
-                valorDato = datos[undato.getIdTipoAmbiente2().getIdTipoAmbiente() - 1].getValor();
-                if (valorDato == 0) {
-                    valorDato = -1;
-                }
-                if ((mayorValor < 0 && amb2 == null) || valorDato > mayorValor) {
-                    amb2 = datos[undato.getIdTipoAmbiente2().getIdTipoAmbiente() - 1].getTipoAmbiente();
-                    mayorValor = valorDato;
-                }
-            }
-        }
-
-        listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2);
-        // tercer ambiente
-        TipoAmbiente amb3 = null;
-        mayorValor = -10;
-        for (DatosRiasec undato : listares) {
-            if (undato.getIdTipoAmbiente3() == null) {
-                if (0 > mayorValor) {
-                    amb3 = null;
-                    mayorValor = 0;
-                }
-            } else {
-                valorDato = datos[undato.getIdTipoAmbiente3().getIdTipoAmbiente() - 1].getValor();
-                if (valorDato == 0) {
-                    valorDato = -1;
-                }
-                if ((mayorValor < 0 && amb3 == null) || valorDato > mayorValor) {
-                    amb3 = datos[undato.getIdTipoAmbiente3().getIdTipoAmbiente() - 1].getTipoAmbiente();
-                    mayorValor = valorDato;
-                }
-            }
-        }
-
-        List<DatosRiasec> unaListaresUnicos = new ArrayList();
-        // Escoger solo los valores unicos
-        System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
-        listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-        System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
-
-        if (listares != null) {
-            for (DatosRiasec datosR : listares) {
-                if (!unaListaresUnicos.contains(datosR)) {
-                    unaListaresUnicos.add(datosR);
-                }
-            }
-        }
-
-        return unaListaresUnicos;
-    }
-
-    public DatosAmbiente[] cargarDatosResultadoPor(Encuesta encuesta) {
-        List<ResultadoPorAmbiente> listaResultados = null;
+    public DatosEleccionArea[] cargarDatosResultadoPor(Encuesta encuesta) {
+        List<AreaEncuesta> listaResultados = null;
         listaResultados = resultadosPorEncuesta(encuesta);
-        DatosAmbiente[] listaBarras = null;
+        DatosEleccionArea[] listaBarras = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
 
             listaBarras = promedioResultados(listaResultados);
@@ -302,26 +199,26 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return listaBarras;
     }
 
-    public DatosAmbiente[] cargarDatosResultadoEncuesta(int opcion) {
+    public DatosEleccionArea[] cargarDatosResultadoEncuesta(int opcion) {
         string_grafico = null;
-        List<ResultadoPorAmbiente> listaResultados = null;
+        List<AreaEncuesta> listaResultados = null;
         switch (opcion) {
             case 1111:
                 listaResultados = resultadosPorEncuesta(encuesta);
                 break;
             case 111:
-                listaResultados = resultadosPorEstudiante(estudiante);
+                listaResultados = resultadosAreaEncuestaPorEstudiante(estudiante);
                 break;
             case 11:
-                listaResultados = resultadosAmbientePorGrado(grado);
+                listaResultados = resultadosAreaEncuestaPorGrado(grado);
                 break;
             case 1:
-                listaResultados = resultadosAmbientePorInstitucion(institucion);
+                listaResultados = resultadosAreaEncuestaPorInstitucion(institucion);
                 break;
             default:
                 System.out.println("opcion incorrecta");
         }
-        DatosAmbiente[] listaBarras = null;
+        DatosEleccionArea[] listaBarras = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
 
             listaBarras = promedioResultados(listaResultados);
@@ -329,10 +226,23 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return listaBarras;
     }
 
+    DatosEleccionArea[] listaBarrasGrafico;
+
+    public DatosEleccionArea[] getListaBarrasGrafico() {
+        if (listaBarrasGrafico != null) {
+            System.out.println("rgb:" + listaBarrasGrafico[0].getColor().rgba());
+        }
+        return listaBarrasGrafico;
+    }
+
+    public void setListaBarrasGrafico(DatosEleccionArea[] listaBarrasGrafico) {
+        this.listaBarrasGrafico = listaBarrasGrafico;
+    }
+
     public String cargarGraficoResultadoEncuesta(int opcion) {
-        DatosAmbiente[] listaBarras = cargarDatosResultadoEncuesta(opcion);
-        if (listaBarras != null && listaBarras.length != 0) {
-            string_grafico = obtenerGrafico(listaBarras);
+        listaBarrasGrafico = cargarDatosResultadoEncuesta(opcion);
+        if (listaBarrasGrafico != null && listaBarrasGrafico.length != 0) {
+            string_grafico = obtenerGrafico(listaBarrasGrafico);
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage msg;
@@ -342,11 +252,11 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return string_grafico;
     }
 
-    private String obtenerGrafico(DatosAmbiente[] listaDatos) {
+    private String obtenerGrafico(DatosEleccionArea[] listaDatos) {
         List datas = new ArrayList();
         List<Color> colors = new ArrayList();
         BarData data = new BarData();
-        for (DatosAmbiente dato : listaDatos) {
+        for (DatosEleccionArea dato : listaDatos) {
             double valor = Math.round(dato.getValor() * 1000D) / 1000D;
             datas.add(valor);
             colors.add(dato.getColor());
@@ -360,8 +270,13 @@ public class EstadisticaAreasController extends Controller implements Serializab
                 .setBorderColor(Color.DARK_GRAY)
                 .setBorderWidth(2);
         data.addDataset(dataset);
-
-        return new BarChart(data).toJson();
+        BarChart unbar = new BarChart(data);
+        BarOptions options = new BarOptions();
+        options.setResponsive(true);
+        // Comenzar el axis Y en 0 (cero)
+        options.setScales((new BarScale()).addyAxes((new YAxis<LinearTicks>()).setTicks((new LinearTicks()).setBeginAtZero(Boolean.TRUE))));
+        unbar.setOptions(options);
+        return unbar.toJson();
     }
 
     public int detectarTipoEstadistica() {
@@ -378,13 +293,13 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return opcion;
     }
 
-    public List<ResultadoPorAmbiente> resultadosAmbientePorInstitucion(Institucion una_institucion) {
+    public List<AreaEncuesta> resultadosAreaEncuestaPorInstitucion(Institucion una_institucion) {
         if (una_institucion != null) {
-            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
-            List<Grado> listEstudianteGrado = una_institucion.getGradoList();
-            List<ResultadoPorAmbiente> listaResult_aux;
-            for (Grado un_grado : listEstudianteGrado) {
-                listaResult_aux = resultadosAmbientePorGrado(un_grado);
+            List<AreaEncuesta> listaResultados = new ArrayList();
+            List<Grado> listGrado = una_institucion.getGradoList();
+            List<AreaEncuesta> listaResult_aux;
+            for (Grado un_grado : listGrado) {
+                listaResult_aux = resultadosAreaEncuestaPorGrado(un_grado);
                 if (listaResult_aux == null || listaResult_aux.isEmpty()) {
                     continue;
                 }
@@ -395,14 +310,14 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return null;
     }
 
-    public List<ResultadoPorAmbiente> resultadosAmbientePorGrado(Grado un_grado) {
+    public List<AreaEncuesta> resultadosAreaEncuestaPorGrado(Grado un_grado) {
         if (un_grado != null) {
-            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+            List<AreaEncuesta> listaResultados = new ArrayList();
             List<Encuesta> listaEncuestas = un_grado.getEncuestaList();
             listaTotalEncuestas.addAll(listaEncuestas);
             for (Encuesta uencuesta : listaEncuestas) {
 
-                List<ResultadoPorAmbiente> listaResultadosPorAmbiente = uencuesta.getResultadoPorAmbienteList();
+                List<AreaEncuesta> listaResultadosPorAmbiente = uencuesta.getAreaEncuestaList();
                 if (listaResultadosPorAmbiente.isEmpty()) {
                     continue;
                 }
@@ -413,18 +328,18 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return null;
     }
 
-    public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante) {
+    public List<AreaEncuesta> resultadosAreaEncuestaPorEstudiante(Estudiante un_estudiante) {
         if (listaTotalEncuestas == null) {
             listaTotalEncuestas = new ArrayList();
         }
         if (un_estudiante != null) {
-            List<ResultadoPorAmbiente> listaResultados = new ArrayList();
+            List<AreaEncuesta> listaResultados = new ArrayList();
 
             List<Encuesta> listaEncuestas = un_estudiante.getEncuestaList();
             listaTotalEncuestas.addAll(listaEncuestas);
             for (Encuesta una_encuesta : listaEncuestas) {
 
-                List<ResultadoPorAmbiente> listaResultadosPorAmbiente = una_encuesta.getResultadoPorAmbienteList();
+                List<AreaEncuesta> listaResultadosPorAmbiente = una_encuesta.getAreaEncuestaList();
                 if (listaResultadosPorAmbiente.isEmpty()) {
                     continue;
                 }
@@ -435,14 +350,14 @@ public class EstadisticaAreasController extends Controller implements Serializab
         return null;
     }
 
-    public List<ResultadoPorAmbiente> resultadosPorEncuesta(Encuesta encuesta) {
+    public List<AreaEncuesta> resultadosPorEncuesta(Encuesta encuesta) {
         System.out.println("resultadosPorEncuesta: " + encuesta);
         if (listaTotalEncuestas == null) {
             listaTotalEncuestas = new ArrayList();
         }
         listaTotalEncuestas.add(encuesta);
         if (encuesta != null) {
-            List<ResultadoPorAmbiente> listaResultados = getResultadoPorAmbienteController().getItemsPorEncuesta(encuesta.getIdEncuesta());
+            List<AreaEncuesta> listaResultados = getAreaEncuestaController().getItemsPorEncuesta(encuesta);
             return listaResultados;
         }
         return null;
@@ -450,36 +365,67 @@ public class EstadisticaAreasController extends Controller implements Serializab
 
     /**
      *
-     * @param listaResultadosPorAmbiente
+     * @param listaAreaEncuesta
      * @return
      */
-    public DatosAmbiente[] promedioResultados(List<ResultadoPorAmbiente> listaResultadosPorAmbiente) {
-        if (listaResultadosPorAmbiente == null || listaResultadosPorAmbiente.isEmpty()) {
+    public DatosEleccionArea[] promedioResultados(List<AreaEncuesta> listaAreaEncuesta) {
+        if (listaAreaEncuesta == null || listaAreaEncuesta.isEmpty()) {
             return null;
         }
-        DatosAmbiente[] listaDatos = new DatosAmbiente[6];
-        DatosAmbiente datos;
-//        System.out.println("result: " + listaResultadosPorAmbiente);
-        for (ResultadoPorAmbiente result : listaResultadosPorAmbiente) {
-            int tipo = result.getTipoAmbiente().getIdTipoAmbiente();
-            if (listaDatos[tipo - 1] == null) {
-                listaDatos[tipo - 1] = new DatosAmbiente();
-                listaDatos[tipo - 1].setTipo(result.getTipoAmbiente().getIdTipoAmbiente());
-                listaDatos[tipo - 1].setLabel(result.getTipoAmbiente().getTipo());
-                listaDatos[tipo - 1].setTipoAmbiente(result.getTipoAmbiente());
-                String[] color = result.getTipoAmbiente().getColor().split(",");
-                int r = Integer.parseInt(color[0]);
-                int g = Integer.parseInt(color[1]);
-                int b = Integer.parseInt(color[2]);
-                double a = Double.parseDouble(color[3]);
-                listaDatos[tipo - 1].setColor(new Color(r, g, b, a));
+        int maxIdArea = getAreaController().maxIdArea();
+        int[][] resultado = new int[maxIdArea][3];
+        /**
+         * 1: mas me gusta 2: menos me gusta 3: por nota
+         */
+        // contar elecciones por timpo de eleccion por area
+        int k = 0;
+
+        for (AreaEncuesta areaEnc : listaAreaEncuesta) {
+            k++;
+            if (areaEnc == null || areaEnc.getIdArea() == null) {
+                continue;
             }
-            datos = listaDatos[tipo - 1];
-            datos.setValor(datos.getValor() + (double) result.getValor());
+            int indiceArea = areaEnc.
+                    getIdArea().
+                    getIdArea() - 1;
+            int indiceIdTipoEleccion = areaEnc.getTipoEleccionMateria().getIdTipoEleccionMateria() - 1;
+            resultado[indiceArea][indiceIdTipoEleccion]++;
         }
-        for (DatosAmbiente listaDato : listaDatos) {
-            listaDato.setValor(listaDato.getValor() * 6 / listaResultadosPorAmbiente.size());
+
+        List<TipoEleccionMateria> listaTipoEleccion = getTipoEleccionMateriaController().getItems();
+        int[] indicesMaximos = new int[listaTipoEleccion.size()];
+        // inicializar los indices
+        for (int j = 0; j < indicesMaximos.length; j++) {
+            indicesMaximos[j] = 0;
         }
+        // buscar maximo contador por materia por tipo de eleccion
+        for (int i = 1; i < maxIdArea; i++) {
+            for (int j = 0; j < indicesMaximos.length; j++) {
+                if (resultado[indicesMaximos[j]][j] < resultado[i][j]) {
+                    indicesMaximos[j] = i;
+                }
+            }
+        }
+
+        DatosEleccionArea[] listaDatos = new DatosEleccionArea[listaTipoEleccion.size()];
+        for (int j = 0; j < listaTipoEleccion.size(); j++) {
+            TipoEleccionMateria untipoEM = listaTipoEleccion.get(j);
+            int tipo = untipoEM.getIdTipoEleccionMateria();
+            if (listaDatos[tipo - 1] == null) {
+                listaDatos[tipo - 1] = new DatosEleccionArea();
+            }
+            listaDatos[tipo - 1].setTipo(1);
+            listaDatos[tipo - 1].setLabel(untipoEM.getTipo());
+            String[] color = listaTipoEleccion.get(j).getColor().split(",");
+            int r = Integer.parseInt(color[0]);
+            int g = Integer.parseInt(color[1]);
+            int b = Integer.parseInt(color[2]);
+            double a = Double.parseDouble(color[3]);
+            listaDatos[tipo - 1].setColor(new Color(r, g, b, a));
+            listaDatos[tipo - 1].setValor((double) resultado[indicesMaximos[j]][j]);
+            listaDatos[tipo - 1].setArea(getAreaController().getArea(indicesMaximos[j] + 1));
+        }
+
         return listaDatos;
     }
 

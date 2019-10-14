@@ -4,6 +4,10 @@ import be.ceau.chart.BarChart;
 import be.ceau.chart.color.Color;
 import be.ceau.chart.data.BarData;
 import be.ceau.chart.dataset.BarDataset;
+import be.ceau.chart.options.BarOptions;
+import be.ceau.chart.options.scales.BarScale;
+import be.ceau.chart.options.scales.YAxis;
+import be.ceau.chart.options.ticks.LinearTicks;
 import com.ingesoft.interpro.controladores.util.DatosAmbiente;
 import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
@@ -363,7 +367,13 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
                 .setBorderWidth(2);
         data.addDataset(dataset);
 
-        return new BarChart(data).toJson();
+        BarChart unbar = new BarChart(data);
+        BarOptions options = new BarOptions();
+        options.setResponsive(true);
+        // Comenzar el axis Y en 0 (cero)
+        options.setScales((new BarScale()).addyAxes((new YAxis<LinearTicks>()).setTicks((new LinearTicks()).setBeginAtZero(Boolean.TRUE))));
+        unbar.setOptions(options);
+        return unbar.toJson();
     }
 
     public int detectarTipoEstadistica() {

@@ -143,6 +143,10 @@ public class AreaEncuestaController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
+    public List<AreaEncuesta> getItemsPorEncuesta(Encuesta encuesta) {
+        return getFacade().obtenerResultadoPorAmbiente(encuesta);
+    }
+    
     public List<AreaEncuesta> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a")
     , @NamedQuery(name = "Area.findByIdArea", query = "SELECT a FROM Area a WHERE a.idArea = :idArea")
-    , @NamedQuery(name = "Area.findByNombre", query = "SELECT a FROM Area a WHERE a.nombre = :nombre")})
+    , @NamedQuery(name = "Area.findByNombre", query = "SELECT a FROM Area a WHERE a.nombre = :nombre")
+    , @NamedQuery(name = "Area.maxIdArea", query = "SELECT MAX(a.idArea) FROM Area a")
+})
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;

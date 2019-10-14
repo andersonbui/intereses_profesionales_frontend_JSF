@@ -6,9 +6,11 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Area;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,11 @@ public class AreaFacade extends AbstractFacade<Area> {
     public AreaFacade() {
         super(Area.class);
     }
-    
+
+    public Integer maxIdArea() {
+        Query query = em.createNamedQuery("Area.maxIdArea");
+        Object obj = query.getSingleResult();
+        Integer listaEncuestas = (Integer) obj;
+        return listaEncuestas;
+    }
 }

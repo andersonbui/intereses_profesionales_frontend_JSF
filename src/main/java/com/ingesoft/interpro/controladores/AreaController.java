@@ -199,6 +199,10 @@ public class AreaController implements Serializable {
         return getFacade().find(id);
     }
 
+    public int maxIdArea() {
+        return getFacade().maxIdArea();
+    }
+    
     public List<Area> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

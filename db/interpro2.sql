@@ -18,3 +18,6 @@ INNER JOIN interpro.Encuesta as eta ON estg.idEstudiante = eta.idEstudiante AND 
 INNER JOIN interpro.AreaProfesional as apf ON apf.idAreaProfesional = eta.idAreaProfesional
 INNER JOIN interpro.ResultadoPorAmbiente as rpa ON rpa.idEncuesta = eta.idEncuesta
 WHERE gd.grado = 8 AND est.idPersona > 100;
+
+
+SELECT max(idArea) from interpro.Area;

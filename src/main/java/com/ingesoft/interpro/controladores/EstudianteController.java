@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
@@ -21,7 +22,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
@@ -35,12 +35,9 @@ public class EstudianteController extends Controller implements Serializable {
     private boolean editar;
     private int pasoActual;
     private boolean skip;
-    private int number;
-    private int puntos;
 
     public EstudianteController() {
         pasoActual = 0;
-        puntos = 0;
     }
 
     public boolean isEditar() {
@@ -141,6 +138,13 @@ public class EstudianteController extends Controller implements Serializable {
             items = getFacade().findAll();
         }
         return items;
+    }
+    
+    public List<Estudiante> getItems(Institucion institucion) {
+        List<Estudiante> lista_e = getFacade().buscarPorInstitucion(institucion);
+        System.out.println("lista estudiantes:");
+        System.out.println(lista_e);
+        return  lista_e;
     }
 
     public String onFlowProcess(FlowEvent event) {

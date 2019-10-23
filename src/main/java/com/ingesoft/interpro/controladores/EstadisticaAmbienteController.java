@@ -44,20 +44,14 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     Date fechafin;
     private String string_grafico;
     String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
-    List<Color> lista_colores;
     String tiempo;
 
     List<DatosRiasec> listaDatosRaisec;
     private String personalidad;
+    
+    List<Resultados> cadenasgrafico;
 
     public EstadisticaAmbienteController() {
-        lista_colores = new ArrayList(6);
-        lista_colores.add(new Color(255, 0, 0, 0.7));//rojo-investigativo
-        lista_colores.add(new Color(0, 0, 255, 0.7));//azul-social
-        lista_colores.add(new Color(255, 170, 0, 0.7));//anaranjado-artistico
-        lista_colores.add(new Color(0, 255, 255, 0.7));//cyan-convencional
-        lista_colores.add(new Color(255, 255, 0, 0.7));//amarillo-emprendedor
-        lista_colores.add(new Color(0, 255, 0, 0.7));//verde-realista
 
     }
 
@@ -163,7 +157,13 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 //        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
-
+    
+    public String[] getGraficoMultiple() {
+        String[] graficas = new String[2];
+//        System.out.println("getGraficoModelo: " + string_grafico);
+        return graficas;
+    }
+    
     public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
@@ -177,12 +177,45 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
         return result;
     }
+    
+//    public List<Resultados> cargarEstadisticasPorCadaEstudiante() {
+//        cadenasgrafico = new ArrayList<>();
+//    }
+    
+    public Resultados cargarGraficoResultadoAmbiente(Estudiante estudiante) {
+        Resultados resul = new Resultados();
+        int opcion = detectarTipoEstadistica();
+        System.out.println("opcion: " + opcion);
+        List ListaEncuestas = new ArrayList();
+        String stringgrafico = null;
+        
+        
+        List<ResultadoPorAmbiente> listaResultados = resultadosPorEstudiante(estudiante);
+        DatosAmbiente[] listaBarras = null;
+        if (listaResultados != null && !listaResultados.isEmpty()) {
+            listaBarras = promedioResultados(listaResultados);
+            stringgrafico = obtenerGrafico(listaBarras);
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage msg;
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
+            context.addMessage(null, msg);
+        }
+        
+        resul.setGrafico(stringgrafico);
 
+        EncuestaController encuestaController = getEncuestaController();
+        encuestaController.setItems(ListaEncuestas);
+        String unapersonalidad = encuestaController.obtenerPromedioPersonalidad(ListaEncuestas);
+        resul.setPersonalidad(unapersonalidad);
+        return resul;
+    }
+    
     public String cargarGraficoResultadoEncuesta(Encuesta encuesta) {
         this.encuesta = encuesta;
         return cargarGraficoResultadoEncuesta(1111);
     }
-
+    
     public String cargarGraficoResultadoEncuestaEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
         return cargarGraficoResultadoEncuesta(111);
@@ -307,7 +340,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         }
         return listaBarras;
     }
-
+   
     public DatosAmbiente[] cargarDatosResultadoEncuesta(int opcion) {
         string_grafico = null;
         List<ResultadoPorAmbiente> listaResultados = null;
@@ -499,5 +532,29 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     protected AbstractFacade getFacade() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static class Resultados {
+        String grafico;
+        String personalidad;
 
+        public String getGrafico() {
+            return grafico;
+        }
+
+        public void setGrafico(String grafico) {
+            this.grafico = grafico;
+        }
+
+        public String getPersonalidad() {
+            return personalidad;
+        }
+
+        public void setPersonalidad(String personalidad) {
+            this.personalidad = personalidad;
+        }
+        
+        
+        
+    }
+    
 }

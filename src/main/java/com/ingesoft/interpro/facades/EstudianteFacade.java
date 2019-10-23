@@ -6,7 +6,9 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,6 +41,16 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> {
             if (estud != null) {
                 return estud;
             }
+        }
+        return null;
+    }
+    
+    
+    public List<Estudiante> buscarPorInstitucion(Institucion institucion) {
+        Query query = em.createNamedQuery("Estudiante.buscarPorInstitucion");
+        query.setParameter("institucion", institucion);
+        if (!query.getResultList().isEmpty()) {
+            return query.getResultList();
         }
         return null;
     }

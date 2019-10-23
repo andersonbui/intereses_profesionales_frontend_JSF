@@ -23,6 +23,19 @@
         <script  src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
 
         <title><ui:insert name="title">Default Title</ui:insert></title>
+
+        <script type="text/javascript">
+
+            function graficar(id, json = null) {
+                if (json !== null) {
+                    if (id !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById(id);
+                        new Chart(ctx, json);
+                    }
+                }
+            }
+        </script>
     </h:head>
 
     <h:body class="question-page unified-theme new-topbar">
@@ -102,6 +115,7 @@
                         </p:submenu>
                         <p:submenu label="Administracion" rendered="#{loginController.isDocente()}">
                             <p:menuitem value="Estadisticas Ambiente/Personalidad" outcome="/vistas/encuesta/Estadistica.xhtml" />
+                            <p:menuitem value="Estadisticas Por estudiante" outcome="/vistas/encuesta/EstadisticaMultiple.xhtml" />
                             <p:menuitem value="Estadisticas Areas" outcome="/vistas/encuesta/EstadisticaAreas.xhtml" />
                             <p:menuitem value="Generar mineria" rendered="#{loginController.isAdmin()}" action="#{mineriaController.entrenarModelo()}" />
                         </p:submenu>

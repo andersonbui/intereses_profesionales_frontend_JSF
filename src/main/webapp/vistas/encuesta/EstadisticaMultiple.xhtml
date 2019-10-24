@@ -13,8 +13,7 @@
         </ui:define>
 
         <ui:define name="content">
-            <h:outputScript library="js" name="Chart.js"/>
-            <h:form id="EstadisticaForm">
+            <h:form id="EstadisticaForm" style="border: whitesmoke 30px solid">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" id="id_selects">
 
@@ -64,26 +63,50 @@
                                      value="cargar" 
                                      update=":growl,display,id_estudiantes">
                     </p:commandButton>
-                    <button type="button" value=""   onclick="printPage()" >
+                    <button type="button" value=""   onclick="generarpdf()" >
                         <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                     </button>
                     <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.institucion != null}"
-                              value="#{estudianteController.getItems(estadisticaAmbienteController.institucion)}" var="est"> 
+                              value="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante(estudianteController.getItems(estadisticaAmbienteController.institucion))}" var="result"> 
+                        
+                        <br/>
+                        <!-- ADD_PAGE -->
+                        "<!-- ADD_PAGE -->"
                         <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
 
                             <p:outputPanel>
+                                <h3><b>Estimado estudiante #{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido} los resultados para usted son: </b></h3>
+                                <br/>
+
+                                <h:body id='idpersonalidad'  rendered="#{result.personalidad != null}" >
+                                    <h1 style="text-align: center;" value="">Personalidad: #{result.personalidad}</h1>
+                                    <center class="grupo-img-personalidad">
+                                        <c:forEach begin="0" end="3" var="index">
+                                            <div class="personalidad">
+                                                <div>
+                                                    <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad )}" 
+                                                                    name="#{encuestaController.resultado_personalidad(index, result.personalidad)}" class="img_personalidad" style="" />   
+                                                </div>
+                                                <div>
+                                                    <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad )}" class="txt_personalidad" />
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </center>
+                                </h:body>
+                                
                                 <h:panelGrid columns="2" cellpadding="5">
-                                    #{est.idPersona.email}, #{est.estrato}
+                                    #{result.estudiante.idPersona.email}, #{result.estudiante.estrato}
                                     
                                     <div class="row">
                                         <div>
                                             <h:body id='divgrafico' >
                                                 <p:panelGrid id="grafica" >
                                                     <div style="height: 300px; width: 700px;" >
-                                                        <canvas id="#{est.idEstudiante}" width="700" height="300"></canvas>
+                                                        <canvas id="#{result.estudiante.idEstudiante}" width="700" height="300"></canvas>
                                                     </div>
                                                     <script>
-                                                        graficar("#{est.idEstudiante}", #{estadisticaAmbienteController.cargarGraficoResultadoEncuestaEstudiante(est)});
+                                                        graficar("#{result.estudiante.idEstudiante}", #{result.grafico});
                                                     </script>
                                                 </p:panelGrid>
                                             </h:body>
@@ -100,26 +123,40 @@
                         </h:panelGrid>
                         <hr />
                     </p:repeat>
-                        <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
-
-                            <h1 style="text-align: center;" value="">Personalidad: #{estadisticaAmbienteController.personalidad}</h1>
-                            <center class="grupo-img-personalidad">
-                                <c:forEach begin="0" end="3" var="index">
-                                    <div class="personalidad">
-                                        <div>
-                                            <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" 
-                                                            name="#{encuestaController.resultado_personalidad(index,estadisticaAmbienteController.personalidad)}" class="img_personalidad" style="" />   
-                                        </div>
-                                        <div>
-                                            <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, estadisticaAmbienteController.personalidad )}" class="txt_personalidad" />
-                                        </div>
-                                    </div>
-                                </c:forEach>
-                            </center>
-                        </h:body>
-                        
                 </h:panelGroup>
             </h:form>
+            <script>
+                function generarpdf() {
+                   var printContents = document.getElementById('EstadisticaForm').innerHTML;
+//                    w = window.open();
+//                    w.document.write(printContents);
+//                    w.document.close(); // necessary for IE >= 10
+//                    w.focus(); // necessary for IE >= 10
+//                    w.print();
+//                    w.close();
+                    //window.print();
+//                    var originalContents = document.body.innerHTML;
+//
+//                    document.body.innerHTML = printContents;
+//                    window.print();
+//                    document.body.innerHTML = originalContents;
+
+                    var mywindow = window.open('', 'my div', 'height=400,width=600');
+                    mywindow.document.write('<html><head><title>Resultados del uso de la plataforma</title>');
+                    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+                    mywindow.document.write(document.head.innerHTML);
+                    mywindow.document.write('</head><body >');
+                    mywindow.document.write(printContents);
+                    mywindow.document.write('</body></html>');
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10
+
+                    mywindow.print();
+//                    mywindow.close();
+
+                    return true;
+                }
+            </script>
         </ui:define>
     </ui:composition>
 

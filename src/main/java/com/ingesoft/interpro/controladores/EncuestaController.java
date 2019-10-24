@@ -128,7 +128,7 @@ public class EncuestaController extends Controller implements Serializable {
             int cantidad = 0;
             double suma = 0;
             for (Encuesta item : items) {
-                
+
                 if (item != null && item.getPuntajeEvaluacion() != null) {
                     suma += item.getPuntajeEvaluacion();
                     cantidad++;
@@ -449,7 +449,7 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
-        System.out.println("resultado_personalidad/personalidad: "+personalidad);
+        System.out.println("resultado_personalidad/personalidad: " + personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
@@ -459,6 +459,9 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad_descripcion(int i, String personalidad) {
+        if (personalidad == null || personalidad == "") {
+            return null;
+        }
         String result_personalidad = personalidad;
         String codigo_personalidad = "" + i + result_personalidad.charAt(i);
         if (null == codigo_personalidad) {

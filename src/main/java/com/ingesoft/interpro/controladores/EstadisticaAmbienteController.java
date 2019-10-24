@@ -49,7 +49,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
     List<DatosRiasec> listaDatosRaisec;
     private String personalidad;
-    
+
     List<ResultadoEstMultiple> cadenasgrafico;
 
     public EstadisticaAmbienteController() {
@@ -148,6 +148,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     public void reiniciarEstadistica() {
         string_grafico = null;
         listaDatosRaisec = null;
+        cadenasgrafico = null;
     }
 
     public List<DatosRiasec> getListaDatosRaisec() {
@@ -158,13 +159,13 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 //        System.out.println("getGraficoModelo: " + string_grafico);
         return string_grafico;
     }
-    
+
     public String[] getGraficoMultiple() {
         String[] graficas = new String[2];
 //        System.out.println("getGraficoModelo: " + string_grafico);
         return graficas;
     }
-    
+
     public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
@@ -178,23 +179,25 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
         return result;
     }
-    
-    public List<ResultadoEstMultiple> cargarEstadisticasPorCadaEstudiante(List<Estudiante> listaEst) {
-        cadenasgrafico = new ArrayList<>();
-        for (Estudiante unestudiante : listaEst) {
-            cadenasgrafico.add(cargarGraficoResultadoAmbiente(unestudiante));
+
+    public List<ResultadoEstMultiple> cargarEstadisticasPorCadaEstudiante() {
+        if (getEstadisticaAmbienteController().getInstitucion() != null && cadenasgrafico == null) {
+            List<Estudiante> listaEst = getEstudianteController().getItems(getEstadisticaAmbienteController().getInstitucion());
+            if (listaEst != null) {
+                cadenasgrafico = new ArrayList<>();
+                for (Estudiante unestudiante : listaEst) {
+                    cadenasgrafico.add(cargarGraficoResultadoAmbiente(unestudiante));
+                }
+            }
         }
         return cadenasgrafico;
     }
-    
+
     public ResultadoEstMultiple cargarGraficoResultadoAmbiente(Estudiante estudiante) {
         ResultadoEstMultiple resul = new ResultadoEstMultiple();
-        int opcion = detectarTipoEstadistica();
-        System.out.println("opcion: " + opcion);
         List listaEncuestas = new ArrayList();
         String stringgrafico = null;
-        
-        
+
         List<ResultadoPorAmbiente> listaResultados = resultadosPorEstudiante(estudiante, listaEncuestas);
         DatosAmbiente[] listaBarras = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
@@ -206,7 +209,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
             context.addMessage(null, msg);
         }
-        
+
         resul.setGrafico(stringgrafico);
         resul.setEstudiante(estudiante);
 
@@ -216,12 +219,12 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         resul.setPersonalidad(unapersonalidad);
         return resul;
     }
-    
+
     public String cargarGraficoResultadoEncuesta(Encuesta encuesta) {
         this.encuesta = encuesta;
         return cargarGraficoResultadoEncuesta(1111);
     }
-    
+
     public String cargarGraficoResultadoEncuestaEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
         return cargarGraficoResultadoEncuesta(111);
@@ -229,7 +232,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
     public DatosAmbiente[] cargarDatosResultadoPor(Estudiante estudiante) {
         List<ResultadoPorAmbiente> listaResultados = null;
-        listaResultados = resultadosPorEstudiante(estudiante,listaTotalEncuestas);
+        listaResultados = resultadosPorEstudiante(estudiante, listaTotalEncuestas);
         DatosAmbiente[] listaBarras = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
 
@@ -346,7 +349,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         }
         return listaBarras;
     }
-   
+
     public DatosAmbiente[] cargarDatosResultadoEncuesta(int opcion) {
         string_grafico = null;
         List<ResultadoPorAmbiente> listaResultados = null;
@@ -464,7 +467,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         return null;
     }
 
-    public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante, List listaTotalEncuestas ) {
+    public List<ResultadoPorAmbiente> resultadosPorEstudiante(Estudiante un_estudiante, List listaTotalEncuestas) {
         if (listaTotalEncuestas == null) {
             listaTotalEncuestas = new ArrayList();
         }
@@ -538,5 +541,5 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
     protected AbstractFacade getFacade() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

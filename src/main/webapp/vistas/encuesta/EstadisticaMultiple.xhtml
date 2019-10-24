@@ -59,32 +59,40 @@
                             <f:ajax listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{estadisticaAmbienteController.cargarGraficoResultadoAmbiente()}"
+                    <p:commandButton actionListener="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}"
                                      value="cargar" 
                                      update=":growl,display,id_estudiantes">
                     </p:commandButton>
                     <button type="button" value=""   onclick="generarpdf()" >
                         <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                     </button>
-                    <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.institucion != null}"
-                              value="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante(estudianteController.getItems(estadisticaAmbienteController.institucion))}" var="result"> 
+                    <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}"
+                              value="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}" var="result"> 
                         
                         <br/>
                         <!-- ADD_PAGE -->
-                        "<!-- ADD_PAGE -->"
-                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail" 
+                                     rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}">
 
                             <p:outputPanel>
-                                <h3><b>Estimado estudiante #{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido} los resultados para usted son: </b></h3>
+                                <h4 style="text-align:center">Estimado estudiante <b>#{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido}</b></h4>
+                                <p  style="font-size: 1.5em; text-align: left">Email: #{result.estudiante.idPersona.email} </p>
+                                <p  style="font-size: 1.5em; text-align: left">Estrato: #{result.estudiante.estrato}</p>
                                 <br/>
-
-                                <h:body id='idpersonalidad'  rendered="#{result.personalidad != null}" >
+                                <h:outputFormat rendered="#{result.personalidad!=''}">
+                                    <h2> Sus resultados son: </h2>
+                                </h:outputFormat>
+                                <h:outputFormat rendered="#{result.personalidad==''}">
+                                    <h2> No ha completado la encuesta.</h2>
+                                </h:outputFormat>
+                                <br/>
+                                <h:body id='idpersonalidad' rendered="#{result.personalidad!='' and encuestaController.resultado_personalidad_descripcion(index, result.personalidad ) != null}" >
                                     <h1 style="text-align: center;" value="">Personalidad: #{result.personalidad}</h1>
                                     <center class="grupo-img-personalidad">
                                         <c:forEach begin="0" end="3" var="index">
                                             <div class="personalidad">
                                                 <div>
-                                                    <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad )}" 
+                                                    <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad)}" 
                                                                     name="#{encuestaController.resultado_personalidad(index, result.personalidad)}" class="img_personalidad" style="" />   
                                                 </div>
                                                 <div>
@@ -95,9 +103,8 @@
                                     </center>
                                 </h:body>
                                 
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    #{result.estudiante.idPersona.email}, #{result.estudiante.estrato}
-                                    
+                                <h:panelGrid columns="2" cellpadding="5" rendered="#{result.grafico != null}">
+                                                                        
                                     <div class="row">
                                         <div>
                                             <h:body id='divgrafico' >
@@ -128,20 +135,8 @@
             <script>
                 function generarpdf() {
                    var printContents = document.getElementById('EstadisticaForm').innerHTML;
-//                    w = window.open();
-//                    w.document.write(printContents);
-//                    w.document.close(); // necessary for IE >= 10
-//                    w.focus(); // necessary for IE >= 10
-//                    w.print();
-//                    w.close();
-                    //window.print();
-//                    var originalContents = document.body.innerHTML;
-//
-//                    document.body.innerHTML = printContents;
-//                    window.print();
-//                    document.body.innerHTML = originalContents;
 
-                    var mywindow = window.open('', 'my div', 'height=400,width=600');
+                    var mywindow = window.open('', 'Resultados del uso de la plataforma', 'height=400,width=600');
                     mywindow.document.write('<html><head><title>Resultados del uso de la plataforma</title>');
                     /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
                     mywindow.document.write(document.head.innerHTML);
@@ -152,7 +147,7 @@
                     mywindow.focus(); // necessary for IE >= 10
 
                     mywindow.print();
-//                    mywindow.close();
+                    mywindow.close();
 
                     return true;
                 }

@@ -142,8 +142,8 @@ public class EstudianteController extends Controller implements Serializable {
     
     public List<Estudiante> getItems(Institucion institucion) {
         List<Estudiante> lista_e = getFacade().buscarPorInstitucion(institucion);
-        System.out.println("lista estudiantes:");
-        System.out.println(lista_e);
+//        System.out.println("lista estudiantes:");
+//        System.out.println(lista_e);
         return  lista_e;
     }
 

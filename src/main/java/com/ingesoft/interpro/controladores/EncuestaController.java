@@ -449,7 +449,11 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
-        System.out.println("resultado_personalidad/personalidad: " + personalidad);
+        if (personalidad == null || "".equals(personalidad)) {
+            return null;
+        }
+        System.out.println("resultado_personalidad-: "+personalidad);
+        System.out.println("resultado_personalidad-/personalidad: " + personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
         System.out.println(url);
@@ -459,14 +463,20 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad_descripcion(int i, String personalidad) {
-        if (personalidad == null || personalidad == "") {
-            return null;
+        if (personalidad == null || "".equals(personalidad)) {
+            return "";
         }
-        String result_personalidad = personalidad;
-        String codigo_personalidad = "" + i + result_personalidad.charAt(i);
-        if (null == codigo_personalidad) {
+        System.out.println("resultado_personalidad_descripcion: "+personalidad);
+        Character result_personalidad = null;
+        try{
+            result_personalidad = personalidad.charAt(i);
+        }catch (Exception e) {
+            System.out.println("personalidad vacia");
+        }
+        if (null == result_personalidad) {
             return null;
         } else {
+            String codigo_personalidad = "" + i + result_personalidad;
             switch (codigo_personalidad) {
                 case "0E":
                     return "Estrovertido";

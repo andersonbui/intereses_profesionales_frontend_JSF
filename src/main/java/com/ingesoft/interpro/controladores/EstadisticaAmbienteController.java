@@ -200,9 +200,12 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
         List<ResultadoPorAmbiente> listaResultados = resultadosPorEstudiante(estudiante, listaEncuestas);
         DatosAmbiente[] listaBarras = null;
+        List<DatosRiasec> listaRiasec = null;
         if (listaResultados != null && !listaResultados.isEmpty()) {
             listaBarras = promedioResultados(listaResultados);
             stringgrafico = obtenerGrafico(listaBarras);
+            // datos riasec
+            listaRiasec = generarDatosRiasec(listaBarras);
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage msg;
@@ -210,11 +213,17 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
             context.addMessage(null, msg);
         }
 
+        
         resul.setGrafico(stringgrafico);
         resul.setEstudiante(estudiante);
+        resul.setListaDatRiasec(listaRiasec);
 
         EncuestaController encuestaController = getEncuestaController();
         encuestaController.setItems(listaEncuestas);
+        
+        resul.setPromedioPuntajeEValuacion(encuestaController.promedioPuntajeEvaluacion());
+        resul.setPromedioPuntajeEncuesta(encuestaController.promedioPuntajeEncuesta());
+        
         String unapersonalidad = encuestaController.obtenerPromedioPersonalidad(listaEncuestas);
         resul.setPersonalidad(unapersonalidad);
         return resul;

@@ -64,11 +64,8 @@
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico">
                     </p:commandButton>
-                    <button type="button" value=""   onclick="printPage()" >
-                        <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Cada estudiante 
-                    </button>
-                    <button type="button" value=""   onclick="printPage()" >
-                        <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Esta hoja 
+                    <button type="button" value=""   onclick="window.print()" >
+                        <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                     </button>
                     <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
                         

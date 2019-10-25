@@ -4,6 +4,8 @@ import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
 import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
@@ -134,9 +136,7 @@ public class EstudianteController extends Controller implements Serializable {
     }
 
     public List<Estudiante> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
         return items;
     }
     
@@ -203,6 +203,16 @@ public class EstudianteController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
+    public String ultimoGrado(Estudiante estudiante){
+        if (estudiante != null) {
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
+            if (estudianteGrado != null) {
+                return estudianteGrado.getGrado().getCurso();
+            }
+        }
+        return "";
+    }
+    
     public Estudiante getEstudiantePorPersona(Persona persona) {
 //        System.out.println("persona: " + persona);
 //        System.out.println("getFacade(): " + getFacade());

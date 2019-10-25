@@ -89,9 +89,7 @@ public class CodigoInstitucionController implements Serializable {
     }
 
     public List<CodigoInstitucion> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
         return items;
     }
 

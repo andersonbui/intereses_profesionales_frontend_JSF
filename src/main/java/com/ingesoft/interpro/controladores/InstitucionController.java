@@ -72,9 +72,7 @@ public class InstitucionController extends Controller {
     }
 
     public List<Institucion> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
         return items;
     }
 

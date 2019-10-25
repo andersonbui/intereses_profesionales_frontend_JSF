@@ -107,10 +107,15 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public double promedioPuntajeEncuesta() {
-        if (items != null && !items.isEmpty()) {
+        
+        return  promedioPuntajeEncuesta(items);
+    }
+    
+    public double promedioPuntajeEncuesta(List<Encuesta> listaItems ) {
+        if (listaItems != null && !listaItems.isEmpty()) {
             int cantidad = 0;
             double suma = 0;
-            for (Encuesta item : items) {
+            for (Encuesta item : listaItems) {
                 if (item != null && item.getPuntajeEncuesta() != null) {
                     suma += item.getPuntajeEncuesta();
                     cantidad++;
@@ -122,12 +127,16 @@ public class EncuestaController extends Controller implements Serializable {
         }
         return 0;
     }
-
+    
     public double promedioPuntajeEvaluacion() {
-        if (items != null && !items.isEmpty()) {
+        return promedioPuntajeEvaluacion(items);
+    }
+
+    public double promedioPuntajeEvaluacion(List<Encuesta> listaItems) {
+        if (listaItems != null && !listaItems.isEmpty()) {
             int cantidad = 0;
             double suma = 0;
-            for (Encuesta item : items) {
+            for (Encuesta item : listaItems) {
 
                 if (item != null && item.getPuntajeEvaluacion() != null) {
                     suma += item.getPuntajeEvaluacion();

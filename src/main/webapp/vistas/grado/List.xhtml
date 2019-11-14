@@ -33,19 +33,19 @@
                             </f:facet>
                             <h:outputText value="#{item.idGrado}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.curso}" headerText="#{bundle.ListGradoTitle_curso}" footerText="#{bundle.ListGradoTitle_curso}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListGradoTitle_curso}"/>
                             </f:facet>
                             <h:outputText value="#{item.curso}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.grado}" headerText="#{bundle.ListGradoTitle_grado}" footerText="#{bundle.ListGradoTitle_grado}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListGradoTitle_grado}"/>
                             </f:facet>
                             <h:outputText value="#{item.grado}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.idInstitucion.nombre}" headerText="#{bundle.ListGradoTitle_idInstitucion}" footerText="#{bundle.ListGradoTitle_idInstitucion}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListGradoTitle_idInstitucion}"/>
                             </f:facet>

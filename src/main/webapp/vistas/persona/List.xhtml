@@ -16,7 +16,11 @@
         <ui:define name="content">
             <h:form id="PersonaListForm">
                 <p:panel header="#{bundle.ListPersonaTitle}">
-                    <p:dataTable id="datalist" value="#{personaController.items}" var="item"
+                    <p:dataTable id="datalist" 
+                                 value="#{personaController.items}" 
+                                 emptyMessage="No se encontraron registros"
+                                 var="item"
+                                 widgetVar="tabla_persona"
                                  selectionMode="single" 
                                  selection="#{personaController.selected}"
                                  paginator="true"
@@ -28,55 +32,63 @@
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
-                        <p:column>
+                        <p:column  filterBy="#{item.idPersona}" headerText="#{bundle.PersonaTitle_idPersona}" footerText="texto" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_idPersona}"/>
                             </f:facet>
                             <h:outputText value="#{item.idPersona}"/>
                         </p:column>
-                        <p:column>
+                        <p:column  filterBy="#{item.nombre}" headerText="#{bundle.PersonaTitle_nombre}" footerText="texto" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_nombre}"/>
                             </f:facet>
                             <h:outputText value="#{item.nombre}"/>
                         </p:column>
-                        <p:column>
+                        <p:column  filterBy="#{item.apellido}" headerText="#{bundle.PersonaTitle_apellido}" footerText="#{bundle.PersonaTitle_apellido}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_apellido}"/>
                             </f:facet>
                             <h:outputText value="#{item.apellido}"/>
                         </p:column>
-                        <p:column>
+                        <p:column   filterBy="#{item.email}" headerText="#{bundle.PersonaTitle_email}" footerText="#{bundle.PersonaTitle_email}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_email}"/>
                             </f:facet>
                             <h:outputText value="#{item.email}"/>
                         </p:column>
-                        <p:column>
+                        <p:column   filterBy="#{item.identificacion}" headerText="#{bundle.PersonaTitle_identificacion}" footerText="#{bundle.PersonaTitle_identificacion}" filterMatchMode="exact">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_identificacion}"/>
                             </f:facet>
                             <h:outputText value="#{item.identificacion}"/>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.sexo}" headerText="#{bundle.PersonaTitle_sexo}" footerText="#{bundle.PersonaTitle_sexo}" filterMatchMode="contains">
                             <f:facet name="header">
+<!--                                <p:selectOneButton onchange="PF('tabla_persona').filter()">
+                                    <f:converter converterId="javax.faces.Character" />
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Mujeres" itemValue="F"/>
+                                    <f:selectItem itemLabel="Hombres" itemValue="M"/>
+                                </p:selectOneButton>-->
                                 <h:outputText value="#{bundle.PersonaTitle_sexo}"/>
                             </f:facet>
                             <h:outputText value="#{item.sexo}"/>
                         </p:column>
-                        <p:column>
+<!--                        <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.PersonaTitle_tipo}"/>
                             </f:facet>
                             <h:outputText value="#{personaController.obtenerTipoUsuario(item)}" />
-                        </p:column>
-                        <p:column>
+                        </p:column>-->
+                        <p:column   filterBy="#{item.idUsuario.usuario}" headerText="#{bundle.UsuarioTitle_Usuario}" 
+                                    footerText="#{bundle.UsuarioTitle_Usuario}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.UsuarioTitle_Usuario}"/>
                             </f:facet>
                             <h:outputText value="#{item.idUsuario.usuario}"/>
                         </p:column>
-                        <p:column>
+                            <p:column   filterBy="#{item.idUsuario.estado}" headerText="#{bundle.UsuarioTitle_estado}" 
+                                        footerText="#{bundle.UsuarioTitle_estado}" filterMatchMode="contains">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.UsuarioTitle_estado}"/>
                             </f:facet>

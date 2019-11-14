@@ -32,6 +32,7 @@ public class PersonaController extends Controller implements Serializable {
     @EJB
     private com.ingesoft.interpro.facades.PersonaFacade ejbFacade;
     private List<Persona> items = null;
+    private List<Persona> personasFiltradas = null;
     private Persona selected;
     private final String[] tiposEstadoUsuario;
     private boolean editar;
@@ -54,6 +55,14 @@ public class PersonaController extends Controller implements Serializable {
 
     public void setSelected(Persona selected) {
         this.selected = selected;
+    }
+
+    public List<Persona> getPersonasFiltradas() {
+        return personasFiltradas;
+    }
+
+    public void setPersonasFiltradas(List<Persona> personasFiltradas) {
+        this.personasFiltradas = personasFiltradas;
     }
 
     public void estudianteSeleccionado(Persona persona) {

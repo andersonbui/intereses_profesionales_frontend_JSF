@@ -28,3 +28,4 @@ nbdist/
 # End of https://www.gitignore.io/api/maven,java-web,netbeans
 /.directory
 /src/main/java/com/ingesoft/interpro/controladores/util/CredencialesGF.java
+**/downloads

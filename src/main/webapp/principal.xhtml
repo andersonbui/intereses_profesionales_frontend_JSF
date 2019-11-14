@@ -119,6 +119,7 @@
                             <p:menuitem value="Estadisticas Por estudiante" outcome="/vistas/encuesta/EstadisticaMultiple.xhtml" />
                             <p:menuitem value="Estadisticas Areas" outcome="/vistas/encuesta/EstadisticaAreas.xhtml" />
                             <p:menuitem value="Generar mineria" rendered="#{loginController.isAdmin()}" action="#{mineriaController.entrenarModelo()}" />
+                            
                         </p:submenu>
 
                         <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >

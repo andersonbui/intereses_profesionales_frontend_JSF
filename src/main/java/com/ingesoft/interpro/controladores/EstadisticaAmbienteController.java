@@ -151,6 +151,18 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         cadenasgrafico = null;
     }
 
+    public void reiniciarTodo() {
+        string_grafico = null;
+        listaDatosRaisec = null;
+        cadenasgrafico = null;
+        personalidad = null;
+        institucion = null;
+        estudiante = null;
+        grado = null;
+        getEncuestaController().setItems(null);
+    }
+
+
     public List<DatosRiasec> getListaDatosRaisec() {
         return listaDatosRaisec;
     }
@@ -333,9 +345,9 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
 
         List<DatosRiasec> unaListaresUnicos = new ArrayList();
         // Escoger solo los valores unicos
-        System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
+//        System.out.println("Sin datos riasec que coincidan: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
         listares = getDatosRiasecController().getItemsByTiposAmbiente(amb1, amb2, amb3);
-        System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
+//        System.out.println("Nuevos ambientes escogidos: amb1: " + amb1 + "; amb2: " + amb2 + "; amb3:" + amb3 + " => listaprof " + listares);
 
         if (listares != null) {
             for (DatosRiasec datosR : listares) {

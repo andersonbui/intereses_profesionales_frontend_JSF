@@ -13,6 +13,7 @@
         </ui:define>
 
         <ui:define name="content">
+            #{estadisticaAreasController.reiniciarTodo()}
             <h:outputScript library="js" name="Chart.js"/>
             <h:form id="EstadisticaForm">
                 <h:panelGroup id="display">

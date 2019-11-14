@@ -461,11 +461,11 @@ public class EncuestaController extends Controller implements Serializable {
         if (personalidad == null || "".equals(personalidad)) {
             return null;
         }
-        System.out.println("resultado_personalidad-: "+personalidad);
-        System.out.println("resultado_personalidad-/personalidad: " + personalidad);
+//        System.out.println("resultado_personalidad-: "+personalidad);
+//        System.out.println("resultado_personalidad-/personalidad: " + personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
-        System.out.println(url);
+//        System.out.println(url);
 
         return url;
 
@@ -475,7 +475,7 @@ public class EncuestaController extends Controller implements Serializable {
         if (personalidad == null || "".equals(personalidad)) {
             return "";
         }
-        System.out.println("resultado_personalidad_descripcion: "+personalidad);
+//        System.out.println("resultado_personalidad_descripcion: "+personalidad);
         Character result_personalidad = null;
         try{
             result_personalidad = personalidad.charAt(i);
@@ -527,6 +527,10 @@ public class EncuestaController extends Controller implements Serializable {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
+    }
+
+    public List<Encuesta> actualesItems() {
+        return items;
     }
 
     public List<Encuesta> getItems() {

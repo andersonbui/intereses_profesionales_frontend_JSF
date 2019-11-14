@@ -144,6 +144,15 @@ public class EstadisticaAreasController extends Controller implements Serializab
         listaDatosRaisec = null;
     }
 
+    public void reiniciarTodo() {
+        string_grafico = null;
+        listaDatosRaisec = null;
+        listaBarrasGrafico = null;
+        institucion = null;
+        estudiante = null;
+        grado = null;
+    }
+
     public List<DatosRiasec> getListaDatosRaisec() {
         return listaDatosRaisec;
     }

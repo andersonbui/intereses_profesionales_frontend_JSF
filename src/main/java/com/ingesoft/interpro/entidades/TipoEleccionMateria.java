@@ -43,6 +43,9 @@ public class TipoEleccionMateria implements Serializable {
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
+    @Size(max = 20)
+    @Column(name = "color")
+    private String color;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoEleccionMateria")
     private List<AreaEncuesta> areaEncuestaList;
 
@@ -67,6 +70,14 @@ public class TipoEleccionMateria implements Serializable {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @XmlTransient

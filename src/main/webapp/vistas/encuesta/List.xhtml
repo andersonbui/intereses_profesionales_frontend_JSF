@@ -41,11 +41,11 @@
                                 <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                             </h:outputText>
                         </p:column>
-                        <p:column>
+                        <p:column filterBy="#{item.estudiante.idPersona.email}" headerText="#{bundle.PersonaTitle_email}" footerText="#{bundle.PersonaTitle_email}" filterMatchMode="contains">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEncuestaTitle_idEstudiante}"/>
+                                <h:outputText value="#{bundle.PersonaTitle_email}"/>
                             </f:facet>
-                            <h:outputText value="#{item.estudianteGrado.estudiante.idPersona.nombre}"/>
+                            <h:outputText value="#{item.estudiante.idPersona.email}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EncuestaViewForm" oncomplete="PF('EncuestaViewDialog').show()" disabled="#{empty encuestaController.selected}"/>

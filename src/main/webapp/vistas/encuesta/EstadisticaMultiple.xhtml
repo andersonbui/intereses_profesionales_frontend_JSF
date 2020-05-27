@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/principal.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            #{estadisticaAmbienteController.reiniciarTodo()}
+            <h:form id="EstadisticaForm" style="border: whitesmoke 30px solid">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" id="id_selects">
+
+                        <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
+                        <p:selectOneMenu id="id_select_institucion" 
+                                         value="#{estadisticaAmbienteController.institucion}" 
+                                         required="true"
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
+                                           var="institucion"
+                                           itemLabel="#{institucion.nombre}"
+                                           itemValue="#{institucion}"/>
+                            <f:ajax render="id_selects, id_estudiantes" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_Grado}" for="id_select_grado" />
+                        <p:selectOneMenu id="id_select_grado" 
+                                         value="#{estadisticaAmbienteController.grado}" 
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAmbienteController.institucion.gradoList}"
+                                           rendered="#{estadisticaAmbienteController.institucion!= null}"
+                                           var="grado"
+                                           itemLabel="#{grado.curso}"
+                                           itemValue="#{grado}"/>
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_estudiante}" for="id_select_estudiante" />
+                        <p:selectOneMenu id="id_select_estudiante" 
+                                         value="#{estadisticaAmbienteController.estudiante}" 
+                                         immediate="true" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAmbienteController.obternerEstudiante(estadisticaAmbienteController.grado)}"
+                                           rendered="#{estadisticaAmbienteController.grado != null}"
+                                           var="estudiante"
+                                           itemLabel="#{estudiante.idPersona.email}"
+                                           itemValue="#{estudiante}"/>
+                            <f:ajax listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}"
+                                     value="cargar" 
+                                     update=":growl,display,id_estudiantes">
+                    </p:commandButton>
+                    <button type="button" value=""   onclick="generarpdf()" >
+                        <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
+                    </button>
+                    <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}"
+                              value="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}" var="result"> 
+
+                        <br/>
+                        <!-- ADD_PAGE -->
+                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail" 
+                                     rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}">
+
+                            <p:outputPanel>
+                                <h4 style="text-align:center">Estimado estudiante <b>#{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido}</b></h4>
+                                <p  style="font-size: 1.5em; text-align: left">Email: #{result.estudiante.idPersona.email} </p>
+                                <p:outputLabel  style="font-size: 1.5em; text-align: left">Grado #{estudianteController.ultimoGrado(result.estudiante)}</p:outputLabel>
+                                <br/>
+                                <p:outputLabel value="Puntaje de Juego: #{result.getPromedioPuntajeEncuesta()}"></p:outputLabel>
+                                <br/>
+                                <p:outputLabel value="Puntaje Evaluacion: #{result.getPromedioPuntajeEValuacion()}"></p:outputLabel>
+                                <br/>
+                                <h:outputFormat rendered="#{result.personalidad!=''}">
+                                    <h2> Sus resultados son: </h2>
+                                </h:outputFormat>
+                                <h:outputFormat rendered="#{result.personalidad==''}">
+                                    <h2> No ha completado la encuesta.</h2>
+                                </h:outputFormat>
+                                <br/>
+                                <h:body id='idpersonalidad' rendered="#{result.personalidad!='' and encuestaController.resultado_personalidad_descripcion(index, result.personalidad ) != null}" >
+                                    <h1 style="text-align: center;" value="">Personalidad: #{result.personalidad}</h1>
+                                    <center class="grupo-img-personalidad">
+                                        <c:forEach begin="0" end="3" var="index">
+                                            <div class="personalidad">
+                                                <div>
+                                                    <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad)}" 
+                                                                    name="#{encuestaController.resultado_personalidad(index, result.personalidad)}" class="img_personalidad" style="" />   
+                                                </div>
+                                                <div>
+                                                    <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, result.personalidad )}" class="txt_personalidad" />
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </center>
+                                </h:body>
+
+                                <h:panelGrid columns="2" rendered="#{result.grafico != null}">
+                                    <h:column >
+                                        <div  style=" ">
+                                            <h3 style="text-align: center;display: block">Puntajes de ambientes.</h3>
+                                            <h:body id='divgrafico' >
+                                                <p:panelGrid id="grafica" >
+                                                    <div style="height: 300px; width: 100%; max-width:600px; " >
+                                                        <canvas id="#{result.estudiante.idEstudiante}" width="700" height="300"></canvas>
+                                                    </div>
+                                                    <script>
+                                                    graficar("#{result.estudiante.idEstudiante}", #{result.grafico});
+                                                    </script>
+                                                </p:panelGrid>
+                                            </h:body>
+                                        </div>
+                                    </h:column>
+                                    <h:column >
+                                        <div  style="position:relative">
+                                            <h3 style="display: inline-table">Profesiones Comunes para tus habilidades</h3>
+                                            <p:dataTable var="dato" value="#{result.listaDatRiasec}" rows="100" paginator="false">
+                                                <p:column headerText="profesion" >
+                                                    <h:outputText value="#{dato.profesion}" />
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:column>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </h:panelGrid>
+                        <hr />
+                    </p:repeat>
+                </h:panelGroup>
+            </h:form>
+            <script>
+                function generarpdf() {
+                    var printContents = document.getElementById('EstadisticaForm').innerHTML;
+
+                    var mywindow = window.open('', 'Resultados del uso de la plataforma', 'height=400,width=600');
+                    mywindow.document.write('<html><head><title>Resultados del uso de la plataforma</title>');
+                    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+                    mywindow.document.write(document.head.innerHTML);
+                    mywindow.document.write('</head><body >');
+                    mywindow.document.write(printContents);
+                    mywindow.document.write('</body></html>');
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10
+
+                    //mywindow.print();
+//                    mywindow.close();
+
+                    return true;
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+
+</html>

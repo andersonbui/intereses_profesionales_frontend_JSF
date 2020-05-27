@@ -4,6 +4,10 @@ import be.ceau.chart.BarChart;
 import be.ceau.chart.color.Color;
 import be.ceau.chart.data.BarData;
 import be.ceau.chart.dataset.BarDataset;
+import be.ceau.chart.options.BarOptions;
+import be.ceau.chart.options.scales.BarScale;
+import be.ceau.chart.options.scales.YAxis;
+import be.ceau.chart.options.ticks.LinearTicks;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
@@ -169,7 +173,13 @@ public class EstadisticaPersonalidadController implements Serializable {
                 .setBorderWidth(2);
         data.addDataset(dataset);
 
-        return new BarChart(data).toJson();
+        BarChart unbar = new BarChart(data);
+        BarOptions options = new BarOptions();
+        options.setResponsive(true);
+        // Comenzar el axis Y en 0 (cero)
+        options.setScales((new BarScale()).addyAxes((new YAxis()).setTicks((new LinearTicks()).setBeginAtZero(Boolean.TRUE))));
+        unbar.setOptions(options);
+        return unbar.toJson();
     }
 
     private int detectarTipoEstadistica() {
@@ -239,52 +249,6 @@ public class EstadisticaPersonalidadController implements Serializable {
         return null;
     }
 
-    /**
-     * por ahora trae todos los resultados de las encuestas sin importar si
-     * pretenecen al mismo es
-     *
-     * @param una_institucion
-     * @return
-     */
-//    public Datos[] estadisticaPorInstitucion(Institucion una_institucion) {
-//        Datos[] listaBarras = null;
-//        List<ResultadoPorAmbiente> listaResultados;
-//        listaResultados = resultadosAmbientePorInstitucion(una_institucion);
-//
-//        if (listaResultados != null && listaResultados.isEmpty()) {
-//            FacesContext context = FacesContext.getCurrentInstance();
-//            FacesMessage msg;
-//            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
-//            context.addMessage(null, msg);
-//        } else {
-//            listaBarras = promedioResultados(listaResultados);
-//        }
-//        System.out.println("listaBarras: " + listaBarras);
-//        return listaBarras;
-//    }
-    /**
-     * por ahora trae todos los resultados de las encuestas sin importar si
-     * pretenecen al mismo es
-     *
-     * @param un_grado
-     * @return
-     */
-//    public Datos[] estadisticaPorGrado(Grado un_grado) {
-//        Datos[] listaBarras = null;
-//        List<ResultadoPorAmbiente> listaResultados;
-//        listaResultados = resultadosAmbientePorGrado(un_grado);
-//
-//        if (listaResultados != null && listaResultados.isEmpty()) {
-//            FacesContext context = FacesContext.getCurrentInstance();
-//            FacesMessage msg;
-//            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
-//            context.addMessage(null, msg);
-//        } else {
-//            listaBarras = promedioResultados(listaResultados);
-//        }
-//        System.out.println("listaBarras: " + listaBarras);
-//        return listaBarras;
-//    }
     /**
      *
      * @param listaResultadosPorAmbiente

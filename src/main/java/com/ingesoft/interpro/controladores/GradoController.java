@@ -67,9 +67,8 @@ public class GradoController extends Controller {
     }
 
     public List<Grado> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
+        
         return items;
     }
 

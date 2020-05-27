@@ -102,6 +102,10 @@ public class UsuarioController extends Controller implements Serializable {
         }
         return items;
     }
+
+    public void setItems(List<Usuario> items) {
+        this.items = items;
+    }
  
     public boolean esEstudiante(java.lang.Integer idUsuario) {
         return getFacade().esEstudiante(idUsuario);

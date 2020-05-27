@@ -13,6 +13,7 @@
         </ui:define>
 
         <ui:define name="content">
+            #{estadisticaAmbienteController.reiniciarTodo()}
             <h:outputScript library="js" name="Chart.js"/>
             <h:form id="EstadisticaForm">
                 <h:panelGroup id="display">
@@ -33,7 +34,7 @@
                             <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="#{bundle.Label_grado}" for="id_select_grado" />
+                        <p:outputLabel value="#{bundle.Label_Grado}" for="id_select_grado" />
                         <p:selectOneMenu id="id_select_grado" 
                                          value="#{estadisticaAmbienteController.grado}" 
                                          immediate="true" 
@@ -64,7 +65,9 @@
                                      value="cargar" 
                                      update="grafica,:growl,display,divgrafico">
                     </p:commandButton>
-                    
+                    <button type="button" value=""   onclick="window.print()" >
+                        <i class='far fa-file-pdf' style='font-size:20px;color:red'></i>Imprimir
+                    </button>
                     <h:body id='idpersonalidad'  rendered="#{estadisticaAmbienteController.personalidad != null}" >
                         
                         <h1 style="text-align: center;" value="">Personalidad: #{estadisticaAmbienteController.personalidad}</h1>
@@ -88,7 +91,7 @@
                             <h:body id='divgrafico' >
                                 <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
                                     <script>
-                                graficar(#{estadisticaAmbienteController.getGraficoModelo()});
+                                        graficar(#{estadisticaAmbienteController.getGraficoModelo()});
                                     </script>
                                     <div style="height: 300px; width: 700px;" >
                                         <canvas id="myChart" width="700" height="300"></canvas>
@@ -97,11 +100,16 @@
                             </h:body>
                         </div>
                         <div>
-                            <p:outputLabel value="Puntaje de Juego: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
+                            <p:outputLabel  rendered="#{encuestaController.actualesItems() != null}"
+                                            value="Puntaje de Juego: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
                             <br/>
-                            <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
+                            <p:outputLabel  rendered="#{encuestaController.actualesItems() != null}"
+                                            value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
                         </div>
                     </div>
+                    <script type="text/javascript">
+
+                    </script>
                 </h:panelGroup>
             </h:form>
             <script type="text/javascript">

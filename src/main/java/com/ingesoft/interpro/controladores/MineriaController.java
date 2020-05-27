@@ -28,6 +28,7 @@ import org.primefaces.context.RequestContext;
 public class MineriaController extends Controller implements Serializable {
 
     Map<String, Boolean> camposActivos;
+    String ruta_descarga = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/")+"/resources/downloads/";
     String archivo_de_instancias = "mineria.arff";
     public static String nombreModelo = "modelo.min";
     public static String atributo_clase = "ingenieria";
@@ -65,11 +66,12 @@ public class MineriaController extends Controller implements Serializable {
         List<Encuesta> encuestas = encuestaController.getItems();
         // para indicar si algo salio mal en los campos obtenidos
         System.out.println("Archivo generado: " + archivo_de_instancias);
-        String nombreArchivoCompleto = guardarDatosEncuestas(encuestas, archivo_de_instancias);
+        String nombreArchivoCompleto = guardarDatosEncuestas(encuestas, ruta_descarga + archivo_de_instancias);
 
         facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "ubicacion: <br/>" + nombreArchivoCompleto));
+        requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "<h3>Click para descargar:</h3>  <br/>"
+                + "<h4 align=\"center\"><a target=\"blank\" href=\"https://suideal.co/intereses_profesionales_frontend_JSF/faces/javax.faces.resource/downloads/mineria.arff\">" + archivo_de_instancias + "</a></h4>"));
         return true;
     }
 

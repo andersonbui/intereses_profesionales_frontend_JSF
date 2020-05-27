@@ -4,7 +4,10 @@ import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EstudianteFacade;
 
@@ -21,7 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
@@ -35,12 +37,9 @@ public class EstudianteController extends Controller implements Serializable {
     private boolean editar;
     private int pasoActual;
     private boolean skip;
-    private int number;
-    private int puntos;
 
     public EstudianteController() {
         pasoActual = 0;
-        puntos = 0;
     }
 
     public boolean isEditar() {
@@ -137,10 +136,15 @@ public class EstudianteController extends Controller implements Serializable {
     }
 
     public List<Estudiante> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
         return items;
+    }
+
+    public List<Estudiante> getItems(Institucion institucion) {
+        List<Estudiante> lista_e = getFacade().buscarPorInstitucion(institucion);
+//        System.out.println("lista estudiantes:");
+//        System.out.println(lista_e);
+        return lista_e;
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -162,6 +166,9 @@ public class EstudianteController extends Controller implements Serializable {
     public boolean isEstudiante(Persona persona) {
 //        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
         List<GrupoUsuario> listaGU = getGrupoUsuarioController().getGruposUsuario(persona.getIdUsuario());
+        if (listaGU == null) {
+            return false;
+        }
         for (GrupoUsuario grupoUsuario : listaGU) {
             System.out.println("grupoUsuario: " + grupoUsuario);
             if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
@@ -197,6 +204,16 @@ public class EstudianteController extends Controller implements Serializable {
 
     public Estudiante getEstudiante(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public String ultimoGrado(Estudiante estudiante) {
+        if (estudiante != null) {
+            EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
+            if (estudianteGrado != null) {
+                return estudianteGrado.getGrado().getCurso();
+            }
+        }
+        return "";
     }
 
     public Estudiante getEstudiantePorPersona(Persona persona) {

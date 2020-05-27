@@ -107,10 +107,15 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public double promedioPuntajeEncuesta() {
-        if (items != null && !items.isEmpty()) {
+        
+        return  promedioPuntajeEncuesta(items);
+    }
+    
+    public double promedioPuntajeEncuesta(List<Encuesta> listaItems ) {
+        if (listaItems != null && !listaItems.isEmpty()) {
             int cantidad = 0;
             double suma = 0;
-            for (Encuesta item : items) {
+            for (Encuesta item : listaItems) {
                 if (item != null && item.getPuntajeEncuesta() != null) {
                     suma += item.getPuntajeEncuesta();
                     cantidad++;
@@ -122,13 +127,17 @@ public class EncuestaController extends Controller implements Serializable {
         }
         return 0;
     }
-
+    
     public double promedioPuntajeEvaluacion() {
-        if (items != null && !items.isEmpty()) {
+        return promedioPuntajeEvaluacion(items);
+    }
+
+    public double promedioPuntajeEvaluacion(List<Encuesta> listaItems) {
+        if (listaItems != null && !listaItems.isEmpty()) {
             int cantidad = 0;
             double suma = 0;
-            for (Encuesta item : items) {
-                
+            for (Encuesta item : listaItems) {
+
                 if (item != null && item.getPuntajeEvaluacion() != null) {
                     suma += item.getPuntajeEvaluacion();
                     cantidad++;
@@ -449,21 +458,34 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public String resultado_personalidad(int i, String personalidad) {
-        System.out.println("resultado_personalidad/personalidad: "+personalidad);
+        if (personalidad == null || "".equals(personalidad)) {
+            return null;
+        }
+//        System.out.println("resultado_personalidad-: "+personalidad);
+//        System.out.println("resultado_personalidad-/personalidad: " + personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
-        System.out.println(url);
+//        System.out.println(url);
 
         return url;
 
     }
 
     public String resultado_personalidad_descripcion(int i, String personalidad) {
-        String result_personalidad = personalidad;
-        String codigo_personalidad = "" + i + result_personalidad.charAt(i);
-        if (null == codigo_personalidad) {
+        if (personalidad == null || "".equals(personalidad)) {
+            return "";
+        }
+//        System.out.println("resultado_personalidad_descripcion: "+personalidad);
+        Character result_personalidad = null;
+        try{
+            result_personalidad = personalidad.charAt(i);
+        }catch (Exception e) {
+            System.out.println("personalidad vacia");
+        }
+        if (null == result_personalidad) {
             return null;
         } else {
+            String codigo_personalidad = "" + i + result_personalidad;
             switch (codigo_personalidad) {
                 case "0E":
                     return "Estrovertido";
@@ -505,6 +527,10 @@ public class EncuestaController extends Controller implements Serializable {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
+    }
+
+    public List<Encuesta> actualesItems() {
+        return items;
     }
 
     public List<Encuesta> getItems() {

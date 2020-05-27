@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/principal.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            #{estadisticaAreasController.reiniciarTodo()}
+            <h:outputScript library="js" name="Chart.js"/>
+            <h:form id="EstadisticaForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" id="id_selects">
+
+                        <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
+                        <p:selectOneMenu id="id_select_institucion" 
+                                         value="#{estadisticaAreasController.institucion}" 
+                                         required="true"
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
+                                           var="institucion"
+                                           itemLabel="#{institucion.nombre}"
+                                           itemValue="#{institucion}"/>
+                            <f:ajax render="id_selects" listener="#{estadisticaAreasController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_Grado}" for="id_select_grado" />
+                        <p:selectOneMenu id="id_select_grado" 
+                                         value="#{estadisticaAreasController.grado}" 
+                                         immediate="true" 
+                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_estudiante}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAreasController.institucion.gradoList}"
+                                           rendered="#{estadisticaAreasController.institucion!= null}"
+                                           var="grado"
+                                           itemLabel="#{grado.curso}"
+                                           itemValue="#{grado}"/>
+                            <f:ajax render="id_selects" listener="#{estadisticaAreasController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundle.Label_preferencia}" for="id_select_estudiante" />
+                        <p:selectOneMenu id="id_select_estudiante" 
+                                         value="#{estadisticaAreasController.estudiante}" 
+                                         immediate="true" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{estadisticaAreasController.obternerEstudiante(estadisticaAreasController.grado)}"
+                                           rendered="#{estadisticaAreasController.grado != null}"
+                                           var="estudiante"
+                                           itemLabel="#{estudiante.idPersona.email}"
+                                           itemValue="#{estudiante}"/>
+                            <f:ajax listener="#{estadisticaAreasController.reiniciarEstadistica()}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{estadisticaAreasController.cargarGraficoResultadoAmbiente()}"
+                                     value="cargar" 
+                                     update="grafica,:growl,display,divgrafico">
+                    </p:commandButton>
+                    
+                    <br/>
+                    <div class="row">
+                            <h:body id='divgrafico' >
+                                <p:panelGrid id="grafica"  rendered="#{estadisticaAreasController.getGraficoModelo() != null}">
+                                    <script>
+                                        graficar(#{estadisticaAreasController.getGraficoModelo()});
+                                    </script>
+                                    <div style="height: 500px; width: 700px;" >
+                                        <canvas id="myChart" width="700" height="500"></canvas>
+                                    </div>
+                                </p:panelGrid>
+                            </h:body>
+                            <br/>
+                            <ui:repeat value="#{estadisticaAreasController.listaBarrasGrafico}" var="bar" rendered="#{estadisticaAreasController.listaBarrasGrafico != null}">
+                                <div style="margin-left: 20px; width: 80%;" class="row">
+                                    <div class="ui-grid-col-1">
+                                        <div style="width:20px; height: 20px; background-color: #{bar.color.rgba()}"></div>
+                                    </div>
+                                    <div class="ui-grid-col-11" >
+                                        #{bar.area.nombre}
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+            <script type="text/javascript">
+                var chartmio = null;
+                function graficar(json) {
+                    if (json !== null) {
+                        console.log(json);
+                        var ctx = document.getElementById("myChart");
+    
+                        chartmio = new Chart(ctx, json);
+                    }
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+
+</html>

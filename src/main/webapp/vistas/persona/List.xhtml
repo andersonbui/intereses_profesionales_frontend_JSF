@@ -14,6 +14,7 @@
         </ui:define>
 
         <ui:define name="content">
+            #{personaController.setItems(null)}
             <h:form id="PersonaListForm">
                 <p:panel header="#{bundle.ListPersonaTitle}">
                     <p:dataTable id="datalist" 

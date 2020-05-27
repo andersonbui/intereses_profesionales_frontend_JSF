@@ -125,9 +125,10 @@ public class PersonaController extends Controller implements Serializable {
         }
         editar = true;
         if (selected != null) {
+
             EstudianteController estudianteController = getEstudianteController();
-            selected.getEstudianteList().size();
-            if (estudianteController.isEstudiante(persona)) {
+//            selected.getEstudianteList().size();
+            if (estudianteController.isEstudiante(selected)) {
 //                Estudiante estudiante = selected.getEstudianteList().get(0);
                 Estudiante estudiante = estudianteController.getEstudiantePorPersona(selected);
                 if (estudiante == null && selected.getIdUsuario().getEstado().equals(UsuarioController.EN_PROCESO)) {
@@ -154,6 +155,7 @@ public class PersonaController extends Controller implements Serializable {
                 getPaisController().setSelected(null);
             }
 //            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+            System.out.println("actualizando usuario.");
             UsuarioController usuarioController = getUsuarioController();
             usuarioController.setSelected(selected.getIdUsuario());
 
@@ -198,6 +200,7 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     private Persona create() {
+        System.out.println("create de PersonaController");
         selected = (Persona) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PersonaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -227,16 +230,18 @@ public class PersonaController extends Controller implements Serializable {
     }
 
     public void updateConUsuarioEstudiante() {
-        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+        
         UsuarioController usuarioController = getUsuarioController();
+        usuarioController.setSelected(selected.getIdUsuario());
         usuarioController.update();
-        boolean isEst = getEstudianteController().isEstudiante(perso);
+        boolean isEst = getEstudianteController().isEstudiante(selected);
         System.out.println("updateConUsuarioEstudiante.esEstudiante: " + isEst);
         if (isEst) {
             EstudianteController estudianteController = getEstudianteController();
             estudianteController.update();
 //            getEstudianteGradoController().create();
         }
+//        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
     }
 
     public void destroy() {
@@ -256,6 +261,10 @@ public class PersonaController extends Controller implements Serializable {
         return "--";
     }
 
+    public void setItems(List<Persona> items) {
+        this.items = items;
+    }
+ 
     public List<Persona> getItems() {
         if (items == null) {
             Persona persona = getLoginController().getPersonaActual();
@@ -288,6 +297,27 @@ public class PersonaController extends Controller implements Serializable {
 
     public List<Persona> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+    }
+
+    public boolean usuarioEnProceso() {
+        return UsuarioController.EN_PROCESO.equals(selected.getIdUsuario().getEstado());
+    }
+
+    public String usuarioVerificacion() {
+        return usuarioEnProceso() ? "Verificar :(" : "Verificado :)";
+    }
+
+    public String usuarioClassVerificacion() {
+        return usuarioEnProceso() ? "btn-warning" : "btn-success";
+    }
+
+    public boolean verificarUsuario() {
+        if (usuarioEnProceso()) {
+            selected.getIdUsuario().setEstado(UsuarioController.EN_ESPERA);
+            System.out.println("verificacion: " + selected.getIdUsuario().getEstado());
+            return true;
+        }
+        return false;
     }
 
     @FacesConverter(forClass = Persona.class)

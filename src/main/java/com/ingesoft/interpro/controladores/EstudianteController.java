@@ -139,12 +139,12 @@ public class EstudianteController extends Controller implements Serializable {
         items = getFacade().findAll();
         return items;
     }
-    
+
     public List<Estudiante> getItems(Institucion institucion) {
         List<Estudiante> lista_e = getFacade().buscarPorInstitucion(institucion);
 //        System.out.println("lista estudiantes:");
 //        System.out.println(lista_e);
-        return  lista_e;
+        return lista_e;
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -166,6 +166,9 @@ public class EstudianteController extends Controller implements Serializable {
     public boolean isEstudiante(Persona persona) {
 //        List<GrupoUsuario> listaGU = persona.getIdUsuario().getGrupoUsuarioList();
         List<GrupoUsuario> listaGU = getGrupoUsuarioController().getGruposUsuario(persona.getIdUsuario());
+        if (listaGU == null) {
+            return false;
+        }
         for (GrupoUsuario grupoUsuario : listaGU) {
             System.out.println("grupoUsuario: " + grupoUsuario);
             if (grupoUsuario.getTipoUsuario().getTipo().equals(UsuarioController.TIPO_ESTUDIANTE)) {
@@ -203,7 +206,7 @@ public class EstudianteController extends Controller implements Serializable {
         return getFacade().find(id);
     }
 
-    public String ultimoGrado(Estudiante estudiante){
+    public String ultimoGrado(Estudiante estudiante) {
         if (estudiante != null) {
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
             if (estudianteGrado != null) {
@@ -212,7 +215,7 @@ public class EstudianteController extends Controller implements Serializable {
         }
         return "";
     }
-    
+
     public Estudiante getEstudiantePorPersona(Persona persona) {
 //        System.out.println("persona: " + persona);
 //        System.out.println("getFacade(): " + getFacade());

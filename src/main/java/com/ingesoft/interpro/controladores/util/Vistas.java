@@ -20,59 +20,63 @@ import javax.servlet.http.HttpServletRequest;
 public class Vistas implements Serializable {
 
     private static String ruta;
-    private static String rutaGeneral = "/intereses_profesionales_frontend_JSF/faces";
 
     public static String getRuta() {
         return ruta;
     }
 
+    public static String getRutaGeneral() {
+        return "/suidealdev/faces";
+//        return "/intereses_profesionales_frontend_JSF/faces";
+    }
+    
     public static String verPaginaPrincipal() {
-        ruta = rutaGeneral + "/vistas/preguntaAmbiente/List.xhtml";
+        ruta = getRutaGeneral() + "/vistas/preguntaAmbiente/List.xhtml";
         return ruta;
     }
 
     public static String verPreguntas() {
-        ruta = rutaGeneral + "/vistas/pregunta/List.xhtml";
+        ruta = getRutaGeneral() + "/vistas/pregunta/List.xhtml";
         return ruta;
     }
 
     public static String verDatosPersonales() {
-        ruta = rutaGeneral + "/usuariosdelsistema/estudiante/VerEstudiante_Est.xhtml";
+        ruta = getRutaGeneral() + "/usuariosdelsistema/estudiante/VerEstudiante_Est.xhtml";
         return ruta;
     }
 
     public static String verPublicacion() {
-        ruta = rutaGeneral + "/usuariosdelsistema/estudiante/VerPublicacion.xhtml";
+        ruta = getRutaGeneral() + "/usuariosdelsistema/estudiante/VerPublicacion.xhtml";
         return ruta;
     }
 
     public static String registrarPublicacion() {
-        ruta = rutaGeneral + "/usuariosdelsistema/estudiante/RegistrarPublicacion.xhtml";
+        ruta = getRutaGeneral() + "/usuariosdelsistema/estudiante/RegistrarPublicacion.xhtml";
         return ruta;
     }
 
     public static String verPublicaciones() {
-        ruta = rutaGeneral + "/usuariosdelsistema/estudiante/ListarPublicaciones.xhtml";
+        ruta = getRutaGeneral() + "/usuariosdelsistema/estudiante/ListarPublicaciones.xhtml";
         return ruta;
     }
 
     public static String verMiPerfil() {
-        ruta = rutaGeneral + "/vistas/miperfil/VerPerfil.xhtml";
+        ruta = getRutaGeneral() + "/vistas/miperfil/VerPerfil.xhtml";
         return ruta;
     }
 
     public static String completarPerfil() {
-        ruta = rutaGeneral + "/vistas/miperfil/completarPerfil.xhtml";
+        ruta = getRutaGeneral() + "/vistas/miperfil/completarPerfil.xhtml";
         return ruta;
     }
 
     public static String login() {
-        ruta = rutaGeneral + "/login.xhtml";
+        ruta = getRutaGeneral() + "/login.xhtml";
         return ruta;
     }
 
     public static String inicio() {
-        ruta = rutaGeneral + "/vistas/inicio.xhtml";
+        ruta = getRutaGeneral() + "/vistas/inicio.xhtml";
         return ruta;
     }
 
@@ -81,26 +85,26 @@ public class Vistas implements Serializable {
     }
 
     public static String urlRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/registro.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + getRutaGeneral() + "/registro.xhtml";
     }
 
     public static String completarRegistroFacebook() {
-        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/completarRegistroFacebook.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + getRutaGeneral() + "/completarRegistroFacebook.xhtml";
     }
 
     public static String loginCompleta() {
-        return getProtocolo() + "://" + Vistas.getIP() + rutaGeneral + "/login.xhtml";
+        return getProtocolo() + "://" + Vistas.getIP() + getRutaGeneral() + "/login.xhtml";
     }
 
     public static String urlCorreoRegistro(String token) {
-        return getProtocolo() + "://" + getIP() + rutaGeneral + "/continuarRegistro.xhtml?token=" + token + "";
+        return getProtocolo() + "://" + getIP() + getRutaGeneral() + "/continuarRegistro.xhtml?token=" + token + "";
     }
     public static String urlCorreoRecuperar(String token) {
-        return getProtocolo() + "://" + getIP() + rutaGeneral + "/vistas/recuperar/continuar_recuperar_clave.xhtml?token=" + token + "";
+        return getProtocolo() + "://" + getIP() + getRutaGeneral() + "/vistas/recuperar/continuar_recuperar_clave.xhtml?token=" + token + "";
     }
     
     public static String urlMensaje() {
-        return getProtocolo() + "://" + getIP() + rutaGeneral +"/mensaje.xhtml";
+        return getProtocolo() + "://" + getIP() + getRutaGeneral() +"/mensaje.xhtml";
     }
 
     public static String getIP() {

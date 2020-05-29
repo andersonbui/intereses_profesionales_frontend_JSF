@@ -73,6 +73,14 @@ public class EncuestaController extends Controller implements Serializable {
         selected.setPuntajeEvaluacion(puntos_eval);
     }
 
+    public void addPuntos_eval(int puntos_eval) {
+        selected.setPuntajeEvaluacion(getPuntos_eval() + puntos_eval);
+    }
+    
+    public void addPuntos_encuesta(int puntos_encuesta) {
+        selected.setPuntajeEncuesta(getPuntos_encuesta() + puntos_encuesta);
+    }
+
     public void setPuntos_encuesta(int puntos_encuesta) {
         selected.setPuntajeEncuesta(puntos_encuesta);
     }
@@ -248,12 +256,14 @@ public class EncuestaController extends Controller implements Serializable {
         Grado grado = getGradoController().getSelected();
         selected.setGrado(grado);
         update();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
 
     public void pasoPreguntasPersonalidad() throws IOException {
         this.pasoActivo = 2;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
     }
 
     public void pasoResumen() throws IOException {
@@ -262,7 +272,8 @@ public class EncuestaController extends Controller implements Serializable {
         EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
         estadisticaAmbienteController.setEncuesta(selected);
         estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/encuesta/resumen.xhtml");
     }
 
     public void finalizar() throws IOException {
@@ -448,7 +459,8 @@ public class EncuestaController extends Controller implements Serializable {
             create();
             AreaController areaController = getAreaController();
             areaController.inicializar(selected);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/welcomePrimefaces.xhtml");
+            String rutaGeneral = Vistas.getRutaGeneral();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/welcomePrimefaces.xhtml");
 
 //            }
         } catch (Exception e) {

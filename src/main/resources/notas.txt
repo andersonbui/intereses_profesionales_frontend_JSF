@@ -3,3 +3,15 @@ http://localhost:8080/intereses_profesionales_frontend_JSF/faces/continuarRegist
 
 Tareas faltantes:
 -actualizar el estado del token despues de ser utilizado
+
+Entorno de desarrollo
+
+archivos implicados:
+
+- ./src/main/resources/META-INF/persistence.xml
+- ./src/main/webapp/WEB-INF/glassfish-resources.xml
+- ./src/main/webapp/WEB-INF/glassfish-web.xml
+- ./src/main/webapp/WEB-INF/web.xml
+
+cambiar el nombre del dominio en 
+- ./src/main/java/com/ingesoft/interpro/controladores/util/Vistas.java 

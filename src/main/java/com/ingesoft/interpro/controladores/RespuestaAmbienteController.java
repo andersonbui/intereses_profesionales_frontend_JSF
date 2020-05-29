@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Variables;
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
@@ -497,6 +498,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             Random rand = new Random(Calendar.getInstance().getTimeInMillis());
             for (RespuestaAmbiente item : items) {
                 item.setRespuesta((float) valores[rand.nextInt(3)]);
+                getEncuestaController().addPuntos_eval(1);
             }
         }// @end
         listaResultadosPorAmbiente = null;
@@ -546,7 +548,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/vistas/encuesta/resumen.xhtml");
+        
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/resumen.xhtml");
         for (RespuestaAmbiente item : items) {
             this.getFacade().edit(item);
         }

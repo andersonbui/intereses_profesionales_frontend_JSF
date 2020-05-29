@@ -1,6 +1,7 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.EscribirArchivo;
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
@@ -70,8 +71,10 @@ public class MineriaController extends Controller implements Serializable {
 
         facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
         RequestContext requestContext = RequestContext.getCurrentInstance();
+        
+        String rutaGeneral = Vistas.getRutaGeneral();
         requestContext.showMessageInDialog(new FacesMessage("dataset generado exitosamente", "<h3>Click para descargar:</h3>  <br/>"
-                + "<h4 align=\"center\"><a target=\"blank\" href=\"https://suideal.co/intereses_profesionales_frontend_JSF/faces/javax.faces.resource/downloads/mineria.arff\">" + archivo_de_instancias + "</a></h4>"));
+                + "<h4 align=\"center\"><a target=\"blank\" href=\"https://suideal.co" + rutaGeneral + "/javax.faces.resource/downloads/mineria.arff\">" + archivo_de_instancias + "</a></h4>"));
         return true;
     }
 

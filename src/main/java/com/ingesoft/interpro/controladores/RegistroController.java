@@ -151,6 +151,7 @@ public class RegistroController extends Controller implements Serializable {
 
     public void continuarCreacionUsuario(Usuario unusuario) throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
+        String rutaGeneral = Vistas.getRutaGeneral();
         Calendar fechaExpiracion = Calendar.getInstance();
         if (unusuario != null) {
             Calendar fechaActual = Calendar.getInstance();
@@ -172,11 +173,11 @@ public class RegistroController extends Controller implements Serializable {
                 estadoUsuario = null;
                 selected = unusuario;
                 this.create();
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
+                context.getExternalContext().redirect(rutaGeneral + "/continuarRegistro.xhtml");
                 return;
             }
         }
-        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
+        context.getExternalContext().redirect(rutaGeneral + "/registroTokenRechazado.xhtml");
     }
 
     public Profile getProfile() {
@@ -233,7 +234,9 @@ public class RegistroController extends Controller implements Serializable {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Felicidades", "");
                 // enviar email 
                 Utilidades.enviarCorreoDeRegistro(getUsuario(), un_usuario.getTokenAcesso());
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/envioEmailRegistro.xhtml");
+                
+                String rutaGeneral = Vistas.getRutaGeneral();
+                context.getExternalContext().redirect(rutaGeneral + "/envioEmailRegistro.xhtml");
 //                Utilidades.enviarCorreo("andersonbuitron@unicauca.edu.co", " asunto1", "este es el cuerpo del mensaje");
                 //TODO
             } else {

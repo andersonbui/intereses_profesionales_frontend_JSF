@@ -331,7 +331,8 @@ public class LoginController extends Controller implements Serializable {
 
     public String salir() throws IOException {
         eliminarSesion();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/login.xhtml");
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/login.xhtml");
         return "";
     }
 

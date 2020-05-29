@@ -7,6 +7,7 @@ package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.Utilidades;
+import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
@@ -52,6 +53,7 @@ public class LoginFacebookController extends Controller implements Serializable 
         Usuario unusuario = getUsuarioController().obtUsuarioPorToken(token);
         FacesContext context = FacesContext.getCurrentInstance();
         Calendar fechaExpiracion = Calendar.getInstance();
+        String rutaGeneral = Vistas.getRutaGeneral();
         if (unusuario != null) {
             Calendar fechaActual = Calendar.getInstance();
             Date fechaExp = unusuario.getFechaExpiracionToken();
@@ -69,12 +71,12 @@ public class LoginFacebookController extends Controller implements Serializable 
                 unusuario.setEstado(UsuarioController.EN_PROCESO);
                 selected = unusuario;
                 this.create();
-                context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/continuarRegistro.xhtml");
+                context.getExternalContext().redirect(rutaGeneral + "/continuarRegistro.xhtml");
                 return;
             }
 
         }
-        context.getExternalContext().redirect("/intereses_profesionales_frontend_JSF/faces/registroTokenRechazado.xhtml");
+        context.getExternalContext().redirect(rutaGeneral + "/registroTokenRechazado.xhtml");
 
         System.out.println("setToken: " + token);
         this.token = token;

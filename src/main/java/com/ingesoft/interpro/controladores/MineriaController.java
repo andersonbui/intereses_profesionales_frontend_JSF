@@ -69,7 +69,7 @@ public class MineriaController extends Controller implements Serializable {
         System.out.println("Archivo generado: " + archivo_de_instancias);
         String nombreArchivoCompleto = guardarDatosEncuestas(encuestas, ruta_descarga + archivo_de_instancias);
 
-        facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
+        //facesContext.getApplication().setMessageBundle("carambas esto es un mensaje");
         RequestContext requestContext = RequestContext.getCurrentInstance();
         
         String rutaGeneral = Vistas.getRutaGeneral();
@@ -101,7 +101,7 @@ public class MineriaController extends Controller implements Serializable {
         }
 
         if (encuesta.getIdAreaProfesional() == null) {
-//                continue;
+            return null;
         } else {
             ingenieria = (encuesta.getIdAreaProfesional().getIdAreaProfesional() == 0) ? "SI" : "NO";
         }
@@ -145,7 +145,9 @@ public class MineriaController extends Controller implements Serializable {
     public void entrenarModelo() throws IOException {
         if (guardarDatosParaEntrenamiento()) {
             Mineria mineria = new Mineria();
-            mineria.entrenar(nombreModelo, archivo_de_instancias, atributo_clase);
+            String nomArchivoInst  = ruta_descarga + archivo_de_instancias;
+            System.out.println("nombreModelo: " + nombreModelo + " - nomArchivoInst: " + nomArchivoInst+ " - atributo_clase: " + atributo_clase );
+            mineria.entrenar(nombreModelo, nomArchivoInst, atributo_clase);
         }
     }
 

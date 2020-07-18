@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/principal.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListPersonaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <style type="text/css">    
+                .subtitle_gestionvar {
+                   background-image: linear-gradient(277deg, #1b81d7 0%, #1f4869 100%); 
+                   color:white; 
+                   width: 100%; 
+                   padding: 20px
+                }
+                .content_gestionvar {
+                    width: 100%; 
+                    padding: 20px
+                }
+                #gestion_var_form .ui-datalist-data {
+                    padding-left: 30px;
+                }
+
+            </style>
+            <h:form id="gestion_var_form">
+                <h:panelGroup id="datalist">
+                    <div class="subtitle_gestionvar">
+                        <h1>Predicción de Profesión</h1>
+                    </div>
+                    <div class="content_gestionvar">
+                    <p:panelGrid columns="1" rendered="#{gestionProfesionView.getVariables() != null}">
+                        <p:selectOneMenu value="#{gestionProfesionView.variableSeleccionada}" immediate="true"  onchange="#{select}"> 
+                            <f:selectItems  value="#{gestionProfesionView.variables}" var="vari" itemLabel="#{vari}" itemValue="#{vari}">
+                            </f:selectItems>
+                            <f:ajax render="guardarCambiosProf"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                        #{select.toString()}
+                    <p:commandButton id="guardarCambiosProf" icon="ui-icon-pencil"   value="Actualizar"
+                                     actionListener="#{gestionProfesionView.actualizarProfesionSeleccionada()}" 
+                                     oncomplete="PF('ActualizarVariablesDialog').show()" disabled="#{gestionProfesionView.noCambioProf()}" />
+                    </div>
+                </h:panelGroup>
+                <p:dialog header="Profesion actualizada" modal="true" showEffect="clip" widgetVar="ActualizarVariablesDialog" resizable="false">
+                    <p:outputPanel id="display">
+                        <p:dataList id="id_datalist" value="#{gestionProfesionView.variableSeleccionada}" var="console" type="ordered">
+                            <f:facet name="header">
+                                Profesion
+                            </f:facet>
+                            <h:outputLabel value="#{console}" />
+                        </p:dataList>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -118,8 +118,13 @@
                             <p:menuitem value="Estadisticas Ambiente/Personalidad" outcome="/vistas/encuesta/Estadistica.xhtml" />
                             <p:menuitem value="Estadisticas Por estudiante" outcome="/vistas/encuesta/EstadisticaMultiple.xhtml" />
                             <p:menuitem value="Estadisticas Areas" outcome="/vistas/encuesta/EstadisticaAreas.xhtml" />
-                            <p:menuitem value="Generar mineria" rendered="#{loginController.isAdmin()}" action="#{mineriaController.entrenarModelo()}" />
                             
+                        </p:submenu>
+                        
+                        <p:submenu label="Mineria" rendered="#{loginController.isAdmin()}">
+                            <p:menuitem value="Gestion de variables" outcome="/vistas/mineria/GestionVariables.xhtml" />
+                            <p:menuitem value="Predicción de profesión" outcome="/vistas/mineria/PrediccionProfesion.xhtml" />
+                            <p:menuitem value="Extracción de conjunto de datos" outcome="/vistas/encuesta/EstadisticaAreas.xhtml" />
                         </p:submenu>
 
                         <p:submenu label="Gestion datos" rendered="#{loginController.docente}"  >

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/principal.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListPersonaTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <style type="text/css">    
+                .subtitle_gestionvar {
+                   background-image: linear-gradient(277deg, #1b81d7 0%, #1f4869 100%); 
+                   color:white; 
+                   width: 100%; 
+                   padding: 20px
+                }
+                .content_gestionvar {
+                    width: 100%; 
+                    padding: 20px
+                }
+                #gestion_var_form .ui-datalist-data {
+                    padding-left: 30px;
+                }
+
+            </style>
+            <h:form id="gestion_var_form">
+                <h:panelGroup id="datalist">
+                    <div class="subtitle_gestionvar">
+                        <h1>Gestion de variables</h1>
+                    </div>
+                    <div class="content_gestionvar">
+                        
+                    <p:panelGrid columns="1" rendered="#{gestionVarMinView.getVariables() != null}">
+                        <p:selectManyCheckbox value="#{gestionVarMinView.variablesSeleccionadas}" layout="responsive" columns="1">
+                            <f:selectItems  value="#{gestionVarMinView.variables}" var="vari" itemLabel="#{vari}" itemValue="#{vari}">
+                            </f:selectItems>
+                        </p:selectManyCheckbox>
+                    </p:panelGrid>
+                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Actualizar"
+                                     actionListener="#{gestionVarMinView.actualizarVariablesMineria()}" 
+                                     oncomplete="PF('ActualizarVariablesDialog').show()"/>
+                    </div>
+                </h:panelGroup>
+                <p:dialog header="Variables actualizadas" modal="true" showEffect="clip" widgetVar="ActualizarVariablesDialog" resizable="false">
+                    <p:outputPanel id="display">
+                        <p:dataList id="id_datalist" value="#{gestionVarMinView.variablesSeleccionadas}" var="console" type="ordered">
+                            <f:facet name="header">
+                                Variables seleccionadas
+                            </f:facet>
+                            <h:outputLabel value="#{console}" />
+                        </p:dataList>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+<!--
+                        <h:outputText value="{bundle.PersonaLabel_tipo}"/>
+                        <h:outputText value="{loginController.personaActual.tipo}" title="{bundle.PersonaTitle_tipo}"/>-->

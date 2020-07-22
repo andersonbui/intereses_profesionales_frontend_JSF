@@ -6,13 +6,17 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,88 +26,57 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "GrupoUsuario")
+@Table(name = "ConfigMineria")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GrupoUsuario.findAll", query = "SELECT g FROM GrupoUsuario g")
-    , @NamedQuery(name = "GrupoUsuario.findByUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario = :usuario")
-    , @NamedQuery(name = "GrupoUsuario.findByIdUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idUsuario = :idUsuario")
-    , @NamedQuery(name = "GrupoUsuario.findByIdTipoUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.grupoUsuarioPK.idTipoUsuario = :idTipoUsuario")
-    , @NamedQuery(name = "GrupoUsuario.findPorUsuario", query = "SELECT g FROM GrupoUsuario g WHERE g.usuario1 = :usuario")
+    @NamedQuery(name = "ConfigMineria.findAll", query = "SELECT g FROM ConfigMineria g")
+    , @NamedQuery(name = "ConfigMineria.findByIdConfigMineria", query = "SELECT cm FROM ConfigMineria cm WHERE cm.idConfigMineria = :id")
 })
-public class GrupoUsuario implements Serializable {
+public class ConfigMineria implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GrupoUsuarioPK grupoUsuarioPK;
-    @Size(max = 45)
-    @Column(name = "usuario")
-    private String usuario;
-    @JoinColumn(name = "idTipoUsuario", referencedColumnName = "idTipoUsuario", insertable = false, updatable = false)
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idConfigMineria")
+    protected Integer idConfigMineria;
+    
+    @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
     @ManyToOne(optional = false)
-    private TipoUsuario tipoUsuario;
-    @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Usuario usuario1;
-
-    public GrupoUsuario() {
+    private AreaProfesional idAreaProfesional;
+    
+    public Integer getIdConfigMineria() {
+        return idConfigMineria;
     }
 
-    public GrupoUsuario(GrupoUsuarioPK grupoUsuarioPK) {
-        this.grupoUsuarioPK = grupoUsuarioPK;
+    public void setIdConfigMineria(Integer idConfigMineria) {
+        this.idConfigMineria = idConfigMineria;
     }
 
-    public GrupoUsuario(int idUsuario, int idTipoUsuario) {
-        this.grupoUsuarioPK = new GrupoUsuarioPK(idUsuario, idTipoUsuario);
+    public AreaProfesional getIdAreaProfesional() {
+        return idAreaProfesional;
     }
 
-    public GrupoUsuarioPK getGrupoUsuarioPK() {
-        return grupoUsuarioPK;
+    public void setIdAreaProfesional(AreaProfesional idAreaProfesional) {
+        this.idAreaProfesional = idAreaProfesional;
     }
-
-    public void setGrupoUsuarioPK(GrupoUsuarioPK grupoUsuarioPK) {
-        this.grupoUsuarioPK = grupoUsuarioPK;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public Usuario getUsuario1() {
-        return usuario1;
-    }
-
-    public void setUsuario1(Usuario usuario1) {
-        this.usuario1 = usuario1;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (grupoUsuarioPK != null ? grupoUsuarioPK.hashCode() : 0);
+        hash += (idConfigMineria != null ? idConfigMineria.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GrupoUsuario)) {
+        if (!(object instanceof ConfigMineria)) {
             return false;
         }
-        GrupoUsuario other = (GrupoUsuario) object;
-        if ((this.grupoUsuarioPK == null && other.grupoUsuarioPK != null) || (this.grupoUsuarioPK != null && !this.grupoUsuarioPK.equals(other.grupoUsuarioPK))) {
+        ConfigMineria other = (ConfigMineria) object;
+        if ((this.idConfigMineria == null && other.idConfigMineria != null) || (this.idConfigMineria != null && !this.idConfigMineria.equals(other.idConfigMineria))) {
             return false;
         }
         return true;
@@ -111,7 +84,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "GrupoUsuario[ grupoUsuarioPK=" + grupoUsuarioPK + "tipoUsuario=" + this.tipoUsuario + " ]";
+        return "ConfigMineria[ idConfigMineria=" + idConfigMineria + " - idAreaProfesional=" + this.idAreaProfesional + " ]";
     }
     
 }

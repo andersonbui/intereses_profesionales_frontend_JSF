@@ -1,7 +1,13 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.facades.AbstractFacade;
+import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.entidades.AreaProfesional;
+import com.ingesoft.interpro.entidades.ConfigMineria;
+import com.ingesoft.interpro.facades.ConfigMineriaFacade;
 import java.io.Serializable;
+import java.util.List;
+import java.util.ResourceBundle;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -9,55 +15,61 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class GestionProfesionView extends Controller implements Serializable {
 
-    public String[] variables;
-    public String variableSeleccionada;
-    public String anterior;
+    @EJB
+    public ConfigMineriaFacade ejbFacade;
+    public ConfigMineria gestionProfesionSeleccionada;
+    public AreaProfesional anterior;
+    public ConfigMineria seleccionado;
 
     public GestionProfesionView() {
-        variables = new String[]{
-            "INGENIERÍA ARQUITECTURA URBANISMO Y AFINES",
-            "AGRONOMÍA VETERINARIA Y AFINES",
-            "ECONOMIA ADMINISTRACION CONTADURIA Y AFINES",
-            "CIENCIAS DE LA SALUD",
-            "CIENCIAS SOCIALES Y HUMANAS",
-            "BELLAS ARTES",
-            "CIENCIAS DE LA EDUCACIÓN",
-            "MATEMÁTICAS Y CIENCIAS NATURALES",
-            "FUERZA MILITAR y NO SE"
-        };
     }
     
-    public String[] getVariables() {
-        return variables;
-    }
-    
+    /**
+     * Guargdar Objeto seleccionado
+     */
     public void actualizarProfesionSeleccionada() {
         System.out.println("Actualizar varibles");
-        anterior = variableSeleccionada;
-    }
-    
-    @Override
-    protected AbstractFacade getFacade() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public String getVariableSeleccionada() {
-        if(variableSeleccionada == null){
-            String materiaRecuperada = "MATEMÁTICAS Y CIENCIAS NATURALES";
-            anterior = materiaRecuperada;
-            return materiaRecuperada;
-        } else {
-            return variableSeleccionada;
+        anterior = seleccionado.getIdAreaProfesional();
+        if(seleccionado != null){
+            persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProfesionSeleccionadaUpdated"), seleccionado);
         }
     }
+    
+    public AreaProfesional getVariableSeleccionada() {
+        seleccionado = recuperarConfigMineria();
+        if(seleccionado != null){
+            anterior = seleccionado.getIdAreaProfesional();
+            return seleccionado.getIdAreaProfesional();
+        }
+        return null;
+    }
 
-    public void setVariableSeleccionada(String variableSeleccionada) {
+    public void setVariableSeleccionada(AreaProfesional variableSeleccionada) {
 //        System.out.println("setVariableSeleccionada - cambiandos: "+variableSeleccionada);
-        this.variableSeleccionada = variableSeleccionada;
+        this.seleccionado.setIdAreaProfesional(variableSeleccionada);
+        
     }
     
     public boolean noCambioProf() {
-//        System.out.println("noCambioProf - variableSeleccionada: "+variableSeleccionada+" - anterior: "+anterior);
-        return anterior.equals(variableSeleccionada);
+        if(anterior != null & seleccionado != null){
+            return anterior.equals(seleccionado.getIdAreaProfesional());
+        }
+        return false;
     }
+    
+    @Override
+    protected ConfigMineriaFacade getFacade() {
+        return ejbFacade;
+    }
+    
+    public ConfigMineria recuperarConfigMineria() {
+        if (seleccionado == null) {
+            List<ConfigMineria> lista = getFacade().findAll();
+            if(lista!= null && !lista.isEmpty()) {
+                seleccionado = lista.get(0);
+            }
+        }
+        return seleccionado;
+    }
+
 }

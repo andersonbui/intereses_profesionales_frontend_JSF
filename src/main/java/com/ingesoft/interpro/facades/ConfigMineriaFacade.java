@@ -5,7 +5,7 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.Materia;
+import com.ingesoft.interpro.entidades.ConfigMineria;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author debian
  */
 @Stateless
-public class MateriaFacade extends AbstractFacade<Materia> {
+public class ConfigMineriaFacade extends AbstractFacade<ConfigMineria> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class MateriaFacade extends AbstractFacade<Materia> {
         return em;
     }
 
-    public MateriaFacade() {
-        super(Materia.class);
+    public ConfigMineriaFacade() {
+        super(ConfigMineria.class);
     }
     
 }

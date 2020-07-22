@@ -99,7 +99,7 @@ public class AreaProfesional implements Serializable {
 
     @Override
     public String toString() {
-        return "AreaProfesional[ idAreaProfesional=" + idAreaProfesional + " ]";
+        return "AreaProfesional[ idAreaProfesional=" + idAreaProfesional + ", area: " + area + " ]";
     }
     
 }

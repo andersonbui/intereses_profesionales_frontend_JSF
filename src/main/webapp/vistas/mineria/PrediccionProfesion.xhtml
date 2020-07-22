@@ -35,22 +35,22 @@
                         <h1>Predicción de Profesión</h1>
                     </div>
                     <div class="content_gestionvar">
-                    <p:panelGrid columns="1" rendered="#{gestionProfesionView.getVariables() != null}">
-                        <p:selectOneMenu value="#{gestionProfesionView.variableSeleccionada}" immediate="true"  onchange="#{select}"> 
-                            <f:selectItems  value="#{gestionProfesionView.variables}" var="vari" itemLabel="#{vari}" itemValue="#{vari}">
+                        <p:panelGrid columns="1" rendered="#{areaProfesionalController.items != null}">
+                        <p:selectOneMenu value="#{gestionProfesionView.variableSeleccionada}" > 
+                            <f:selectItems  value="#{areaProfesionalController.items}" var="vari" itemLabel="#{vari.area}" itemValue="#{vari}">
                             </f:selectItems>
                             <f:ajax render="guardarCambiosProf"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                        #{select.toString()}
                     <p:commandButton id="guardarCambiosProf" icon="ui-icon-pencil"   value="Actualizar"
-                                     actionListener="#{gestionProfesionView.actualizarProfesionSeleccionada()}" 
-                                     oncomplete="PF('ActualizarVariablesDialog').show()" disabled="#{gestionProfesionView.noCambioProf()}" />
+                                     actionListener="#{gestionProfesionView.actualizarProfesionSeleccionada()}"
+                                     oncomplete="PF('ActualizarVariablesDialog').show()" disabled="#{gestionProfesionView.noCambioProf()}" 
+                                     />
                     </div>
                 </h:panelGroup>
                 <p:dialog header="Profesion actualizada" modal="true" showEffect="clip" widgetVar="ActualizarVariablesDialog" resizable="false">
                     <p:outputPanel id="display">
-                        <p:dataList id="id_datalist" value="#{gestionProfesionView.variableSeleccionada}" var="console" type="ordered">
+                        <p:dataList id="id_datalist" value="#{gestionProfesionView.variableSeleccionada.area}" var="console" type="ordered">
                             <f:facet name="header">
                                 Profesion
                             </f:facet>

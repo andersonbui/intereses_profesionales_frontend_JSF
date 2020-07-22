@@ -45,7 +45,7 @@
                         <h:outputText value="#{loginController.personaActual.idUsuario!=null?loginController.personaActual.idUsuario.usuario:''}" 
                                       title="#{bundle.UsuarioTitle_Usuario}"/>
                     </p:panelGrid>
-                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil"
+                    <p:commandButton id="editarPerfilButton" icon="ui-icon-pencil"   value="Editar perfil" 
                                      actionListener="#{personaController.prepareUpdate(loginController.personaActual)}" 
                                      update=":PerfilEditForm" oncomplete="PF('PerfilEditDialog').show()"/>
                 </h:panelGroup>

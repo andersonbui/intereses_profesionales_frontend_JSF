@@ -36,7 +36,7 @@ public class GrupoUsuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GrupoUsuarioPK grupoUsuarioPK;
-    @Size(max = 45)
+    @Size(max = 70)
     @Column(name = "usuario")
     private String usuario;
     @JoinColumn(name = "idTipoUsuario", referencedColumnName = "idTipoUsuario", insertable = false, updatable = false)

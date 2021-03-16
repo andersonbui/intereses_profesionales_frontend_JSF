@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -45,11 +44,15 @@ public class TipoEstiloPreguntaController extends Controller implements Serializ
     public void setSelected(TipoEstiloPregunta selected) {
         this.selected = selected;
     }
-
+    
+    @Override
     protected void setEmbeddableKeys() {
+        selected.getTipoEstiloPreguntaPK().setIdTipoEstilo(selected.getTipoEstilo().getIdTipoEstilo());
+        selected.getTipoEstiloPreguntaPK().setIdpreguntaEstilos(selected.getPreguntaEstilosAprendizajeFs().getIdpreguntaEstilos());
     }
 
     protected void initializeEmbeddableKey() {
+        selected.setTipoEstiloPreguntaPK(new TipoEstiloPreguntaPK());
     }
 
     @Override

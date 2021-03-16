@@ -130,7 +130,7 @@ public class PreguntaEstilosAprendizajeFs implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs[ idpreguntaEstilos=" + idpreguntaEstilos + " ]";
+        return "PreguntaEstilosAprendizajeFs[ idpreguntaEstilos=" + idpreguntaEstilos + "|" + enunciado + " ]";
     }
     
 }

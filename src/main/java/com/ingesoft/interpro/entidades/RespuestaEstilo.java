@@ -23,11 +23,13 @@ import javax.persistence.Table;
  * @author Personal
  */
 @Entity
-@Table(name = "respuestaestilo")
+@Table(name = "RespuestaEstilo")
 @NamedQueries({
     @NamedQuery(name = "RespuestaEstilo.findAll", query = "SELECT r FROM RespuestaEstilo r"),
     @NamedQuery(name = "RespuestaEstilo.findByIdRespuestaEstilo", query = "SELECT r FROM RespuestaEstilo r WHERE r.idRespuestaEstilo = :idRespuestaEstilo"),
-    @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta")})
+    @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta"),
+    @NamedQuery(name = "RespuestaEstilo.findByEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.idEncuesta = :encuesta")
+})
 public class RespuestaEstilo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +42,7 @@ public class RespuestaEstilo implements Serializable {
     private Character respuesta;
     @JoinColumn(name = "Encuesta_idEncuesta", referencedColumnName = "idEncuesta")
     @ManyToOne(optional = false)
-    private Encuesta encuestaidEncuesta;
+    private Encuesta idEncuesta;
     @JoinColumn(name = "idpregunta_estilos", referencedColumnName = "idpregunta_estilos")
     @ManyToOne(optional = false)
     private PreguntaEstilosAprendizajeFs idpreguntaEstilos;
@@ -69,11 +71,11 @@ public class RespuestaEstilo implements Serializable {
     }
 
     public Encuesta getEncuestaidEncuesta() {
-        return encuestaidEncuesta;
+        return idEncuesta;
     }
 
     public void setEncuestaidEncuesta(Encuesta encuestaidEncuesta) {
-        this.encuestaidEncuesta = encuestaidEncuesta;
+        this.idEncuesta = encuestaidEncuesta;
     }
 
     public PreguntaEstilosAprendizajeFs getIdpreguntaEstilos() {

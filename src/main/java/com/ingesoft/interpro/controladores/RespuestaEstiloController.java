@@ -86,7 +86,11 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         }
         return items;
     }
-
+    
+    public List<RespuestaEstilo> getItemsXEncuesta(Encuesta encuesta) {
+        return getFacade().getItemsXEncuesta(encuesta);
+    }
+    
     public RespuestaEstilo getRespuestaEstilo(Integer id) {
         return getFacade().find(id);
     }

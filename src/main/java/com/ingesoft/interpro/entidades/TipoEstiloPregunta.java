@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
  * @author Personal
  */
 @Entity
-@Table(name = "tipoestilo_pregunta")
+@Table(name = "TipoEstilo_Pregunta")
 @NamedQueries({
     @NamedQuery(name = "TipoEstiloPregunta.findAll", query = "SELECT t FROM TipoEstiloPregunta t"),
     @NamedQuery(name = "TipoEstiloPregunta.findByIndice", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.indice = :indice"),

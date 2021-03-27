@@ -266,8 +266,14 @@ public class EncuestaController extends Controller implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
     }
 
-    public void pasoResumen() throws IOException {
+    public void pasoEstiloAprendizaje() throws IOException {
         this.pasoActivo = 3;
+        String rutaGeneral = Vistas.getRutaGeneral();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntasEstilosAprendizaje/index.xhtml");
+    }
+    
+    public void pasoResumen() throws IOException {
+        this.pasoActivo = 4;
         actualizarSelected();
         EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
         estadisticaAmbienteController.setEncuesta(selected);
@@ -275,7 +281,7 @@ public class EncuestaController extends Controller implements Serializable {
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/encuesta/resumen.xhtml");
     }
-
+    
     public void finalizar() throws IOException {
         this.pasoActivo = 0;
         FacesContext.getCurrentInstance().getExternalContext().redirect(Vistas.inicio());

@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaEstiloController")
 @SessionScoped
@@ -28,8 +29,14 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     private List<RespuestaEstilo> items = null;
     private RespuestaEstilo selected;
 
+    private final int tamGrupo;
+    private int pasoActual;
+    private int numGrupos;
+    
     public RespuestaEstiloController() {
-
+        tamGrupo = 4;
+        pasoActual = 0;
+        numGrupos = 5; // TODO: valor = 1
     }
 
     public void inicializar(Encuesta selected) {
@@ -143,5 +150,69 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         }
 
     }
+    
+    
+    /**
+     * Funciones de encuesta
+     */
+      
+    public int getPasoActual() {
+        return pasoActual;
+    }
 
+    public int getUltimoPaso() {
+        return (numGrupos);
+    }
+
+    public void setPasoActual(int pasoActual) {
+        this.pasoActual = pasoActual;
+    }
+
+    public int getStep() {
+        return pasoActual;
+    }
+
+    public int getnombrePaso() {
+        return (pasoActual * 100 / numGrupos);
+    }
+
+    public boolean puedeAnteriorPaso() {
+        return pasoActual > 0;
+    }
+
+    public boolean puedeSiguientePasoNoUltimo() {
+        return pasoActual < (numGrupos - 1);
+    }
+
+    public boolean esPenultimoPaso() {
+        return pasoActual == (numGrupos - 1);
+    }
+
+    public boolean esUltimoPaso() {
+        return pasoActual == numGrupos;
+    }
+
+    public int anteriorPaso() {
+        pasoActual -= 1;
+//        grupo = getGrupoItems(pasoActual + 1);
+        return pasoActual;
+    }
+
+    public int siguientePaso(ActionEvent actionEvent) {
+        System.out.println("siguientes paso");
+        pasoActual += 1;
+//        grupo = getGrupoItems(pasoActual + 1);
+        return pasoActual;
+    }
+
+    public boolean finalizarEncuesta() {
+//        for (RespuestaPersonalidad respuesta : grupo) {
+//            getFacade().edit(respuesta);
+//        }
+//        pasoActual += 1;
+
+        // realizar estadistica de respuestas
+//        return realizarEstadisticas();
+        return true;
+    }
 }

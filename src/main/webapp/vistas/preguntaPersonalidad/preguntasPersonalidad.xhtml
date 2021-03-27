@@ -128,8 +128,8 @@
                                              actionListener="#{respuestaPersonalidadController.anteriorPaso}"
                                              update=":PreguntaPersonalidadForm, @form" >
                             </p:commandButton>
-                            <p:commandButton value="Ver resumen de encuesta" ajax="true" style="float:right;" class="float-r btn"
-                                             action="#{encuestaController.pasoResumen()}"
+                            <p:commandButton value="Estilos de aprendizaje" ajax="true" style="float:right;" class="float-r btn"
+                                             action="#{encuestaController.pasoEstiloAprendizaje()}"
                                              rendered="#{respuestaPersonalidadController.esUltimoPaso()}"
                                              > 
                             </p:commandButton>
@@ -140,7 +140,7 @@
             </h:form>
             <h:form>
                 <p:commandButton value="Ver resumen de encuesta (Desarrollo)" ajax="true"
-                                 action="#{encuestaController.pasoResumen()}"
+                                 action="#{encuestaController.pasoEstiloAprendizaje()}"
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

@@ -4,9 +4,11 @@ import com.ingesoft.interpro.entidades.RespuestaEstilo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
 import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -28,19 +30,37 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     private com.ingesoft.interpro.facades.RespuestaEstiloFacade ejbFacade;
     private List<RespuestaEstilo> items = null;
     private RespuestaEstilo selected;
-
+    private List<RespuestaEstilo> grupo = null;
+    
+    private List<PreguntaEstilosAprendizajeFs> grupoP = null;//TODO: eliminar
+    private List<PreguntaEstilosAprendizajeFs> itemsP = null;//TODO: eliminar
+    
+    /**
+     * Cantidad de preguntas por pagina 
+     */
     private final int tamGrupo;
     private int pasoActual;
+    /**
+     * cantidad de paginas
+     */
     private int numGrupos;
     
     public RespuestaEstiloController() {
-        tamGrupo = 4;
+        tamGrupo = 3;
         pasoActual = 0;
         numGrupos = 5; // TODO: valor = 1
     }
 
     public void inicializar(Encuesta selected) {
 
+    }
+
+    public List<RespuestaEstilo> getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(List<RespuestaEstilo> grupo) {
+        this.grupo = grupo;
     }
 
     public RespuestaEstilo getSelected() {
@@ -110,6 +130,86 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return getFacade().findAll();
     }
 
+    void prepararRespuestas(List<PreguntaEstilosAprendizajeFs> itemsPreg, Encuesta encuesta) {
+        this.numGrupos = itemsPreg.size()/tamGrupo;
+//        System.out.println(" ==== numGrupos PreguntaEstilosAprendizajeFs : "+numGrupos);
+        
+        getGrupos();
+        pasoActual = 0;
+//        grupo = getGrupoItems(pasoActual + 1);
+        itemsP = itemsPreg; //TODO: eliminar
+        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
+        
+    }
+
+    public List<Integer> getGrupos() {
+        List<Integer> gruposPreguntas = new ArrayList<>();
+        items = getItems();
+        numGrupos = items.size() / tamGrupo;
+        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        for (int i = 1; i <= numGrupos; i++) {
+            gruposPreguntas.add(i);
+        }
+        return gruposPreguntas;
+    }
+    
+    /**
+     * obtiene las respuestas de un determinado grupo
+     *
+     * @param numGrupo
+     * @return
+     *///TODO: eliminar
+    public List<PreguntaEstilosAprendizajeFs> getGrupoItemsPreguntas(int numGrupo) {
+        
+        List<PreguntaEstilosAprendizajeFs> listaPreEstApren = null;
+        if (itemsP != null) {
+            listaPreEstApren = new ArrayList<>();
+            for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
+                if (i >= 0 && i < itemsP.size()) {
+                    listaPreEstApren.add(itemsP.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        return listaPreEstApren;
+    }
+    
+    public List<PreguntaEstilosAprendizajeFs> getGrupoP() {
+        return grupoP;
+    }
+
+    public void setGrupoP(List<PreguntaEstilosAprendizajeFs> grupoP) {
+        this.grupoP = grupoP;
+    }
+    
+    /**
+     * obtiene las respuestas de un determinado grupo
+     *
+     * @param numGrupo
+     * @return
+     */
+    public List<RespuestaEstilo> getGrupoItems(int numGrupo) {
+        getItems();
+        // guardar respuestas actuales
+//        if (grupo != null && !grupo.isEmpty()) {
+//            HiloGuardado hilo = new HiloGuardado(grupo);
+//            hilo.start();
+//        }
+        List<RespuestaEstilo> listaRespuestas = null;
+        if (items != null) {
+            listaRespuestas = new ArrayList<>();
+            for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
+                if (i >= 0 && i < items.size()) {
+                    listaRespuestas.add(items.get(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        return listaRespuestas;
+    }
+    
     @FacesConverter(forClass = RespuestaEstilo.class)
     public static class RespuestaEstiloControllerConverter implements Converter {
 
@@ -194,6 +294,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
 
     public int anteriorPaso() {
         pasoActual -= 1;
+        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
 //        grupo = getGrupoItems(pasoActual + 1);
         return pasoActual;
     }
@@ -201,6 +302,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso");
         pasoActual += 1;
+        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
 //        grupo = getGrupoItems(pasoActual + 1);
         return pasoActual;
     }

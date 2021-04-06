@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -140,4 +141,9 @@ public class PreguntaEstilosAprendizajeFsController extends Controller implement
 
     }
 
+    public void preparePreguntasEstilosApren( Encuesta encuesta) {
+        RespuestaEstiloController respuestaEstiloController = getRespuestaEstiloController();
+        items = getItems();
+        respuestaEstiloController.prepararRespuestas(items, encuesta);
+    }
 }

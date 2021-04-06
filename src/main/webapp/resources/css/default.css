@@ -13,8 +13,7 @@
     padding: 0px 65px;   
 }
 
-elemento {
-}
+
 #content {
     max-width: 1300px;
     width: calc(100% - 164px);
@@ -162,4 +161,17 @@ body *, body ::before, body ::after {
     max-width: 1500px;
     box-sizing: border-box;
 
+}
+
+.select_pregunta_est td {
+    background-color: #0081c2;
+    display: block;
+    margin: 10px 30px;
+    color: white;
+    padding-left: 10px;
+    font-weight: bold;
+}
+
+.panel-preguntas-personalidad .ui-panel-content, .panel-preguntas-personalidad .ui-panel-content td {
+    font-size: 1.3em !important;
 }

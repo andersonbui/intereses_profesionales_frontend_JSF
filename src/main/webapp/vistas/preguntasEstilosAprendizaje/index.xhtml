@@ -57,6 +57,15 @@
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaEstiloController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                            No es ultimo paso #{respuestaEstiloController.getnombrePaso()}
+                           tam grupo preg: #{respuestaEstiloController.grupoP.size()}
+                           <br/>
+                           <ui:repeat value="#{respuestaEstiloController.grupoP}" var="item">
+                               #{item.idpreguntaEstilos}: #{item.enunciado} <br/>
+                                <p:selectOneRadio id="sexo" required="true" class="select_pregunta_est">
+                                    <f:selectItems value="#{item.tipoestiloPreguntaList}" var="tep" 
+                                                   itemLabel="#{tep.opcion}" itemValue="#{tep}"  class="pregunta_estilo" />
+                                </p:selectOneRadio>
+                           </ui:repeat>
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >
                             <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{respuestaEstiloController.anteriorPaso}"

@@ -8,6 +8,7 @@ package com.ingesoft.interpro.entidades;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,18 +27,15 @@ import javax.persistence.Table;
 @Table(name = "RespuestaEstilo")
 @NamedQueries({
     @NamedQuery(name = "RespuestaEstilo.findAll", query = "SELECT r FROM RespuestaEstilo r"),
-    @NamedQuery(name = "RespuestaEstilo.findByIdRespuestaEstilo", query = "SELECT r FROM RespuestaEstilo r WHERE r.idRespuestaEstilo = :idRespuestaEstilo"),
+    @NamedQuery(name = "RespuestaEstilo.findByIdRespuestaEstilo", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK = :respuestaEstiloPK"),
     @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta"),
     @NamedQuery(name = "RespuestaEstilo.findByEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.idEncuesta = :encuesta")
 })
 public class RespuestaEstilo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idRespuestaEstilo")
-    private Integer idRespuestaEstilo;
+    @EmbeddedId
+    private RespuestaEstiloPK respuestaEstiloPK;
     @Column(name = "respuesta")
     private Character respuesta;
     @JoinColumn(name = "Encuesta_idEncuesta", referencedColumnName = "idEncuesta")
@@ -53,18 +51,17 @@ public class RespuestaEstilo implements Serializable {
     public RespuestaEstilo(PreguntaEstilosAprendizajeFs idpreguntaEstilos, Encuesta idEncuesta) {
         this.idpreguntaEstilos = idpreguntaEstilos;
         this.idEncuesta = idEncuesta;
+        this.respuestaEstiloPK = new RespuestaEstiloPK();
+        this.respuestaEstiloPK.setEncuesta_idEncuesta(idEncuesta.getIdEncuesta());
+        this.respuestaEstiloPK.setIdpregunta_estilos(idpreguntaEstilos.getIdpreguntaEstilos());
     }
     
-    public RespuestaEstilo(Integer idRespuestaEstilo) {
-        this.idRespuestaEstilo = idRespuestaEstilo;
+    public RespuestaEstiloPK getRespuestaEstiloPK() {
+        return respuestaEstiloPK;
     }
 
-    public Integer getIdRespuestaEstilo() {
-        return idRespuestaEstilo;
-    }
-
-    public void setIdRespuestaEstilo(Integer idRespuestaEstilo) {
-        this.idRespuestaEstilo = idRespuestaEstilo;
+    public void setRespuestaEstiloPK(RespuestaEstiloPK respuestaEstiloPK) {
+        this.respuestaEstiloPK = respuestaEstiloPK;
     }
 
     public Character getRespuesta() {
@@ -94,7 +91,7 @@ public class RespuestaEstilo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idRespuestaEstilo != null ? idRespuestaEstilo.hashCode() : 0);
+        hash += (respuestaEstiloPK != null ? respuestaEstiloPK.hashCode() : 0);
         return hash;
     }
 
@@ -105,7 +102,7 @@ public class RespuestaEstilo implements Serializable {
             return false;
         }
         RespuestaEstilo other = (RespuestaEstilo) object;
-        if ((this.idRespuestaEstilo == null && other.idRespuestaEstilo != null) || (this.idRespuestaEstilo != null && !this.idRespuestaEstilo.equals(other.idRespuestaEstilo))) {
+        if ((this.respuestaEstiloPK == null && other.respuestaEstiloPK != null) || (this.respuestaEstiloPK != null && !this.respuestaEstiloPK.equals(other.respuestaEstiloPK))) {
             return false;
         }
         return true;
@@ -113,7 +110,7 @@ public class RespuestaEstilo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaEstilo[ idRespuestaEstilo=" + idRespuestaEstilo + " ]";
+        return "com.ingesoft.interpro.entidades.RespuestaEstilo[ respuestaEstiloPK=" + respuestaEstiloPK + " ]";
     }
     
 }

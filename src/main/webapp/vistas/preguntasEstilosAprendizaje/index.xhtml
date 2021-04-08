@@ -57,7 +57,6 @@
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaEstiloController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                            No es ultimo paso #{respuestaEstiloController.getnombrePaso()}
-                           tam grupo preg: #{respuestaEstiloController.grupoP.size()}
                            <br/>
                            <ui:repeat value="#{respuestaEstiloController.grupo}" var="respuesta">
                                #{respuesta.idpreguntaEstilos.enunciado} <br/>

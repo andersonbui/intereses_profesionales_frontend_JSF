@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.RespuestaEstilo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
 import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
@@ -10,6 +11,7 @@ import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -127,6 +129,11 @@ public class RespuestaEstiloController extends Controller implements Serializabl
 //            vecContRespuestasPersonalidad = new int[listaPreguntas.size()]; // puntos
             for (PreguntaEstilosAprendizajeFs pregunta : listaPreguntas) {
                 selected = new RespuestaEstilo(pregunta, this.encuesta);
+                
+                if (Utilidades.esDesarrollo()) {
+                    char valuerand = ((new Random()).nextBoolean())? 'A': 'B';
+                    selected.setRespuesta(valuerand);
+                }
                 items.add(selected);
             }
         }
@@ -176,10 +183,10 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     public List<RespuestaEstilo> getGrupoItems(int numGrupo) {
         items = getRespuestas();
         // guardar respuestas actuales
-//        if (grupo != null && !grupo.isEmpty()) {
-//            HiloGuardado hilo = new HiloGuardado(grupo);
-//            hilo.start();
-//        }
+        if (grupo != null && !grupo.isEmpty()) {
+            HiloGuardado hilo = new HiloGuardado(grupo);
+            hilo.start();
+        }
         List<RespuestaEstilo> listaRespuestas = null;
         if (items != null) {
             listaRespuestas = new ArrayList<>();
@@ -192,6 +199,26 @@ public class RespuestaEstiloController extends Controller implements Serializabl
             }
         }
         return listaRespuestas;
+    }
+    
+    public class HiloGuardado extends Thread {
+
+        private final List<RespuestaEstilo> itemsRespuestas;
+
+        public HiloGuardado(List<RespuestaEstilo> itemsRespuestas) {
+            this.itemsRespuestas = itemsRespuestas;
+        }
+
+        @Override
+        public void run() {
+            RespuestaEstilo respAux;
+            for (RespuestaEstilo respuesta : itemsRespuestas) {
+                respAux = getFacade().edit(respuesta);
+                respuesta.setIdRespuestaEstilo(respAux.getIdRespuestaEstilo());
+            }
+            System.out.println("Termino de guardar Respuestas Estilo A");
+        }
+
     }
     
     @FacesConverter(forClass = RespuestaEstilo.class)
@@ -289,7 +316,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     }
 
     public boolean finalizarEncuesta() {
-//        for (RespuestaPersonalidad respuesta : grupo) {
+//        for (RespuestaEstilo respuesta : grupo) {
 //            getFacade().edit(respuesta);
 //        }
 //        pasoActual += 1;

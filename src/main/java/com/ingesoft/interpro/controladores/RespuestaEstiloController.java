@@ -31,9 +31,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     private List<RespuestaEstilo> items = null;
     private RespuestaEstilo selected;
     private List<RespuestaEstilo> grupo = null;
-    
-    private List<PreguntaEstilosAprendizajeFs> grupoP = null;//TODO: eliminar
-    private List<PreguntaEstilosAprendizajeFs> itemsP = null;//TODO: eliminar
+    private List<PreguntaEstilosAprendizajeFs> listaPreguntas = null;
     
     /**
      * Cantidad de preguntas por pagina 
@@ -45,21 +43,30 @@ public class RespuestaEstiloController extends Controller implements Serializabl
      */
     private int numGrupos;
     
+    Encuesta encuesta;
+    
     public RespuestaEstiloController() {
         tamGrupo = 3;
         pasoActual = 0;
-        numGrupos = 5; // TODO: valor = 1
+        numGrupos = 0;
     }
 
     public void inicializar(Encuesta selected) {
 
     }
 
+    public int getNumGrupos() {
+        items = getRespuestas();
+        numGrupos = items.size() / tamGrupo;
+        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        return numGrupos;
+    }
+    
     public List<RespuestaEstilo> getGrupo() {
         return grupo;
     }
 
-    public void setGrupo(List<RespuestaEstilo> grupo) {
+    private void setGrupo(List<RespuestaEstilo> grupo) {
         this.grupo = grupo;
     }
 
@@ -114,6 +121,18 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return items;
     }
     
+    public List<RespuestaEstilo> getRespuestas() {
+        if (items == null) {
+            items = new ArrayList<>(listaPreguntas.size());
+//            vecContRespuestasPersonalidad = new int[listaPreguntas.size()]; // puntos
+            for (PreguntaEstilosAprendizajeFs pregunta : listaPreguntas) {
+                selected = new RespuestaEstilo(pregunta, this.encuesta);
+                items.add(selected);
+            }
+        }
+        return items;
+    }
+    
     public List<RespuestaEstilo> getItemsXEncuesta(Encuesta encuesta) {
         return getFacade().getItemsXEncuesta(encuesta);
     }
@@ -131,57 +150,22 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     }
 
     void prepararRespuestas(List<PreguntaEstilosAprendizajeFs> itemsPreg, Encuesta encuesta) {
-        this.numGrupos = itemsPreg.size()/tamGrupo;
-//        System.out.println(" ==== numGrupos PreguntaEstilosAprendizajeFs : "+numGrupos);
-        
-        getGrupos();
+        listaPreguntas = itemsPreg;
+        this.encuesta = encuesta;
         pasoActual = 0;
-//        grupo = getGrupoItems(pasoActual + 1);
-        itemsP = itemsPreg; //TODO: eliminar
-        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
         
+        getNumGrupos();
+        grupo = getGrupoItems(pasoActual + 1);
     }
 
-    public List<Integer> getGrupos() {
-        List<Integer> gruposPreguntas = new ArrayList<>();
-        items = getItems();
-        numGrupos = items.size() / tamGrupo;
-        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-        for (int i = 1; i <= numGrupos; i++) {
-            gruposPreguntas.add(i);
-        }
-        return gruposPreguntas;
-    }
-    
-    /**
-     * obtiene las respuestas de un determinado grupo
-     *
-     * @param numGrupo
-     * @return
-     *///TODO: eliminar
-    public List<PreguntaEstilosAprendizajeFs> getGrupoItemsPreguntas(int numGrupo) {
-        
-        List<PreguntaEstilosAprendizajeFs> listaPreEstApren = null;
-        if (itemsP != null) {
-            listaPreEstApren = new ArrayList<>();
-            for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
-                if (i >= 0 && i < itemsP.size()) {
-                    listaPreEstApren.add(itemsP.get(i));
-                } else {
-                    break;
-                }
-            }
-        }
-        return listaPreEstApren;
-    }
-    
-    public List<PreguntaEstilosAprendizajeFs> getGrupoP() {
-        return grupoP;
-    }
-
-    public void setGrupoP(List<PreguntaEstilosAprendizajeFs> grupoP) {
-        this.grupoP = grupoP;
-    }
+//    public List<Integer> getGrupos() {
+////        List<Integer> gruposPreguntas = new ArrayList<>();
+////        for (int i = 1; i <= numGrupos; i++) {
+////            gruposPreguntas.add(i);
+////        }
+////        return gruposPreguntas;
+//        return null;
+//    }
     
     /**
      * obtiene las respuestas de un determinado grupo
@@ -190,7 +174,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
      * @return
      */
     public List<RespuestaEstilo> getGrupoItems(int numGrupo) {
-        getItems();
+        items = getRespuestas();
         // guardar respuestas actuales
 //        if (grupo != null && !grupo.isEmpty()) {
 //            HiloGuardado hilo = new HiloGuardado(grupo);
@@ -294,16 +278,13 @@ public class RespuestaEstiloController extends Controller implements Serializabl
 
     public int anteriorPaso() {
         pasoActual -= 1;
-        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
-//        grupo = getGrupoItems(pasoActual + 1);
+        setGrupo(getGrupoItems(pasoActual + 1));
         return pasoActual;
     }
 
     public int siguientePaso(ActionEvent actionEvent) {
-        System.out.println("siguientes paso");
         pasoActual += 1;
-        grupoP = getGrupoItemsPreguntas(pasoActual + 1);//TODO: eliminar
-//        grupo = getGrupoItems(pasoActual + 1);
+        setGrupo(getGrupoItems(pasoActual + 1));
         return pasoActual;
     }
 

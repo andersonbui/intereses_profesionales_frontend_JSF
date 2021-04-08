@@ -59,11 +59,11 @@
                            No es ultimo paso #{respuestaEstiloController.getnombrePaso()}
                            tam grupo preg: #{respuestaEstiloController.grupoP.size()}
                            <br/>
-                           <ui:repeat value="#{respuestaEstiloController.grupoP}" var="item">
-                               #{item.idpreguntaEstilos}: #{item.enunciado} <br/>
-                                <p:selectOneRadio id="sexo" required="true" class="select_pregunta_est">
-                                    <f:selectItems value="#{item.tipoestiloPreguntaList}" var="tep" 
-                                                   itemLabel="#{tep.opcion}" itemValue="#{tep}"  class="pregunta_estilo" />
+                           <ui:repeat value="#{respuestaEstiloController.grupo}" var="respuesta">
+                               #{respuesta.idpreguntaEstilos.enunciado} <br/>
+                               <p:selectOneRadio id="sexo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
+                                    <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoestiloPreguntaList}" var="tep" 
+                                                   itemLabel="#{tep.opcion}" itemValue="#{tep.indice}"  class="pregunta_estilo" />
                                 </p:selectOneRadio>
                            </ui:repeat>
                         </p:panel>

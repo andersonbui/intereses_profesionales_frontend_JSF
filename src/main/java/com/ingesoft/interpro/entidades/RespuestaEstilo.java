@@ -49,7 +49,12 @@ public class RespuestaEstilo implements Serializable {
 
     public RespuestaEstilo() {
     }
-
+    
+    public RespuestaEstilo(PreguntaEstilosAprendizajeFs idpreguntaEstilos, Encuesta idEncuesta) {
+        this.idpreguntaEstilos = idpreguntaEstilos;
+        this.idEncuesta = idEncuesta;
+    }
+    
     public RespuestaEstilo(Integer idRespuestaEstilo) {
         this.idRespuestaEstilo = idRespuestaEstilo;
     }

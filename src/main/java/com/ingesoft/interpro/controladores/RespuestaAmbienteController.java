@@ -14,7 +14,6 @@ import com.ingesoft.interpro.facades.RespuestaAmbienteFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -25,7 +24,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -34,9 +32,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
 
 @ManagedBean(name = "respuestaAmbienteController")
 @SessionScoped
@@ -467,6 +462,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         double[] valores = {0.0, 0.5, 1.0};
         List<RespuestaAmbiente> items_recuperados = obtenerTodosPorEncuesta(encuesta);
         items = new ArrayList<>(preguntas.size());
+        cantidadRespuestas = new int[preguntas.size()];
         for (PreguntaAmbiente pregunta : preguntas) {
             selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
             selected.setPreguntaAmbiente(pregunta);
@@ -483,7 +479,6 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             }
             items.add(selected);
         }
-        cantidadRespuestas = new int[items.size()];
 
         // desactivar puntaje a preguntas ya respondidas
         for (int indi : lindicesRecuperados) {
@@ -503,6 +498,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         }// @end
         listaResultadosPorAmbiente = null;
         getGrupos();
+        //ubicar la encuesta en la ultima pagina respondida
         if (items_recuperados != null && !items_recuperados.isEmpty()) {
             pasoActual = (items_recuperados.size() / 6) - 1;
             if (pasoActual > numGrupos) {

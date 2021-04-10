@@ -45,6 +45,10 @@ public class RespuestaEstiloController extends Controller implements Serializabl
      * cantidad de paginas
      */
     private int numGrupos;
+    /**
+     * contador de puntos por respuesta
+     */
+    int[] vecContRespuestasPersonalidad; // contador de puntos por respuesta
     
     Encuesta encuesta;
     
@@ -130,8 +134,13 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     
     public List<RespuestaEstilo> getRespuestas() {
         if (items == null) {
+            int contPuntosRecuperados = 0;
+            if(encuesta.getPuntajeEncuesta() != null && encuesta.getPuntajeEncuesta() >= 0) {
+                contPuntosRecuperados = encuesta.getPuntajeEncuesta();
+            }
             items = new ArrayList<>(listaPreguntas.size());
-//            vecContRespuestasPersonalidad = new int[listaPreguntas.size()]; // puntos
+            vecContRespuestasPersonalidad =  new int[listaPreguntas.size()];
+            vecContRespuestasPersonalidad = new int[listaPreguntas.size()]; // puntos
             List<RespuestaEstilo> items_recuperados = obtenerTodosPorEncuesta(encuesta);
             for (PreguntaEstilosAprendizajeFs pregunta : listaPreguntas) {
                 selected = new RespuestaEstilo(pregunta, this.encuesta);
@@ -142,15 +151,20 @@ public class RespuestaEstiloController extends Controller implements Serializabl
                 if (items_recuperados != null && !items_recuperados.isEmpty()) {
                     int indice = items_recuperados.indexOf(selected);
                     if (indice >= 0) {
-//                        int i = (pregunta.getOrden() - 1);
-    //                    cantidadRespuestas[i]++;
-//                        lindicesRecuperados.add(i);
+                        int i = (pregunta.getOrden() - 1);
+                        vecContRespuestasPersonalidad[i]++;//desactivar puntos a respuestas respondidas anteriormente
+                        contPuntosRecuperados ++;
                         selected.setRespuesta(items_recuperados.get(indice).getRespuesta());
                     }
                 }
                 items.add(selected);
             }
+            encuesta.setPuntajeEncuesta(contPuntosRecuperados);
         }
+        
+        //ubicar la encuesta en la ultima pagina respondida
+        // TODO
+        
         return items;
     }
     
@@ -187,6 +201,15 @@ public class RespuestaEstiloController extends Controller implements Serializabl
 ////        return gruposPreguntas;
 //        return null;
 //    }
+    
+    public void seleccionarPunto(RespuestaEstilo respuestaEstilo) {
+        int posicion = respuestaEstilo.getIdpreguntaEstilos().getOrden()- 1;
+        if (vecContRespuestasPersonalidad[posicion] == 0) {
+            getEncuestaController().aumentarPuntos();
+            getEncuestaController().setTiempo(0);//Number(0);
+        }
+        vecContRespuestasPersonalidad[posicion]++;
+    }
     
     /**
      * obtiene las respuestas de un determinado grupo

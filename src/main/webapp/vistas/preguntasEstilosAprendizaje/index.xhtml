@@ -55,14 +55,15 @@
                         </h:panelGroup>
                     </div>
                     <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaEstiloController.esUltimoPaso()}" >
+                        <h1><p:progressBar value="#{respuestaEstiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
-                           No es ultimo paso #{respuestaEstiloController.getnombrePaso()}
                            <br/>
                            <ui:repeat value="#{respuestaEstiloController.grupo}" var="respuesta">
                                #{respuesta.idpreguntaEstilos.enunciado} <br/>
-                               <p:selectOneRadio id="sexo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
+                               <p:selectOneRadio id="id_resp_estilo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
                                     <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoestiloPreguntaList}" var="tep" 
                                                    itemLabel="#{tep.opcion}" itemValue="#{tep.indice}"  class="pregunta_estilo" />
+                                    <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{respuestaEstiloController.seleccionarPunto(respuesta)}" />
                                 </p:selectOneRadio>
                            </ui:repeat>
                         </p:panel>

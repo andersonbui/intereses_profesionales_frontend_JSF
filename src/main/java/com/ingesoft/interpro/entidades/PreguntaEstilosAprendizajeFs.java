@@ -26,11 +26,11 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "pregunta_estilos_aprendizaje_FS")
 @NamedQueries({
-    @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findAll", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p"),
+    @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findAll", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p  order by p.orden"),
     @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findByIdpreguntaEstilos", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p WHERE p.idpreguntaEstilos = :idpreguntaEstilos"),
     @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findByEnunciado", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p WHERE p.enunciado = :enunciado"),
     @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findByUrlimagen", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p WHERE p.urlimagen = :urlimagen"),
-    @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findByOrdenint", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p WHERE p.ordenint = :ordenint")})
+    @NamedQuery(name = "PreguntaEstilosAprendizajeFs.findByOrden", query = "SELECT p FROM PreguntaEstilosAprendizajeFs p WHERE p.orden = :orden")})
 public class PreguntaEstilosAprendizajeFs implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,9 +45,8 @@ public class PreguntaEstilosAprendizajeFs implements Serializable {
     @Size(max = 45)
     @Column(name = "urlimagen")
     private String urlimagen;
-    @Size(max = 45)
-    @Column(name = "ordenint")
-    private String ordenint;
+    @Column(name = "orden")
+    private int orden;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "preguntaEstilosAprendizajeFs")
     private List<TipoEstiloPregunta> tipoestiloPreguntaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpreguntaEstilos")
@@ -84,12 +83,12 @@ public class PreguntaEstilosAprendizajeFs implements Serializable {
         this.urlimagen = urlimagen;
     }
 
-    public String getOrdenint() {
-        return ordenint;
+    public int getOrden() {
+        return orden;
     }
 
-    public void setOrdenint(String ordenint) {
-        this.ordenint = ordenint;
+    public void setOrden(int orden) {
+        this.orden = orden;
     }
 
     public List<TipoEstiloPregunta> getTipoestiloPreguntaList() {

@@ -43,6 +43,9 @@ public class RespuestaPersonalidadController extends Controller implements Seria
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
+    /**
+     * contador de puntos por respuesta
+     */
     int[] vecContRespuestasPersonalidad;
 
     public RespuestaPersonalidadController() {

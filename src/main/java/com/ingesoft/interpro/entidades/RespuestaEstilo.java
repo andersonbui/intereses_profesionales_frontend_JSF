@@ -6,13 +6,9 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -27,7 +23,8 @@ import javax.persistence.Table;
 @Table(name = "RespuestaEstilo")
 @NamedQueries({
     @NamedQuery(name = "RespuestaEstilo.findAll", query = "SELECT r FROM RespuestaEstilo r"),
-    @NamedQuery(name = "RespuestaEstilo.findByIdRespuestaEstilo", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK = :respuestaEstiloPK"),
+    @NamedQuery(name = "RespuestaEstilo.findByIdPreguntaEstilos", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.idpregunta_estilos = :idpregunta_estilos"),
+    @NamedQuery(name = "RespuestaEstilo.findByIdEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.Encuesta_idEncuesta = :idEncuesta"),
     @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta"),
     @NamedQuery(name = "RespuestaEstilo.findByEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.idEncuesta = :encuesta")
 })
@@ -38,10 +35,10 @@ public class RespuestaEstilo implements Serializable {
     private RespuestaEstiloPK respuestaEstiloPK;
     @Column(name = "respuesta")
     private Character respuesta;
-    @JoinColumn(name = "Encuesta_idEncuesta", referencedColumnName = "idEncuesta")
+    @JoinColumn(name = "Encuesta_idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Encuesta idEncuesta;
-    @JoinColumn(name = "idpregunta_estilos", referencedColumnName = "idpregunta_estilos")
+    @JoinColumn(name = "idpregunta_estilos", referencedColumnName = "idpregunta_estilos", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PreguntaEstilosAprendizajeFs idpreguntaEstilos;
 

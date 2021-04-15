@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.ContadorTiposEstilos;
 import com.ingesoft.interpro.entidades.RespuestaEstilo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
@@ -48,9 +49,11 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     /**
      * contador de puntos por respuesta
      */
-    int[] vecContRespuestasPersonalidad; // contador de puntos por respuesta
+    int[] vecContadorRespuestasEstiloApren; // contador de puntos por respuesta
     
     Encuesta encuesta;
+    
+    ContadorTiposEstilos[] estadisticaEncuentaEstiloApren;
     
     public RespuestaEstiloController() {
         tamGrupo = 3;
@@ -139,8 +142,8 @@ public class RespuestaEstiloController extends Controller implements Serializabl
                 contPuntosRecuperados = encuesta.getPuntajeEncuesta();
             }
             items = new ArrayList<>(listaPreguntas.size());
-            vecContRespuestasPersonalidad =  new int[listaPreguntas.size()];
-            vecContRespuestasPersonalidad = new int[listaPreguntas.size()]; // puntos
+            vecContadorRespuestasEstiloApren =  new int[listaPreguntas.size()];
+            vecContadorRespuestasEstiloApren = new int[listaPreguntas.size()]; // puntos
             List<RespuestaEstilo> items_recuperados = obtenerTodosPorEncuesta(encuesta);
             for (PreguntaEstilosAprendizajeFs pregunta : listaPreguntas) {
                 selected = new RespuestaEstilo(pregunta, this.encuesta);
@@ -152,7 +155,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
                     int indice = items_recuperados.indexOf(selected);
                     if (indice >= 0) {
                         int i = (pregunta.getOrden() - 1);
-                        vecContRespuestasPersonalidad[i]++;//desactivar puntos a respuestas respondidas anteriormente
+                        vecContadorRespuestasEstiloApren[i]++;//desactivar puntos a respuestas respondidas anteriormente
                         contPuntosRecuperados ++;
                         selected.setRespuesta(items_recuperados.get(indice).getRespuesta());
                     }
@@ -184,6 +187,10 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return getFacade().findAll();
     }
 
+    public ContadorTiposEstilos[] getEstadisticaEncuentaEstiloApren() {
+        return estadisticaEncuentaEstiloApren;
+    }
+    
     void prepararRespuestas(List<PreguntaEstilosAprendizajeFs> itemsPreg, Encuesta encuesta) {
         listaPreguntas = itemsPreg;
         this.encuesta = encuesta;
@@ -204,26 +211,38 @@ public class RespuestaEstiloController extends Controller implements Serializabl
     
     public void seleccionarPunto(RespuestaEstilo respuestaEstilo) {
         int posicion = respuestaEstilo.getIdpreguntaEstilos().getOrden()- 1;
-        if (vecContRespuestasPersonalidad[posicion] == 0) {
+        if (vecContadorRespuestasEstiloApren[posicion] == 0) {
             getEncuestaController().aumentarPuntos();
             getEncuestaController().setTiempo(0);//Number(0);
         }
-        vecContRespuestasPersonalidad[posicion]++;
+        vecContadorRespuestasEstiloApren[posicion]++;
     }
     
+    /**
+     * Guardar respuestas en BD desde una lista de Respuestas de forma asincrona
+     * @param listaRespuestas 
+     * @return  
+     */
+    public HiloGuardado guardarRespuestas(List<RespuestaEstilo> listaRespuestas) {
+        // guardar respuestas actuales
+        if (listaRespuestas != null && !listaRespuestas.isEmpty()) {
+            HiloGuardado hilo = new HiloGuardado(listaRespuestas);
+            hilo.start();
+            return hilo;
+        }
+        return null;
+    }
     /**
      * obtiene las respuestas de un determinado grupo
      *
      * @param numGrupo
      * @return
      */
-    public List<RespuestaEstilo> getGrupoItems(int numGrupo) {
+    public List<RespuestaEstilo> getGrupoItems(int numGrupo){
         items = getRespuestas();
-        // guardar respuestas actuales
-        if (grupo != null && !grupo.isEmpty()) {
-            HiloGuardado hilo = new HiloGuardado(grupo);
-            hilo.start();
-        }
+        
+        guardarRespuestas(grupo);
+        
         List<RespuestaEstilo> listaRespuestas = null;
         if (items != null) {
             listaRespuestas = new ArrayList<>();
@@ -357,14 +376,18 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return pasoActual;
     }
 
-    public boolean finalizarEncuesta() {
-//        for (RespuestaEstilo respuesta : grupo) {
-//            getFacade().edit(respuesta);
-//        }
-//        pasoActual += 1;
+    public boolean finalizarEncuesta() throws InterruptedException {
+        getEncuestaController().detenerReloj();
+        
+        Thread hilo = guardarRespuestas(grupo);
+        hilo.join();
+        
+        estadisticaEncuentaEstiloApren = getEstiloConstroller().estadisticaEncuesta(encuesta);
+        
+        pasoActual += 1;
 
-        // realizar estadistica de respuestas
-//        return realizarEstadisticas();
+        getEncuestaController().guardarSelected();
         return true;
     }
+    
 }

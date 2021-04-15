@@ -212,10 +212,25 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getEncuestaController().detenerReloj();
     }
 
+    /**
+     * Ingresa a la ultima evaluacion
+     */
     public void casiFinaliza() {
+        /**
+         * Entrar a ultima evaluacion de encuesta
+         */
         setEvaluacion(true);
+        /**
+         * ir a pagina inicial de evaluacion
+         */
         reinicioPasoActualEvaluacion();
+        /**
+         * detener reloj para ultima evaluacion
+         */
         detenerReloj();
+        /**
+         * Primera pregunta de evaluacion
+         */
         getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         getEncuestaController().guardarSelected();
     }

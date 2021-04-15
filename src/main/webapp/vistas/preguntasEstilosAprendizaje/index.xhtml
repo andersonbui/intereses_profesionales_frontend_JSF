@@ -54,7 +54,7 @@
                                     value="#{encuestaController.tiempo}" height="70px" />
                         </h:panelGroup>
                     </div>
-                    <h:panelGroup class="panel-preguntas-personalidad" rendered="#{!respuestaEstiloController.esUltimoPaso()}" >
+                    <h:panelGroup class="panel-preguntas-estilos-aprendizaje" rendered="#{!respuestaEstiloController.esUltimoPaso()}" >
                         <h1><p:progressBar value="#{respuestaEstiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                            <br/>
@@ -74,15 +74,21 @@
                             <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{respuestaEstiloController.siguientePaso}"
                                               update=":PreguntaEstilosAprenForm, @form" rendered="#{respuestaEstiloController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
+                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{respuestaEstiloController.finalizarEncuesta()}"
                                               update=":PreguntaEstilosAprenForm, @form" rendered="#{respuestaEstiloController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
                     </h:panelGroup>
-                    <h:panelGroup class="panel-preguntas-personalidad"  rendered="#{respuestaEstiloController.esUltimoPaso()}" >
+                    <h:panelGroup class="panel-preguntas-estilos-aprendizaje"  rendered="#{respuestaEstiloController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                             <h1><p:progressBar value="#{respuestaEstiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             Ultimo paso
+                            <div >
+                                <br/>
+                                <ui:repeat value="#{respuestaEstiloController.estadisticaEncuentaEstiloApren}" var="respuesta">
+                                    #{respuesta.contador} |  #{respuesta.tipoEstilo.nombre}<br/>
+                                </ui:repeat>
+                            </div>
                         </p:panel>
                         <h:panelGroup  style="background-color: black; display: block;" >
                             <p:commandButton class="float-l btn" value="anterior" ajax="true" 

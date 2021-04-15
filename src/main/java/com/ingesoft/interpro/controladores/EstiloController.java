@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.ContadorTiposEstilos;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
 import com.ingesoft.interpro.entidades.RespuestaEstilo;
@@ -44,13 +45,13 @@ public class EstiloController  extends Controller implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    public void getCalculo(){
+    public void estadisticaEncuestaPrueba(){
         
-        int idEncuesta = 1;
+        int idEncuesta = 727;
         Encuesta encuesta = this.getEncuestaController().getEncuesta(idEncuesta);
-        ContadorTiposEstilos[] listaContadorTiposEstilos = this.getCalculoTiposEstilos(encuesta);
+        ContadorTiposEstilos[] listaContadorTiposEstilos = this.estadisticaEncuesta(encuesta);
         for (ContadorTiposEstilos item : listaContadorTiposEstilos) {
-            System.out.println("resta: "+ item.contador + "| tipoEstilo: "+item.tipoEstilo.getNombre());
+            System.out.println("resta: "+ item.getContador() + "| tipoEstilo: "+item.getTipoEstilo().getNombre());
             
         }
         
@@ -61,7 +62,7 @@ public class EstiloController  extends Controller implements Serializable {
      * @param encuesta
      * @return 
      */
-    private ContadorTiposEstilos[] getCalculoTiposEstilos(Encuesta encuesta){
+    public ContadorTiposEstilos[] estadisticaEncuesta(Encuesta encuesta){
         this.items = this.getRespuestaEstiloController().getItemsXEncuesta(encuesta);
         
         if(this.items == null ){
@@ -86,8 +87,8 @@ public class EstiloController  extends Controller implements Serializable {
             if(contador[columna][fila] == null) {
                 contador[columna][fila] = new ContadorTiposEstilos();
             }
-            contador[columna][fila].contador++;
-            contador[columna][fila].tipoEstilo = obj.getTipoEstilo();
+            contador[columna][fila].aumentarContador();
+            contador[columna][fila].setTipoEstilo(obj.getTipoEstilo());
             
         }
         ContadorTiposEstilos[] vectorRes = new ContadorTiposEstilos[4];
@@ -95,29 +96,20 @@ public class EstiloController  extends Controller implements Serializable {
         /** Calculo de grupos de tipos de estilo */
         for (int i = 0; i < 4; i++) {
             
-            indice = contador[0][i].contador > contador[1][i].contador ? 0 : 1;
-            resta = Math.abs(contador[0][i].contador - contador[1][i].contador);
+            indice = contador[0][i].getContador() > contador[1][i].getContador() ? 0 : 1;
+            resta = Math.abs(contador[0][i].getContador() - contador[1][i].getContador());
             
             if(vectorRes[i] == null) {
                 vectorRes[i] = new ContadorTiposEstilos();
             }
-            vectorRes[i].tipoEstilo = contador[indice][i].tipoEstilo;
-            vectorRes[i].contador = resta;
+            vectorRes[i].setTipoEstilo(contador[indice][i].getTipoEstilo());
+            vectorRes[i].setContador(resta);
             
 //            System.out.println("sum: "+ (contador[0][i].contador) + "| tipoEstilo: "+contador[0][i].tipoEstilo.getNombre());
 //            System.out.println("sum: "+ (contador[1][i].contador) + "| tipoEstilo: "+contador[1][i].tipoEstilo.getNombre());
             
         }
         return vectorRes;
-    }
-    
-    class ContadorTiposEstilos {
-        int contador;
-        TipoEstilo tipoEstilo;
-        
-        public ContadorTiposEstilos() {
-            contador = 0;
-        }
     }
     
     @Override

@@ -65,7 +65,7 @@
                             <h:panelGroup id="grupoTimeJuego" class="float-r">
                                 <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
                                         listener="#{encuestaController.incrementTiempo()}"
-                                        update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
+                                        update="grupoTimeJuego,puntos_id" autoStart="#{!encuestaController.relojDetenido()}"
                                         stop="#{encuestaController.relojDetenido()}" />
                                 <p:knob min="0" max="15" widgetVar="knob" 
                                         value="#{encuestaController.tiempo}" height="70px" />

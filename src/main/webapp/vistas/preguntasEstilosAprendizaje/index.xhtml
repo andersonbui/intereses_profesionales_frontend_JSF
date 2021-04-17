@@ -9,13 +9,18 @@
 
     <ui:composition template="/realizarEncuesta.xhtml">
 
-        <style type="text/css">
-            .value {
-                font-weight: bold;
-                margin-left:  100px;
-            }
-        </style>
         <ui:define name="content">
+            <style type="text/css">
+                .value {
+                    font-weight: bold;
+                    margin-left:  100px;
+                }
+
+                .contentenedor-preguntas-estilo {
+                    width: 100px;
+                    margin: auto;
+                }
+            </style>
             <h:form >
                 <p:dialog header="Instrucciones de juego" widgetVar="instruccionesEstilosAprenDialog"
                           modal="true" height="250" closable="false" style="padding:10px 40px;" >
@@ -46,9 +51,9 @@
                         </div>
                         <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
                         <h:panelGroup id="grupoTimeJuego" class="float-r">
-                            <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego, puntos_id"
+                            <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego,puntos_id"
                                     listener="#{encuestaController.incrementTiempo()}"
-                                    update="grupoTimeJuego" autoStart="#{!encuestaController.relojDetenido()}"
+                                    update="grupoTimeJuego,puntos_id" autoStart="#{!encuestaController.relojDetenido()}"
                                     stop="#{encuestaController.relojDetenido()}" />
                             <p:knob min="0" max="15" widgetVar="knob" 
                                     value="#{encuestaController.tiempo}" height="70px" />
@@ -82,11 +87,10 @@
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje"  rendered="#{respuestaEstiloController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                             <h1><p:progressBar value="#{respuestaEstiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
-                            Ultimo paso
-                            <div >
-                                <br/>
+
+                            <div class="contentenedor-preguntas-estilo" >
                                 <ui:repeat value="#{respuestaEstiloController.estadisticaEncuentaEstiloApren}" var="respuesta">
-                                    #{respuesta.contador} |  #{respuesta.tipoEstilo.nombre}<br/>
+                                    #{respuesta.contador} |  <span title="#{respuesta.tipoEstilo.definicion}"> #{respuesta.tipoEstilo.nombre}</span><br/>
                                 </ui:repeat>
                             </div>
                         </p:panel>

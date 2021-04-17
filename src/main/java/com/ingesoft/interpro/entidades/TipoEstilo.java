@@ -44,7 +44,7 @@ public class TipoEstilo implements Serializable {
     @Size(max = 12)
     @Column(name = "nombre")
     private String nombre;
-    @Size(max = 45)
+    @Size(max = 500)
     @Column(name = "definicion")
     private String definicion;
     @Size(max = 20)

@@ -102,14 +102,6 @@ public class EncuestaController extends Controller implements Serializable {
         return 0;
     }
 
-    public void aumentarPuntos() {
-        if (evaluacion) {
-            setPuntos_eval(getPuntos_eval() + 1);
-        } else {
-            setPuntos_encuesta(getPuntos_encuesta() + 1);
-        }
-    }
-
     public List<Encuesta> listarEncuestasSelected(Estudiante estudiante) {
         return getFacade().buscarPorEstudiante(estudiante);
     }
@@ -215,26 +207,36 @@ public class EncuestaController extends Controller implements Serializable {
         detener_reloj = true;
     }
 
+    public void aumentarPuntos() {
+        if (evaluacion) {
+            setPuntos_eval(getPuntos_eval() + 1);
+        } else {
+            setPuntos_encuesta(getPuntos_encuesta() + 1);
+        }
+        this.update();
+    }
+    
+    public void disminuirPunto() {
+        if (evaluacion) {
+            if (getPuntos_eval() > 0) {
+                setPuntos_eval(getPuntos_eval() - 1);
+            } else {
+            }
+        } else {
+            if (getPuntos_encuesta() > 0) {
+                setPuntos_encuesta(getPuntos_encuesta() - 1);
+            } else {
+            }
+        }
+        this.update();
+    }
+    
     public void incrementTiempo() {
         tiempo++;
         if (tiempo > 15) {
             tiempo = 0;
-            if (evaluacion) {
-                if (getPuntos_eval() > 0) {
-                    setPuntos_eval(getPuntos_eval() - 1);
-                } else {
-                }
-            } else {
-                if (getPuntos_encuesta() > 0) {
-                    setPuntos_encuesta(getPuntos_encuesta() - 1);
-                } else {
-                }
-            }
+            this.disminuirPunto();
         }
-    }
-
-    public void disminuirPuntosEncuesta() {
-
     }
 
     public void incrementPuntaje() {

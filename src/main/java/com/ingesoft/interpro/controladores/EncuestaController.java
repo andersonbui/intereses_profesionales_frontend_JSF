@@ -263,12 +263,14 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void pasoPreguntasPersonalidad() throws IOException {
+        getPreguntaPersonalidadController().preparePreguntasPersonalidad(selected);
         this.pasoActivo = 2;
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
     }
 
     public void pasoEstiloAprendizaje() throws IOException {
+        getPreguntaEstilosAprendizajeFsController().preparePreguntasEstilosApren(selected);
         this.pasoActivo = 3;
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntasEstilosAprendizaje/index.xhtml");

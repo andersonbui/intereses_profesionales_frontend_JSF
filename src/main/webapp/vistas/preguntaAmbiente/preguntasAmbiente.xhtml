@@ -252,7 +252,6 @@
                                                      update=":PreguntaAmbienteForm, @form"  rendered="#{!respuestaAmbienteController.esPenultimoPaso() and (respuestaAmbienteEvaluacionController.pasoActual ne -1)}"  >
                                     </p:commandButton>
                                     <p:commandButton class="float-r btn" value="Finalizar" ajax="true" 
-                                                     action="#{encuestaController.detenerReloj()}" 
                                                      actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
                                                      update=":PreguntaAmbienteForm, @form" 
                                                      rendered="#{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or encuestaController.esDesarrollo()}" >
@@ -267,7 +266,8 @@
                             <p:panel header="Preguntas de Ambiente">
                                 <h1><p:progressBar value="#{respuestaAmbienteController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                                 <p:panelGrid styleClass="panelgrid">
-                                    <h1>Felicidades</h1>
+                                    <h1>Felicidades #{encuestaController.selected.estudiante.idPersona.nombre} #{encuestaController.selected.estudiante.idPersona.apellido}</h1>
+                                    <p><b>#{encuestaController.selected.estudiante.idPersona.email}</b></p>
                                     <p><b>Has completado las preguntas de Ambiente</b></p>
 
 
@@ -335,9 +335,9 @@
                 </center>
             </h:form>
             <h:form>
-                <p:commandButton value="Siguiente encuestaAmbiente" ajax="true" class="btn"
-                                 action="#{encuestaController.pasoPreguntasPersonalidad()}"
-                                 actionListener="#{preguntaPersonalidadController.preparePreguntasPersonalidad(loginController.actual, encuestaController.selected)}"
+                <p:commandButton value="Ir a resumen" ajax="true" class="btn"
+                                 actionListener="#{respuestaAmbienteController.actualizarTodasRespuestas()}"
+                                 update=":PreguntaAmbienteForm, @form" 
                                  rendered="#{encuestaController.esDesarrollo() or respuestaAmbienteController.esUltimoPaso()}"
                                  > 
                 </p:commandButton>

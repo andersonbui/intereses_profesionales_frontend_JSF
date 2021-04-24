@@ -5,7 +5,6 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Variables;
-import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
@@ -245,6 +244,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public int finalizarEncuesta(ActionEvent actionEvent) {
+        getEncuestaController().detenerReloj();
+        
+        /* Guardado de ultimo grupo de respuestas de ambiente*/
         for (RespuestaAmbiente respuesta : grupo) {
             getFacade().edit(respuesta);
         }
@@ -558,13 +560,13 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     }
 
-    public List<RespuestaAmbiente> actualizarRespuestas() throws IOException {
+    public List<RespuestaAmbiente> actualizarTodasRespuestas() throws IOException {
         
-        String rutaGeneral = Vistas.getRutaGeneral();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/resumen.xhtml");
         for (RespuestaAmbiente item : items) {
             this.getFacade().edit(item);
         }
+        pasoActual = (numGrupos - 1);
+        finalizarEncuesta(null);
         return items;
     }
 

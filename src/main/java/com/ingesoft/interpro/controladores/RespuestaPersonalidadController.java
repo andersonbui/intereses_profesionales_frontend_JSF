@@ -6,9 +6,9 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
-import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -211,6 +211,15 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         return gruposPreguntas;
     }
 
+    
+    public List<RespuestaPersonalidad> actualizarTodasRespuestas() throws IOException {
+        for (RespuestaPersonalidad item : items) {
+            this.getFacade().edit(item);
+        }
+        pasoActual = (numGrupos - 1);
+        finalizarEncuesta();
+        return items;
+    }
     /**
      * obtiene las respuestas de un determinado grupo
      *

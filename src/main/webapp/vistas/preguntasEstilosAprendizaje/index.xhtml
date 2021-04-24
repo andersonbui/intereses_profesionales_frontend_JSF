@@ -13,7 +13,7 @@
             <style type="text/css">
                 .value {
                     font-weight: bold;
-                    margin-left:  100px;
+                    margin-left:  auto;
                 }
 
                 .contentenedor-preguntas-estilo {
@@ -22,10 +22,11 @@
                 }
             </style>
             <h:form >
-                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesEstilosAprenDialog"
-                          modal="true" height="250" closable="false" style="padding:10px 40px;" >
+                <p:dialog header="Instrucciones de encuesta" widgetVar="instruccionesEstilosAprenDialog"
+                          modal="true"  width="50%" height="250px" closable="false" style="padding:10px 40px; width:250px; height:250px;"  >
                     <div style="font-size:1.2em">
-                        <p> Colocar instrucciones<br/>
+                        <p> la descripción para la sección de estilos de aprendizaje.
+                            En esta sección de estilos de aprendizaje por favor seleccióne para cada pregunta una de las dos posibles respuestas y continue dando clic en el boton siguiente<br/>
                         </p>
                         <br/>
                     </div>
@@ -112,6 +113,7 @@
             <h:form>
                 <p:commandButton value="Ver resumen de encuesta (Desarrollo)" ajax="true"
                                  action="#{encuestaController.pasoResumen()}"
+                                 actionListener="#{respuestaEstiloController.finalizarEncuesta()}"
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

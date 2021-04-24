@@ -18,8 +18,8 @@
         <ui:define name="content">
             <h:form >
                 <p:dialog header="Instrucciones de juego" widgetVar="instruccionesPersonalidadDialog"
-                          modal="true" height="250" closable="false" style="padding:10px 40px;" >
-                    <div style="font-size:1.2em">
+                          modal="true" closable="false" style="padding:10px 40px; width:250px; height:250px" >
+                    <div style="font-size:1.2em;">
                         <p> Usted ahora se encuentra en la encuesta de personalidad, en ella usted debe escoger la puntuación<br/>
                             más aproximada a las dos afirmaciones presentadas de acuerdo a su personalidad.<br/>
                         </p>
@@ -94,7 +94,7 @@
                             <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{respuestaPersonalidadController.siguientePaso}"
                                               update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.puedeSiguientePasoNoUltimo()}" >
                             </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{encuestaController.finalizarEncuesta()}"
+                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{respuestaPersonalidadController.finalizarEncuesta()}"
                                               update=":PreguntaPersonalidadForm, @form" rendered="#{respuestaPersonalidadController.esPenultimoPaso()}" >
                             </p:commandButton>
                         </h:panelGroup>
@@ -142,7 +142,7 @@
             <h:form>
                 <p:commandButton value="Encuesta estilos de aprendizaje (Desarrollo)" ajax="true"
                                  action="#{encuestaController.pasoEstiloAprendizaje()}"
-                                 actionListener="#{preguntaEstilosAprendizajeFsController.preparePreguntasEstilosApren( encuestaController.selected)}"
+                                 actionListener="#{respuestaPersonalidadController.finalizarEncuesta()}"
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

@@ -14,11 +14,15 @@
                     <div class="row" style="margin:auto">
                         <div >
                             <div style="width:100%;text-align:center;font-weight:bold; font-size:x-large">
-                                <div>Puntaje de Juego: <br/> #{encuestaController.selected.puntajeEncuesta}</div>
+                                <div>Estimad@: #{encuestaController.selected.estudiante.idPersona.nombre} #{encuestaController.selected.estudiante.idPersona.apellido}</div>
+                                
+                                <div>Email: #{encuestaController.selected.estudiante.idPersona.email} </div>
+                                
+                                <div>Puntaje de Juego: #{encuestaController.selected.puntajeEncuesta}</div>
 
-                                <div>Puntaje Evaluacion:<br/> #{encuestaController.selected.puntajeEvaluacion}</div>
+                                <div>Puntaje Evaluacion: #{encuestaController.selected.puntajeEvaluacion}</div>
                                 <br/>
-                                <div>Ingeriero?:<br/> #{encuestaController.prediccion()}</div>
+                                <div>Ingeriero?: #{encuestaController.prediccion()}</div>
                                 <br/>
                             </div><br/>
                             <h:body id='divgrafico' >

@@ -7,12 +7,7 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PreguntaPersonalidadFacade;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,11 +20,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "preguntaPersonalidadController")
 @SessionScoped
-public class PreguntaPersonalidadController implements Serializable {
+public class PreguntaPersonalidadController extends Controller {
 
     private static final long serialVersionUID = 1L;
     @EJB
@@ -55,7 +49,8 @@ public class PreguntaPersonalidadController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private PreguntaPersonalidadFacade getFacade() {
+    @Override
+    protected PreguntaPersonalidadFacade getFacade() {
         return ejbFacade;
     }
 
@@ -71,7 +66,7 @@ public class PreguntaPersonalidadController implements Serializable {
         return null;
     }
 
-    public void preparePreguntasPersonalidad(Usuario usuario, Encuesta encuesta) {
+    public void preparePreguntasPersonalidad(Encuesta encuesta) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
         RespuestaPersonalidadController respuestaPersonalidadController = (RespuestaPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPersonalidadController");

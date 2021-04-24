@@ -7,7 +7,6 @@ package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
-import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.util.Properties;
@@ -332,5 +331,19 @@ public abstract class Controller implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EstiloController estiloController = (EstiloController) elResolver.getValue(facesContext.getELContext(), null, "estiloController");
         return estiloController;
+    }
+    
+    public PreguntaEstilosAprendizajeFsController getPreguntaEstilosAprendizajeFsController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PreguntaEstilosAprendizajeFsController preguntaEstilosAprendizajeFsController = (PreguntaEstilosAprendizajeFsController) elResolver.getValue(facesContext.getELContext(), null, "preguntaEstilosAprendizajeFsController");
+        return preguntaEstilosAprendizajeFsController;
+    }
+    
+    public PreguntaPersonalidadController getPreguntaPersonalidadController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PreguntaPersonalidadController preguntaPersonalidadController = (PreguntaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "preguntaPersonalidadController");
+        return preguntaPersonalidadController;
     }
 }

@@ -385,8 +385,7 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         estadisticaEncuentaEstiloApren = getEstiloConstroller().estadisticaEncuesta(encuesta);
         
         pasoActual += 1;
-
-        getEncuestaController().guardarSelected();
+        getEncuestaController().finalizarEncuesta();
         return true;
     }
     

@@ -130,7 +130,6 @@
                             </p:commandButton>
                             <p:commandButton value="Estilos de aprendizaje" ajax="true" style="float:right;" class="float-r btn"
                                              action="#{encuestaController.pasoEstiloAprendizaje()}"
-                                             actionListener="#{preguntaEstilosAprendizajeFsController.preparePreguntasEstilosApren( encuestaController.selected)}"
                                              rendered="#{respuestaPersonalidadController.esUltimoPaso()}"
                                              > 
                             </p:commandButton>
@@ -140,9 +139,9 @@
                 </div>
             </h:form>
             <h:form>
-                <p:commandButton value="Encuesta estilos de aprendizaje (Desarrollo)" ajax="true"
-                                 action="#{encuestaController.pasoEstiloAprendizaje()}"
-                                 actionListener="#{respuestaPersonalidadController.finalizarEncuesta()}"
+                <p:commandButton value="Ir a resumen" ajax="true"
+                                 actionListener="#{respuestaPersonalidadController.actualizarTodasRespuestas()}"
+                                 update=":PreguntaPersonalidadForm, @form" 
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

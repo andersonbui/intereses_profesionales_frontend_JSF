@@ -318,7 +318,6 @@
                                             </div>
                                             <p:commandButton value="Siguiente encuesta" ajax="true" style="float:right;" class="btn float-r "
                                                              action="#{encuestaController.pasoPreguntasPersonalidad()}"
-                                                             actionListener="#{preguntaPersonalidadController.preparePreguntasPersonalidad(loginController.actual, encuestaController.selected)}"
                                                              rendered="#{encuestaController.esDesarrollo() or respuestaAmbienteController.esUltimoPaso()}" >
                                             </p:commandButton>
                                         </p:column>

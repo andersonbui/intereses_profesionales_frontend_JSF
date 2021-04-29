@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
 import com.ingesoft.interpro.entidades.RespuestaEstiloPK;
 import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -389,4 +390,13 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return true;
     }
     
+        
+    public List<RespuestaEstilo> actualizarTodasRespuestas() throws IOException, InterruptedException {
+        for (RespuestaEstilo item : items) {
+            this.getFacade().edit(item);
+        }
+        pasoActual = (numGrupos - 1);
+        finalizarEncuesta();
+        return items;
+    }
 }

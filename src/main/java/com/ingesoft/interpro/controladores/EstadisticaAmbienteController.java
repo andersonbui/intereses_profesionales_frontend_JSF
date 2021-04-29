@@ -22,8 +22,6 @@ import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -187,7 +185,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         String result = cargarGraficoResultadoEncuesta(opcion);
 
         encuestaController.setItems(listaTotalEncuestas);
-        personalidad = encuestaController.obtenerPromedioPersonalidad(listaTotalEncuestas);
+        personalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(listaTotalEncuestas);
 
         return result;
     }
@@ -236,7 +234,7 @@ public class EstadisticaAmbienteController extends Controller implements Seriali
         resul.setPromedioPuntajeEValuacion(encuestaController.promedioPuntajeEvaluacion());
         resul.setPromedioPuntajeEncuesta(encuestaController.promedioPuntajeEncuesta());
         
-        String unapersonalidad = encuestaController.obtenerPromedioPersonalidad(listaEncuestas);
+        String unapersonalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(listaEncuestas);
         resul.setPersonalidad(unapersonalidad);
         return resul;
     }

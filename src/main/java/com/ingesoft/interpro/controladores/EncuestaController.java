@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.util.ElementoPersonalidad;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
@@ -38,8 +39,6 @@ public class EncuestaController extends Controller implements Serializable {
     private Encuesta selected;
     private Encuesta sinterminar;
     private int pasoActivo;
-
-    int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
 
     private boolean evaluacion;
     private int tiempo;
@@ -279,9 +278,10 @@ public class EncuestaController extends Controller implements Serializable {
     public void pasoResumen() throws IOException {
         this.pasoActivo = 4;
         actualizarSelected();
-        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
-        estadisticaAmbienteController.setEncuesta(selected);
-        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
+//        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
+//        estadisticaAmbienteController.setEncuesta(selected);
+//        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
+        
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/encuesta/resumen.xhtml");
     }
@@ -292,109 +292,10 @@ public class EncuestaController extends Controller implements Serializable {
     }
 
     public void finalizarEncuesta() {
-        getRespuestaPersonalidadController().finalizarEncuesta();
-        String personalidad = obtenerPersonalidad(selected);
-        selected.setPersonalidad(personalidad);
         selected.setPuntajeEncuesta(getPuntos_encuesta());
         selected.setPuntajeEvaluacion(getPuntos_eval());
         selected.setEstado(ESTADO_FINALIZADA);
-        detenerReloj();
         update();
-    }
-
-    /**
-     *
-     * @param encuestaAcutal
-     * @return
-     */
-    private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
-
-        List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
-        if (lista == null) {
-            return null;
-        }
-        if (lista.size() != ORDEN_RESPUESTA_PERSONALIDAD.length) {
-            System.out.println("lista getRespuestaPorPersonalidadList: " + lista.size());
-            return null;
-        }
-        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
-        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
-            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
-            valores[indice] = new ElementoPersonalidad();
-            valores[indice].puntaje = respuestaPorPersonalidad.getPuntaje();
-            valores[indice].tipo = respuestaPorPersonalidad.getTipoPersonalidad().getTipo();
-        }
-
-        ElementoPersonalidad[] valoresAux = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
-        for (int i = 0; i < ORDEN_RESPUESTA_PERSONALIDAD.length; i++) {
-            valoresAux[i] = valores[ORDEN_RESPUESTA_PERSONALIDAD[i]];
-        }
-        return valoresAux;
-    }
-
-    /**
-     *
-     * @param encuesta
-     * @return
-     */
-    private String obtenerPersonalidad(Encuesta encuesta) {
-        ElementoPersonalidad[] valores = obtenerValores(encuesta);
-
-        String personalidad = "";
-        String tipo;
-
-        for (ElementoPersonalidad indice : valores) {
-            tipo = indice.tipo;
-            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
-        }
-        return personalidad;
-    }
-
-    /**
-     *
-     * @param encuestas
-     * @return
-     */
-    public String obtenerPromedioPersonalidad(List<Encuesta> encuestas) {
-        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
-        int cont_encuestaPerson = 0;
-        for (int i = 0; i < valores.length; i++) {
-            valores[i] = new ElementoPersonalidad();
-            valores[i].puntaje = 0;
-        }
-        // suma
-        for (Encuesta encuesta : encuestas) {
-            ElementoPersonalidad[] valoresaux = obtenerValores(encuesta);
-            if (valoresaux != null) {
-                cont_encuestaPerson++;
-                for (int i = 0; i < valoresaux.length; i++) {
-                    valores[i].tipo = valoresaux[i].tipo;
-                    valores[i].puntaje += valoresaux[i].puntaje;
-                }
-            }
-        }
-        if (cont_encuestaPerson == 0) {
-            return "";
-        }
-        // promedio
-        for (int i = 0; i < valores.length; i++) {
-            valores[i].puntaje /= cont_encuestaPerson;
-        }
-
-        String personalidad = "";
-        String tipo;
-
-        for (ElementoPersonalidad indice : valores) {
-            tipo = indice.tipo;
-            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
-        }
-        return personalidad;
-    }
-
-    public class ElementoPersonalidad {
-
-        public String tipo;
-        public int puntaje;
     }
 
     public void tomarEncuestaSinTerminar() {

@@ -1,6 +1,5 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.controladores.util.DatosAmbiente;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
@@ -8,12 +7,9 @@ import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
-import com.ingesoft.interpro.entidades.TipoAmbiente;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -81,7 +77,8 @@ public class MisReultadosController extends Controller implements Serializable {
                 return "";
             }
             encuestaController.setItems(encuestas);
-            personalidad = encuestaController.obtenerPromedioPersonalidad(encuestas);
+            
+            personalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
     }

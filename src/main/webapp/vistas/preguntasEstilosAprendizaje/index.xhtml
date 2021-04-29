@@ -100,7 +100,7 @@
                                              actionListener="#{respuestaEstiloController.anteriorPaso}"
                                              update=":PreguntaEstilosAprenForm, @form" >
                             </p:commandButton>
-                            <p:commandButton value="Ver resumen de encuesta" ajax="true" style="float:right;" class="float-r btn"
+                            <p:commandButton value="Ver resumen de encuestas" ajax="true" style="float:right;" class="float-r btn"
                                              action="#{encuestaController.pasoResumen()}"
                                              rendered="#{respuestaEstiloController.esUltimoPaso()}"
                                              > 
@@ -111,9 +111,9 @@
                 </div>
             </h:form>
             <h:form>
-                <p:commandButton value="Ver resumen de encuesta (Desarrollo)" ajax="true"
-                                 action="#{encuestaController.pasoResumen()}"
-                                 actionListener="#{respuestaEstiloController.finalizarEncuesta()}"
+                <p:commandButton value="ir a resumen" ajax="true"
+                                 actionListener="#{respuestaEstiloController.actualizarTodasRespuestas()}"
+                                 update=":PreguntaEstilosAprenForm, @form" 
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

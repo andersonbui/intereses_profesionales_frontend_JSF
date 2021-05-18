@@ -1,6 +1,5 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.controladores.util.ElementoPersonalidad;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
@@ -9,7 +8,6 @@ import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Persona;
-import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
@@ -374,9 +372,9 @@ public class EncuestaController extends Controller implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/welcomePrimefaces.xhtml");
 
 //            }
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

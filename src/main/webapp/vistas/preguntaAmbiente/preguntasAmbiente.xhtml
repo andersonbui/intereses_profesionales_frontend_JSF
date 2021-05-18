@@ -21,13 +21,15 @@
         <ui:define name="content">
             <p:growl id="msgs" /> 
             <h:form >
-                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="200" closable="false" >
+                <p:dialog header="Instrucciones de juego" widgetVar="instruccionesAmbienteDialog" modal="true" height="250" closable="false" >
                     <b><p>Usted está en la encuesta de perfiles profesionales, debe seleccionar: <br/>
                             <p:graphicImage name="img/emoji_feliz.png" width="30px" height="30px" /> cuando le guste la actividad descrita en la imagen<br/>
                             <p:graphicImage name="img/emoji_neutral.png" width="30px" height="30px"/> cuando no sabe si le guste o no  la actividad descrita en la imagen<br/>
-                            <p:graphicImage name="img/emoji_disgustado.png" width="30px" height="30px"/> cuando no le guste la actividad descrita en la imagen<br/>
+                            <p:graphicImage name="img/emoji_disgustado.png" width="30px" height="30px"/> cuando no le guste la actividad descrita en la imagen<br/><br/>
 
-                            Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto. Exitos!</p></b>
+                            Cada calificación de las imágenes le da un punto y si se tarda más de 15 segundos pierde un punto.<br/>
+                            <b>Dar doble clic a la ultima respuesta de cada página.</b> <br/>
+                            Exitos!</p></b>
 
                     <p:commandButton value="Aceptar" update="@form, PreguntaAmbienteForm" ajax="true" style="margin-bottom:20px; margin-left: 44%;"
                                      actionListener="#{encuestaController.arrancarReloj()}" 

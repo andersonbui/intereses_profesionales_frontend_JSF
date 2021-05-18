@@ -184,16 +184,19 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     }
 
     public void meGusta(RespuestaAmbiente respuesta) {
+//        System.out.println("meGusta");
         respuesta.setRespuesta((float) 1.0);
         reinicioUnicoPorPregunta(respuesta);
     }
 
     public void indiferente(RespuestaAmbiente respuesta) {
+//        System.out.println("indiferente");
         respuesta.setRespuesta((float) 0.5);
         reinicioUnicoPorPregunta(respuesta);
     }
 
     public void noMeGusta(RespuestaAmbiente respuesta) {
+//        System.out.println("noMeGusta");
         respuesta.setRespuesta((float) 0);
         reinicioUnicoPorPregunta(respuesta);
     }

@@ -66,15 +66,6 @@ public class PreguntaPersonalidadController extends Controller {
         return null;
     }
 
-    public void preparePreguntasPersonalidad(Encuesta encuesta) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        RespuestaPersonalidadController respuestaPersonalidadController = (RespuestaPersonalidadController) elOtroResolver.getValue(facesContext.getELContext(), null, "respuestaPersonalidadController");
-        items = getItems();
-//        encuesta.setPersonalidad("IIEJ");
-        respuestaPersonalidadController.prepararRespuestas(items, encuesta);
-    }
-
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaPersonalidadCreated"));
         if (!JsfUtil.isValidationFailed()) {

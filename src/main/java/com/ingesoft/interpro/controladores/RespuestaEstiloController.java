@@ -29,7 +29,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaEstiloController")
 @SessionScoped
-public class RespuestaEstiloController extends Controller implements Serializable {
+public class RespuestaEstiloController extends Controller implements Serializable, EncuestaControllerInterface {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaEstiloFacade ejbFacade;
@@ -192,24 +192,6 @@ public class RespuestaEstiloController extends Controller implements Serializabl
         return estadisticaEncuentaEstiloApren;
     }
     
-    void prepararRespuestas(List<PreguntaEstilosAprendizajeFs> itemsPreg, Encuesta encuesta) {
-        listaPreguntas = itemsPreg;
-        this.encuesta = encuesta;
-        pasoActual = 0;
-        
-        getNumGrupos();
-        grupo = getGrupoItems(pasoActual + 1);
-    }
-
-//    public List<Integer> getGrupos() {
-////        List<Integer> gruposPreguntas = new ArrayList<>();
-////        for (int i = 1; i <= numGrupos; i++) {
-////            gruposPreguntas.add(i);
-////        }
-////        return gruposPreguntas;
-//        return null;
-//    }
-    
     public void seleccionarPunto(RespuestaEstilo respuestaEstilo) {
         int posicion = respuestaEstilo.getIdpreguntaEstilos().getOrden()- 1;
         if (vecContadorRespuestasEstiloApren[posicion] == 0) {
@@ -256,6 +238,28 @@ public class RespuestaEstiloController extends Controller implements Serializabl
             }
         }
         return listaRespuestas;
+    }
+
+    @Override
+    public void reiniciar() {
+        pasoActual = 0;
+        return ;
+    }
+
+    @Override
+    public void prepararEncuesta(Encuesta encuesta) {
+        listaPreguntas = getPreguntaEstilosAprendizajeFsController().getItems();
+        this.encuesta = encuesta;
+        pasoActual = 0;
+        
+        getNumGrupos();
+        grupo = getGrupoItems(pasoActual + 1);
+        
+    }
+
+    @Override
+    public String getRuta() {
+        return "/vistas/preguntasEstilosAprendizaje/index.xhtml";
     }
     
     public class HiloGuardado extends Thread {

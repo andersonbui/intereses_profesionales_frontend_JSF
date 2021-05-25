@@ -251,8 +251,7 @@
                                 </div>
                             </p:panel></center>
                         <p:commandButton value="Siguiente encuesta" ajax="true" class=" btn"
-                                         action="#{encuestaController.pasoPreguntasAmbiente()}"
-                                         actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual)}"
+                                         action="#{encuestaController.siguienteEncuesta()}"
                                          style="float:right;"
                                          > 
                         </p:commandButton>
@@ -260,8 +259,7 @@
 
                 </p:wizard>
                 <p:commandButton value="Siguiente encuesta (Desarrollo)" ajax="true" 
-                                 action="#{encuestaController.pasoPreguntasAmbiente()}"
-                                 actionListener="#{preguntaAmbienteController.preparePreguntas(loginController.actual)}"
+                                 action="#{encuestaController.siguienteEncuesta()}"
                                  rendered="#{encuestaController.esDesarrollo()}"
                                  > 
                 </p:commandButton>

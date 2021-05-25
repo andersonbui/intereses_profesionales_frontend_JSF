@@ -45,7 +45,9 @@ public class PreguntaEstilosAprendizajeFsController extends Controller implement
         this.selected = selected;
     }
 
+    @Override
     protected void setEmbeddableKeys() {
+        
     }
 
     protected void initializeEmbeddableKey() {
@@ -141,9 +143,4 @@ public class PreguntaEstilosAprendizajeFsController extends Controller implement
 
     }
 
-    public void preparePreguntasEstilosApren( Encuesta encuesta) {
-        RespuestaEstiloController respuestaEstiloController = getRespuestaEstiloController();
-        items = getItems();
-        respuestaEstiloController.prepararRespuestas(items, encuesta);
-    }
 }

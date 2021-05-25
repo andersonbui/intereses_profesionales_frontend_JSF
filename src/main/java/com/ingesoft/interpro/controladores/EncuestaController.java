@@ -13,6 +13,7 @@ import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -42,6 +43,9 @@ public class EncuestaController extends Controller implements Serializable {
     private int tiempo;
     boolean detener_reloj;
     private final String ESTADO_FINALIZADA = "FINALIZADA";
+    
+    private int contadorEncuesta = 0;
+    List<EncuestaControllerInterface> listaencuestas;
 
     public boolean esDesarrollo() {
         return Utilidades.esDesarrollo();
@@ -247,30 +251,56 @@ public class EncuestaController extends Controller implements Serializable {
     public void setEvaluacion(boolean isEvaluacion) {
         this.evaluacion = isEvaluacion;
     }
-
-    public void pasoPreguntasAmbiente() throws IOException {
-        this.pasoActivo = 1;
+    
+    public void guaradarInfoPersonal() {
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
-        System.out.println("encuesta en pasoPreguntasAmbiente(): " + selected);
         Grado grado = getGradoController().getSelected();
         selected.setGrado(grado);
         update();
-        String rutaGeneral = Vistas.getRutaGeneral();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaAmbiente/preguntasAmbiente.xhtml");
     }
-
-    public void pasoPreguntasPersonalidad() throws IOException {
-        getPreguntaPersonalidadController().preparePreguntasPersonalidad(selected);
-        this.pasoActivo = 2;
+    
+//    public void pasoPreguntasAmbiente() throws IOException {
+//        
+//        System.out.println("encuesta en pasoPreguntasAmbiente(): " + selected);
+//        contadorEncuesta++; //1
+//        this.pasoActivo = contadorEncuesta;
+//        EncuestaControllerInterface encuesta = getRespuestaAmbienteController();
+//        encuesta.prepararEncuesta(selected);
+//        String ruta = encuesta.getRuta();
+//        String rutaGeneral = Vistas.getRutaGeneral();
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
+//    }
+//    
+//    public void pasoPreguntasPersonalidad() throws IOException {
+//        contadorEncuesta++; //2
+//        this.pasoActivo = contadorEncuesta;
+//        EncuestaControllerInterface encuesta = getRespuestaPersonalidadController();
+//        encuesta.prepararEncuesta(selected);
+//        String ruta = encuesta.getRuta();
+//        String rutaGeneral = Vistas.getRutaGeneral();
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + ruta);
+//    }
+//
+//    public void pasoEstiloAprendizaje() throws IOException {
+//        contadorEncuesta++; //3
+//        this.pasoActivo = contadorEncuesta;
+//        EncuestaControllerInterface encuesta = getRespuestaEstiloController();
+//        encuesta.prepararEncuesta(selected);
+//        String ruta = encuesta.getRuta();
+//        String rutaGeneral = Vistas.getRutaGeneral();
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
+//    }
+    
+    
+    public void siguienteEncuesta() throws IOException {
+        contadorEncuesta++;
+        this.pasoActivo = contadorEncuesta;
+        EncuestaControllerInterface encuesta = listaencuestas.get(this.pasoActivo);
+        encuesta.prepararEncuesta(selected);
+        String ruta = encuesta.getRuta();
+        System.out.println("encuesta ruta: " + ruta);
         String rutaGeneral = Vistas.getRutaGeneral();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml");
-    }
-
-    public void pasoEstiloAprendizaje() throws IOException {
-        getPreguntaEstilosAprendizajeFsController().preparePreguntasEstilosApren(selected);
-        this.pasoActivo = 3;
-        String rutaGeneral = Vistas.getRutaGeneral();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/preguntasEstilosAprendizaje/index.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
     }
     
     public void pasoResumen() throws IOException {
@@ -352,7 +382,13 @@ public class EncuestaController extends Controller implements Serializable {
                 crearEncuesta();
             }
         }
-        pasoActivo = 0;
+        pasoActivo = -1;
+        contadorEncuesta = -1;
+        listaencuestas = new ArrayList();
+        listaencuestas.add(getRespuestaAmbienteController());
+        listaencuestas.add(getRespuestaPersonalidadController());
+        listaencuestas.add(getRespuestaEstiloController());
+        
         detener_reloj = true;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
         getRespuestaAmbienteController().reiniciar();

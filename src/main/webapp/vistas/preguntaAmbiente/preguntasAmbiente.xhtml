@@ -319,7 +319,7 @@
                                                 <p:outputLabel value="Evaluación: #{encuestaController.puntos_eval}"/><br/>
                                             </div>
                                             <p:commandButton value="Siguiente encuesta" ajax="true" style="float:right;" class="btn float-r "
-                                                             action="#{encuestaController.pasoPreguntasPersonalidad()}"
+                                                             action="#{encuestaController.siguienteEncuesta()}"
                                                              rendered="#{encuestaController.esDesarrollo() or respuestaAmbienteController.esUltimoPaso()}" >
                                             </p:commandButton>
                                         </p:column>

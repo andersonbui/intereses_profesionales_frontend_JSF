@@ -34,7 +34,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaAmbienteController")
 @SessionScoped
-public class RespuestaAmbienteController extends Controller implements Serializable {
+public class RespuestaAmbienteController extends Controller implements Serializable, EncuestaControllerInterface {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
@@ -63,6 +63,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return getEncuestaController().getSelected();
     }
 
+    @Override
     public void reiniciar() {
         pasoActual = 0;
         gruposPreguntas = null;
@@ -236,7 +237,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         getEncuestaController().guardarSelected();
     }
-
+        
     /**
      * volver a la primer pagina de la evaluacion - asegurar que siempre empieza
      * la evaluacion por la definicion
@@ -322,6 +323,20 @@ public class RespuestaAmbienteController extends Controller implements Serializa
             resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
             resultadoPorAmbienteController.create();
         }
+    }
+
+    @Override
+    public void prepararEncuesta(Encuesta encuesta) {
+        
+        PreguntaAmbienteController preguntasController = getPreguntaAmbienteController();
+        List<PreguntaAmbiente> preguntas = preguntasController.getItems();
+        prepararRespuestas(preguntas);
+        
+    }
+
+    @Override
+    public String getRuta() {
+        return "/vistas/preguntaAmbiente/preguntasAmbiente.xhtml";
     }
 
     private class Elemento {

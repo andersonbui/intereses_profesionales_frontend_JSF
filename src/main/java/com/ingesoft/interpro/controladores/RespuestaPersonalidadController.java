@@ -33,7 +33,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaPersonalidadController")
 @SessionScoped
-public class RespuestaPersonalidadController extends Controller implements Serializable {
+public class RespuestaPersonalidadController extends Controller implements Serializable, EncuestaControllerInterface {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaPersonalidadFacade ejbFacade;
@@ -241,6 +241,10 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         return personalidad;
     }
     
+    @Override
+    public void reiniciar() {
+        return;
+    }
     /**
      *
      * @param encuesta
@@ -293,6 +297,11 @@ public class RespuestaPersonalidadController extends Controller implements Seria
             respuestaPorPersonalidadController.create();
         }
         return true;
+    }
+
+    @Override
+    public String getRuta() {
+        return "/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml";
     }
 
     public class Elemento {
@@ -362,7 +371,13 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         System.out.println("hola accion;" + respuestaPersonalidad);
     }
 
-    public List<RespuestaPersonalidad> prepararRespuestas(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
+    @Override
+    public void prepararEncuesta(Encuesta encuesta) {
+        List<PreguntaPersonalidad> preguntas = getPreguntaPersonalidadController().getItems();
+        prepararRespuestasAux(preguntas, encuesta);
+    }
+    
+    private List<RespuestaPersonalidad> prepararRespuestasAux(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
         System.out.println("encuesta: " + encuesta);
         System.out.println("preguntas: " + preguntas);
         EncuestaAcutal = encuesta;

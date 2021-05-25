@@ -3,23 +3,15 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.PreguntaAmbiente;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.controladores.util.Variables;
-import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.PreguntaAmbienteFacade;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.el.ELResolver;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -33,11 +25,11 @@ public class PreguntaAmbienteController extends Controller implements Serializab
 
     private static final long serialVersionUID = 1L;
 
-//    public boolean skip;
     @EJB
     private com.ingesoft.interpro.facades.PreguntaAmbienteFacade ejbFacade;
     private List<PreguntaAmbiente> items = null;
     private PreguntaAmbiente selected;
+    
     public PreguntaAmbienteController() {
     }
     
@@ -67,12 +59,6 @@ public class PreguntaAmbienteController extends Controller implements Serializab
         return selected;
     }
 
-    public void preparePreguntas(Usuario usuario) {
-        RespuestaAmbienteController respuestaController = getRespuestaAmbienteController();
-        getItems();
-        respuestaController.prepararRespuestas(items);
-    }
-    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"),selected);
         if (!JsfUtil.isValidationFailed()) {

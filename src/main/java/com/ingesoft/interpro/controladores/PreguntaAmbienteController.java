@@ -27,7 +27,7 @@ public class PreguntaAmbienteController extends Controller implements Serializab
 
     @EJB
     private com.ingesoft.interpro.facades.PreguntaAmbienteFacade ejbFacade;
-    private List<PreguntaAmbiente> items = null;
+    private List<PreguntaAmbiente> itemsPreguntas = null;
     private PreguntaAmbiente selected;
     
     public PreguntaAmbienteController() {
@@ -62,7 +62,7 @@ public class PreguntaAmbienteController extends Controller implements Serializab
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteCreated"),selected);
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsPreguntas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
@@ -74,15 +74,15 @@ public class PreguntaAmbienteController extends Controller implements Serializab
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaAmbienteDeleted"),selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsPreguntas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public List<PreguntaAmbiente> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
+        if (itemsPreguntas == null) {
+            itemsPreguntas = getFacade().findAll();
         }
-        return items;
+        return itemsPreguntas;
     }
 
 

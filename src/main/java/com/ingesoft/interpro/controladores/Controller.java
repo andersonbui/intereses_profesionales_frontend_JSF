@@ -319,20 +319,13 @@ public abstract class Controller implements Serializable {
         return resultadoPorAmbienteController;
     }
 
-    public RespuestaEstiloController getRespuestaEstiloController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        RespuestaEstiloController respuestaEstiloController = (RespuestaEstiloController) elResolver.getValue(facesContext.getELContext(), null, "respuestaEstiloController");
-        return respuestaEstiloController;
-    }
-
-    public EstiloController getEstiloConstroller() {
+    public EstiloController getEstiloController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EstiloController estiloController = (EstiloController) elResolver.getValue(facesContext.getELContext(), null, "estiloController");
         return estiloController;
     }
-    
+
     public PreguntaEstilosAprendizajeFsController getPreguntaEstilosAprendizajeFsController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();

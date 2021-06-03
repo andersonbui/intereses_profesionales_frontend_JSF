@@ -259,57 +259,22 @@ public class EncuestaController extends Controller implements Serializable {
         update();
     }
     
-//    public void pasoPreguntasAmbiente() throws IOException {
-//        
-//        System.out.println("encuesta en pasoPreguntasAmbiente(): " + selected);
-//        contadorEncuesta++; //1
-//        this.pasoActivo = contadorEncuesta;
-//        EncuestaControllerInterface encuesta = getRespuestaAmbienteController();
-//        encuesta.prepararEncuesta(selected);
-//        String ruta = encuesta.getRuta();
-//        String rutaGeneral = Vistas.getRutaGeneral();
-//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
-//    }
-//    
-//    public void pasoPreguntasPersonalidad() throws IOException {
-//        contadorEncuesta++; //2
-//        this.pasoActivo = contadorEncuesta;
-//        EncuestaControllerInterface encuesta = getRespuestaPersonalidadController();
-//        encuesta.prepararEncuesta(selected);
-//        String ruta = encuesta.getRuta();
-//        String rutaGeneral = Vistas.getRutaGeneral();
-//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + ruta);
-//    }
-//
-//    public void pasoEstiloAprendizaje() throws IOException {
-//        contadorEncuesta++; //3
-//        this.pasoActivo = contadorEncuesta;
-//        EncuestaControllerInterface encuesta = getRespuestaEstiloController();
-//        encuesta.prepararEncuesta(selected);
-//        String ruta = encuesta.getRuta();
-//        String rutaGeneral = Vistas.getRutaGeneral();
-//        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
-//    }
-    
-    
     public void siguienteEncuesta() throws IOException {
         contadorEncuesta++;
-        this.pasoActivo = contadorEncuesta;
-        EncuestaControllerInterface encuesta = listaencuestas.get(this.pasoActivo);
+        this.pasoActivo = contadorEncuesta + 1;
+        if(contadorEncuesta >= listaencuestas.size()) {
+            pasoResumen();
+        }
+        EncuestaControllerInterface encuesta = listaencuestas.get(contadorEncuesta);
         encuesta.prepararEncuesta(selected);
         String ruta = encuesta.getRuta();
-        System.out.println("encuesta ruta: " + ruta);
+        System.out.println("encuesta ruta: " + ruta + " | this.pasoActivo: "+this.pasoActivo);
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+ruta);
     }
     
     public void pasoResumen() throws IOException {
-        this.pasoActivo = 4;
         actualizarSelected();
-//        EstadisticaAmbienteController estadisticaAmbienteController = getEstadisticaAmbienteController();
-//        estadisticaAmbienteController.setEncuesta(selected);
-//        estadisticaAmbienteController.cargarGraficoResultadoEncuesta(1111);
-        
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/encuesta/resumen.xhtml");
     }
@@ -366,7 +331,7 @@ public class EncuestaController extends Controller implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         LoginController loginController = getLoginController();
-        Usuario usu = loginController.getActual();
+//        Usuario usu = loginController.getActual();
         Persona persona = loginController.getPersonaActual();
         Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
         obtenerEncuestaSinTerminar(estud);
@@ -387,7 +352,7 @@ public class EncuestaController extends Controller implements Serializable {
         listaencuestas = new ArrayList();
         listaencuestas.add(getRespuestaAmbienteController());
         listaencuestas.add(getRespuestaPersonalidadController());
-        listaencuestas.add(getRespuestaEstiloController());
+        listaencuestas.add(getEstiloController());
         
         detener_reloj = true;
         getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
@@ -405,9 +370,8 @@ public class EncuestaController extends Controller implements Serializable {
             AreaController areaController = getAreaController();
             areaController.inicializar(selected);
             String rutaGeneral = Vistas.getRutaGeneral();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/welcomePrimefaces.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/vistas/encuesta/encuestaInfoPersonal.xhtml");
 
-//            }
         } catch (IOException e) {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
 //            e.printStackTrace();

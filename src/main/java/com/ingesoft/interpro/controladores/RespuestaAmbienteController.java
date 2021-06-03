@@ -38,14 +38,13 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;
-    private List<RespuestaAmbiente> items = null;
-    private RespuestaAmbiente selected;
+    private List<RespuestaAmbiente> itemsRespuestas = null;
+    private List<PreguntaAmbiente> listaPreguntas = null;
 
     private final int tamGrupo;
     private int pasoActual;
     private int numGrupos;
-    private int[] cantidadRespuestas;
-    private List<Integer> gruposPreguntas;
+    private int[] cantidadRespuestasXPregunta;
     private List<String> images;
     private List<RespuestaAmbiente> grupo = null;
     private boolean finalizo;
@@ -54,9 +53,17 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public RespuestaAmbienteController() {
         tamGrupo = 6;
         numGrupos = 1;
-        gruposPreguntas = null;
+        listaPreguntas = null;
         listaResultadosPorAmbiente = null;
         pasoActual = 0;
+    }
+
+    private List<PreguntaAmbiente> getListaPreguntas() {
+        return listaPreguntas;
+    }
+
+    private void setListaPreguntas(List<PreguntaAmbiente> listaPreguntas) {
+        this.listaPreguntas = listaPreguntas;
     }
 
     public Encuesta getEncuestaAcutal() {
@@ -66,7 +73,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     @Override
     public void reiniciar() {
         pasoActual = 0;
-        gruposPreguntas = null;
+        listaPreguntas = null;
         listaResultadosPorAmbiente = null;
         setEvaluacion(false);
     }
@@ -204,8 +211,8 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public void reinicioUnicoPorPregunta(RespuestaAmbiente respuesta) {
         int indice = (respuesta.getPreguntaAmbiente().getOrden() - 1);
-        cantidadRespuestas[indice]++;
-        if (cantidadRespuestas[indice] == 1) {
+        cantidadRespuestasXPregunta[indice]++;
+        if (cantidadRespuestasXPregunta[indice] == 1) {
             setTiempo(0);
             aumentarPuntos();
         }
@@ -309,7 +316,7 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         valores[4].valor = 0.0;
         valores[5].valor = 0.0;
 
-        for (RespuestaAmbiente respuestaAmbiente : items) {
+        for (RespuestaAmbiente respuestaAmbiente : itemsRespuestas) {
             TipoAmbiente tipoAmb = respuestaAmbiente.getPreguntaAmbiente().getIdTipoAmbiente();
             int indice = tipoAmb.getIdTipoAmbiente() - 1;
             valores[indice].tipoPer = tipoAmb;
@@ -330,8 +337,11 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         
         PreguntaAmbienteController preguntasController = getPreguntaAmbienteController();
         List<PreguntaAmbiente> preguntas = preguntasController.getItems();
-        prepararRespuestas(preguntas);
+        setListaPreguntas(preguntas);
         
+        finalizo = false;
+        listaResultadosPorAmbiente = null;
+        getItemsRespuestas();
     }
 
     @Override
@@ -345,60 +355,55 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         public double valor;
     }
 
-    public List<Integer> getGrupos() {
-        gruposPreguntas = null;
-        if (gruposPreguntas == null) {
-            gruposPreguntas = new ArrayList<>();
-            items = getItems();
-            numGrupos = items.size() / tamGrupo;
-            numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
-            // @desarrollo
-            if (Utilidades.esDesarrollo()) {
-                numGrupos = 6;
-            }// @end
-            for (int i = 1; i <= numGrupos; i++) {
-                gruposPreguntas.add(i);
-            }
-            System.out.println("gruposPreguntas: " + gruposPreguntas);
-        }
-        return gruposPreguntas;
+    public int getCantidadGrupos() {
+        List itemsRespuest = getItemsRespuestas();
+        int cantidadGrupos = 0; // numGrupos
+        int tamaniogrupo = getTamGrupo();
+
+        cantidadGrupos = itemsRespuest.size() / tamaniogrupo; 
+        cantidadGrupos += (itemsRespuest.size() % tamaniogrupo == 0 ? 0 : 1);
+        // @desarrollo
+        if (Utilidades.esDesarrollo()) {
+            cantidadGrupos = 6;
+        }// @end
+        return cantidadGrupos;
     }
 
-    public RespuestaAmbiente getSelected() {
-        return selected;
-    }
+//    public RespuestaAmbiente getSelected() {
+//        return selected;
+//    }
+//
+//    public void setSelected(RespuestaAmbiente selected) {
+//        this.selected = selected;
+//    }
 
-    public void setSelected(RespuestaAmbiente selected) {
-        this.selected = selected;
-    }
-
-    @Override
-    protected void setEmbeddableKeys() {
-        selected.getRespuestaAmbientePK().setIdPreguntasAmbiente(selected.getPreguntaAmbiente().getIdPreguntaAmbiente());
-        selected.getRespuestaAmbientePK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
-    }
-
-    protected void initializeEmbeddableKey() {
-        selected.setRespuestaAmbientePK(new com.ingesoft.interpro.entidades.RespuestaAmbientePK());
-    }
+//    @Override
+//    protected void setEmbeddableKeys() {
+//        selected.getRespuestaAmbientePK().setIdPreguntasAmbiente(selected.getPreguntaAmbiente().getIdPreguntaAmbiente());
+//        selected.getRespuestaAmbientePK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
+//    }
+//
+//    protected void initializeEmbeddableKey() {
+//        selected.setRespuestaAmbientePK(new com.ingesoft.interpro.entidades.RespuestaAmbientePK());
+//    }
 
     @Override
     protected RespuestaAmbienteFacade getFacade() {
         return ejbFacade;
     }
 
-    public RespuestaAmbiente prepareCreate() {
-        selected = new RespuestaAmbiente();
-        initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteCreated"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
+//    public RespuestaAmbiente prepareCreate() {
+//        selected = new RespuestaAmbiente();
+//        initializeEmbeddableKey();
+//        return selected;
+//    }
+//
+//    public void create() {
+//        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteCreated"), selected);
+//        if (!JsfUtil.isValidationFailed()) {
+//            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
+//        }
+//    }
 
     public String obtenerColor(String tipo) {
         String color = "#000000";
@@ -429,24 +434,17 @@ public class RespuestaAmbienteController extends Controller implements Serializa
         return item.getRespuesta().isNaN() ? "border: 2px solid red; padding: 4px;" : "border: 2px solid white; padding: 4px;";
     }
 
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"), selected);
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteDeleted"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public List<RespuestaAmbiente> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
-    }
+//    public void update() {
+//        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"), selected);
+//    }
+//    
+//    public void destroy() {
+//        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteDeleted"), selected);
+//        if (!JsfUtil.isValidationFailed()) {
+//            selected = null; // Remove selection
+//            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
+//        }
+//    }
 
     /**
      * obtiene las respuestas de un determinado grupo
@@ -455,18 +453,20 @@ public class RespuestaAmbienteController extends Controller implements Serializa
      * @return
      */
     public List<RespuestaAmbiente> getGrupoItems(int numGrupo) {
-        getItems();
+        getItemsRespuestas();
+        List<RespuestaAmbiente> listaRespuestas = null;
+        
         // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
             HiloGuardado hilo = new HiloGuardado(grupo, getEncuestaController());
             hilo.start();
         }
-        List<RespuestaAmbiente> listaRespuestas = null;
-        if (items != null) {
+        
+        if (itemsRespuestas != null) {
             listaRespuestas = new ArrayList<>();
             for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
-                if (i >= 0 && i < items.size()) {
-                    listaRespuestas.add(items.get(i));
+                if (i >= 0 && i < itemsRespuestas.size()) {
+                    listaRespuestas.add(itemsRespuestas.get(i));
                 } else {
                     break;
                 }
@@ -478,72 +478,69 @@ public class RespuestaAmbienteController extends Controller implements Serializa
     public List<RespuestaAmbiente> getTodasImages() {
         List<RespuestaAmbiente> listaRespuestas;
         listaRespuestas = null;
-        if (items != null) {
+        if (itemsRespuestas != null) {
             listaRespuestas = new ArrayList<>();
-            for (int i = 1; i < items.size(); i++) {
-                items.get(i).getPreguntaAmbiente().getOrden();
-                listaRespuestas.add(items.get(i));
+            for (int i = 1; i < itemsRespuestas.size(); i++) {
+                itemsRespuestas.get(i).getPreguntaAmbiente().getOrden();
+                listaRespuestas.add(itemsRespuestas.get(i));
             }
         }
         return listaRespuestas;
     }
 
-    public List<RespuestaAmbiente> prepararRespuestas(List<PreguntaAmbiente> preguntas) {
-        List<Integer> lindicesRecuperados = new ArrayList();
-        gruposPreguntas = null;
-        Encuesta encuesta = getEncuestaAcutal();
-        finalizo = false;
-        // PRUEBAS
-        double[] valores = {0.0, 0.5, 1.0};
-        List<RespuestaAmbiente> items_recuperados = obtenerTodosPorEncuesta(encuesta);
-        items = new ArrayList<>(preguntas.size());
-        cantidadRespuestas = new int[preguntas.size()];
-        for (PreguntaAmbiente pregunta : preguntas) {
-            selected = new RespuestaAmbiente(pregunta.getIdPreguntaAmbiente(), encuesta.getIdEncuesta());
-            selected.setPreguntaAmbiente(pregunta);
-            selected.setEncuesta(encuesta);
-            selected.setRespuesta(Float.NaN);
-            if (items_recuperados != null && !items_recuperados.isEmpty()) {
-                int indice = items_recuperados.indexOf(selected);
-                if (indice >= 0) {
-                    int i = (pregunta.getOrden() - 1);
-//                    cantidadRespuestas[i]++;
-                    lindicesRecuperados.add(i);
-                    selected.setRespuesta(items_recuperados.get(indice).getRespuesta());
+    public List<RespuestaAmbiente> getItemsRespuestas() {
+        List<PreguntaAmbiente> preguntas;
+        if (itemsRespuestas == null && (preguntas = getListaPreguntas()) != null) {
+             
+            itemsRespuestas = new ArrayList<>(preguntas.size());
+            cantidadRespuestasXPregunta = new int[preguntas.size()];
+            Encuesta encuesta = getEncuestaAcutal();
+            RespuestaAmbiente unaRespAmb;
+            List<RespuestaAmbiente> items_recuperados = obtenerTodosPorEncuesta(encuesta);
+            
+            for (PreguntaAmbiente pregunta : preguntas) {
+                unaRespAmb = new RespuestaAmbiente(pregunta, encuesta);
+                Float respuesta = Float.NaN;
+                if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                    int indice = items_recuperados.indexOf(unaRespAmb);
+                    if (indice >= 0) {
+                        int i = (pregunta.getOrden() - 1);
+                        cantidadRespuestasXPregunta[i]++;
+                        respuesta = items_recuperados.get(indice).getRespuesta();
+                    }
                 }
+                // @desarrollo - respuetas para desarrollo
+                if (respuesta.isNaN() && Utilidades.esDesarrollo()) {
+                    double[] valores = {0.0, 0.5, 1.0}; // PARA VALORES DE PRUEBA
+                    Random rand = new Random(Calendar.getInstance().getTimeInMillis());
+                    respuesta = (float) valores[rand.nextInt(3)];
+                    getEncuestaController().addPuntos_eval(1);
+                }// @end
+                /** 
+                 * si se consigue una respuesta almacenado o 
+                 * aleatorio(desarrollo), entonces, agregarlo a la pregunta 
+                 */
+                if(!respuesta.isNaN()){
+                    unaRespAmb.setRespuesta(respuesta);
+                }
+                itemsRespuestas.add(unaRespAmb);
             }
-            items.add(selected);
-        }
+            
+            numGrupos = getCantidadGrupos();
+            
+            //ubicar la encuesta en la ultima pagina respondida
+            if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                pasoActual = (items_recuperados.size() / 6) - 1;
+                if (pasoActual > numGrupos) {
+                    pasoActual = numGrupos - 1;
+                }
+            } else {
+                pasoActual = 0;
+            }
 
-        // desactivar puntaje a preguntas ya respondidas
-        for (int indi : lindicesRecuperados) {
-            cantidadRespuestas[indi]++;
+            grupo = getGrupoItems(pasoActual + 1);
         }
-        if(encuesta.getPuntajeEncuesta() == null) {
-            encuesta.setPuntajeEncuesta(lindicesRecuperados.size());
-        }
-        // @desarrollo
-        if (Utilidades.esDesarrollo()) {
-            System.out.println("encuesta: " + encuesta);
-            Random rand = new Random(Calendar.getInstance().getTimeInMillis());
-            for (RespuestaAmbiente item : items) {
-                item.setRespuesta((float) valores[rand.nextInt(3)]);
-                getEncuestaController().addPuntos_eval(1);
-            }
-        }// @end
-        listaResultadosPorAmbiente = null;
-        getGrupos();
-        //ubicar la encuesta en la ultima pagina respondida
-        if (items_recuperados != null && !items_recuperados.isEmpty()) {
-            pasoActual = (items_recuperados.size() / 6) - 1;
-            if (pasoActual > numGrupos) {
-                pasoActual = numGrupos - 1;
-            }
-        } else {
-            pasoActual = 0;
-        }
-        grupo = getGrupoItems(pasoActual + 1);
-        return items;
+        return itemsRespuestas;
     }
 
     public String obtenerImagen(RespuestaAmbiente respuesta) {
@@ -580,12 +577,12 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     public List<RespuestaAmbiente> actualizarTodasRespuestas() throws IOException {
         
-        for (RespuestaAmbiente item : items) {
+        for (RespuestaAmbiente item : itemsRespuestas) {
             this.getFacade().edit(item);
         }
         pasoActual = (numGrupos - 1);
         finalizarEncuesta(null);
-        return items;
+        return itemsRespuestas;
     }
 
     public RespuestaAmbiente getRespuestaAmbiente(com.ingesoft.interpro.entidades.RespuestaAmbientePK id) {

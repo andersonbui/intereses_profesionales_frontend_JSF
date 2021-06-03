@@ -47,6 +47,15 @@ public class RespuestaAmbiente implements Serializable {
     public RespuestaAmbiente() {
     }
 
+    public RespuestaAmbiente(PreguntaAmbiente preguntaAmbiente, Encuesta idEncuesta) {
+        this.preguntaAmbiente = preguntaAmbiente;
+        this.encuesta = idEncuesta;
+        this.respuestaAmbientePK = new RespuestaAmbientePK();
+        this.respuestaAmbientePK.setIdEncuesta(idEncuesta.getIdEncuesta());
+        this.respuestaAmbientePK.setIdPreguntasAmbiente(preguntaAmbiente.getIdPreguntaAmbiente());
+        this.setRespuesta(Float.NaN);
+    }
+    
     public RespuestaAmbiente(RespuestaAmbientePK respuestaAmbientePK) {
         this.respuestaAmbientePK = respuestaAmbientePK;
     }

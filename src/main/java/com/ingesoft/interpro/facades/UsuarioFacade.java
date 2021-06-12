@@ -5,7 +5,6 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.controladores.TipoUsuarioController;
 import com.ingesoft.interpro.controladores.UsuarioController;
 import com.ingesoft.interpro.entidades.Usuario;
 import java.util.List;

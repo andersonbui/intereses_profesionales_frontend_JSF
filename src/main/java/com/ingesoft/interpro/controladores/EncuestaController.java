@@ -5,14 +5,16 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
+import com.ingesoft.interpro.entidades.EstadosEncuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.GestionEncuesta;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Persona;
-import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -391,7 +393,7 @@ public class EncuestaController extends Controller implements Serializable {
         return url;
 
     }
-
+    
     public String resultado_personalidad_descripcion(int i, String personalidad) {
         if (personalidad == null || "".equals(personalidad)) {
             return "";

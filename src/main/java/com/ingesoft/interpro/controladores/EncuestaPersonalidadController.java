@@ -3,9 +3,8 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
-import com.ingesoft.interpro.entidades.EstadosEncuesta;
-import com.ingesoft.interpro.entidades.GestionEncuestas;
-import com.ingesoft.interpro.facades.GestionEncuestaFacade;
+import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
+import com.ingesoft.interpro.facades.EncuestaPersonalidadFacade;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,27 +20,27 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "gestionEncuestaController")
+@ManagedBean(name = "encuestaPersonalidadController")
 @SessionScoped
-public class GestionEncuestaController extends Controller implements Serializable {
+public class EncuestaPersonalidadController extends Controller implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.GestionEncuestaFacade ejbFacade;
-    private List<GestionEncuestas> items = null;
-    private GestionEncuestas selected;
-    public GestionEncuestaController() {
-        
-    }
+    private com.ingesoft.interpro.facades.EncuestaPersonalidadFacade ejbFacade;
+    private List<EncuestaPersonalidad> items = null;
+    private EncuestaPersonalidad selected;
 
-    public void setItems(List<GestionEncuestas> items) {
+    public EncuestaPersonalidadController() {
+    }
+    
+    public void setItems(List<EncuestaPersonalidad> items) {
         this.items = items;
     }
 
-    public GestionEncuestas getSelected() {
+    public EncuestaPersonalidad getSelected() {
         return selected;
     }
 
-    public void setSelected(GestionEncuestas selected) {
+    public void setSelected(EncuestaPersonalidad selected) {
         this.selected = selected;
     }
 
@@ -53,7 +52,7 @@ public class GestionEncuestaController extends Controller implements Serializabl
     }
 
     @Override
-    protected GestionEncuestaFacade getFacade() {
+    protected EncuestaPersonalidadFacade getFacade() {
         return ejbFacade;
     }
 
@@ -61,24 +60,22 @@ public class GestionEncuestaController extends Controller implements Serializabl
         getFacade().edit(getSelected());
     }
 
-    public String prueba() {
-        GestionEncuestas ee = new GestionEncuestas();
-        ee.setEstado(EstadosEncuesta.ACTIVO);
-        ee.setDescripcion("una descripcion");
-        ee.setFechaCreacion(new Date());
-        ee = getFacade().edit(ee);
-        return "hola: "+ee;
+    public EncuestaPersonalidad crearEncuestaPersonalidad(Encuesta encuesta) {
+        selected = new EncuestaPersonalidad(encuesta);
+        selected.setFechaCreacion(new Date());
+        create();
+        return selected;
     }
 
     public void create() {
-        selected = (GestionEncuestas) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"), selected);
+        selected = (EncuestaPersonalidad) persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        selected = (GestionEncuestas) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
+        selected = (EncuestaPersonalidad) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
     }
 
     public void destroy() {
@@ -89,40 +86,40 @@ public class GestionEncuestaController extends Controller implements Serializabl
         }
     }
 
-    public List<GestionEncuestas> actualesItems() {
+    public List<EncuestaPersonalidad> actualesItems() {
         return items;
     }
 
-    public List<GestionEncuestas> getItems() {
+    public List<EncuestaPersonalidad> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
         return items;
     }
 
-    public GestionEncuestas getEncuesta(java.lang.Integer id) {
+    public EncuestaPersonalidad getEncuestaPersonalidad(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<GestionEncuestas> getItemsAvailableSelectMany() {
+    public List<EncuestaPersonalidad> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<GestionEncuestas> getItemsAvailableSelectOne() {
+    public List<EncuestaPersonalidad> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = GestionEncuestas.class)
-    public static class EncuestaControllerConverter implements Converter {
+    @FacesConverter(forClass = EncuestaPersonalidad.class)
+    public static class EncuestaPersonalidadControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GestionEncuestaController controller = (GestionEncuestaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "gestionEncuestaController");
-            return controller.getEncuesta(getKey(value));
+            EncuestaPersonalidadController controller = (EncuestaPersonalidadController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "encuestaPersonalidadController");
+            return controller.getEncuestaPersonalidad(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -142,11 +139,11 @@ public class GestionEncuestaController extends Controller implements Serializabl
             if (object == null) {
                 return null;
             }
-            if (object instanceof GestionEncuestas) {
-                GestionEncuestas o = (GestionEncuestas) object;
-                return getStringKey(o.getId());
+            if (object instanceof EncuestaPersonalidad) {
+                EncuestaPersonalidad o = (EncuestaPersonalidad) object;
+                return getStringKey(o.getIdEncuesta());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Encuesta.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), EncuestaPersonalidad.class.getName()});
                 return null;
             }
         }

@@ -28,13 +28,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "TipoEstiloPregunta.findAll", query = "SELECT t FROM TipoEstiloPregunta t"),
     @NamedQuery(name = "TipoEstiloPregunta.findByIndice", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.indice = :indice"),
     @NamedQuery(name = "TipoEstiloPregunta.findByOpcion", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.opcion = :opcion"),
-    @NamedQuery(name = "TipoEstiloPregunta.findByIdTipoEstilo", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.tipoestiloPreguntaPK.idTipoEstilo = :idTipoEstilo"),
-    @NamedQuery(name = "TipoEstiloPregunta.findByIdpreguntaEstilos", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.tipoestiloPreguntaPK.idpreguntaEstilos = :idpreguntaEstilos")})
+    @NamedQuery(name = "TipoEstiloPregunta.findByIdTipoEstilo", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.tipoEstiloPreguntaPK.idTipoEstilo = :idTipoEstilo"),
+    @NamedQuery(name = "TipoEstiloPregunta.findByIdPreguntaEstilos", query = "SELECT t FROM TipoEstiloPregunta t WHERE t.tipoEstiloPreguntaPK.idPreguntaEstilosAprendizaje = :idPreguntaEstilos")})
 public class TipoEstiloPregunta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected TipoEstiloPreguntaPK tipoestiloPreguntaPK;
+    protected TipoEstiloPreguntaPK tipoEstiloPreguntaPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "indice")
@@ -44,36 +44,38 @@ public class TipoEstiloPregunta implements Serializable {
     @Size(min = 1, max = 150)
     @Column(name = "opcion")
     private String opcion;
-    @JoinColumn(name = "idTipoEstilo", referencedColumnName = "idTipoEstilo", insertable = false, updatable = false)
+    
+    @JoinColumn(name = "idTipoEstilo", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private TipoEstilo tipoestilo;
-    @JoinColumn(name = "idpregunta_estilos", referencedColumnName = "idpregunta_estilos", insertable = false, updatable = false)
+    private TipoEstilo tipoEstilo;
+    
+    @JoinColumn(name = "idPreguntaEstilosAprendizaje", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private PreguntaEstilosAprendizajeFs preguntaEstilosAprendizajeFs;
+    private PreguntaEstilosAprendizaje preguntaEstilosAprendizaje;
 
     public TipoEstiloPregunta() {
     }
 
-    public TipoEstiloPregunta(TipoEstiloPreguntaPK tipoestiloPreguntaPK) {
-        this.tipoestiloPreguntaPK = tipoestiloPreguntaPK;
+    public TipoEstiloPregunta(TipoEstiloPreguntaPK tipoEstiloPreguntaPK) {
+        this.tipoEstiloPreguntaPK = tipoEstiloPreguntaPK;
     }
 
-    public TipoEstiloPregunta(TipoEstiloPreguntaPK tipoestiloPreguntaPK, Character indice, String opcion) {
-        this.tipoestiloPreguntaPK = tipoestiloPreguntaPK;
+    public TipoEstiloPregunta(TipoEstiloPreguntaPK tipoEstiloPreguntaPK, Character indice, String opcion) {
+        this.tipoEstiloPreguntaPK = tipoEstiloPreguntaPK;
         this.indice = indice;
         this.opcion = opcion;
     }
 
     public TipoEstiloPregunta(int idTipoEstilo, int idpreguntaEstilos) {
-        this.tipoestiloPreguntaPK = new TipoEstiloPreguntaPK(idTipoEstilo, idpreguntaEstilos);
+        this.tipoEstiloPreguntaPK = new TipoEstiloPreguntaPK(idTipoEstilo, idpreguntaEstilos);
     }
 
     public TipoEstiloPreguntaPK getTipoEstiloPreguntaPK() {
-        return tipoestiloPreguntaPK;
+        return tipoEstiloPreguntaPK;
     }
 
     public void setTipoEstiloPreguntaPK(TipoEstiloPreguntaPK tipoestiloPreguntaPK) {
-        this.tipoestiloPreguntaPK = tipoestiloPreguntaPK;
+        this.tipoEstiloPreguntaPK = tipoestiloPreguntaPK;
     }
 
     public Character getIndice() {
@@ -93,25 +95,25 @@ public class TipoEstiloPregunta implements Serializable {
     }
 
     public TipoEstilo getTipoEstilo() {
-        return tipoestilo;
+        return tipoEstilo;
     }
 
-    public void setTipoestilo(TipoEstilo tipoestilo) {
-        this.tipoestilo = tipoestilo;
+    public void setTipoEstilo(TipoEstilo tipoEstilo) {
+        this.tipoEstilo = tipoEstilo;
     }
 
-    public PreguntaEstilosAprendizajeFs getPreguntaEstilosAprendizajeFs() {
-        return preguntaEstilosAprendizajeFs;
+    public PreguntaEstilosAprendizaje getPreguntaEstilosAprendizaje() {
+        return preguntaEstilosAprendizaje;
     }
 
-    public void setPreguntaEstilosAprendizajeFs(PreguntaEstilosAprendizajeFs preguntaEstilosAprendizajeFs) {
-        this.preguntaEstilosAprendizajeFs = preguntaEstilosAprendizajeFs;
+    public void setPreguntaEstilosAprendizaje(PreguntaEstilosAprendizaje preguntaEstilosAprendizaje) {
+        this.preguntaEstilosAprendizaje = preguntaEstilosAprendizaje;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (tipoestiloPreguntaPK != null ? tipoestiloPreguntaPK.hashCode() : 0);
+        hash += (tipoEstiloPreguntaPK != null ? tipoEstiloPreguntaPK.hashCode() : 0);
         return hash;
     }
 
@@ -122,7 +124,7 @@ public class TipoEstiloPregunta implements Serializable {
             return false;
         }
         TipoEstiloPregunta other = (TipoEstiloPregunta) object;
-        if ((this.tipoestiloPreguntaPK == null && other.tipoestiloPreguntaPK != null) || (this.tipoestiloPreguntaPK != null && !this.tipoestiloPreguntaPK.equals(other.tipoestiloPreguntaPK))) {
+        if ((this.tipoEstiloPreguntaPK == null && other.tipoEstiloPreguntaPK != null) || (this.tipoEstiloPreguntaPK != null && !this.tipoEstiloPreguntaPK.equals(other.tipoEstiloPreguntaPK))) {
             return false;
         }
         return true;
@@ -130,7 +132,7 @@ public class TipoEstiloPregunta implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.TipoEstiloPregunta[ tipoestiloPreguntaPK=" + tipoestiloPreguntaPK + " ]";
+        return "TipoEstiloPregunta[ PK=" + tipoEstiloPreguntaPK + " ]";
     }
     
 }

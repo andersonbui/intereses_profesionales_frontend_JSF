@@ -290,6 +290,13 @@ public abstract class Controller implements Serializable {
         EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
         return encuestaController;
     }
+    
+    public EncuestaPersonalidadController getEncuestaPersonalidadController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EncuestaPersonalidadController encuestaPersonalidadController = (EncuestaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "encuestaPersonalidadController");
+        return encuestaPersonalidadController;
+    }
 
     public AreaController getAreaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -326,11 +333,18 @@ public abstract class Controller implements Serializable {
         return estiloController;
     }
 
-    public PreguntaEstilosAprendizajeFsController getPreguntaEstilosAprendizajeFsController() {
+    public PreguntaEstilosAprendizajeController getPreguntaEstilosAprendizajeController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
-        PreguntaEstilosAprendizajeFsController preguntaEstilosAprendizajeFsController = (PreguntaEstilosAprendizajeFsController) elResolver.getValue(facesContext.getELContext(), null, "preguntaEstilosAprendizajeFsController");
-        return preguntaEstilosAprendizajeFsController;
+        PreguntaEstilosAprendizajeController preguntaEstilosAprendizajeController = (PreguntaEstilosAprendizajeController) elResolver.getValue(facesContext.getELContext(), null, "preguntaEstilosAprendizajeController");
+        return preguntaEstilosAprendizajeController;
+    }
+    
+    public RespuestaEstilosController getRespuestaEstilosControllerController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaEstilosController respuestaEstilosController = (RespuestaEstilosController) elResolver.getValue(facesContext.getELContext(), null, "respuestaEstilosController");
+        return respuestaEstilosController;
     }
     
     public PreguntaPersonalidadController getPreguntaPersonalidadController() {

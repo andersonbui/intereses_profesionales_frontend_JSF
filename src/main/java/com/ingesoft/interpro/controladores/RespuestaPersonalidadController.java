@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
 import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -76,7 +78,7 @@ public class RespuestaPersonalidadController extends Controller implements Seria
     }
 
     protected void setEmbeddableKeys() {
-        selected.getRespuestaPersonalidadPK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
+        selected.getRespuestaPersonalidadPK().setIdEncuesta(selected.getEncuestaPersonalidad().getIdEncuesta());
         selected.getRespuestaPersonalidadPK().setIdPreguntaPersonalidad(selected.getPreguntaPersonalidad().getIdPreguntaPersonalidad());
     }
 
@@ -157,12 +159,14 @@ public class RespuestaPersonalidadController extends Controller implements Seria
             getFacade().edit(respuesta);
         }
         pasoActual += 1;
-    
+
         realizarEstadisticas();
         EncuestaAcutal = getEncuestaController().getSelected();
         
         String personalidad = obtenerPersonalidad(EncuestaAcutal);
-        EncuestaAcutal.setPersonalidad(personalidad);
+        EncuestaAcutal.getEncuestaPersonalidad().setPersonalidad(personalidad);
+        EncuestaAcutal.getEncuestaPersonalidad().setEstado(EncuestaPersonalidad.FINALIZADA);
+        EncuestaAcutal.getEncuestaPersonalidad().setFechaFinalizada(new Date());
         
         getEncuestaController().guardarSelected();
         // realizar estadistica de respuestas
@@ -292,7 +296,7 @@ public class RespuestaPersonalidadController extends Controller implements Seria
         for (int i = 0; i < valores.length; i++) {
             respuestaPorPersonalidadController.prepareCreate();
             respuestaPorPersonalidadController.getSelected().setPuntaje(valores[i].valor);
-            respuestaPorPersonalidadController.getSelected().setEncuesta(EncuestaAcutal);
+            respuestaPorPersonalidadController.getSelected().setEncuestaPersonalidad(EncuestaAcutal.getEncuestaPersonalidad());
             respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
             respuestaPorPersonalidadController.create();
         }
@@ -368,7 +372,6 @@ public class RespuestaPersonalidadController extends Controller implements Seria
             getEncuestaController().setTiempo(0);//Number(0);
         }
         vecContRespuestasPersonalidad[posicion]++;
-        System.out.println("hola accion;" + respuestaPersonalidad);
     }
 
     @Override
@@ -378,15 +381,14 @@ public class RespuestaPersonalidadController extends Controller implements Seria
     }
     
     private List<RespuestaPersonalidad> prepararRespuestasAux(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
-        System.out.println("encuesta: " + encuesta);
-        System.out.println("preguntas: " + preguntas);
         EncuestaAcutal = encuesta;
         items = new ArrayList<>(preguntas.size());
         vecContRespuestasPersonalidad = new int[preguntas.size()];
+        EncuestaPersonalidad epe = getEncuestaPersonalidadController().crearEncuestaPersonalidad(encuesta);
         for (PreguntaPersonalidad pregunta : preguntas) {
             selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
             selected.setPreguntaPersonalidad(pregunta);
-            selected.setEncuesta(encuesta);
+            selected.setEncuestaPersonalidad(epe);
             items.add(selected);
         }
 

@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -334,6 +333,9 @@ public class RespuestaAmbienteController extends Controller implements Serializa
 
     @Override
     public void prepararEncuesta(Encuesta encuesta) {
+        
+        getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
+        reiniciar();
         
         PreguntaAmbienteController preguntasController = getPreguntaAmbienteController();
         List<PreguntaAmbiente> preguntas = preguntasController.getItems();

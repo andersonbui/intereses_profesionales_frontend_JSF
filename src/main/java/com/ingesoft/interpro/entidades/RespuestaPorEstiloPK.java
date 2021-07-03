@@ -13,10 +13,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Personal
+ * @author anderson
  */
 @Embeddable
-public class TipoEstiloPreguntaPK implements Serializable {
+public class RespuestaPorEstiloPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
@@ -24,15 +24,15 @@ public class TipoEstiloPreguntaPK implements Serializable {
     private int idTipoEstilo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idPreguntaEstilosAprendizaje")
-    private int idPreguntaEstilosAprendizaje;
+    @Column(name = "idEncuestaEstilosAprendizaje")
+    private int idEncuestaEstilosAprendizaje;
 
-    public TipoEstiloPreguntaPK() {
+    public RespuestaPorEstiloPK() {
     }
 
-    public TipoEstiloPreguntaPK(int idTipoEstilo, int idPreguntaEstilos) {
+    public RespuestaPorEstiloPK(int idTipoEstilo, int idEncuestaEstilosAprendizaje) {
         this.idTipoEstilo = idTipoEstilo;
-        this.idPreguntaEstilosAprendizaje = idPreguntaEstilos;
+        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
     }
 
     public int getIdTipoEstilo() {
@@ -43,33 +43,33 @@ public class TipoEstiloPreguntaPK implements Serializable {
         this.idTipoEstilo = idTipoEstilo;
     }
 
-    public int getIdPreguntaEstilosAprendizaje() {
-        return idPreguntaEstilosAprendizaje;
+    public int getIdEncuestaEstilosAprendizaje() {
+        return idEncuestaEstilosAprendizaje;
     }
 
-    public void setIdPreguntaEstilosAprendizaje(int idPreguntaEstilosAprendizaje) {
-        this.idPreguntaEstilosAprendizaje = idPreguntaEstilosAprendizaje;
+    public void setIdEncuestaEstilosAprendizaje(int idEncuestaEstilosAprendizaje) {
+        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idTipoEstilo;
-        hash += (int) idPreguntaEstilosAprendizaje;
+        hash += (int) idEncuestaEstilosAprendizaje;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoEstiloPreguntaPK)) {
+        if (!(object instanceof RespuestaPorEstiloPK)) {
             return false;
         }
-        TipoEstiloPreguntaPK other = (TipoEstiloPreguntaPK) object;
+        RespuestaPorEstiloPK other = (RespuestaPorEstiloPK) object;
         if (this.idTipoEstilo != other.idTipoEstilo) {
             return false;
         }
-        if (this.idPreguntaEstilosAprendizaje != other.idPreguntaEstilosAprendizaje) {
+        if (this.idEncuestaEstilosAprendizaje != other.idEncuestaEstilosAprendizaje) {
             return false;
         }
         return true;
@@ -77,7 +77,7 @@ public class TipoEstiloPreguntaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoestiloPreguntaPK[ idTipoEstilo=" + idTipoEstilo + ", idPreguntaEstilosAprendizaje=" + idPreguntaEstilosAprendizaje + " ]";
+        return "cRespuestaPorEstiloPK[ idTipoEstilo=" + idTipoEstilo + ", idEncuestaEstilosAprendizaje=" + idEncuestaEstilosAprendizaje + " ]";
     }
     
 }

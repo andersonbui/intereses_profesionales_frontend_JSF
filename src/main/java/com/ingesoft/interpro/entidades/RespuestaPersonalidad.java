@@ -35,17 +35,20 @@ public class RespuestaPersonalidad implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected RespuestaPersonalidadPK respuestaPersonalidadPK;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "respuesta")
     private int respuesta;
-    @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Encuesta encuesta;
+    
     @JoinColumn(name = "idPreguntaPersonalidad", referencedColumnName = "idPreguntaPersonalidad", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PreguntaPersonalidad preguntaPersonalidad;
 
+    @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private EncuestaPersonalidad encuestaPersonalidad;
+    
     public RespuestaPersonalidad() {
     }
 
@@ -78,12 +81,12 @@ public class RespuestaPersonalidad implements Serializable {
         this.respuesta = respuesta;
     }
 
-    public Encuesta getEncuesta() {
-        return encuesta;
+    public EncuestaPersonalidad getEncuestaPersonalidad() {
+        return encuestaPersonalidad;
     }
 
-    public void setEncuesta(Encuesta encuesta) {
-        this.encuesta = encuesta;
+    public void setEncuestaPersonalidad(EncuestaPersonalidad encuestaPersonalidad) {
+        this.encuestaPersonalidad = encuestaPersonalidad;
     }
 
     public PreguntaPersonalidad getPreguntaPersonalidad() {

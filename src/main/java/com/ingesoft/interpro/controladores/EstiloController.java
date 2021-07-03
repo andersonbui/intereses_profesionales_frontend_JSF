@@ -6,10 +6,10 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
-import com.ingesoft.interpro.entidades.RespuestaEstiloPK;
-import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
+import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
+import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizaje;
 import com.ingesoft.interpro.entidades.TipoEstiloPregunta;
+import com.ingesoft.interpro.facades.EncuestaEstilosAprendizajeFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
@@ -33,11 +33,12 @@ import javax.faces.event.ActionEvent;
 public class EstiloController extends Controller implements Serializable, EncuestaControllerInterface {
 
     @EJB
-    private com.ingesoft.interpro.facades.RespuestaEstiloFacade ejbFacade;
-    private List<RespuestaEstilo> items = null;
-    private RespuestaEstilo selected;
+    private com.ingesoft.interpro.facades.EncuestaEstilosAprendizajeFacade ejbFacade;
+    private EncuestaEstilosAprendizaje selected;
+    
     private List<RespuestaEstilo> grupo = null;
-    private List<PreguntaEstilosAprendizajeFs> listaPreguntas = null;
+    private List<RespuestaEstilo> itemsRespuestas = null;
+    private List<PreguntaEstilosAprendizaje> listaPreguntas = null;
     
     /**
      * Cantidad de preguntas por pagina 
@@ -68,9 +69,9 @@ public class EstiloController extends Controller implements Serializable, Encues
     }
 
     public int getNumGrupos() {
-        items = getRespuestas();
-        numGrupos = items.size() / tamGrupo;
-        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        itemsRespuestas = getRespuestas();
+        numGrupos = itemsRespuestas.size() / tamGrupo;
+        numGrupos += (itemsRespuestas.size() % tamGrupo == 0 ? 0 : 1);
         return numGrupos;
     }
     
@@ -82,11 +83,11 @@ public class EstiloController extends Controller implements Serializable, Encues
         this.grupo = grupo;
     }
 
-    public RespuestaEstilo getSelected() {
+    public EncuestaEstilosAprendizaje getSelected() {
         return selected;
     }
 
-    public void setSelected(RespuestaEstilo selected) {
+    public void setSelected(EncuestaEstilosAprendizaje selected) {
         this.selected = selected;
     }
 
@@ -97,54 +98,67 @@ public class EstiloController extends Controller implements Serializable, Encues
     }
 
     @Override
-    protected RespuestaEstiloFacade getFacade() {
+    protected EncuestaEstilosAprendizajeFacade getFacade() {
         return ejbFacade;
     }
 
-    public RespuestaEstilo prepareCreate() {
-        selected = new RespuestaEstilo();
+    public EncuestaEstilosAprendizaje prepareCreate() {
+        selected = new EncuestaEstilosAprendizaje();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloCreated"), selected);
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaEstiloCreated"), selected);
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloUpdated"), selected);
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaEstiloUpdated"), selected);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloDeleted"), selected);
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("EncuestaEstiloDeleted"), selected);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<RespuestaEstilo> obtenerTodosPorEncuesta(Encuesta encuesta) {
-        return getFacade().getItemsXEncuesta(encuesta);
-    }
-    
     public List<RespuestaEstilo> getRespuestas() {
-        if (items == null) {
+        if (itemsRespuestas == null) {
+            if(encuesta == null){
+                this.encuesta = getEncuestaController().getSelected();
+            }
+            if(listaPreguntas == null){
+                listaPreguntas = getPreguntaEstilosAprendizajeController().getItems();
+            }
             int contPuntosRecuperados = 0;
             if(encuesta.getPuntajeEncuesta() != null && encuesta.getPuntajeEncuesta() >= 0) {
                 contPuntosRecuperados = encuesta.getPuntajeEncuesta();
             }
-            items = new ArrayList<>(listaPreguntas.size());
-            vecContadorRespuestasEstiloApren =  new int[listaPreguntas.size()];
-            vecContadorRespuestasEstiloApren = new int[listaPreguntas.size()]; // puntos
-            List<RespuestaEstilo> items_recuperados = obtenerTodosPorEncuesta(encuesta);
-            for (PreguntaEstilosAprendizajeFs pregunta : listaPreguntas) {
-                selected = new RespuestaEstilo(pregunta, this.encuesta);
+            int tamListPreguntas = listaPreguntas.size();
+            itemsRespuestas = new ArrayList<>(tamListPreguntas);
+            vecContadorRespuestasEstiloApren =  new int[tamListPreguntas];
+            vecContadorRespuestasEstiloApren = new int[tamListPreguntas]; // puntos
+            if(encuesta.getEncuestaEstilosAprendizaje() == null){
+                selected = new EncuestaEstilosAprendizaje(this.encuesta);
+//                this.update();
+                this.encuesta.setEncuestaEstilosAprendizaje(selected);
+                getEncuestaController().update();
+                this.encuesta = getEncuestaController().getSelected();
+            } else {
+                 selected = encuesta.getEncuestaEstilosAprendizaje();
+            }
+            List<RespuestaEstilo> items_recuperados = getRespuestaEstilosControllerController().obtenerTodosPorEncuesta(selected);
+            RespuestaEstilo unaRespuestaEstilo;
+            for (PreguntaEstilosAprendizaje pregunta : listaPreguntas) {
+                unaRespuestaEstilo = new RespuestaEstilo(pregunta, selected);
                 Character respuesta = null;
                 if (items_recuperados != null && !items_recuperados.isEmpty()) {
-                    int indice = items_recuperados.indexOf(selected);
+                    int indice = items_recuperados.indexOf(unaRespuestaEstilo);
                     if (indice >= 0) {
                         int i = (pregunta.getOrden() - 1);
                         vecContadorRespuestasEstiloApren[i]++;//desactivar puntos a respuestas respondidas anteriormente
@@ -158,9 +172,9 @@ public class EstiloController extends Controller implements Serializable, Encues
                     getEncuestaController().addPuntos_eval(1);
                 }
                 if(respuesta != null){
-                    selected.setRespuesta(respuesta);
+                    unaRespuestaEstilo.setRespuesta(respuesta);
                 }
-                items.add(selected);
+                itemsRespuestas.add(unaRespuestaEstilo);
             }
             encuesta.setPuntajeEncuesta(contPuntosRecuperados);
         }
@@ -168,22 +182,18 @@ public class EstiloController extends Controller implements Serializable, Encues
         //ubicar la encuesta en la ultima pagina respondida
         // TODO
         
-        return items;
+        return itemsRespuestas;
     }
     
-    public List<RespuestaEstilo> getItemsXEncuesta(Encuesta encuesta) {
-        return getFacade().getItemsXEncuesta(encuesta);
-    }
-    
-    public RespuestaEstilo getRespuestaEstilo(RespuestaEstiloPK id) {
+    public EncuestaEstilosAprendizaje getRespuestaEstilo(Integer id) {
         return getFacade().find(id);
     }
 
-    public List<RespuestaEstilo> getItemsAvailableSelectMany() {
+    public List<EncuestaEstilosAprendizaje> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<RespuestaEstilo> getItemsAvailableSelectOne() {
+    public List<EncuestaEstilosAprendizaje> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
@@ -208,7 +218,7 @@ public class EstiloController extends Controller implements Serializable, Encues
     public HiloGuardado guardarRespuestas(List<RespuestaEstilo> listaRespuestas) {
         // guardar respuestas actuales
         if (listaRespuestas != null && !listaRespuestas.isEmpty()) {
-            HiloGuardado hilo = new HiloGuardado(listaRespuestas);
+            HiloGuardado hilo = new HiloGuardado(listaRespuestas, getRespuestaEstilosControllerController());
             hilo.start();
             return hilo;
         }
@@ -221,16 +231,16 @@ public class EstiloController extends Controller implements Serializable, Encues
      * @return
      */
     public List<RespuestaEstilo> getGrupoItems(int numGrupo){
-        items = getRespuestas();
+        itemsRespuestas = getRespuestas();
         
         guardarRespuestas(grupo);
         
         List<RespuestaEstilo> listaRespuestas = null;
-        if (items != null) {
+        if (itemsRespuestas != null) {
             listaRespuestas = new ArrayList<>();
             for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
-                if (i >= 0 && i < items.size()) {
-                    listaRespuestas.add(items.get(i));
+                if (i >= 0 && i < itemsRespuestas.size()) {
+                    listaRespuestas.add(itemsRespuestas.get(i));
                 } else {
                     break;
                 }
@@ -247,7 +257,7 @@ public class EstiloController extends Controller implements Serializable, Encues
 
     @Override
     public void prepararEncuesta(Encuesta encuesta) {
-        listaPreguntas = getPreguntaEstilosAprendizajeFsController().getItems();
+        listaPreguntas = getPreguntaEstilosAprendizajeController().getItems();
         this.encuesta = encuesta;
         pasoActual = 0;
         
@@ -264,25 +274,25 @@ public class EstiloController extends Controller implements Serializable, Encues
     public class HiloGuardado extends Thread {
 
         private final List<RespuestaEstilo> itemsRespuestas;
+        RespuestaEstilosController estilosControleler;
 
-        public HiloGuardado(List<RespuestaEstilo> itemsRespuestas) {
+        public HiloGuardado(List<RespuestaEstilo> itemsRespuestas, RespuestaEstilosController estilosControleler) {
             this.itemsRespuestas = itemsRespuestas;
+            this.estilosControleler = estilosControleler;
         }
 
         @Override
         public void run() {
             for (RespuestaEstilo respuesta : itemsRespuestas) {
-                getFacade().edit(respuesta);
+                this.estilosControleler.getFacade().edit(respuesta);
             }
             System.out.println("Termino de guardar Respuestas Estilo A");
         }
 
     }
-    @FacesConverter(forClass = RespuestaEstilo.class)
+    
+    @FacesConverter(forClass = EncuestaEstilosAprendizaje.class)
     public static class RespuestaEstiloControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
@@ -290,37 +300,32 @@ public class EstiloController extends Controller implements Serializable, Encues
                 return null;
             }
             EstiloController controller = (EstiloController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "respuestaAmbienteController");
+                    getValue(facesContext.getELContext(), null, "estiloController");
             return controller.getRespuestaEstilo(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.RespuestaEstiloPK getKey(String value) {
-            com.ingesoft.interpro.entidades.RespuestaEstiloPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.RespuestaEstiloPK();
-            key.setIdpregunta_estilos(Integer.parseInt(values[0]));
-            key.setEncuesta_idEncuesta(Integer.parseInt(values[1]));
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.RespuestaEstiloPK value) {
+        String getStringKey(Integer value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdpregunta_estilos());
-            sb.append(SEPARATOR);
-            sb.append(value.getEncuesta_idEncuesta());
+            sb.append(value);
             return sb.toString();
         }
 
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
+             if (object == null) {
                 return null;
             }
-            if (object instanceof RespuestaEstilo) {
-                RespuestaEstilo o = (RespuestaEstilo) object;
-                return getStringKey(o.getRespuestaEstiloPK());
+            if (object instanceof EncuestaEstilosAprendizaje) {
+                EncuestaEstilosAprendizaje o = (EncuestaEstilosAprendizaje) object;
+                return getStringKey(o.getIdEncuesta());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), RespuestaEstilo.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), EncuestaEstilosAprendizaje.class.getName()});
                 return null;
             }
         }
@@ -385,8 +390,11 @@ public class EstiloController extends Controller implements Serializable, Encues
         
         Thread hilo = guardarRespuestas(grupo);
         hilo.join();
+        // colocar como finalizada y guarda cambios
+        getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
+        update();
         
-        estadisticaEncuentaEstiloApren = estadisticaEncuesta(encuesta);
+        estadisticaEncuentaEstiloApren = estadisticaEncuesta(encuesta.getEncuestaEstilosAprendizaje());
         
         pasoActual += 1;
         getEncuestaController().finalizarEncuesta();
@@ -395,36 +403,22 @@ public class EstiloController extends Controller implements Serializable, Encues
     
         
     public List<RespuestaEstilo> actualizarTodasRespuestas() throws IOException, InterruptedException {
-        for (RespuestaEstilo item : items) {
-            this.getFacade().edit(item);
-        }
+        RespuestaEstilosController estilosControleler = getRespuestaEstilosControllerController();
+        estilosControleler.actualizarTodasRespuestas(itemsRespuestas);
         pasoActual = (numGrupos - 1);
         finalizarEncuesta();
-        return items;
+        return itemsRespuestas;
     }
-    
-    
-    // public void estadisticaEncuestaPrueba(){
-        
-    //     int idEncuesta = 727;
-    //     Encuesta encuesta = this.getEncuestaController().getEncuesta(idEncuesta);
-    //     ContadorTiposEstilos[] listaContadorTiposEstilos = this.estadisticaEncuesta(encuesta);
-    //     for (ContadorTiposEstilos item : listaContadorTiposEstilos) {
-    //         System.out.println("resta: "+ item.getContador() + "| tipoEstilo: "+item.getTipoEstilo().getNombre());
-            
-    //     }
-        
-    // }
     
     /**
      * Calcula Estadistica de tipo estilo de una encuesta
      * @param encuesta
      * @return 
      */
-    public ContadorTiposEstilos[] estadisticaEncuesta(Encuesta encuesta){
-        this.items = this.getEstiloController().getItemsXEncuesta(encuesta);
+    public ContadorTiposEstilos[] estadisticaEncuesta(EncuestaEstilosAprendizaje encuesta){
+        this.itemsRespuestas = getRespuestaEstilosControllerController().getItemsXEncuesta(encuesta);
         
-        if(this.items == null ){
+        if(this.itemsRespuestas == null ){
             return null;
         }
         ContadorTiposEstilos[][] contador = new ContadorTiposEstilos[2][4]; /** 8 es la cantidad de tipos de estilo */
@@ -435,12 +429,12 @@ public class EstiloController extends Controller implements Serializable, Encues
         int fila;
         
         /** Sumatoria de tipos de estilo de las respuestas */
-        for (RespuestaEstilo item : this.items) {
-            PreguntaEstilosAprendizajeFs pregunta = item.getIdpreguntaEstilos();
-            List<TipoEstiloPregunta> listaTiposEstiloPregunta = pregunta.getTipoestiloPreguntaList();
+        for (RespuestaEstilo item : this.itemsRespuestas) {
+            PreguntaEstilosAprendizaje pregunta = item.getIdpreguntaEstilos();
+            List<TipoEstiloPregunta> listaTiposEstiloPregunta = pregunta.getTipoEstiloPreguntaList();
             TipoEstiloPregunta obj = (listaTiposEstiloPregunta.get(0).getIndice().equals(item.getRespuesta()))?listaTiposEstiloPregunta.get(0):listaTiposEstiloPregunta.get(1);
                  
-            indice = obj.getTipoEstilo().getIdTipoEstilo()-1;
+            indice = obj.getTipoEstilo().getId()-1;
             columna = indice % 2;
             fila = indice / 2;
             if(contador[columna][fila] == null) {
@@ -467,4 +461,5 @@ public class EstiloController extends Controller implements Serializable, Encues
         }
         return vectorRes;
     }
+
 }

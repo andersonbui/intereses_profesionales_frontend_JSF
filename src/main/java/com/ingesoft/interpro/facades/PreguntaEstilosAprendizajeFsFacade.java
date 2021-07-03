@@ -1,6 +1,6 @@
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
+import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizaje;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
  * @author debian
  */
 @Stateless
-public class PreguntaEstilosAprendizajeFsFacade extends AbstractFacade<PreguntaEstilosAprendizajeFs> {
+public class PreguntaEstilosAprendizajeFsFacade extends AbstractFacade<PreguntaEstilosAprendizaje> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -21,7 +21,7 @@ public class PreguntaEstilosAprendizajeFsFacade extends AbstractFacade<PreguntaE
     }
 
     public PreguntaEstilosAprendizajeFsFacade() {
-        super(PreguntaEstilosAprendizajeFs.class);
+        super(PreguntaEstilosAprendizaje.class);
     }       
     
 }

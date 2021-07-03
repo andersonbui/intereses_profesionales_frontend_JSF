@@ -47,8 +47,8 @@ public class TipoEstiloPreguntaController extends Controller implements Serializ
     
     @Override
     protected void setEmbeddableKeys() {
-        selected.getTipoEstiloPreguntaPK().setIdTipoEstilo(selected.getTipoEstilo().getIdTipoEstilo());
-        selected.getTipoEstiloPreguntaPK().setIdpreguntaEstilos(selected.getPreguntaEstilosAprendizajeFs().getIdpreguntaEstilos());
+        selected.getTipoEstiloPreguntaPK().setIdTipoEstilo(selected.getTipoEstilo().getId());
+        selected.getTipoEstiloPreguntaPK().setIdPreguntaEstilosAprendizaje(selected.getPreguntaEstilosAprendizaje().getId());
     }
 
     protected void initializeEmbeddableKey() {
@@ -125,7 +125,7 @@ public class TipoEstiloPreguntaController extends Controller implements Serializ
             String values[] = value.split(SEPARATOR_ESCAPED);
             key = new TipoEstiloPreguntaPK();
             key.setIdTipoEstilo(Integer.parseInt(values[0]));
-            key.setIdpreguntaEstilos(Integer.parseInt(values[1]));
+            key.setIdPreguntaEstilosAprendizaje(Integer.parseInt(values[1]));
             return key;
         }
 
@@ -133,7 +133,7 @@ public class TipoEstiloPreguntaController extends Controller implements Serializ
             StringBuilder sb = new StringBuilder();
             sb.append(value.getIdTipoEstilo());
             sb.append(SEPARATOR);
-            sb.append(value.getIdpreguntaEstilos());
+            sb.append(value.getIdPreguntaEstilosAprendizaje());
             return sb.toString();
         }
 

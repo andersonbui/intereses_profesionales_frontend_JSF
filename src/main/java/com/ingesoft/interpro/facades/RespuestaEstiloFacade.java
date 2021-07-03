@@ -1,6 +1,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.interpro.entidades.RespuestaEstilo;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -27,9 +28,9 @@ public class RespuestaEstiloFacade extends AbstractFacade<RespuestaEstilo> {
         super(RespuestaEstilo.class);
     }       
     
-    public List<RespuestaEstilo> getItemsXEncuesta(Encuesta encuesta) {
-        Query query = em.createNamedQuery("RespuestaEstilo.findByEncuesta");
-        query.setParameter("encuesta", encuesta);
+    public List<RespuestaEstilo> getItemsXEncuesta(EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
+        Query query = em.createNamedQuery("RespuestaEstilo.findByEncuestaEstilosAprendizaje");
+        query.setParameter("encuestaEstilosAprendizaje", encuestaEstilosAprendizaje);
         List<RespuestaEstilo> lista = query.getResultList();
         if (!lista.isEmpty()) {
             return lista;

@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,37 +40,26 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Encuesta.findAll", query = "SELECT e FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByIdEncuesta", query = "SELECT e FROM Encuesta e WHERE e.idEncuesta = :idEncuesta")
-    , @NamedQuery(name = "Encuesta.findByFecha", query = "SELECT e FROM Encuesta e WHERE e.fecha = :fecha")
+    , @NamedQuery(name = "Encuesta.findByFechaCreacion", query = "SELECT e FROM Encuesta e WHERE e.fechaCreacion = :fecha")
+    , @NamedQuery(name = "Encuesta.findByFechaFinalizada", query = "SELECT e FROM Encuesta e WHERE e.fechaFinalizada = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
-    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.personalidad = :personalidad")
-    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudiante = :estudiante order by e.fecha asc")
-    , @NamedQuery(name = "Encuesta.findByGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado order by e.fecha asc")
-    , @NamedQuery(name = "Encuesta.findByEstudianteGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado AND e.estudiante = :estudiante order by e.fecha asc")
+    , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.encuestaPersonalidad = :encuestaPersonalidad")
+    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudiante = :estudiante order by e.fechaCreacion asc")
+    , @NamedQuery(name = "Encuesta.findByGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado order by e.fechaCreacion asc")
+    , @NamedQuery(name = "Encuesta.findByEstudianteGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado AND e.estudiante = :estudiante order by e.fechaCreacion asc")
 })
 public class Encuesta implements Serializable {
 
+    public static String PENDINENTE = "PENDINENTE";
+    public static String FINALIZADA = "FINALIZADA";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idEncuesta")
     private Integer idEncuesta;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
-    @Size(max = 5)
-    @Column(name = "personalidad")
-    private String personalidad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<AreaEncuesta> areaEncuestaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<RespuestaAmbiente> respuestaAmbienteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta", fetch=FetchType.EAGER)
-    private List<ResultadoPorAmbiente> resultadoPorAmbienteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<RespuestaPorPersonalidad> respuestaPorPersonalidadList;
+    
     @JoinColumn(name = "idAreaProfesional", referencedColumnName = "idAreaProfesional")
     @ManyToOne
     private AreaProfesional idAreaProfesional;
@@ -82,16 +72,45 @@ public class Encuesta implements Serializable {
     @ManyToOne(optional = false)
     private Estudiante estudiante;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
-    private List<RespuestaPersonalidad> respuestaPersonalidadList;
     @Column(name = "puntajeEncuesta")
     private Integer puntajeEncuesta;
+    
     @Column(name = "puntajeEvaluacion")
     private Integer puntajeEvaluacion;
+    
     @Size(max = 15)
     @Column(name = "estado")
     private String estado;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fechaCreacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    
+    @Size(max = 45)
+    @Column(name = "fechaFinalizada")
+    private String fechaFinalizada;
+    
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta", fetch=FetchType.EAGER)
+    private EncuestaEstilosAprendizaje encuestaEstilosAprendizaje;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private EncuestaPersonalidad encuestaPersonalidad;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private EncuestaInteligenciasMultiples encuestaInteligenciasMultiples;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<AreaEncuesta> areaEncuestaList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private List<RespuestaAmbiente> respuestaAmbienteList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta", fetch=FetchType.EAGER)
+    private List<ResultadoPorAmbiente> resultadoPorAmbienteList;
+    
     public Encuesta() {
     }
 
@@ -99,9 +118,9 @@ public class Encuesta implements Serializable {
         this.idEncuesta = idEncuesta;
     }
 
-    public Encuesta(Integer idEncuesta, Date fecha) {
+    public Encuesta(Integer idEncuesta, Date fechaCreacion) {
         this.idEncuesta = idEncuesta;
-        this.fecha = fecha;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public String getEstado() {
@@ -120,20 +139,12 @@ public class Encuesta implements Serializable {
         this.idEncuesta = idEncuesta;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getPersonalidad() {
-        return personalidad;
-    }
-
-    public void setPersonalidad(String personalidad) {
-        this.personalidad = personalidad;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     @XmlTransient
@@ -163,15 +174,6 @@ public class Encuesta implements Serializable {
         this.resultadoPorAmbienteList = resultadoPorAmbienteList;
     }
 
-    @XmlTransient
-    public List<RespuestaPorPersonalidad> getRespuestaPorPersonalidadList() {
-        return respuestaPorPersonalidadList;
-    }
-
-    public void setRespuestaPorPersonalidadList(List<RespuestaPorPersonalidad> respuestaPorPersonalidadList) {
-        this.respuestaPorPersonalidadList = respuestaPorPersonalidadList;
-    }
-
     public AreaProfesional getIdAreaProfesional() {
         return idAreaProfesional;
     }
@@ -196,16 +198,6 @@ public class Encuesta implements Serializable {
         this.grado = grado;
     }
     
-    @XmlTransient
-    public List<RespuestaPersonalidad> getRespuestaPersonalidadList() {
-        return respuestaPersonalidadList;
-    }
-
-    public void setRespuestaPersonalidadList(List<RespuestaPersonalidad> respuestaPersonalidadList) {
-        this.respuestaPersonalidadList = respuestaPersonalidadList;
-    }
-
-
     public Integer getPuntajeEncuesta() {
         return puntajeEncuesta;
     }
@@ -221,6 +213,39 @@ public class Encuesta implements Serializable {
     public void setPuntajeEvaluacion(Integer puntajeEvaluacion) {
         this.puntajeEvaluacion = puntajeEvaluacion;
     }
+    
+    public String getFechaFinalizada() {
+        return fechaFinalizada;
+    }
+
+    public void setFechaFinalizada(String fechaFinalizada) {
+        this.fechaFinalizada = fechaFinalizada;
+    }
+
+    public EncuestaEstilosAprendizaje getEncuestaEstilosAprendizaje() {
+        return encuestaEstilosAprendizaje;
+    }
+
+    public void setEncuestaEstilosAprendizaje(EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
+        this.encuestaEstilosAprendizaje = encuestaEstilosAprendizaje;
+    }
+
+    public EncuestaPersonalidad getEncuestaPersonalidad() {
+        return encuestaPersonalidad;
+    }
+
+    public void setEncuestaPersonalidad(EncuestaPersonalidad encuestaPersonalidad) {
+        this.encuestaPersonalidad = encuestaPersonalidad;
+    }
+
+    public EncuestaInteligenciasMultiples getEncuestaInteligenciasMultiples() {
+        return encuestaInteligenciasMultiples;
+    }
+
+    public void setEncuestaInteligenciasMultiples(EncuestaInteligenciasMultiples encuestaInteligenciasMultiples) {
+        this.encuestaInteligenciasMultiples = encuestaInteligenciasMultiples;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -245,5 +270,5 @@ public class Encuesta implements Serializable {
     public String toString() {
         return "Encuesta[ idEncuesta=" + idEncuesta + " ]";
     }
-    
+
 }

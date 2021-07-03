@@ -56,6 +56,9 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
         Encuesta encuestaSeleccionada = null;
         List<Encuesta> lista = buscarPorEstudiante(estudiante);
         if (lista != null && !lista.isEmpty()) {
+//            lista.stream().filter((t) -> {
+//                return t.getEstado() == null || t.getEstado() == "" || t.getEstado().equals(EncuestaPersonalidad.PENDINENTE) ; 
+//            });
             for (int i = lista.size() - 1; i >= 0; i--) {
 
                 Encuesta encuesta = lista.get(i);
@@ -67,7 +70,6 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
                 }
             }
         }
-        System.out.println("encuestaSeleccionada: " + encuestaSeleccionada);
         return encuestaSeleccionada;
     }
 }

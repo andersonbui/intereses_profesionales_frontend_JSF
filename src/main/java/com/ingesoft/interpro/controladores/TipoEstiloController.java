@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -132,7 +131,7 @@ public class TipoEstiloController  extends Controller implements Serializable {
             }
             if (object instanceof TipoEstilo) {
                 TipoEstilo o = (TipoEstilo) object;
-                return getStringKey(o.getIdTipoEstilo());
+                return getStringKey(o.getId());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), TipoEstilo.class.getName()});
                 return null;

@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "GestionEncuesta")
+@Table(name = "GestionEncuestas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GestionEncuesta.findAll", query = "SELECT e FROM GestionEncuesta e")
-    , @NamedQuery(name = "GestionEncuesta.findById", query = "SELECT e FROM GestionEncuesta e WHERE e.id = :id")
+    @NamedQuery(name = "GestionEncuestas.findAll", query = "SELECT e FROM GestionEncuestas e")
+    , @NamedQuery(name = "GestionEncuestas.findById", query = "SELECT e FROM GestionEncuestas e WHERE e.id = :id")
 })
-public class GestionEncuesta implements Serializable {
+public class GestionEncuestas implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -51,7 +51,7 @@ public class GestionEncuesta implements Serializable {
     @Column(name = "fechaCreacion")
     private Date fechaCreacion;
 
-    public GestionEncuesta() {
+    public GestionEncuestas() {
     }
 
     public Integer getId() {
@@ -96,10 +96,10 @@ public class GestionEncuesta implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GestionEncuesta)) {
+        if (!(object instanceof GestionEncuestas)) {
             return false;
         }
-        GestionEncuesta other = (GestionEncuesta) object;
+        GestionEncuestas other = (GestionEncuestas) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

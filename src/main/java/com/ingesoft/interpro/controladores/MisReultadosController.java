@@ -68,7 +68,7 @@ public class MisReultadosController extends Controller implements Serializable {
             System.out.println("cargarGraficoMisResultado encuesta ");
             List<Encuesta> encuestas = new ArrayList();
             encuestas.add(encuesta);
-            personalidad = encuesta.getPersonalidad();
+            personalidad = encuesta.getEncuestaPersonalidad().getPersonalidad();
             encuestaController.setItems(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
         } else {

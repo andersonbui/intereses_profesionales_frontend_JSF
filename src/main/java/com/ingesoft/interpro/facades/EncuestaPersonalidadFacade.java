@@ -5,8 +5,8 @@
  */
 package com.ingesoft.interpro.facades;
 
-import com.ingesoft.interpro.entidades.GestionEncuestas;
-import java.util.List;
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author debian
  */
 @Stateless
-public class GestionEncuestaFacade extends AbstractFacade<GestionEncuestas> {
+public class EncuestaPersonalidadFacade extends AbstractFacade<EncuestaPersonalidad> {
 
     @PersistenceContext(unitName = "com.ingeniosoft_intereses_profesionales_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -27,18 +27,13 @@ public class GestionEncuestaFacade extends AbstractFacade<GestionEncuestas> {
         return em;
     }
 
-    public GestionEncuestaFacade() {
-        super(GestionEncuestas.class);
+    public EncuestaPersonalidadFacade() {
+        super(EncuestaPersonalidad.class);
     }
-
-    public GestionEncuestas getGestionEncuestaById(int idGestionEncuesta) {
-        Query query = em.createNamedQuery("GestionEncuesta.getGestionEncuestaById");
-        query.setParameter("id", idGestionEncuesta);
-        List<GestionEncuestas> GestionEncuesta = query.getResultList();
-        if (!GestionEncuesta.isEmpty()) {
-            return GestionEncuesta.get(0);
-        }
-        return null;
+    
+    public EncuestaPersonalidad buscarPorEncuesta(Encuesta encuesta) {
+        Query query = em.createNamedQuery("EncuestaPersonalidad.findByEncuesta");
+        EncuestaPersonalidad elem = (EncuestaPersonalidad) query.getSingleResult();
+        return elem;
     }
-
 }

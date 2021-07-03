@@ -108,15 +108,15 @@
 
                                 <p:outputLabel value="Su personalidad es:" style="font-size: 30px; font-weight:bold;"/>
                                 <p:outputLabel style="font-size: 30px; font-weight:bold;"/>
-                                <p:outputLabel value="#{encuestaController.selected.personalidad}"/><br/> <br/>
+                                <p:outputLabel value="#{encuestaController.selected.encuestaPersonalidad.personalidad}"/><br/> <br/>
                                 <center>
                                     <c:forEach begin="0" end="3" var="index">
                                         <div class="personalidad">
                                             <div>
-                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" name="#{encuestaController.resultado_personalidad(index,encuestaController.selected.personalidad)}" class="img_personalidad" style="" />   
+                                                <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.encuestaPersonalidad.personalidad)}" name="#{encuestaController.resultado_personalidad(index,encuestaController.selected.encuestaPersonalidad.personalidad)}" class="img_personalidad" style="" />   
                                             </div>
                                             <div>
-                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.personalidad)}" class="txt_personalidad" />
+                                                <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index,encuestaController.selected.encuestaPersonalidad.personalidad)}" class="txt_personalidad" />
                                             </div>
                                         </div>
                                     </c:forEach>

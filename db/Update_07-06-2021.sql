@@ -106,10 +106,29 @@ ALTER TABLE `interpro`.`RespuestaEstilo`
 DROP FOREIGN KEY `fk_RespuestaEstilo_pregunta_estilos_aprendizaje_FS1`,
 DROP FOREIGN KEY `fk_RespuestaEstilo_Encuesta1`;
 
+INSERT INTO interpro.EncuestaEstilosAprendizaje (
+	SELECT  
+		e.idEncuesta, 
+		e.fechaCreacion, 
+		e.fechaCreacion, 
+		CASE 
+			WHEN COUNT(re.respuesta) = 44  THEN 'FINALIZADA'
+			ELSE 'PENDINENTE'
+		END
+	FROM interpro.Encuesta e 
+	LEFT JOIN interpro.RespuestaEstilo re on re.idEncuestaEstilosAprendizaje = e.idEncuesta 
+	GROUP BY e.idEncuesta
+);
+
 ALTER TABLE `interpro`.`RespuestaEstilo` 
 ADD CONSTRAINT `fk_RespuestaEstilo_PreguntaEstilosAprendizaje`
   FOREIGN KEY (`idPreguntaEstilosAprendizaje`)
   REFERENCES `interpro`.`PreguntaEstilosAprendizaje` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_RespuestaEstilo_EncuestaEstilosAprendizaje1`
+  FOREIGN KEY (`idEncuestaEstilosAprendizaje`)
+  REFERENCES `interpro`.`EncuestaEstilosAprendizaje` (`idEncuesta`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
@@ -225,11 +244,6 @@ CREATE TABLE IF NOT EXISTS `interpro`.`EncuestaEstilosAprendizaje` (
   CONSTRAINT `fk_EncuestaEstilosAprendizaje_Encuesta1`
     FOREIGN KEY (`idEncuesta`)
     REFERENCES `interpro`.`Encuesta` (`idEncuesta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_EncuestaEstilosAprendizaje_RespuestaEstilo1`
-    FOREIGN KEY (`idEncuesta`)
-    REFERENCES `interpro`.`RespuestaEstilo` (`idEncuestaEstilosAprendizaje`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

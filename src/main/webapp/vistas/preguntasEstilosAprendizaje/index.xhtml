@@ -67,7 +67,7 @@
                            <ui:repeat value="#{estiloController.grupo}" var="respuesta">
                                #{respuesta.idpreguntaEstilos.enunciado} <br/>
                                <p:selectOneRadio id="id_resp_estilo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
-                                    <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoestiloPreguntaList}" var="tep" 
+                                    <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoEstiloPreguntaList}" var="tep" 
                                                    itemLabel="#{tep.opcion}" itemValue="#{tep.indice}"  class="pregunta_estilo" />
                                     <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{estiloController.seleccionarPunto(respuesta)}" />
                                 </p:selectOneRadio>

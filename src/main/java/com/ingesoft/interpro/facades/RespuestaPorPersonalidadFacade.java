@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import java.util.List;
@@ -33,9 +34,9 @@ public class RespuestaPorPersonalidadFacade extends AbstractFacade<RespuestaPorP
         super(RespuestaPorPersonalidad.class);
     }
 
-    public List<RespuestaPorPersonalidad> buscarRespuestaPorPersonalidadPorEncuesta(Encuesta encuesta) {
+    public List<RespuestaPorPersonalidad> buscarRespuestaPorPersonalidadPorEncuesta(EncuestaPersonalidad encuesta) {
         Query query = em.createNamedQuery("RespuestaPorPersonalidad.buscarRespuestaPorPersonalidadPorEncuesta");
-        query.setParameter("encuesta", encuesta);
+        query.setParameter("encuestaPersonalidad", encuesta);
         if (!query.getResultList().isEmpty()) {
             List<RespuestaPorPersonalidad> lista = query.getResultList();
             if (!lista.isEmpty()) {

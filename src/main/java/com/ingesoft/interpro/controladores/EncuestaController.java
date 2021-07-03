@@ -5,16 +5,13 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
-import com.ingesoft.interpro.entidades.EstadosEncuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
-import com.ingesoft.interpro.entidades.GestionEncuesta;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EncuestaFacade;
 import java.io.IOException;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -266,6 +263,7 @@ public class EncuestaController extends Controller implements Serializable {
         this.pasoActivo = contadorEncuesta + 1;
         if(contadorEncuesta >= listaencuestas.size()) {
             pasoResumen();
+            return;
         }
         EncuestaControllerInterface encuesta = listaencuestas.get(contadorEncuesta);
         encuesta.prepararEncuesta(selected);
@@ -319,7 +317,7 @@ public class EncuestaController extends Controller implements Serializable {
 
     public void crearEncuesta() {
         selected = new Encuesta();
-        selected.setFecha(new Date());
+        selected.setFechaCreacion(new Date());
         System.out.println("se creo nueva id encuesta");
         selected.setIdEncuesta(getIdEncuesta()); //depronto aqui este el rpoblema, quitar el idencuesta
         setPuntos_encuesta(0);
@@ -333,7 +331,6 @@ public class EncuestaController extends Controller implements Serializable {
      */
     public void prepararYCrear() throws IOException {
         LoginController loginController = getLoginController();
-//        Usuario usu = loginController.getActual();
         Persona persona = loginController.getPersonaActual();
         Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
         obtenerEncuestaSinTerminar(estud);
@@ -357,8 +354,6 @@ public class EncuestaController extends Controller implements Serializable {
         listaencuestas.add(getEstiloController());
         
         detener_reloj = true;
-        getRespuestaAmbienteEvaluacionController().reiniciarEvaluacion();
-        getRespuestaAmbienteController().reiniciar();
         getAreaEncuestaController().inicializar();
 
         try {
@@ -384,11 +379,8 @@ public class EncuestaController extends Controller implements Serializable {
         if (personalidad == null || "".equals(personalidad)) {
             return null;
         }
-//        System.out.println("resultado_personalidad-: "+personalidad);
-//        System.out.println("resultado_personalidad-/personalidad: " + personalidad);
         String result_personalidad = personalidad;
         String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
-//        System.out.println(url);
 
         return url;
 

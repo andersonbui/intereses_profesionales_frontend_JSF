@@ -6,6 +6,7 @@
 package com.ingesoft.interpro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,34 +25,38 @@ import javax.persistence.Table;
 @Table(name = "RespuestaEstilo")
 @NamedQueries({
     @NamedQuery(name = "RespuestaEstilo.findAll", query = "SELECT r FROM RespuestaEstilo r"),
-    @NamedQuery(name = "RespuestaEstilo.findByIdPreguntaEstilos", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.idpregunta_estilos = :idpregunta_estilos"),
-    @NamedQuery(name = "RespuestaEstilo.findByIdEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.Encuesta_idEncuesta = :idEncuesta"),
+    @NamedQuery(name = "RespuestaEstilo.findByIdPreguntaEstilos", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.idPreguntaEstilosAprendizaje = :idPreguntaEstilosAprendizaje"),
+    @NamedQuery(name = "RespuestaEstilo.findByIdEncuestaEstilosAprendizaje", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuestaEstiloPK.idEncuestaEstilosAprendizaje = :idEncuestaEstilosAprendizaje"),
     @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta"),
-    @NamedQuery(name = "RespuestaEstilo.findByEncuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.idEncuesta = :encuesta")
+    @NamedQuery(name = "RespuestaEstilo.findByEncuestaEstilosAprendizaje", query = "SELECT r FROM RespuestaEstilo r WHERE r.encuestaEstilosAprendizaje = :encuestaEstilosAprendizaje")
 })
 public class RespuestaEstilo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     private RespuestaEstiloPK respuestaEstiloPK;
+    
     @Column(name = "respuesta")
     private Character respuesta;
-    @JoinColumn(name = "Encuesta_idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
+    
+    @JoinColumn(name = "idPreguntaEstilosAprendizaje", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Encuesta idEncuesta;
-    @JoinColumn(name = "idpregunta_estilos", referencedColumnName = "idpregunta_estilos", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private PreguntaEstilosAprendizajeFs idpreguntaEstilos;
+    private PreguntaEstilosAprendizaje preguntaEstilosAprendizaje;
 
+    
+    @JoinColumn(name = "idEncuestaEstilosAprendizaje", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private EncuestaEstilosAprendizaje encuestaEstilosAprendizaje;
+    
     public RespuestaEstilo() {
     }
     
-    public RespuestaEstilo(PreguntaEstilosAprendizajeFs idpreguntaEstilos, Encuesta idEncuesta) {
-        this.idpreguntaEstilos = idpreguntaEstilos;
-        this.idEncuesta = idEncuesta;
+    public RespuestaEstilo(PreguntaEstilosAprendizaje idpreguntaEstilos, EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
+        this.preguntaEstilosAprendizaje = idpreguntaEstilos;
+        this.encuestaEstilosAprendizaje = encuestaEstilosAprendizaje;
         this.respuestaEstiloPK = new RespuestaEstiloPK();
-        this.respuestaEstiloPK.setEncuesta_idEncuesta(idEncuesta.getIdEncuesta());
-        this.respuestaEstiloPK.setIdpregunta_estilos(idpreguntaEstilos.getIdpreguntaEstilos());
+        this.respuestaEstiloPK.setIdEncuestaEstilosAprendizaje(encuestaEstilosAprendizaje.getIdEncuesta());
+        this.respuestaEstiloPK.setIdPreguntaEstilosAprendizaje(idpreguntaEstilos.getId());
     }
     
     public RespuestaEstiloPK getRespuestaEstiloPK() {
@@ -69,22 +75,30 @@ public class RespuestaEstilo implements Serializable {
         this.respuesta = respuesta;
     }
 
-    public Encuesta getEncuestaidEncuesta() {
-        return idEncuesta;
+    public EncuestaEstilosAprendizaje getEncuestaEstilosAprendizaje() {
+        return encuestaEstilosAprendizaje;
     }
 
-    public void setEncuestaidEncuesta(Encuesta encuestaidEncuesta) {
-        this.idEncuesta = encuestaidEncuesta;
+    public void setEncuestaEstilosAprendizaje(EncuestaEstilosAprendizaje encuestaidEncuesta) {
+        this.encuestaEstilosAprendizaje = encuestaidEncuesta;
     }
 
-    public PreguntaEstilosAprendizajeFs getIdpreguntaEstilos() {
-        return idpreguntaEstilos;
+    public PreguntaEstilosAprendizaje getIdpreguntaEstilos() {
+        return preguntaEstilosAprendizaje;
     }
 
-    public void setIdpreguntaEstilos(PreguntaEstilosAprendizajeFs idpreguntaEstilos) {
-        this.idpreguntaEstilos = idpreguntaEstilos;
+    public void setIdpreguntaEstilos(PreguntaEstilosAprendizaje idpreguntaEstilos) {
+        this.preguntaEstilosAprendizaje = idpreguntaEstilos;
     }
 
+    public PreguntaEstilosAprendizaje getPreguntaEstilosAprendizaje() {
+        return preguntaEstilosAprendizaje;
+    }
+
+    public void setPreguntaEstilosAprendizaje(PreguntaEstilosAprendizaje preguntaEstilosAprendizaje) {
+        this.preguntaEstilosAprendizaje = preguntaEstilosAprendizaje;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -107,7 +121,7 @@ public class RespuestaEstilo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaEstilo[ respuestaEstiloPK=" + respuestaEstiloPK + " ]";
+        return "RespuestaEstilo[ PK=" + respuestaEstiloPK + " ]";
     }
     
 }

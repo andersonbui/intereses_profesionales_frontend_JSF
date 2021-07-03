@@ -29,17 +29,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RespuestaPorPersonalidad.findByIdTipoPersonalidad", query = "SELECT r FROM RespuestaPorPersonalidad r WHERE r.respuestaPorPersonalidadPK.idTipoPersonalidad = :idTipoPersonalidad")
     , @NamedQuery(name = "RespuestaPorPersonalidad.findByPuntaje", query = "SELECT r FROM RespuestaPorPersonalidad r WHERE r.puntaje = :puntaje")
     , @NamedQuery(name = "RespuestaPorPersonalidad.buscarRespuestaPorPersonalidadPorEncuesta", 
-            query = "SELECT r FROM RespuestaPorPersonalidad r WHERE r.encuesta = :encuesta")})
+            query = "SELECT r FROM RespuestaPorPersonalidad r WHERE r.encuestaPersonalidad = :encuestaPersonalidad")})
 public class RespuestaPorPersonalidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @EmbeddedId
     protected RespuestaPorPersonalidadPK respuestaPorPersonalidadPK;
+    
     @Column(name = "puntaje")
     private Integer puntaje;
+    
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Encuesta encuesta;
+    private EncuestaPersonalidad encuestaPersonalidad;
+    
     @JoinColumn(name = "idTipoPersonalidad", referencedColumnName = "idTipoPersonalidad", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private TipoPersonalidad tipoPersonalidad;
@@ -71,12 +75,12 @@ public class RespuestaPorPersonalidad implements Serializable {
         this.puntaje = puntaje;
     }
 
-    public Encuesta getEncuesta() {
-        return encuesta;
+    public EncuestaPersonalidad getEncuestaPersonalidad() {
+        return encuestaPersonalidad;
     }
 
-    public void setEncuesta(Encuesta encuesta) {
-        this.encuesta = encuesta;
+    public void setEncuestaPersonalidad(EncuestaPersonalidad encuestaPersonalidad) {
+        this.encuestaPersonalidad = encuestaPersonalidad;
     }
 
     public TipoPersonalidad getTipoPersonalidad() {

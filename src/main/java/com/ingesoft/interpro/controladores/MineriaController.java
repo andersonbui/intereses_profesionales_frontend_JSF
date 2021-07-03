@@ -159,7 +159,7 @@ public class MineriaController extends Controller implements Serializable {
     }
 
     private Integer obtenerEdad(Encuesta encuesta) {
-        Date fechaEnc = encuesta.getFecha();
+        Date fechaEnc = encuesta.getFechaCreacion();
         Date fechaNac = encuesta.getEstudiante().getIdPersona().getFechaNacimiento();
         if (fechaEnc == null || fechaNac == null) {
             return 0;

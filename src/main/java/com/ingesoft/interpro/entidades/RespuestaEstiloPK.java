@@ -20,42 +20,43 @@ public class RespuestaEstiloPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Encuesta_idEncuesta")
-    private int Encuesta_idEncuesta;
+    @Column(name = "idEncuestaEstilosAprendizaje")
+    private int idEncuestaEstilosAprendizaje;
+    
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idpregunta_estilos")
-    private int idpregunta_estilos;
+    @Column(name = "idPreguntaEstilosAprendizaje")
+    private int idPreguntaEstilosAprendizaje;
 
     public RespuestaEstiloPK() {
     }
 
-    public RespuestaEstiloPK(int idpregunta_estilos, int Encuesta_idEncuesta) {
-        this.idpregunta_estilos = idpregunta_estilos;
-        this.Encuesta_idEncuesta = Encuesta_idEncuesta;
+    public RespuestaEstiloPK(int idpregunta_estilos, int idEncuestaEstilosAprendizaje) {
+        this.idPreguntaEstilosAprendizaje = idpregunta_estilos;
+        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
     }
 
-    public int getEncuesta_idEncuesta() {
-        return Encuesta_idEncuesta;
+    public int getIdEncuestaEstilosAprendizaje() {
+        return idEncuestaEstilosAprendizaje;
     }
 
-    public void setEncuesta_idEncuesta(int Encuesta_idEncuesta) {
-        this.Encuesta_idEncuesta = Encuesta_idEncuesta;
+    public void setIdEncuestaEstilosAprendizaje(int idEncuestaEstilosAprendizaje) {
+        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
     }
 
-    public int getIdpregunta_estilos() {
-        return idpregunta_estilos;
+    public int getIdPreguntaEstilosAprendizaje() {
+        return idPreguntaEstilosAprendizaje;
     }
 
-    public void setIdpregunta_estilos(int idpregunta_estilos) {
-        this.idpregunta_estilos = idpregunta_estilos;
+    public void setIdPreguntaEstilosAprendizaje(int idPreguntaEstilosAprendizaje) {
+        this.idPreguntaEstilosAprendizaje = idPreguntaEstilosAprendizaje;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idpregunta_estilos;
-        hash += (int) Encuesta_idEncuesta;
+        hash += (int) idPreguntaEstilosAprendizaje;
+        hash += (int) idEncuestaEstilosAprendizaje;
         return hash;
     }
 
@@ -66,10 +67,10 @@ public class RespuestaEstiloPK implements Serializable {
             return false;
         }
         RespuestaEstiloPK other = (RespuestaEstiloPK) object;
-        if (this.idpregunta_estilos != other.idpregunta_estilos) {
+        if (this.idPreguntaEstilosAprendizaje != other.idPreguntaEstilosAprendizaje) {
             return false;
         }
-        if (this.Encuesta_idEncuesta != other.Encuesta_idEncuesta) {
+        if (this.idEncuestaEstilosAprendizaje != other.idEncuestaEstilosAprendizaje) {
             return false;
         }
         return true;
@@ -77,7 +78,7 @@ public class RespuestaEstiloPK implements Serializable {
 
     @Override
     public String toString() {
-        return "RespuestaEstiloPK{" + "Encuesta_idEncuesta=" + Encuesta_idEncuesta + ", idpregunta_estilos=" + idpregunta_estilos + '}';
+        return "RespuestaEstiloPK{" + "Encuesta_idEncuesta=" + idEncuestaEstilosAprendizaje + ", idpregunta_estilos=" + idPreguntaEstilosAprendizaje + '}';
     }
     
 }

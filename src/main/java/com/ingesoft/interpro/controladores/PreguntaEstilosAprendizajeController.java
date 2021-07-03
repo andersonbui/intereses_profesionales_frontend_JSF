@@ -1,6 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizajeFs;
+import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizaje;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
@@ -13,27 +13,27 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-@ManagedBean(name = "preguntaEstilosAprendizajeFsController")
+@ManagedBean(name = "preguntaEstilosAprendizajeController")
 @SessionScoped
-public class PreguntaEstilosAprendizajeFsController extends Controller implements Serializable {
+public class PreguntaEstilosAprendizajeController extends Controller implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade ejbFacade;
-    private List<PreguntaEstilosAprendizajeFs> items = null;
-    private PreguntaEstilosAprendizajeFs selected;
+    private List<PreguntaEstilosAprendizaje> items = null;
+    private PreguntaEstilosAprendizaje selected;
 
-    public PreguntaEstilosAprendizajeFsController() {
+    public PreguntaEstilosAprendizajeController() {
     }
 
     public void inicializar(Encuesta selected) {
 
     }
 
-    public PreguntaEstilosAprendizajeFs getSelected() {
+    public PreguntaEstilosAprendizaje getSelected() {
         return selected;
     }
 
-    public void setSelected(PreguntaEstilosAprendizajeFs selected) {
+    public void setSelected(PreguntaEstilosAprendizaje selected) {
         this.selected = selected;
     }
 
@@ -50,8 +50,8 @@ public class PreguntaEstilosAprendizajeFsController extends Controller implement
         return ejbFacade;
     }
 
-    public PreguntaEstilosAprendizajeFs prepareCreate() {
-        selected = new PreguntaEstilosAprendizajeFs();
+    public PreguntaEstilosAprendizaje prepareCreate() {
+        selected = new PreguntaEstilosAprendizaje();
         initializeEmbeddableKey();
         return selected;
     }
@@ -75,22 +75,22 @@ public class PreguntaEstilosAprendizajeFsController extends Controller implement
         }
     }
 
-    public List<PreguntaEstilosAprendizajeFs> getItems() {
+    public List<PreguntaEstilosAprendizaje> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
         return items;
     }
 
-    public PreguntaEstilosAprendizajeFs getPreguntaEstilosAprendizajeFs(Integer id) {
+    public PreguntaEstilosAprendizaje getPreguntaEstilosAprendizajeFs(Integer id) {
         return getFacade().find(id);
     }
 
-    public List<PreguntaEstilosAprendizajeFs> getItemsAvailableSelectMany() {
+    public List<PreguntaEstilosAprendizaje> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<PreguntaEstilosAprendizajeFs> getItemsAvailableSelectOne() {
+    public List<PreguntaEstilosAprendizaje> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 

@@ -24,7 +24,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "areaEncuestaController")
 @SessionScoped
-public class AreaEncuestaController extends Controller implements Serializable {
+public class AreaEncuestaController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.AreaEncuestaFacade ejbFacade;

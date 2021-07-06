@@ -31,7 +31,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "estadisticaAreasController")
 @SessionScoped
-public class EstadisticaAreasController extends Controller implements Serializable {
+public class EstadisticaAreasController extends Controllers implements Serializable {
 
     Institucion institucion;
     Grado grado;

@@ -7,7 +7,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "gestionVarMinView")
 @SessionScoped
-public class GestionVarMineriaView extends Controller implements Serializable {
+public class GestionVarMineriaView extends Controllers implements Serializable {
 
     public String[] variables;
     public String[] variablesSeleccionadas;

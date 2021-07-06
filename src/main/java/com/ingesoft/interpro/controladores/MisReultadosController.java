@@ -16,7 +16,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "misResultadosController")
 @SessionScoped
-public class MisReultadosController extends Controller implements Serializable {
+public class MisReultadosController extends Controllers implements Serializable {
 
     Institucion institucion;
     Grado grado;

@@ -35,7 +35,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaPersonalidadController")
 @SessionScoped
-public class RespuestaPersonalidadController extends Controller implements Serializable, EncuestaControllerInterface {
+public class RespuestaPersonalidadController extends Controllers implements Serializable, EncuestaControllerInterface {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaPersonalidadFacade ejbFacade;

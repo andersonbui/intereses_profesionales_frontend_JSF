@@ -29,7 +29,7 @@ import org.brickred.socialauth.SocialAuthManager;
  */
 @ManagedBean(name = "loginFacebookController")
 @SessionScoped
-public class LoginFacebookController extends Controller implements Serializable {
+public class LoginFacebookController extends Controllers implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 

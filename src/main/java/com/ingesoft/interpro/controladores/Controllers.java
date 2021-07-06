@@ -8,6 +8,9 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.PreguntaInteligenciasMultiplesController;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.RespuestaInteligenciasMultiplesController;
 import java.io.Serializable;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -23,7 +26,7 @@ import org.brickred.socialauth.SocialAuthManager;
  *
  * @author debian
  */
-public abstract class Controller implements Serializable {
+public abstract class Controllers implements Serializable {
 
     protected abstract AbstractFacade getFacade();
 
@@ -290,6 +293,26 @@ public abstract class Controller implements Serializable {
         EncuestaController encuestaController = (EncuestaController) elResolver.getValue(facesContext.getELContext(), null, "encuestaController");
         return encuestaController;
     }
+    public PreguntaInteligenciasMultiplesController getPreguntaInteligenciasMultiplesController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PreguntaInteligenciasMultiplesController preguntaInteligenciasMultiplesController = (PreguntaInteligenciasMultiplesController) elResolver.getValue(facesContext.getELContext(), null, "preguntaInteligenciasMultiplesController");
+        return preguntaInteligenciasMultiplesController;
+    }
+    
+    public RespuestaInteligenciasMultiplesController getRespuestaInteligenciasMultiplesController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaInteligenciasMultiplesController respuestaInteligenciasMultiplesController = (RespuestaInteligenciasMultiplesController) elResolver.getValue(facesContext.getELContext(), null, "respuestaInteligenciasMultiplesController");
+        return respuestaInteligenciasMultiplesController;
+    }
+    
+    public EncuestaInteligenciasMultiplesController getEncuestaInteligenciasMultiplesController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EncuestaInteligenciasMultiplesController encuestaInteligenciasMultiplesController = (EncuestaInteligenciasMultiplesController) elResolver.getValue(facesContext.getELContext(), null, "encuestaInteligenciasMultiplesController");
+        return encuestaInteligenciasMultiplesController;
+    }
     
     public EncuestaPersonalidadController getEncuestaPersonalidadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -353,4 +376,5 @@ public abstract class Controller implements Serializable {
         PreguntaPersonalidadController preguntaPersonalidadController = (PreguntaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "preguntaPersonalidadController");
         return preguntaPersonalidadController;
     }
+    
 }

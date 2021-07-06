@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades;
 
+import com.ingesoft.interpro.controladores.util.PreguntaEncuesta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -37,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PreguntaInteligenciasMultiples.findById", query = "SELECT p FROM PreguntaInteligenciasMultiples p WHERE p.id = :id"),
     @NamedQuery(name = "PreguntaInteligenciasMultiples.findByEnunciado", query = "SELECT p FROM PreguntaInteligenciasMultiples p WHERE p.enunciado = :enunciado"),
     @NamedQuery(name = "PreguntaInteligenciasMultiples.findByOrden", query = "SELECT p FROM PreguntaInteligenciasMultiples p WHERE p.orden = :orden")})
-public class PreguntaInteligenciasMultiples implements Serializable {
+public class PreguntaInteligenciasMultiples extends PreguntaEncuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades;
 
 import java.io.Serializable;
 import java.util.List;

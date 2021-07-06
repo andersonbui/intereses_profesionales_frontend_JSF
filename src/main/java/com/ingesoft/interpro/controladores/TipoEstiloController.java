@@ -21,7 +21,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "tipoEstiloController")
 @SessionScoped
-public class TipoEstiloController  extends Controller implements Serializable {
+public class TipoEstiloController  extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.TipoEstiloFacade ejbFacade;

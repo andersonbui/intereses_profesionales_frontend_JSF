@@ -30,7 +30,7 @@ import javax.faces.event.ActionEvent;
  */
 @ManagedBean(name = "recuperarController")
 @SessionScoped
-public class RecuperarController extends Controller implements Serializable {
+public class RecuperarController extends Controllers implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 

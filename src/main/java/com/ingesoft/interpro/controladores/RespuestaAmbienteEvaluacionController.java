@@ -21,7 +21,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "respuestaAmbienteEvaluacionController")
 @SessionScoped
-public class RespuestaAmbienteEvaluacionController extends Controller implements Serializable {
+public class RespuestaAmbienteEvaluacionController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaAmbienteFacade ejbFacade;

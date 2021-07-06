@@ -30,7 +30,7 @@ import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "estiloController")
 @SessionScoped
-public class EstiloController extends Controller implements Serializable, EncuestaControllerInterface {
+public class EstiloController extends Controllers implements Serializable, EncuestaControllerInterface {
 
     @EJB
     private com.ingesoft.interpro.facades.EncuestaEstilosAprendizajeFacade ejbFacade;

@@ -22,7 +22,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "tipoEstiloPreguntaController")
 @SessionScoped
-public class TipoEstiloPreguntaController extends Controller implements Serializable {
+public class TipoEstiloPreguntaController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.TipoEstiloPreguntaFacade ejbFacade;

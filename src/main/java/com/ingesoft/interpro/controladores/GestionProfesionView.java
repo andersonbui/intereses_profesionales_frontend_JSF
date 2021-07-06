@@ -13,7 +13,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "gestionProfesionView")
 @SessionScoped
-public class GestionProfesionView extends Controller implements Serializable {
+public class GestionProfesionView extends Controllers implements Serializable {
 
     @EJB
     public ConfigMineriaFacade ejbFacade;

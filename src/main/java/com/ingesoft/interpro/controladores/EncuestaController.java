@@ -29,7 +29,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
-public class EncuestaController extends Controller implements Serializable {
+public class EncuestaController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.EncuestaFacade ejbFacade;
@@ -297,7 +297,7 @@ public class EncuestaController extends Controller implements Serializable {
         sinterminar = null;
     }
 
-    private void obtenerEncuestaSinTerminar(Estudiante estudiante) {
+    protected void obtenerEncuestaSinTerminar(Estudiante estudiante) {
         sinterminar = getFacade().encuestaSinTerminar(estudiante);
     }
 
@@ -432,8 +432,9 @@ public class EncuestaController extends Controller implements Serializable {
         }
     }
 
-    public void update() {
+    public Encuesta update() {
         selected = (Encuesta) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EncuestaUpdated"), selected);
+        return selected;
     }
 
     public void destroy() {

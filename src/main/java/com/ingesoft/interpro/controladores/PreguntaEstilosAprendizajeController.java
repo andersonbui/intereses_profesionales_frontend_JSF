@@ -15,7 +15,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "preguntaEstilosAprendizajeController")
 @SessionScoped
-public class PreguntaEstilosAprendizajeController extends Controller implements Serializable {
+public class PreguntaEstilosAprendizajeController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade ejbFacade;

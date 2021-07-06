@@ -28,7 +28,7 @@ import org.primefaces.event.FlowEvent;
 
 @ManagedBean(name = "estudianteController")
 @SessionScoped
-public class EstudianteController extends Controller implements Serializable {
+public class EstudianteController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.EstudianteFacade ejbFacade;

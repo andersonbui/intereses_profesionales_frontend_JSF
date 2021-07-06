@@ -20,7 +20,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "gradoController")
 @SessionScoped
-public class GradoController extends Controller {
+public class GradoController extends Controllers {
 
     @EJB
     private com.ingesoft.interpro.facades.GradoFacade ejbFacade;

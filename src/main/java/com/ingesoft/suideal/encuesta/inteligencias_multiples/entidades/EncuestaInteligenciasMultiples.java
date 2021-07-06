@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades;
 
+import com.ingesoft.interpro.entidades.Encuesta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -82,6 +83,11 @@ public class EncuestaInteligenciasMultiples implements Serializable {
         this.idEncuesta = idEncuesta;
     }
 
+    public EncuestaInteligenciasMultiples(Encuesta encuesta) {
+        this.idEncuesta = encuesta.getIdEncuesta();
+        this.encuesta = encuesta;
+    }
+    
     public Integer getIdEncuesta() {
         return idEncuesta;
     }
@@ -137,6 +143,7 @@ public class EncuestaInteligenciasMultiples implements Serializable {
 
     public void setEncuesta(Encuesta encuesta) {
         this.encuesta = encuesta;
+        this.idEncuesta = encuesta.getIdEncuesta();
     }
 
     @Override

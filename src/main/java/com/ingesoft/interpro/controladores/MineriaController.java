@@ -24,7 +24,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "mineriaController")
 @SessionScoped
-public class MineriaController extends Controller implements Serializable {
+public class MineriaController extends Controllers implements Serializable {
 
     Map<String, Boolean> camposActivos;
     String ruta_descarga = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/")+"/resources/downloads/";

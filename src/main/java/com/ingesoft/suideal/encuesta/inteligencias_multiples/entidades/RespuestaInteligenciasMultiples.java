@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades;
 
-import java.io.Serializable;
+import com.ingesoft.interpro.controladores.util.RespuestaEncuestaAbstract;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByIdEncuestaInteligenciasMultiples", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuestaInteligenciasMultiplesPK.idEncuestaInteligenciasMultiples = :idEncuestaInteligenciasMultiples"),
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByIdPreguntaInteligenciasMultiples", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuestaInteligenciasMultiplesPK.idPreguntaInteligenciasMultiples = :idPreguntaInteligenciasMultiples"),
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByRespuesta", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuesta = :respuesta")})
-public class RespuestaInteligenciasMultiples implements Serializable {
+public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  {
 
     private static final long serialVersionUID = 1L;
     
@@ -45,14 +46,29 @@ public class RespuestaInteligenciasMultiples implements Serializable {
     @JoinColumn(name = "idPreguntaInteligenciasMultiples", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PreguntaInteligenciasMultiples preguntaInteligenciasMultiples;
+    
+    @Transient
+    private boolean estaRespondida;
 
     public RespuestaInteligenciasMultiples() {
+        this.estaRespondida = false;
     }
 
     public RespuestaInteligenciasMultiples(RespuestaInteligenciasMultiplesPK respuestaInteligenciasMultiplesPK) {
         this.respuestaInteligenciasMultiplesPK = respuestaInteligenciasMultiplesPK;
     }
 
+    public void inicializar(
+            EncuestaInteligenciasMultiples encuestaInteligenciasMultiples, 
+            PreguntaInteligenciasMultiples preguntaInteligenciasMultiples) {
+        
+        this.encuestaInteligenciasMultiples = encuestaInteligenciasMultiples;
+        this.preguntaInteligenciasMultiples = preguntaInteligenciasMultiples;
+        this.respuestaInteligenciasMultiplesPK = new RespuestaInteligenciasMultiplesPK(
+            encuestaInteligenciasMultiples.getIdEncuesta(), 
+            preguntaInteligenciasMultiples.getId()
+        );
+    }
     public RespuestaInteligenciasMultiples(int idEncuestaInteligenciasMultiples, int idPreguntaInteligenciasMultiples) {
         this.respuestaInteligenciasMultiplesPK = new RespuestaInteligenciasMultiplesPK(idEncuestaInteligenciasMultiples, idPreguntaInteligenciasMultiples);
     }
@@ -89,6 +105,19 @@ public class RespuestaInteligenciasMultiples implements Serializable {
         this.preguntaInteligenciasMultiples = preguntaInteligenciasMultiples;
     }
 
+    public boolean isRespondida() {
+        return estaRespondida;
+    }
+
+    public void setEstaRespondida(boolean estaRespondida) {
+        this.estaRespondida = estaRespondida;
+    }
+    
+    @Override
+    public void responder() {
+        setEstaRespondida(true);
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,7 +140,7 @@ public class RespuestaInteligenciasMultiples implements Serializable {
 
     @Override
     public String toString() {
-        return "RespuestaInteligenciasMultiples[ respuestaInteligenciasMultiplesPK=" + respuestaInteligenciasMultiplesPK + " ]";
+        return "RespuestaIntelMultiples[ PK=" + respuestaInteligenciasMultiplesPK + "| respuesta:"+respuesta+"|estaRespondida:"+estaRespondida + " ]";
     }
     
 }

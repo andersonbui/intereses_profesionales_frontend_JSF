@@ -27,7 +27,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean(name = "personaController")
 @SessionScoped
-public class PersonaController extends Controller implements Serializable {
+public class PersonaController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.PersonaFacade ejbFacade;

@@ -38,7 +38,7 @@ import org.brickred.socialauth.util.AccessGrant;
  */
 @ManagedBean(name = "registroController")
 @SessionScoped
-public class RegistroController extends Controller implements Serializable {
+public class RegistroController extends Controllers implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 

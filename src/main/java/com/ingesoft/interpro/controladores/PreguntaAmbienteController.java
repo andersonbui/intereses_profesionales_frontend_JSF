@@ -21,7 +21,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "preguntaAmbienteController")
 @SessionScoped
-public class PreguntaAmbienteController extends Controller implements Serializable {
+public class PreguntaAmbienteController extends Controllers implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

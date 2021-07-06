@@ -23,7 +23,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "tipoUsuarioController")
 @SessionScoped
-public class TipoUsuarioController extends Controller implements Serializable {
+public class TipoUsuarioController extends Controllers implements Serializable {
 
     @EJB
     private com.ingesoft.interpro.facades.TipoUsuarioFacade ejbFacade;

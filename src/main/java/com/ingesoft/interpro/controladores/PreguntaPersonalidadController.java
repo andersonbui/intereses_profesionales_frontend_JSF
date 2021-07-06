@@ -23,7 +23,7 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "preguntaPersonalidadController")
 @SessionScoped
-public class PreguntaPersonalidadController extends Controller {
+public class PreguntaPersonalidadController extends Controllers {
 
     private static final long serialVersionUID = 1L;
     @EJB

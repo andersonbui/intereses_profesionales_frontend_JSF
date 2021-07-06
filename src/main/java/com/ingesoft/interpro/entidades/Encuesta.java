@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.entidades;
 
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

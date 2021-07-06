@@ -29,3 +29,4 @@ nbdist/
 /.directory
 /src/main/java/com/ingesoft/interpro/controladores/util/CredencialesGF.java
 **/downloads
+/nbproject/

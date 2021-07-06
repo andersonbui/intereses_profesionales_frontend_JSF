@@ -12,6 +12,8 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mockito.version>1.10.19</mockito.version>
+        <powermock.version>1.6.6</powermock.version>
     </properties>
     
     <dependencies>
@@ -142,6 +144,24 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -152,6 +172,24 @@
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -202,6 +240,50 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+	      <groupId>org.jacoco</groupId>
+	      <artifactId>jacoco-maven-plugin</artifactId>
+	      <version>0.8.3</version>
+	      <executions>
+	      	<execution>
+	      		<id>prepare-agent</id>
+	      		<goals>
+	      			<goal>prepare-agent</goal>
+	      		</goals>
+	      	</execution>
+	      	<execution>
+	      		<id>report</id>
+	      		<phase>prepare-package</phase>
+	      		<goals>
+	      			<goal>report</goal>
+	      		</goals>
+	      	</execution>
+	      	<execution>
+	      		<id>post-unit-test</id>
+	      		<phase>test</phase>
+	      		<goals>
+	      			<goal>report</goal>
+	      		</goals>
+	      		<configuration>
+	      			<dataFile>target/jacoco.exec</dataFile>
+	      			<outputDirectory>target/my-reports</outputDirectory>
+	      		</configuration>
+	      	</execution>
+	      </executions>
+	      <configuration>
+	      	<systemPropertyVariables>
+	      		<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+	      	</systemPropertyVariables>
+	      </configuration>
+	    </plugin>
+	    <plugin>
+	    	<artifactId>maven-surefire-plugin</artifactId>
+	    	<version>2.22.0</version>
+	    </plugin>
+	    <plugin>
+	    	<artifactId>maven-failsafe-plugin</artifactId>
+	    	<version>2.22.0</version>
+	    </plugin>
         </plugins>
     </build>
     <repositories>

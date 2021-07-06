@@ -37,7 +37,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean(name = "loginController")
 @SessionScoped
-public class LoginController extends Controller implements Serializable {
+public class LoginController extends Controllers implements Serializable {
 
     private static final long serialVersionUID = 3658300628580536494L;
 

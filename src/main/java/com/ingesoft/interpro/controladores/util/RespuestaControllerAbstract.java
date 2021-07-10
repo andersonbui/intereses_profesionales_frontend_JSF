@@ -21,4 +21,11 @@ public abstract class RespuestaControllerAbstract<
     
     public abstract List<RespuestaEncuesta> obtenerTodosPorEncuesta(EncuestaPersonalizada encuestaPersonalizada);
     
+    public List<RespuestaEncuesta> actualizarTodasRespuestas(List<RespuestaEncuesta> respuestas) {
+        for (RespuestaEncuesta item : respuestas) {
+            this.getFacade().edit(item);
+        }
+        return respuestas;
+    }
+    
 }

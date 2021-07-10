@@ -15,4 +15,5 @@ public interface EncuestaControllerInterface {
     void reiniciar();
     void prepararEncuesta(Encuesta encuesta);
     String getRuta();
+    String getName();
 }

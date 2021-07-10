@@ -77,13 +77,8 @@
         <div class="content completo">
             <p:growl id="growl" life="3000" />
             <h:form>
-                <p:steps activeIndex="#{encuestaController.pasoActivo}" styleClass="custom"   readonly="false">
-                    <p:menuitem value="Informacion Personal" outcome="/vistas/encuesta/preguntasPersonalidad.xhtml" url="#"/>
-                    <p:menuitem value="Preguntas ambiente" url="#"/>
-                    <p:menuitem value="Personalidad" url="#"/>
-                    <p:menuitem value="Estilos de aprendizaje" url="#"/> 
-                    <p:menuitem value="Resumen" url="#"/>
-                </p:steps> 
+                <p:steps  activeIndex="#{encuestaController.pasoActivo}" model="#{encuestaController.model}" styleClass="custom" readonly="false">
+                </p:steps>
             </h:form>
             <br/>
             <ui:insert name="content" >Content</ui:insert>

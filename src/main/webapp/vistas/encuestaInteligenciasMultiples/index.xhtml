@@ -22,7 +22,7 @@
                 }
             </style>
             <h:form >
-                <p:dialog header="Instrucciones de encuesta" widgetVar="instruccionesEstilosAprenDialog"
+                <p:dialog header="Instrucciones de encuesta" widgetVar="instruccionesIntelMultiplesDialog"
                           modal="true"  width="50%" height="250px" closable="false" style="padding:10px 40px; width:250px; height:250px;"  >
                     <div style="font-size:1.2em">
                         <p> la descripción para la sección de estilos de aprendizaje.
@@ -33,13 +33,13 @@
                     <div style="width:80px; margin:auto">
                         <p:commandButton value="Aceptar" update="@form,PreguntasIntelMultiplesForm" ajax="true" 
                                          actionListener="#{encuestaController.arrancarReloj()}" 
-                                         onclick="PF('instruccionesEstilosAprenDialog').hide();" />
+                                         onclick="PF('instruccionesIntelMultiplesDialog').hide();" />
                     </div>
                 </p:dialog>
             </h:form>
             <h:outputScript >
                 $(document).ready(function () {
-                PF('instruccionesEstilosAprenDialog').show();
+                PF('instruccionesIntelMultiplesDialog').show();
                 });
             </h:outputScript>
             <h:form id="PreguntasIntelMultiplesForm" >
@@ -65,12 +65,7 @@
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                            <br/>
                            <ui:repeat value="#{encuestaInteligenciasMultiplesController.grupoActual}" var="respuesta">
-                               #{respuesta.idpreguntaEstilos.enunciado} <br/>
-                               <p:selectOneRadio id="id_resp_estilo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
-                                    <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoEstiloPreguntaList}" var="tep" 
-                                                   itemLabel="#{tep.opcion}" itemValue="#{tep.indice}"  class="pregunta_estilo" />
-                                    <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{encuestaInteligenciasMultiplesController.seleccionarPunto(respuesta)}" />
-                                </p:selectOneRadio>
+                               #{respuesta.preguntaInteligenciasMultiples.enunciado} <br/>
                            </ui:repeat>
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >

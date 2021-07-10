@@ -248,14 +248,34 @@ public abstract class EncuestaControllerAbstract <
         return listaItemsRespuestas;
     }
     
+    /**
+     * 
+     * @return
+     * @throws InterruptedException 
+     */
+    public List<Respuesta> actualizarTodasRespuestas() throws InterruptedException {
+        RespuestaControllerAbstract unaRespuestaController = getRespuestaController();
+        unaRespuestaController.actualizarTodasRespuestas(getItemsRespuestas());
+        setPasoActual(getNumGrupos() - 1);
+        finalizarEncuesta();
+        return getItemsRespuestas();
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws java.lang.InterruptedException
+     */
+    public abstract boolean finalizarEncuesta() throws InterruptedException ;
+    
     /**************************************************************************
      * Abstracts methods
      **************************************************************************/
-//    /**
-//     * 
-//     * @return 
-//     */
-//    public abstract List<Respuesta> getRespuestas();
+    /**
+     * 
+     * @return 
+     */
+//    public abstract boolean finalizarEncuesta() throws InterruptedException;
 
     /**
      * 

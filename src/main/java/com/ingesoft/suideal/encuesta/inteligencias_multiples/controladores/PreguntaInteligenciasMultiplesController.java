@@ -1,7 +1,6 @@
 package com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores;
 
 import com.ingesoft.interpro.controladores.util.PreguntaControllerAbstract;
-import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.PreguntaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.PreguntaInteligenciasMultiplesFacade;
@@ -28,19 +27,29 @@ public class PreguntaInteligenciasMultiplesController extends PreguntaController
     @EJB
     protected PreguntaInteligenciasMultiplesFacade ejbFacade;
     
+    
+    /************************************************************************
+     * CONSTRUCTORS
+     ************************************************************************/
+    
+    /**
+     * 
+     */
     public PreguntaInteligenciasMultiplesController() {
-    }
-
-    public void inicializar(Encuesta selected) {
-    }
-
-    @Override
-    protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
     }
 
+    
+    /************************************************************************
+     * Funciones personalizadas
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     public PreguntaInteligenciasMultiples prepareCreate() {
         setSelected(new PreguntaInteligenciasMultiples());
@@ -48,6 +57,28 @@ public class PreguntaInteligenciasMultiplesController extends PreguntaController
         return getSelected();
     }
 
+    /**
+     * 
+     * @param respuestas
+     * @return
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    public List<PreguntaInteligenciasMultiples> actualizarTodasRespuestas(List<PreguntaInteligenciasMultiples> respuestas) throws IOException, InterruptedException {
+        for (PreguntaInteligenciasMultiples item : respuestas) {
+            this.getEjbFacade().edit(item);
+        }
+        return respuestas;
+    }
+    
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String getStringCreated(){
         return "PreguntaInteligenciasMultiplesCreated";
@@ -80,6 +111,10 @@ public class PreguntaInteligenciasMultiplesController extends PreguntaController
         return ejbFacade;
     }
 
+    
+    /************************************************************************
+     * CONVERTER
+     ************************************************************************/
     @FacesConverter(forClass = PreguntaInteligenciasMultiples.class)
     public static class PreguntaInteligenciasMultiplesControllerConverter implements Converter {
 
@@ -121,10 +156,4 @@ public class PreguntaInteligenciasMultiplesController extends PreguntaController
 
     }
     
-    public List<PreguntaInteligenciasMultiples> actualizarTodasRespuestas(List<PreguntaInteligenciasMultiples> respuestas) throws IOException, InterruptedException {
-        for (PreguntaInteligenciasMultiples item : respuestas) {
-            this.getEjbFacade().edit(item);
-        }
-        return respuestas;
-    }
 }

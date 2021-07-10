@@ -26,6 +26,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
 
 @ManagedBean(name = "encuestaController")
 @SessionScoped
@@ -41,27 +43,24 @@ public class EncuestaController extends Controllers implements Serializable {
     private boolean evaluacion;
     private int tiempo;
     boolean detener_reloj;
-    private final String ESTADO_FINALIZADA = "FINALIZADA";
     
     private int contadorEncuesta = 0;
-    List<EncuestaControllerInterface> listaencuestas;
-
-    public boolean esDesarrollo() {
-        return Utilidades.esDesarrollo();
-    }
-
+    private List<EncuestaControllerInterface> listaEncuestas;
+    
+    protected DefaultMenuModel model;
+    
+    /************************************************************************
+     * CONSTRUCTORS
+     ************************************************************************/
+    
     public EncuestaController() {
         detener_reloj = true;
     }
 
-    public int getTiempo() {
-        return tiempo;
-    }
-
-    public void setTiempo(int tiempo_eval) {
-        this.tiempo = tiempo_eval;
-    }
-
+    /************************************************************************
+     * Funciones personalizadas
+     ************************************************************************/
+    
     public int getPuntos() {
         if (evaluacion) {
             return getPuntos_eval();
@@ -85,6 +84,28 @@ public class EncuestaController extends Controllers implements Serializable {
         selected.setPuntajeEncuesta(puntos_encuesta);
     }
 
+    public DefaultMenuModel getModel() {
+        if(model == null && listaEncuestas != null && !listaEncuestas.isEmpty()){
+            model = new DefaultMenuModel();
+            
+            DefaultMenuItem firstSubMenu = new DefaultMenuItem("Informacion Personal");
+            model.addElement(firstSubMenu); 
+            
+            for (EncuestaControllerInterface listaEncuesta : listaEncuestas) {
+                firstSubMenu = new DefaultMenuItem(listaEncuesta.getName());
+                model.addElement(firstSubMenu); 
+            }
+            
+            firstSubMenu = new DefaultMenuItem("Resumen");
+            model.addElement(firstSubMenu); 
+        }
+        return model;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     public Integer getPuntos_eval() {
         Integer valor = selected.getPuntajeEvaluacion();
         if (valor != null) {
@@ -162,42 +183,6 @@ public class EncuestaController extends Controllers implements Serializable {
         return prediccion;
     }
 
-    public void setItems(List<Encuesta> items) {
-        this.items = items;
-    }
-
-    public Encuesta getSelected() {
-        return selected;
-    }
-
-    public void setSelected(Encuesta selected) {
-        this.selected = selected;
-    }
-
-    @Override
-    protected void setEmbeddableKeys() {
-    }
-
-    protected void initializeEmbeddableKey() {
-    }
-
-    @Override
-    protected EncuestaFacade getFacade() {
-        return ejbFacade;
-    }
-
-    public int getPasoActivo() {
-        return pasoActivo;
-    }
-
-    public void setPasoActivo(int pasoActivo) {
-        this.pasoActivo = pasoActivo;
-    }
-
-    public boolean relojDetenido() {
-        return detener_reloj;
-    }
-
     public EncuestaController arrancarReloj() {
         detener_reloj = false;
         return this;
@@ -242,15 +227,8 @@ public class EncuestaController extends Controllers implements Serializable {
     public void incrementPuntaje() {
         detener_reloj = !detener_reloj;
     }
-
-    public boolean isEvaluacion() {
-        return evaluacion;
-    }
-
-    public void setEvaluacion(boolean isEvaluacion) {
-        this.evaluacion = isEvaluacion;
-    }
     
+        
     public void guaradarInfoPersonal() {
         getAreaEncuestaController().almacenarEncuestaAreas(selected);
         Grado grado = getGradoController().getSelected();
@@ -261,11 +239,11 @@ public class EncuestaController extends Controllers implements Serializable {
     public void siguienteEncuesta() throws IOException {
         contadorEncuesta++;
         this.pasoActivo = contadorEncuesta + 1;
-        if(contadorEncuesta >= listaencuestas.size()) {
+        if(contadorEncuesta >= listaEncuestas.size()) {
             pasoResumen();
             return;
         }
-        EncuestaControllerInterface encuesta = listaencuestas.get(contadorEncuesta);
+        EncuestaControllerInterface encuesta = listaEncuestas.get(contadorEncuesta);
         encuesta.prepararEncuesta(selected);
         String ruta = encuesta.getRuta();
         System.out.println("encuesta ruta: " + ruta + " | this.pasoActivo: "+this.pasoActivo);
@@ -287,7 +265,7 @@ public class EncuestaController extends Controllers implements Serializable {
     public void finalizarEncuesta() {
         selected.setPuntajeEncuesta(getPuntos_encuesta());
         selected.setPuntajeEvaluacion(getPuntos_eval());
-        selected.setEstado(ESTADO_FINALIZADA);
+        selected.setEstado(Encuesta.FINALIZADA);
         update();
     }
 
@@ -300,16 +278,20 @@ public class EncuestaController extends Controllers implements Serializable {
     protected void obtenerEncuestaSinTerminar(Estudiante estudiante) {
         sinterminar = getFacade().encuestaSinTerminar(estudiante);
     }
-
-    public int getIdEncuesta() {
-        Integer valor = ejbFacade.autogenerarIdEncuesta();
-        return valor == null ? 1 : valor;
-    }
-
+    
     public void guardarSelected() {
         getFacade().edit(getSelected());
     }
-
+    
+    public List getListadoEncuestas(){
+        List unaListaEncuestas = new ArrayList();
+//        unaListaEncuestas.add(getRespuestaAmbienteController());
+//        unaListaEncuestas.add(getRespuestaPersonalidadController());
+//        unaListaEncuestas.add(getEstiloController());
+        unaListaEncuestas.add(getEncuestaInteligenciasMultiplesController());
+        return unaListaEncuestas;
+    }
+    
     private Encuesta actualizarSelected() {
         selected = getFacade().find(selected.getIdEncuesta());
         return selected;
@@ -348,11 +330,8 @@ public class EncuestaController extends Controllers implements Serializable {
         }
         pasoActivo = -1;
         contadorEncuesta = -1;
-        listaencuestas = new ArrayList();
-        listaencuestas.add(getRespuestaAmbienteController());
-        listaencuestas.add(getRespuestaPersonalidadController());
-        listaencuestas.add(getEstiloController());
-        
+        listaEncuestas = getListadoEncuestas();
+                
         detener_reloj = true;
         getAreaEncuestaController().inicializar();
 
@@ -445,6 +424,86 @@ public class EncuestaController extends Controllers implements Serializable {
         }
     }
 
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
+    
+    public boolean esDesarrollo() {
+        return Utilidades.esDesarrollo();
+    }
+    
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo_eval) {
+        this.tiempo = tiempo_eval;
+    }
+    
+    public List<EncuestaControllerInterface> getListaEncuestas() {
+        return listaEncuestas;
+    }
+    
+    public void setModel(DefaultMenuModel model) {
+        this.model = model;
+    }
+
+    /**
+     * @param listaEncuestas 
+     */
+    public void setListaEncuestas(List<EncuestaControllerInterface> listaEncuestas) {
+        this.listaEncuestas = listaEncuestas;
+    }
+    
+    public void setItems(List<Encuesta> items) {
+        this.items = items;
+    }
+
+    public Encuesta getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Encuesta selected) {
+        this.selected = selected;
+    }
+
+    @Override
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    @Override
+    protected EncuestaFacade getFacade() {
+        return ejbFacade;
+    }
+
+    public int getPasoActivo() {
+        return pasoActivo;
+    }
+
+    public void setPasoActivo(int pasoActivo) {
+        this.pasoActivo = pasoActivo;
+    }
+
+    public boolean relojDetenido() {
+        return detener_reloj;
+    }
+    
+    public boolean isEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(boolean isEvaluacion) {
+        this.evaluacion = isEvaluacion;
+    }
+
+    public int getIdEncuesta() {
+        Integer valor = ejbFacade.autogenerarIdEncuesta();
+        return valor == null ? 1 : valor;
+    }
+
     public List<Encuesta> actualesItems() {
         return items;
     }
@@ -468,6 +527,9 @@ public class EncuestaController extends Controllers implements Serializable {
         return getFacade().findAll();
     }
 
+    /************************************************************************
+     * CONVERTER
+     ************************************************************************/
     @FacesConverter(forClass = Encuesta.class)
     public static class EncuestaControllerConverter implements Converter {
 

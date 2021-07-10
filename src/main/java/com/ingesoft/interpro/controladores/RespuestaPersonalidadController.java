@@ -475,6 +475,15 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getName() {
+        return "Personalidad";
+    }
+    
     public RespuestaPersonalidad getRespuestaPersonalidad(com.ingesoft.interpro.entidades.RespuestaPersonalidadPK id) {
         return getFacade().find(id);
     }

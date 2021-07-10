@@ -252,7 +252,6 @@ public class EstiloController extends Controllers implements Serializable, Encue
     @Override
     public void reiniciar() {
         pasoActual = 0;
-        return ;
     }
 
     @Override
@@ -332,11 +331,10 @@ public class EstiloController extends Controllers implements Serializable, Encue
 
     }
     
-    
     /**
      * Funciones de encuesta
+     * @return 
      */
-      
     public int getPasoActual() {
         return pasoActual;
     }
@@ -371,6 +369,11 @@ public class EstiloController extends Controllers implements Serializable, Encue
 
     public boolean esUltimoPaso() {
         return pasoActual == numGrupos;
+    }
+    
+    @Override
+    public String getName() {
+        return "Estilo aprendizaje";
     }
 
     public int anteriorPaso() {

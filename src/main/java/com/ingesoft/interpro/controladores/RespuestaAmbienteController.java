@@ -49,6 +49,9 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     private boolean finalizo;
     List<ResultadoPorAmbiente> listaResultadosPorAmbiente;
 
+    /************************************************************************
+     * CONSTRUCTORES
+     ************************************************************************/
     public RespuestaAmbienteController() {
         tamGrupo = 6;
         numGrupos = 1;
@@ -57,6 +60,14 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         pasoActual = 0;
     }
 
+    /************************************************************************
+     * FUNCIONES PERSONALIZADAS
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
     private List<PreguntaAmbiente> getListaPreguntas() {
         return listaPreguntas;
     }
@@ -587,6 +598,25 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         return itemsRespuestas;
     }
 
+
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getName() {
+        return "Ambientes";
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     public RespuestaAmbiente getRespuestaAmbiente(com.ingesoft.interpro.entidades.RespuestaAmbientePK id) {
         return getFacade().find(id);
     }
@@ -603,6 +633,10 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         return getFacade().findAll();
     }
 
+    /************************************************************************
+     * CONVERTER
+     ************************************************************************/
+    
     @FacesConverter(forClass = RespuestaAmbiente.class)
     public static class RespuestaAmbienteControllerConverter implements Converter {
 

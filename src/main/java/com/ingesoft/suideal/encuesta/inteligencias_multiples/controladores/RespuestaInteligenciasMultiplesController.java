@@ -6,7 +6,6 @@ import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaI
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiplesPK;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.RespuestaInteligenciasMultiplesFacade;
-import java.io.IOException;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -52,6 +51,14 @@ public class RespuestaInteligenciasMultiplesController
         return getSelected();
     }
 
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     protected String getStringCreated(){
         return "RespuestaInteligenciasMultiplesCreated";
@@ -80,6 +87,9 @@ public class RespuestaInteligenciasMultiplesController
         return getEjbFacade().find(id);
     }
 
+    /************************************************************************
+     * CONVERTER
+     ************************************************************************/
     @FacesConverter(forClass = RespuestaInteligenciasMultiples.class)
     public static class RespuestaInteligenciasMultiplesControllerConverter implements Converter {
 
@@ -129,10 +139,4 @@ public class RespuestaInteligenciasMultiplesController
 
     }
     
-    public List<RespuestaInteligenciasMultiples> actualizarTodasRespuestas(List<RespuestaInteligenciasMultiples> respuestas) throws IOException, InterruptedException {
-        for (RespuestaInteligenciasMultiples item : respuestas) {
-            this.getFacade().edit(item);
-        }
-        return respuestas;
-    }
 }

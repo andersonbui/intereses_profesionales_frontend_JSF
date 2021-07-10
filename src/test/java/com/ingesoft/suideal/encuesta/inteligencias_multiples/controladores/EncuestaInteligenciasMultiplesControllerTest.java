@@ -86,20 +86,6 @@ public class EncuestaInteligenciasMultiplesControllerTest {
 //    }
 
     /**
-     * Test of inicializar method, of class EncuestaInteligenciasMultiplesController.
-     */
-    @Disabled
-    @org.junit.jupiter.api.Test
-    public void testInicializar() {
-        System.out.println("inicializar");
-        Encuesta selected = null;
-        EncuestaInteligenciasMultiplesController instance = new EncuestaInteligenciasMultiplesController();
-        instance.inicializar(selected);
-        assertNotNull(selected);
-        // TODO review the generated test code and remove the default call to fail.
-    }
-
-    /**
      * Test of getGrupo method, of class EncuestaInteligenciasMultiplesController.
      */
     @org.junit.jupiter.api.Test

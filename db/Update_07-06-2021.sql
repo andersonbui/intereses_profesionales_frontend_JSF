@@ -76,7 +76,8 @@ ADD CONSTRAINT `fk_RespuestaPorPersonalidad_EncuestaPersonalidad1`
   REFERENCES `interpro`.`EncuestaPersonalidad` (`idEncuesta`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
- 
+
+ /*
 ALTER TABLE `interpro`.`ConfigMineria` 
 DROP FOREIGN KEY `FK_ConfigMineria_idAreaProfesional`;
 
@@ -89,69 +90,7 @@ ADD CONSTRAINT `fk_ConfigMineria_AreaProfesional1`
  
 ALTER TABLE `interpro`.`ConfigMineria` 
 ADD INDEX `fk_ConfigMineria_AreaProfesional1_idx` (`idAreaProfesional` ASC);
-
-RENAME TABLE interpro.pregunta_estilos_aprendizaje_FS TO interpro.PreguntaEstilosAprendizaje;
-
-ALTER TABLE interpro.PreguntaEstilosAprendizaje CHANGE idpregunta_estilos id int(11) NOT NULL;
-
-ALTER TABLE interpro.TipoEstilo CHANGE idTipoEstilo id int(11) auto_increment NOT NULL;
-
-ALTER TABLE interpro.RespuestaEstilo 
-CHANGE idpregunta_estilos idPreguntaEstilosAprendizaje int(11) NOT NULL;
-
-ALTER TABLE `interpro`.`RespuestaEstilo` 
-CHANGE COLUMN `Encuesta_idEncuesta` `idEncuestaEstilosAprendizaje` INT(11) NOT NULL FIRST;
-
-ALTER TABLE `interpro`.`RespuestaEstilo` 
-DROP FOREIGN KEY `fk_RespuestaEstilo_pregunta_estilos_aprendizaje_FS1`,
-DROP FOREIGN KEY `fk_RespuestaEstilo_Encuesta1`;
-
-INSERT INTO interpro.EncuestaEstilosAprendizaje (
-	SELECT  
-		e.idEncuesta, 
-		e.fechaCreacion, 
-		e.fechaCreacion, 
-		CASE 
-			WHEN COUNT(re.respuesta) = 44  THEN 'FINALIZADA'
-			ELSE 'PENDINENTE'
-		END
-	FROM interpro.Encuesta e 
-	LEFT JOIN interpro.RespuestaEstilo re on re.idEncuestaEstilosAprendizaje = e.idEncuesta 
-	GROUP BY e.idEncuesta
-);
-
-ALTER TABLE `interpro`.`RespuestaEstilo` 
-ADD CONSTRAINT `fk_RespuestaEstilo_PreguntaEstilosAprendizaje`
-  FOREIGN KEY (`idPreguntaEstilosAprendizaje`)
-  REFERENCES `interpro`.`PreguntaEstilosAprendizaje` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_RespuestaEstilo_EncuestaEstilosAprendizaje1`
-  FOREIGN KEY (`idEncuestaEstilosAprendizaje`)
-  REFERENCES `interpro`.`EncuestaEstilosAprendizaje` (`idEncuesta`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
-ALTER TABLE `interpro`.`TipoEstilo_Pregunta` 
-DROP FOREIGN KEY `fk_TipoEstilo_Pregunta_TipoEstilo1`,
-DROP FOREIGN KEY `fk_TipoEstilo_Pregunta_pregunta_estilos_aprendizaje_FS1`;
-
-ALTER TABLE interpro.TipoEstilo_Pregunta CHANGE idpregunta_estilos idPreguntaEstilosAprendizaje int(11) NOT NULL;
-
-ALTER TABLE `interpro`.`TipoEstilo_Pregunta` 
-ADD INDEX `fk_TipoEstilo_Pregunta_PreguntaEstilosAprendizaje_idx` (`idPreguntaEstilosAprendizaje` ASC);
-
-ALTER TABLE `interpro`.`TipoEstilo_Pregunta` 
-ADD CONSTRAINT `fk_TipoEstilo_Pregunta_TipoEstilo1`
-  FOREIGN KEY (`idTipoEstilo`)
-  REFERENCES `interpro`.`TipoEstilo` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_TipoEstilo_Pregunta_pregunta_estilos_aprendizaje_FS1`
-  FOREIGN KEY (`idPreguntaEstilosAprendizaje`)
-  REFERENCES `interpro`.`PreguntaEstilosAprendizaje` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+*/
 
 CREATE TABLE IF NOT EXISTS `interpro`.`EncuestaInteligenciasMultiples` (
   `idEncuesta` INT(11) NOT NULL AUTO_INCREMENT,
@@ -197,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `interpro`.`RespuestaPorInteligencia` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
 
 CREATE TABLE IF NOT EXISTS `interpro`.`PreguntaInteligenciasMultiples` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,

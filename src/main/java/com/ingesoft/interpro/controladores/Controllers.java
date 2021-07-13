@@ -5,6 +5,9 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaEstilosController;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.PreguntaEstilosAprendizajeController;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstiloController;
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;

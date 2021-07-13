@@ -1,5 +1,10 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.interpro.controladores.AreaController;
+import com.ingesoft.interpro.controladores.Controllers;
+import com.ingesoft.interpro.controladores.EncuestaControllerInterface;
+import com.ingesoft.interpro.controladores.LoginController;
+import com.ingesoft.interpro.controladores.MineriaController;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
@@ -285,9 +290,9 @@ public class EncuestaController extends Controllers implements Serializable {
     
     public List getListadoEncuestas(){
         List unaListaEncuestas = new ArrayList();
-//        unaListaEncuestas.add(getRespuestaAmbienteController());
-//        unaListaEncuestas.add(getRespuestaPersonalidadController());
-//        unaListaEncuestas.add(getEstiloController());
+        unaListaEncuestas.add(getRespuestaAmbienteController());
+        unaListaEncuestas.add(getRespuestaPersonalidadController());
+        unaListaEncuestas.add(getEstiloController());
         unaListaEncuestas.add(getEncuestaInteligenciasMultiplesController());
         return unaListaEncuestas;
     }

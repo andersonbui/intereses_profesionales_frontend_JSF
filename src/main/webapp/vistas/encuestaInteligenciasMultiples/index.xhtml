@@ -17,7 +17,7 @@
                 }
 
                 .contentenedor-preguntas-estilo {
-                    width: 100px;
+                    width: 300px;
                     margin: auto;
                 }
             </style>
@@ -63,10 +63,23 @@
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje" rendered="#{!encuestaInteligenciasMultiplesController.esUltimoPaso()}" >
                         <h1><p:progressBar value="#{encuestaInteligenciasMultiplesController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
-                           <br/>
-                           <ui:repeat value="#{encuestaInteligenciasMultiplesController.grupoActual}" var="respuesta">
-                               #{respuesta.preguntaInteligenciasMultiples.enunciado} <br/>
-                           </ui:repeat>
+                           <p:panelGrid id="panel" styleClass="panelgrid">
+                                <ui:repeat value="#{encuestaInteligenciasMultiplesController.grupoActual}" var="item">
+                                    <p:row>
+                                        <p:column style=" font-size: 18px; font-weight:bold; color: black">
+                                            <p:outputLabel value="#{item.preguntaInteligenciasMultiples.enunciado}"/>
+                                        </p:column>
+                                        <p:column style=" font-size: 18px; font-weight:bold; color: black" >
+                                            <p:selectOneRadio value="#{item.respuesta}"  >
+                                                <f:selectItem itemValue="1" itemLabel='SI' />
+                                                <f:selectItem itemValue="0" itemLabel='NO' />
+                                                <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{encuestaInteligenciasMultiplesController.seleccionarPunto(item)}" />
+                                            </p:selectOneRadio>
+                                        </p:column>
+                                    </p:row>
+                                </ui:repeat>
+
+                            </p:panelGrid>
                         </p:panel>
                         <h:panelGroup  style="background-color: black;" >
                             <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.anteriorPaso}"
@@ -86,7 +99,7 @@
 
                             <div class="contentenedor-preguntas-estilo" >
                                 <ui:repeat value="#{encuestaInteligenciasMultiplesController.estadisticaEncuentaEstiloApren}" var="respuesta">
-                                    #{respuesta.contador} |  <span title="#{respuesta.tipoEstilo.definicion}"> #{respuesta.tipoEstilo.nombre}</span><br/>
+                                    #{respuesta.contador} |  <span title="#{respuesta.tipo.tipo}"> #{respuesta.tipo.descripcion}</span><br/>
                                 </ui:repeat>
                             </div>
                         </p:panel>

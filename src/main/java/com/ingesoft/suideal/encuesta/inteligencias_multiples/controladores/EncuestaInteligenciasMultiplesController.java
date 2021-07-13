@@ -1,6 +1,6 @@
 package com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores;
 
-import com.ingesoft.interpro.controladores.util.ContadorTiposEstilos;
+import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.EncuestaControllerAbstract;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
@@ -8,7 +8,10 @@ import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.PreguntaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.TipoInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.EncuestaInteligenciasMultiplesFacade;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -37,7 +40,7 @@ public class EncuestaInteligenciasMultiplesController
     /**
      * 
      */
-    ContadorTiposEstilos[] estadisticaEncuentaIntelMultiples;
+    List<Contador<TipoInteligenciasMultiples>> estadisticaEncuentaIntelMultiples;
     
     /************************************************************************
      * Constructor
@@ -135,20 +138,19 @@ public class EncuestaInteligenciasMultiplesController
 
     @Override
     public boolean finalizarEncuesta() throws InterruptedException {
-//        getEncuestaController().detenerReloj();
-//        
-//        Thread hilo = guardarRespuestas(grupo);
-//        hilo.join();
-//        // colocar como finalizada y guarda cambios
-//        getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
-//        update();
-//        
-//        estadisticaEncuentaIntelMultiples = estadisticaEncuesta(encuesta.getEncuestaEstilosAprendizaje());
-//        
-//        setPasoActual(getPasoActual() + 1);
-//        getEncuestaController().finalizarEncuesta();
-//        return true;
-        return false;
+        getEncuestaController().detenerReloj();
+        
+        Thread hilo = guardarRespuestas(getGrupoActual());
+        hilo.join();
+        // colocar como finalizada y guarda cambios
+        getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
+        update();
+        
+        estadisticaEncuentaIntelMultiples = estadisticaEncuesta(getEncuestaGeneral().getEncuestaInteligenciasMultiples());
+        
+        setPasoActual(getPasoActual() + 1);
+        getEncuestaController().finalizarEncuesta();
+        return true;
     }
     
     /**
@@ -156,51 +158,35 @@ public class EncuestaInteligenciasMultiplesController
      * @param encuesta
      * @return 
      */
-    public ContadorTiposEstilos[] estadisticaEncuesta(EncuestaEstilosAprendizaje encuesta){
-//        this.itemsRespuestas = getRespuestaInteligenciasMultiplesController().getItemsXEncuesta(encuesta);
+    public List<Contador<TipoInteligenciasMultiples>> estadisticaEncuesta(EncuestaInteligenciasMultiples encuesta){
+        List<RespuestaInteligenciasMultiples> itemsRespuestas = getRespuestaInteligenciasMultiplesController().obtenerTodosPorEncuesta(encuesta);
         
-//        if(this.itemsRespuestas == null ){
+        if(itemsRespuestas == null ){
             return null;
-//        }
-//        ContadorTiposEstilos[][] contador = new ContadorTiposEstilos[2][4]; /** 8 es la cantidad de tipos de estilo */
-//        contador[0] = new ContadorTiposEstilos[4];
-//        contador[1] = new ContadorTiposEstilos[4];
-//        int indice;
-//        int columna;
-//        int fila;
-//        
-//        /** Sumatoria de tipos de estilo de las respuestas */
-//        for (RespuestaInteligenciasMultiples item : this.itemsRespuestas) {
-//            PreguntaInteligenciasMultiples pregunta = item.getIdpreguntaEstilos();
-//            List<TipoEstiloPregunta> listaTiposEstiloPregunta = pregunta.getTipoEstiloPreguntaList();
-//            TipoEstiloPregunta obj = (listaTiposEstiloPregunta.get(0).getIndice().equals(item.getRespuesta()))?listaTiposEstiloPregunta.get(0):listaTiposEstiloPregunta.get(1);
-//                 
-//            indice = obj.getTipoEstilo().getId()-1;
-//            columna = indice % 2;
-//            fila = indice / 2;
-//            if(contador[columna][fila] == null) {
-//                contador[columna][fila] = new ContadorTiposEstilos();
-//            }
-//            contador[columna][fila].aumentarContador();
-//            contador[columna][fila].setTipoEstilo(obj.getTipoEstilo());
-//            
-//        }
-//        ContadorTiposEstilos[] vectorRes = new ContadorTiposEstilos[4];
-//        int resta;
-//        /** Calculo de grupos de tipos de estilo */
-//        for (int i = 0; i < 4; i++) {
-//            
-//            indice = contador[0][i].getContador() > contador[1][i].getContador() ? 0 : 1;
-//            resta = Math.abs(contador[0][i].getContador() - contador[1][i].getContador());
-//            
-//            if(vectorRes[i] == null) {
-//                vectorRes[i] = new ContadorTiposEstilos();
-//            }
-//            vectorRes[i].setTipoEstilo(contador[indice][i].getTipoEstilo());
-//            vectorRes[i].setContador(resta);
-//            
-//        }
-//        return vectorRes;
+        }
+        int numTipos = 7;
+        List<Contador<TipoInteligenciasMultiples>> contador = new ArrayList<>(numTipos); /** 8 es la cantidad de tipos inteligencias multiples */
+        int indice;
+        for (int i = 0; i < numTipos; i++) {
+            contador.add(new Contador());
+        }
+        /** Sumatoria de tipos de estilo de las respuestas */
+        for (RespuestaInteligenciasMultiples item : itemsRespuestas) {
+            PreguntaInteligenciasMultiples pregunta = item.getPreguntaInteligenciasMultiples();
+            if(item.getRespuesta() == 1){
+                TipoInteligenciasMultiples tiposIntelMulti = pregunta.getIdTipoInteligenciasMultiples();
+
+                indice = tiposIntelMulti.getId() - 1;
+                contador.get(indice).aumentarContador();
+                contador.get(indice).setTipo(tiposIntelMulti);
+            }
+        }
+        
+        contador.sort((Contador uno, Contador dos) -> {
+            return - uno.getContador().compareTo(dos.getContador());
+        });
+        
+        return contador;
     }
     
     
@@ -271,7 +257,7 @@ public class EncuestaInteligenciasMultiplesController
         return getEjbFacade().find(id);
     }
 
-    public ContadorTiposEstilos[] getEstadisticaEncuentaEstiloApren() {
+    public List<Contador<TipoInteligenciasMultiples>> getEstadisticaEncuentaEstiloApren() {
         return estadisticaEncuentaIntelMultiples;
     }
     

@@ -5,7 +5,7 @@
  */
 package com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores;
 
-import com.ingesoft.interpro.controladores.util.ContadorTiposEstilos;
+import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;

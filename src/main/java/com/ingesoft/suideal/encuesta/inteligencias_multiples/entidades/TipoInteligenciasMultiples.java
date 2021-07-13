@@ -137,7 +137,7 @@ public class TipoInteligenciasMultiples implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.TipoInteligenciasMultiples[ id=" + id + " ]";
+        return "TipoInteligenciasMultiples[ id=" + id + "| tipo=" + tipo + "| descripcion:" + descripcion + " ]";
     }
     
 }

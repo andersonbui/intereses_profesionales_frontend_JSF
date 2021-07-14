@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.entidades;
 
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import java.io.Serializable;
 import java.util.Date;
@@ -89,12 +90,12 @@ public class Encuesta implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
-    @Size(max = 45)
     @Column(name = "fechaFinalizada")
-    private String fechaFinalizada;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaFinalizada;
     
     
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta", fetch=FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private EncuestaEstilosAprendizaje encuestaEstilosAprendizaje;
     
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
@@ -215,11 +216,11 @@ public class Encuesta implements Serializable {
         this.puntajeEvaluacion = puntajeEvaluacion;
     }
     
-    public String getFechaFinalizada() {
+    public Date getFechaFinalizada() {
         return fechaFinalizada;
     }
 
-    public void setFechaFinalizada(String fechaFinalizada) {
+    public void setFechaFinalizada(Date fechaFinalizada) {
         this.fechaFinalizada = fechaFinalizada;
     }
 

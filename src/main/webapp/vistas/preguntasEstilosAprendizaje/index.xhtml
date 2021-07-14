@@ -64,7 +64,7 @@
                         <h1><p:progressBar value="#{estiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                            <br/>
-                           <ui:repeat value="#{estiloController.grupo}" var="respuesta">
+                           <ui:repeat value="#{estiloController.grupoActual}" var="respuesta">
                                #{respuesta.idpreguntaEstilos.enunciado} <br/>
                                <p:selectOneRadio id="id_resp_estilo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
                                     <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoEstiloPreguntaList}" var="tep" 

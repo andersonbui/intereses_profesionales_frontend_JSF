@@ -34,6 +34,16 @@ CREATE TABLE `TipoEstilo_Pregunta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+CREATE TABLE `EncuestaEstilosAprendizaje` (
+  `idEncuesta` int(11) NOT NULL ,
+  `fechaCreacion` datetime DEFAULT NULL,
+  `fechaFinalizada` datetime DEFAULT NULL,
+  `estado` enum('PENDINENTE','FINALIZADA') DEFAULT NULL,
+  PRIMARY KEY (`idEncuesta`),
+  UNIQUE KEY `idEncuesta_UNIQUE` (`idEncuesta`),
+  CONSTRAINT `fk_EncuestaEstilosAprendizaje_Encuesta1` FOREIGN KEY (`idEncuesta`) REFERENCES `Encuesta` (`idEncuesta`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1089 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `RespuestaEstilo` (
   `idEncuestaEstilosAprendizaje` int(11) NOT NULL,
   `respuesta` char(1) DEFAULT NULL,
@@ -56,13 +66,3 @@ CREATE TABLE `RespuestaPorEstilo` (
   CONSTRAINT `fk_RespuestaPorEstilo_TipoEstilo1` FOREIGN KEY (`idTipoEstilo`) REFERENCES `TipoEstilo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-CREATE TABLE `EncuestaEstilosAprendizaje` (
-  `idEncuesta` int(11) NOT NULL AUTO_INCREMENT,
-  `fechaCreacion` datetime DEFAULT NULL,
-  `fechaFinalizada` datetime DEFAULT NULL,
-  `estado` enum('PENDINENTE','FINALIZADA') DEFAULT NULL,
-  PRIMARY KEY (`idEncuesta`),
-  UNIQUE KEY `idEncuesta_UNIQUE` (`idEncuesta`),
-  CONSTRAINT `fk_EncuestaEstilosAprendizaje_Encuesta1` FOREIGN KEY (`idEncuesta`) REFERENCES `Encuesta` (`idEncuesta`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1089 DEFAULT CHARSET=utf8;

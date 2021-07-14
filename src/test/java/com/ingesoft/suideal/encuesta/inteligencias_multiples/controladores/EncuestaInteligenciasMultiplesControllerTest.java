@@ -7,11 +7,10 @@ package com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores;
 
 import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
-import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
-import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.EncuestaInteligenciasMultiplesFacade;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELResolver;

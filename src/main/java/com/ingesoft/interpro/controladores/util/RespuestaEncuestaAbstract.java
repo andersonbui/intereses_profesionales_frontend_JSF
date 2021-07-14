@@ -6,13 +6,35 @@
 package com.ingesoft.interpro.controladores.util;
 
 import java.io.Serializable;
+import javax.persistence.Transient;
 
 /**
  *
  * @author anderson
+ * @param <EncuestaPersonalizada>
+ * @param <PreguntaEncuesta>
  */
-public abstract class RespuestaEncuestaAbstract implements Serializable {
+public abstract class RespuestaEncuestaAbstract <
+            EncuestaPersonalizada, 
+            PreguntaEncuesta>
+        implements Serializable {
     
-    public abstract void responder();
+    @Transient
+    private boolean estaRespondida;
+    
+    public boolean isRespondida() {
+        return estaRespondida;
+    }
+
+    public void setEstaRespondida(boolean estaRespondida) {
+        this.estaRespondida = estaRespondida;
+    }
+    
+    public void responder() {
+        setEstaRespondida(true);
+    }
+    
+    public abstract void inicializar(EncuestaPersonalizada encuestaPersonalizada, 
+            PreguntaEncuesta preguntaEncuesta);
     
 }

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
+import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaPorEstilo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,6 @@ public class EncuestaEstilosAprendizaje implements Serializable {
     public static String FINALIZADA = "FINALIZADA";
      
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idEncuesta")
     private Integer idEncuesta;

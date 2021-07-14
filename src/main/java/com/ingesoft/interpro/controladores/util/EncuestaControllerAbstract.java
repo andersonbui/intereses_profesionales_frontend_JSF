@@ -194,14 +194,6 @@ public abstract class EncuestaControllerAbstract <
      * @return 
      */
     public List<Respuesta> getRespuestas() {
-        /**
-         * TODO: prueba
-         * 
-         */
-        EncuestaController encuestaControl = getEncuestaController();
-        encuestaControl.setSelected(encuestaControl.getEncuesta(1085));
-        // ---------------
-        
         List<Respuesta> listaItemsRespuestas = getItemsRespuestas();
         if (listaItemsRespuestas == null || true) { //|| listaPreguntas.size() < itemsRespuestas.size()
             List<Pregunta> listaItemsPreguntas = getPreguntas();
@@ -261,12 +253,13 @@ public abstract class EncuestaControllerAbstract <
         return getItemsRespuestas();
     }
     
-    /**
-     * 
-     * @return
-     * @throws java.lang.InterruptedException
-     */
-    public abstract boolean finalizarEncuesta() throws InterruptedException ;
+    public void seleccionarPunto(Respuesta respuestaEstilo) {
+        if (!respuestaEstilo.isRespondida()) {
+            getEncuestaController().aumentarPuntos();
+            getEncuestaController().setTiempo(0);
+            respuestaEstilo.responder();
+        }
+    }
     
     /**************************************************************************
      * Abstracts methods
@@ -277,6 +270,13 @@ public abstract class EncuestaControllerAbstract <
      */
 //    public abstract boolean finalizarEncuesta() throws InterruptedException;
 
+    /**
+     * 
+     * @return
+     * @throws java.lang.InterruptedException
+     */
+    public abstract boolean finalizarEncuesta() throws InterruptedException ;
+    
     /**
      * 
      * @return 

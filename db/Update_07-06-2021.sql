@@ -15,7 +15,7 @@ CHANGE COLUMN `idEncuesta` `idEncuesta` INT(11) NOT NULL FIRST,
 DROP INDEX `fk_Respuesta_Encuesta1_idx` ;
 
 CREATE TABLE IF NOT EXISTS `interpro`.`EncuestaPersonalidad` (
-  `idEncuesta` INT(11) NOT NULL AUTO_INCREMENT,
+  `idEncuesta` INT(11) NOT NULL,
   `fechaCreacion` DATETIME NULL DEFAULT NULL,
   `fechaFinalizada` DATETIME NULL DEFAULT NULL,
   `estado` ENUM('PENDINENTE', 'FINALIZADA') NULL DEFAULT NULL,
@@ -40,6 +40,7 @@ FROM interpro.Encuesta e
 LEFT JOIN interpro.RespuestaPersonalidad rp on rp.idEncuesta = e.idEncuesta 
 GROUP BY e.idEncuesta);
 
+/**1**/
 ALTER TABLE `interpro`.`RespuestaPersonalidad` 
 ADD CONSTRAINT `fk_RespuestaPersonalidad_EncuestaPersonalidad1`
   FOREIGN KEY (`idEncuesta`)
@@ -50,7 +51,7 @@ ADD CONSTRAINT `fk_RespuestaPersonalidad_EncuestaPersonalidad1`
 
 ALTER TABLE `interpro`.`Encuesta` 
 DROP COLUMN `personalidad`,
-ADD COLUMN `fechaFinalizada` VARCHAR(45) NULL DEFAULT NULL AFTER `estado`,
+ADD COLUMN `fechaFinalizada` DATETIME NULL DEFAULT NULL AFTER `estado`,
 CHANGE COLUMN `fecha` `fechaCreacion` DATETIME NOT NULL ;
 
 
@@ -70,6 +71,7 @@ DROP FOREIGN KEY `fk_Encuesta_has_TipoPersonalidad_Encuesta1`;
 ALTER TABLE `interpro`.`RespuestaPorPersonalidad` 
 DROP INDEX `fk_Encuesta_has_TipoPersonalidad_Encuesta1_idx` ;*/
 
+/**2**/
 ALTER TABLE `interpro`.`RespuestaPorPersonalidad` 
 ADD CONSTRAINT `fk_RespuestaPorPersonalidad_EncuestaPersonalidad1`
   FOREIGN KEY (`idEncuesta`)
@@ -93,7 +95,7 @@ ADD INDEX `fk_ConfigMineria_AreaProfesional1_idx` (`idAreaProfesional` ASC);
 */
 
 CREATE TABLE IF NOT EXISTS `interpro`.`EncuestaInteligenciasMultiples` (
-  `idEncuesta` INT(11) NOT NULL AUTO_INCREMENT,
+  `idEncuesta` INT(11) NOT NULL,
   `fechaCreacion` DATETIME NULL DEFAULT NULL,
   `fechaFinalizada` DATETIME NULL DEFAULT NULL,
   `estado` ENUM('PENDINENTE', 'FINALIZADA') NULL DEFAULT 'PENDINENTE',
@@ -175,7 +177,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `interpro`.`EncuestaEstilosAprendizaje` (
-  `idEncuesta` INT(11) NOT NULL AUTO_INCREMENT,
+  `idEncuesta` INT(11) NOT NULL,
   `fechaCreacion` DATETIME NULL DEFAULT NULL,
   `fechaFinalizada` DATETIME NULL DEFAULT NULL,
   `estado` ENUM('PENDINENTE', 'FINALIZADA') NULL DEFAULT NULL,

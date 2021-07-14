@@ -1,8 +1,8 @@
 package com.ingesoft.interpro.facades;
 
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
-import com.ingesoft.interpro.entidades.RespuestaEstilo;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstilo;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

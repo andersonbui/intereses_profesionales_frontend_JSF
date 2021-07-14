@@ -1,41 +1,31 @@
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores;
 
-import com.ingesoft.interpro.controladores.Controllers;
-import com.ingesoft.interpro.entidades.PreguntaEstilosAprendizaje;
-import com.ingesoft.interpro.controladores.util.JsfUtil;
-import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.PreguntaEstilosAprendizaje;
+import com.ingesoft.interpro.controladores.util.PreguntaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade;
+import java.io.IOException;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "preguntaEstilosAprendizajeController")
 @SessionScoped
-public class PreguntaEstilosAprendizajeController extends Controllers implements Serializable {
+public class PreguntaEstilosAprendizajeController  extends PreguntaControllerAbstract <
+        PreguntaEstilosAprendizaje,
+        PreguntaEstilosAprendizajeFsFacade
+        >  {
 
     @EJB
     private com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade ejbFacade;
-    private List<PreguntaEstilosAprendizaje> items = null;
-    private PreguntaEstilosAprendizaje selected;
-
+    
     public PreguntaEstilosAprendizajeController() {
     }
 
     public void inicializar(Encuesta selected) {
 
-    }
-
-    public PreguntaEstilosAprendizaje getSelected() {
-        return selected;
-    }
-
-    public void setSelected(PreguntaEstilosAprendizaje selected) {
-        this.selected = selected;
     }
 
     @Override
@@ -51,48 +41,56 @@ public class PreguntaEstilosAprendizajeController extends Controllers implements
         return ejbFacade;
     }
 
+    @Override
     public PreguntaEstilosAprendizaje prepareCreate() {
-        selected = new PreguntaEstilosAprendizaje();
+        setSelected(new PreguntaEstilosAprendizaje());
         initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaEstilosAprendizajeFsCreated"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PreguntaEstilosAprendizajeFsUpdated"), selected);
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PreguntaEstilosAprendizajeFsDeleted"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public List<PreguntaEstilosAprendizaje> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
+        return getSelected();
     }
 
     public PreguntaEstilosAprendizaje getPreguntaEstilosAprendizajeFs(Integer id) {
         return getFacade().find(id);
     }
 
-    public List<PreguntaEstilosAprendizaje> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+    /**
+     * 
+     * @param respuestas
+     * @return
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    public List<PreguntaEstilosAprendizaje> actualizarTodasRespuestas(List<PreguntaEstilosAprendizaje> respuestas) throws IOException, InterruptedException {
+        for (PreguntaEstilosAprendizaje item : respuestas) {
+            this.getEjbFacade().edit(item);
+        }
+        return respuestas;
     }
-
-    public List<PreguntaEstilosAprendizaje> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getStringCreated(){
+        return "PreguntaInteligenciasMultiplesCreated";
     }
-
+    
+    @Override
+    public String getStringUpdated(){
+        return "PreguntaInteligenciasMultiplesUpdated";
+    }
+    
+    @Override
+    public String getStringDeleted(){
+        return "PreguntaInteligenciasMultiplesDeleted";
+    }
+    
+    @Override
+    public PreguntaEstilosAprendizajeFsFacade getEjbFacade() {
+        return ejbFacade;
+    }
 }

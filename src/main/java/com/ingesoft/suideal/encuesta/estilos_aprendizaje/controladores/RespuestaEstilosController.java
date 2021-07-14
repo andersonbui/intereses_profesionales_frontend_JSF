@@ -1,18 +1,13 @@
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores;
 
-import com.ingesoft.interpro.controladores.Controllers;
-import com.ingesoft.interpro.entidades.RespuestaEstilo;
-import com.ingesoft.interpro.controladores.util.JsfUtil;
-import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstilo;
+import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
-import com.ingesoft.interpro.entidades.RespuestaEstiloPK;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK;
 import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
-import java.io.IOException;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -25,12 +20,13 @@ import javax.faces.convert.FacesConverter;
 
 @ManagedBean(name = "respuestaEstilosController")
 @SessionScoped
-public class RespuestaEstilosController extends Controllers implements Serializable {
+public class RespuestaEstilosController extends RespuestaControllerAbstract <
+            RespuestaEstilo, 
+            RespuestaEstiloFacade, 
+            EncuestaEstilosAprendizaje> {
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaEstiloFacade ejbFacade;
-    private List<RespuestaEstilo> items = null;
-    private RespuestaEstilo selected;
     
     public RespuestaEstilosController() {
     }
@@ -39,22 +35,7 @@ public class RespuestaEstilosController extends Controllers implements Serializa
 
     }
 
-    public RespuestaEstilo getSelected() {
-        return selected;
-    }
 
-    public void setSelected(RespuestaEstilo selected) {
-        this.selected = selected;
-    }
-
-    protected void setEmbeddableKeys() {
-    }
-
-    public List<RespuestaEstilo> getItems() {
-        items = getFacade().findAll();
-        return items;
-    }
-    
     protected void initializeEmbeddableKey() {
     }
 
@@ -63,34 +44,52 @@ public class RespuestaEstilosController extends Controllers implements Serializa
         return ejbFacade;
     }
 
+    @Override
     public RespuestaEstilo prepareCreate() {
-        selected = new RespuestaEstilo();
+        setSelected(new RespuestaEstilo());
         initializeEmbeddableKey();
-        return selected;
+        return getSelected();
     }
 
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloCreated"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
+    /************************************************************************
+     * GETTERS AND SETTERS METHODS
+     ************************************************************************/
 
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloUpdated"), selected);
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public RespuestaEstiloFacade getEjbFacade() {
+        return ejbFacade;
     }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaEstiloDeleted"), selected);
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getStringCreated(){
+        return "RespuestaEstiloCreated";
     }
-
-    public List<RespuestaEstilo> obtenerTodosPorEncuesta(EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
-        return getFacade().getItemsXEncuesta(encuestaEstilosAprendizaje);
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getStringUpdated(){
+        return "RespuestaEstiloUpdated";
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String getStringDeleted(){
+        return "RespuestaEstiloDeleted";
+    }
+    
     
     public List<RespuestaEstilo> getItemsXEncuesta(EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
         return getFacade().getItemsXEncuesta(encuestaEstilosAprendizaje);
@@ -100,14 +99,19 @@ public class RespuestaEstilosController extends Controllers implements Serializa
         return getFacade().find(id);
     }
 
-    public List<RespuestaEstilo> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+    /**
+     * @param encuestaEstilosAprendizaje
+     * @return 
+     */
+    @Override
+    public List<RespuestaEstilo> obtenerTodosPorEncuesta(EncuestaEstilosAprendizaje encuestaEstilosAprendizaje) {
+        return getEjbFacade().getItemsXEncuesta(encuestaEstilosAprendizaje);
     }
-
-    public List<RespuestaEstilo> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
-    }
-
+    
+    /************************************************************************
+     * CONVERTER
+     ************************************************************************/
+    
     @FacesConverter(forClass = RespuestaEstilo.class)
     public static class RespuestaEstiloControllerConverter implements Converter {
 
@@ -124,16 +128,16 @@ public class RespuestaEstilosController extends Controllers implements Serializa
             return controller.getRespuestaEstilo(getKey(value));
         }
 
-        com.ingesoft.interpro.entidades.RespuestaEstiloPK getKey(String value) {
-            com.ingesoft.interpro.entidades.RespuestaEstiloPK key;
+        com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK getKey(String value) {
+            com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new com.ingesoft.interpro.entidades.RespuestaEstiloPK();
+            key = new com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK();
             key.setIdPreguntaEstilosAprendizaje(Integer.parseInt(values[0]));
             key.setIdEncuestaEstilosAprendizaje(Integer.parseInt(values[1]));
             return key;
         }
 
-        String getStringKey(com.ingesoft.interpro.entidades.RespuestaEstiloPK value) {
+        String getStringKey(com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value.getIdPreguntaEstilosAprendizaje());
             sb.append(SEPARATOR);
@@ -156,11 +160,5 @@ public class RespuestaEstilosController extends Controllers implements Serializa
         }
 
     }
-    
-    public List<RespuestaEstilo> actualizarTodasRespuestas(List<RespuestaEstilo> respuestas) throws IOException, InterruptedException {
-        for (RespuestaEstilo item : respuestas) {
-            this.getFacade().edit(item);
-        }
-        return respuestas;
-    }
+  
 }

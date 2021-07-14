@@ -1,7 +1,7 @@
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores;
 
 import com.ingesoft.interpro.controladores.Controllers;
-import com.ingesoft.interpro.entidades.TipoEstilo;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstilo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstiloPreguntaPK;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;

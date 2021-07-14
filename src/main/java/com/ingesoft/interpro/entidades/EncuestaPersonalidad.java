@@ -48,7 +48,6 @@ public class EncuestaPersonalidad implements Serializable {
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idEncuesta")
     private Integer idEncuesta;

@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
-import java.io.Serializable;
-import javax.persistence.CascadeType;
+import com.ingesoft.interpro.controladores.util.RespuestaEncuestaAbstract;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -30,7 +28,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "RespuestaEstilo.findByRespuesta", query = "SELECT r FROM RespuestaEstilo r WHERE r.respuesta = :respuesta"),
     @NamedQuery(name = "RespuestaEstilo.findByEncuestaEstilosAprendizaje", query = "SELECT r FROM RespuestaEstilo r WHERE r.encuestaEstilosAprendizaje = :encuestaEstilosAprendizaje")
 })
-public class RespuestaEstilo implements Serializable {
+public class RespuestaEstilo  extends RespuestaEncuestaAbstract 
+    < EncuestaEstilosAprendizaje, PreguntaEstilosAprendizaje >{
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -57,6 +56,24 @@ public class RespuestaEstilo implements Serializable {
         this.respuestaEstiloPK = new RespuestaEstiloPK();
         this.respuestaEstiloPK.setIdEncuestaEstilosAprendizaje(encuestaEstilosAprendizaje.getIdEncuesta());
         this.respuestaEstiloPK.setIdPreguntaEstilosAprendizaje(idpreguntaEstilos.getId());
+    }
+    
+    /**
+     * 
+     * @param encuestaEstilosAprendizaje
+     * @param preguntaEstilosAprendizaje
+     */
+    @Override
+    public void inicializar(
+            EncuestaEstilosAprendizaje encuestaEstilosAprendizaje, 
+            PreguntaEstilosAprendizaje preguntaEstilosAprendizaje) {
+        
+        this.encuestaEstilosAprendizaje = encuestaEstilosAprendizaje;
+        this.preguntaEstilosAprendizaje = preguntaEstilosAprendizaje;
+        this.respuestaEstiloPK = new RespuestaEstiloPK(
+            preguntaEstilosAprendizaje.getId(),
+            encuestaEstilosAprendizaje.getIdEncuesta()
+        );
     }
     
     public RespuestaEstiloPK getRespuestaEstiloPK() {

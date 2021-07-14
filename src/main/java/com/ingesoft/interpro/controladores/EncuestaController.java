@@ -1,10 +1,5 @@
 package com.ingesoft.interpro.controladores;
 
-import com.ingesoft.interpro.controladores.AreaController;
-import com.ingesoft.interpro.controladores.Controllers;
-import com.ingesoft.interpro.controladores.EncuestaControllerInterface;
-import com.ingesoft.interpro.controladores.LoginController;
-import com.ingesoft.interpro.controladores.MineriaController;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
@@ -271,6 +266,7 @@ public class EncuestaController extends Controllers implements Serializable {
         selected.setPuntajeEncuesta(getPuntos_encuesta());
         selected.setPuntajeEvaluacion(getPuntos_eval());
         selected.setEstado(Encuesta.FINALIZADA);
+        selected.setFechaFinalizada(new Date());
         update();
     }
 
@@ -290,8 +286,8 @@ public class EncuestaController extends Controllers implements Serializable {
     
     public List getListadoEncuestas(){
         List unaListaEncuestas = new ArrayList();
-        unaListaEncuestas.add(getRespuestaAmbienteController());
-        unaListaEncuestas.add(getRespuestaPersonalidadController());
+//        unaListaEncuestas.add(getRespuestaAmbienteController());
+//        unaListaEncuestas.add(getRespuestaPersonalidadController());
         unaListaEncuestas.add(getEstiloController());
         unaListaEncuestas.add(getEncuestaInteligenciasMultiplesController());
         return unaListaEncuestas;
@@ -321,7 +317,7 @@ public class EncuestaController extends Controllers implements Serializable {
         Persona persona = loginController.getPersonaActual();
         Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
         obtenerEncuestaSinTerminar(estud);
-        System.out.println("verificar encuesta");
+        System.out.println("verificar encuesta:"+selected+"|sinterminar:"+sinterminar);
         if (selected == null) {
             System.out.println("encuesta null");
             if (sinterminar != null) {

@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,7 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByIdEncuestaInteligenciasMultiples", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuestaInteligenciasMultiplesPK.idEncuestaInteligenciasMultiples = :idEncuestaInteligenciasMultiples"),
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByIdPreguntaInteligenciasMultiples", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuestaInteligenciasMultiplesPK.idPreguntaInteligenciasMultiples = :idPreguntaInteligenciasMultiples"),
     @NamedQuery(name = "RespuestaInteligenciasMultiples.findByRespuesta", query = "SELECT r FROM RespuestaInteligenciasMultiples r WHERE r.respuesta = :respuesta")})
-public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  {
+public class RespuestaInteligenciasMultiples 
+        extends RespuestaEncuestaAbstract <
+            EncuestaInteligenciasMultiples , 
+            PreguntaInteligenciasMultiples>  {
 
     private static final long serialVersionUID = 1L;
     
@@ -47,17 +49,20 @@ public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  
     @ManyToOne(optional = false)
     private PreguntaInteligenciasMultiples preguntaInteligenciasMultiples;
     
-    @Transient
-    private boolean estaRespondida;
-
     public RespuestaInteligenciasMultiples() {
-        this.estaRespondida = false;
+        setEstaRespondida(false);
     }
 
     public RespuestaInteligenciasMultiples(RespuestaInteligenciasMultiplesPK respuestaInteligenciasMultiplesPK) {
         this.respuestaInteligenciasMultiplesPK = respuestaInteligenciasMultiplesPK;
     }
 
+    /**
+     * 
+     * @param encuestaInteligenciasMultiples
+     * @param preguntaInteligenciasMultiples 
+     */
+    @Override
     public void inicializar(
             EncuestaInteligenciasMultiples encuestaInteligenciasMultiples, 
             PreguntaInteligenciasMultiples preguntaInteligenciasMultiples) {
@@ -69,6 +74,7 @@ public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  
             preguntaInteligenciasMultiples.getId()
         );
     }
+    
     public RespuestaInteligenciasMultiples(int idEncuestaInteligenciasMultiples, int idPreguntaInteligenciasMultiples) {
         this.respuestaInteligenciasMultiplesPK = new RespuestaInteligenciasMultiplesPK(idEncuestaInteligenciasMultiples, idPreguntaInteligenciasMultiples);
     }
@@ -104,19 +110,6 @@ public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  
     public void setPreguntaInteligenciasMultiples(PreguntaInteligenciasMultiples preguntaInteligenciasMultiples) {
         this.preguntaInteligenciasMultiples = preguntaInteligenciasMultiples;
     }
-
-    public boolean isRespondida() {
-        return estaRespondida;
-    }
-
-    public void setEstaRespondida(boolean estaRespondida) {
-        this.estaRespondida = estaRespondida;
-    }
-    
-    @Override
-    public void responder() {
-        setEstaRespondida(true);
-    }
     
     @Override
     public int hashCode() {
@@ -140,7 +133,7 @@ public class RespuestaInteligenciasMultiples extends RespuestaEncuestaAbstract  
 
     @Override
     public String toString() {
-        return "RespuestaIntelMultiples[ PK=" + respuestaInteligenciasMultiplesPK + "| respuesta:"+respuesta+"|estaRespondida:"+estaRespondida + " ]";
+        return "RespuestaIntelMultiples[ PK=" + respuestaInteligenciasMultiplesPK + "| respuesta:"+respuesta+"|estaRespondida:"+isRespondida() + " ]";
     }
     
 }

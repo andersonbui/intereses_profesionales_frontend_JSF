@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -78,7 +78,7 @@ public class RespuestaEstiloPK implements Serializable {
 
     @Override
     public String toString() {
-        return "RespuestaEstiloPK{" + "Encuesta_idEncuesta=" + idEncuestaEstilosAprendizaje + ", idpregunta_estilos=" + idPreguntaEstilosAprendizaje + '}';
+        return "RespuestaEstiloPK{" + "Encuesta_idEncuesta__=" + idEncuestaEstilosAprendizaje + ", idpregunta_estilos=" + idPreguntaEstilosAprendizaje + '}';
     }
     
 }

@@ -1,11 +1,11 @@
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores;
 
 import com.ingesoft.interpro.controladores.Controllers;
-import com.ingesoft.interpro.entidades.TipoEstiloPregunta;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstiloPregunta;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.TipoEstiloPreguntaPK;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstiloPreguntaPK;
 import com.ingesoft.interpro.facades.TipoEstiloPreguntaFacade;
 
 import java.io.Serializable;

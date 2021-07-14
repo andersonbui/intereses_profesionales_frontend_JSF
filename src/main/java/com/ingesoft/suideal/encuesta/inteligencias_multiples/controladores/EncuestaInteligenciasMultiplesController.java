@@ -4,13 +4,14 @@ import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.EncuestaControllerAbstract;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.EncuestaEstilosAprendizaje;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.PreguntaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.TipoInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.EncuestaInteligenciasMultiplesFacade;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import java.util.Random;
@@ -64,11 +65,11 @@ public class EncuestaInteligenciasMultiplesController
     public EncuestaInteligenciasMultiples prepareCreate() {
         Encuesta unaencuesta = getEncuestaGeneral();
         EncuestaInteligenciasMultiples unaencuestaEspe = new EncuestaInteligenciasMultiples(unaencuesta);
-        
-        unaencuesta.setEncuestaInteligenciasMultiples(unaencuestaEspe);
-        getEncuestaController().update();
+        unaencuestaEspe.setFechaCreacion(new Date());
         setSelected(unaencuestaEspe);
+        this.update();
         
+        unaencuesta.setEncuestaInteligenciasMultiples(getSelected());
         initializeEmbeddableKey();
         return getSelected();
     }
@@ -89,7 +90,7 @@ public class EncuestaInteligenciasMultiplesController
     @Override
     public EncuestaInteligenciasMultiples obtenerEncuestaEspecifica(Encuesta unaencuesta) {
         EncuestaInteligenciasMultiples unaencuestaEspe;
-        if(unaencuesta.getEncuestaEstilosAprendizaje() == null){
+        if(unaencuesta.getEncuestaInteligenciasMultiples() == null){
             prepareCreate();
             unaencuestaEspe = getSelected();
         } else {
@@ -114,13 +115,14 @@ public class EncuestaInteligenciasMultiplesController
         return restarget;
     }
     
-    public void seleccionarPunto(RespuestaInteligenciasMultiples respuestaEstilo) {
-        if (!respuestaEstilo.isRespondida()) {
-            getEncuestaController().aumentarPuntos();
-            getEncuestaController().setTiempo(0);
-            respuestaEstilo.responder();
-        }
-    }
+//    @Override
+//    public void seleccionarPunto(RespuestaInteligenciasMultiples respuestaEstilo) {
+//        if (!respuestaEstilo.isRespondida()) {
+//            getEncuestaController().aumentarPuntos();
+//            getEncuestaController().setTiempo(0);
+//            respuestaEstilo.responder();
+//        }
+//    }
     
     @Override
     public void reiniciar() {
@@ -136,6 +138,18 @@ public class EncuestaInteligenciasMultiplesController
         this.reiniciar();
     }
 
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public EncuestaInteligenciasMultiples getSelected() {
+        if(super.getSelected() == null) {
+            super.setSelected(getEncuestaController().getSelected().getEncuestaInteligenciasMultiples());
+        }
+        return super.getSelected() ;
+    }
+    
     @Override
     public boolean finalizarEncuesta() throws InterruptedException {
         getEncuestaController().detenerReloj();
@@ -143,8 +157,10 @@ public class EncuestaInteligenciasMultiplesController
         Thread hilo = guardarRespuestas(getGrupoActual());
         hilo.join();
         // colocar como finalizada y guarda cambios
-        getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
-        update();
+        setSelected(null);
+        getSelected().setEstado(EncuestaInteligenciasMultiples.FINALIZADA);
+        getSelected().setFechaFinalizada(new Date());
+        this.update();
         
         estadisticaEncuentaIntelMultiples = estadisticaEncuesta(getEncuestaGeneral().getEncuestaInteligenciasMultiples());
         
@@ -229,7 +245,8 @@ public class EncuestaInteligenciasMultiplesController
     public String getStringDeleted(){
         return "EncuestaInteligenciasMultiplesDeleted";
     }
-        /**
+    
+    /**
      * 
      * @return 
      */

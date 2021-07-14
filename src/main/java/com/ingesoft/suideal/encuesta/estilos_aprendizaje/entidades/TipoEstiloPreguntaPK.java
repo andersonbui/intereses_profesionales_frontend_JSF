@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.entidades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -13,10 +13,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author anderson
+ * @author Personal
  */
 @Embeddable
-public class RespuestaPorEstiloPK implements Serializable {
+public class TipoEstiloPreguntaPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
@@ -24,15 +24,15 @@ public class RespuestaPorEstiloPK implements Serializable {
     private int idTipoEstilo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idEncuestaEstilosAprendizaje")
-    private int idEncuestaEstilosAprendizaje;
+    @Column(name = "idPreguntaEstilosAprendizaje")
+    private int idPreguntaEstilosAprendizaje;
 
-    public RespuestaPorEstiloPK() {
+    public TipoEstiloPreguntaPK() {
     }
 
-    public RespuestaPorEstiloPK(int idTipoEstilo, int idEncuestaEstilosAprendizaje) {
+    public TipoEstiloPreguntaPK(int idTipoEstilo, int idPreguntaEstilos) {
         this.idTipoEstilo = idTipoEstilo;
-        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
+        this.idPreguntaEstilosAprendizaje = idPreguntaEstilos;
     }
 
     public int getIdTipoEstilo() {
@@ -43,33 +43,33 @@ public class RespuestaPorEstiloPK implements Serializable {
         this.idTipoEstilo = idTipoEstilo;
     }
 
-    public int getIdEncuestaEstilosAprendizaje() {
-        return idEncuestaEstilosAprendizaje;
+    public int getIdPreguntaEstilosAprendizaje() {
+        return idPreguntaEstilosAprendizaje;
     }
 
-    public void setIdEncuestaEstilosAprendizaje(int idEncuestaEstilosAprendizaje) {
-        this.idEncuestaEstilosAprendizaje = idEncuestaEstilosAprendizaje;
+    public void setIdPreguntaEstilosAprendizaje(int idPreguntaEstilosAprendizaje) {
+        this.idPreguntaEstilosAprendizaje = idPreguntaEstilosAprendizaje;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idTipoEstilo;
-        hash += (int) idEncuestaEstilosAprendizaje;
+        hash += (int) idPreguntaEstilosAprendizaje;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RespuestaPorEstiloPK)) {
+        if (!(object instanceof TipoEstiloPreguntaPK)) {
             return false;
         }
-        RespuestaPorEstiloPK other = (RespuestaPorEstiloPK) object;
+        TipoEstiloPreguntaPK other = (TipoEstiloPreguntaPK) object;
         if (this.idTipoEstilo != other.idTipoEstilo) {
             return false;
         }
-        if (this.idEncuestaEstilosAprendizaje != other.idEncuestaEstilosAprendizaje) {
+        if (this.idPreguntaEstilosAprendizaje != other.idPreguntaEstilosAprendizaje) {
             return false;
         }
         return true;
@@ -77,7 +77,7 @@ public class RespuestaPorEstiloPK implements Serializable {
 
     @Override
     public String toString() {
-        return "cRespuestaPorEstiloPK[ idTipoEstilo=" + idTipoEstilo + ", idEncuestaEstilosAprendizaje=" + idEncuestaEstilosAprendizaje + " ]";
+        return "TipoestiloPreguntaPK[ idTipoEstilo=" + idTipoEstilo + ", idPreguntaEstilosAprendizaje=" + idPreguntaEstilosAprendizaje + " ]";
     }
     
 }

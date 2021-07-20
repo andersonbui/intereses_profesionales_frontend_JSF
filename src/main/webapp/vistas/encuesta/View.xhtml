@@ -13,7 +13,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{encuestaController.selected != null}">
                         <h:outputText value="#{bundle.ViewEncuestaLabel_fecha}"/>
-                        <h:outputText value="#{encuestaController.selected.fecha}" title="#{bundle.ViewEncuestaTitle_fecha}">
+                        <h:outputText value="#{encuestaController.selected.fechaFinalizada}" title="#{bundle.ViewEncuestaTitle_fecha}">
                             <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                         </h:outputText>
                         <h:outputText value="#{bundle.ViewEncuestaLabel_idEstudiante}"/>

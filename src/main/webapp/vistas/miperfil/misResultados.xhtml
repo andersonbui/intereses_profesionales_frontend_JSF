@@ -27,7 +27,7 @@
                             <f:selectItem itemLabel="#{bundle.SelectTodos}" value="#{null}"/>
                             <f:selectItems value="#{encuestaController.listarEncuestasSelected(estudianteController.selected)}"
                                            var="encuesta"
-                                           itemLabel="#{encuesta.fecha}"
+                                           itemLabel="#{encuesta.fechaFinalizada}"
                                            itemValue="#{encuesta}"/>
                             <f:ajax render="id_selects" listener="#{misResultadosController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>

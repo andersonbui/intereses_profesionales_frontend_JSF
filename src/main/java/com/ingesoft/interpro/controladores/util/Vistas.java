@@ -26,7 +26,7 @@ public class Vistas implements Serializable {
     }
 
     public static String getRutaGeneral() {
-        return "/suideal/faces";
+        return "/desarrollosuideal/faces";
 //        return "/intereses_profesionales_frontend_JSF/faces";
     }
     

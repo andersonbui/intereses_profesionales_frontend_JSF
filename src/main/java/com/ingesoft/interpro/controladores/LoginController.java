@@ -8,7 +8,9 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
+import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.GrupoUsuario;
+import com.ingesoft.interpro.entidades.Institucion;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.entidades.Usuario;
 import com.ingesoft.interpro.facades.UsuarioFacade;
@@ -45,7 +47,7 @@ public class LoginController extends Controllers implements Serializable {
     UsuarioFacade ejbFacade;
 
     private Usuario usuarioActual;
-    private Persona personaActual;
+//    private Persona personaActual;
     private SocialAuthManager socialManager;
     private Profile profile;
     String usuario;
@@ -117,24 +119,29 @@ public class LoginController extends Controllers implements Serializable {
     }
 
     public Persona getPersonaActual() {
-        return personaActual;
+        return getPersonaController().getPersona(usuarioActual);
     }
 
-    public void setPersonaActual(Persona personaActual) {
-        this.personaActual = personaActual;
-    }
     public boolean usuarioEsDeInstitucion() {
-        return personaActual.getIdInstitucion() != null;
+        return getPersonaActual().getIdInstitucion() != null;
+    }
+    
+    public Institucion getInstitucion() {
+        return getPersonaActual().getIdInstitucion();
     }
 
     public boolean isAdmin() {
-        return getEstudianteController().esAdmin(personaActual);
+        return getEstudianteController().esAdmin(getPersonaActual());
     }
 
     public boolean isEstudiante() {
         return getUsuarioController().esEstudiante(usuarioActual.getIdUsuario());
     }
 
+    public Estudiante getEstudiante() {
+        return getEstudianteController().getEstudiantePorPersona(getPersonaActual());
+    }
+    
     public boolean permisoEstudiante() {
         if (grupos != null) {
             for (GrupoUsuario grupo : grupos) {
@@ -147,19 +154,28 @@ public class LoginController extends Controllers implements Serializable {
         return false;
     }
 
-    public String utimoGrado() {
-        Estudiante estudiante = getEstudianteController().obtenerEstudiante(personaActual);
+    
+    public Grado utimoGradoObj() {
+        Estudiante estudiante = getEstudianteController().obtenerEstudiante(getPersonaActual());
         if (estudiante != null) {
             EstudianteGrado estudianteGrado = getEstudianteGradoController().obtenerUltimoEstudianteGrado(estudiante);
             if (estudianteGrado != null) {
-                return estudianteGrado.getGrado().getCurso();
+                return estudianteGrado.getGrado();
             }
+        }
+        return null;
+    }
+    
+    public String utimoGrado() {
+        Grado  grado = utimoGradoObj();
+        if (grado != null) {
+            return grado.getCurso();
         }
         return "";
     }
 
     public boolean isDocente() {
-        return getEstudianteController().esDocente(personaActual) || getEstudianteController().esAdmin(personaActual);
+        return getEstudianteController().esDocente(getPersonaActual()) || getEstudianteController().esAdmin(getPersonaActual());
     }
 
 //    public void getPerfilUsuario() throws Exception {
@@ -282,7 +298,7 @@ public class LoginController extends Controllers implements Serializable {
 //        }
         if (usuarioActual != null) {
             if (grupos != null && !grupos.isEmpty()) {
-                personaActual = getPersonaController().getPersona(usuarioActual);
+                Persona personaActual = getPersonaController().getPersona(usuarioActual);
                 usuarioActual = personaActual.getIdUsuario();
                 if (UsuarioController.EN_PROCESO.equals(usuarioActual.getEstado())) {
                     PersonaController personaController = getPersonaController();
@@ -316,7 +332,6 @@ public class LoginController extends Controllers implements Serializable {
 
     public void eliminarSesion() {
         usuarioActual = null;
-        personaActual = null;
         grupos = null;
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest req = (HttpServletRequest) fc.getExternalContext().getRequest();
@@ -336,6 +351,14 @@ public class LoginController extends Controllers implements Serializable {
         String rutaGeneral = Vistas.getRutaGeneral();
         FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral + "/login.xhtml");
         return "";
+    }
+
+    public void actualizarEstudiante() {
+        
+        UsuarioController usuarioController = getUsuarioController();
+        usuarioController.setSelected(usuarioActual);
+        usuarioController.update();
+        usuarioActual = usuarioController.getSelected();
     }
 
 }

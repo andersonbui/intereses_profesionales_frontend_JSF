@@ -44,7 +44,7 @@ public class LoginController extends Controllers implements Serializable {
     @EJB
     UsuarioFacade ejbFacade;
 
-    private Usuario actual;
+    private Usuario usuarioActual;
     private Persona personaActual;
     private SocialAuthManager socialManager;
     private Profile profile;
@@ -132,7 +132,7 @@ public class LoginController extends Controllers implements Serializable {
     }
 
     public boolean isEstudiante() {
-        return getUsuarioController().esEstudiante(actual.getIdUsuario());
+        return getUsuarioController().esEstudiante(usuarioActual.getIdUsuario());
     }
 
     public boolean permisoEstudiante() {
@@ -199,12 +199,12 @@ public class LoginController extends Controllers implements Serializable {
         this.password = password;
     }
 
-    public Usuario getActual() {
-        return actual;
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
     }
 
-    public void setActual(Usuario actual) {
-        this.actual = actual;
+    public void setUsuarioActual(Usuario usuarioActual) {
+        this.usuarioActual = usuarioActual;
     }
 
     public Usuario getUsuario(java.lang.Integer id) {
@@ -249,7 +249,7 @@ public class LoginController extends Controllers implements Serializable {
             } else {
                 nomUsuario = session;
             }
-            actual = ejbFacade.buscarPorUsuario(nomUsuario);
+            usuarioActual = ejbFacade.buscarPorUsuario(nomUsuario);
         } catch (ServletException e) {
 //                e.printStackTrace();
             msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos.");
@@ -257,20 +257,20 @@ public class LoginController extends Controllers implements Serializable {
             context.addMessage(null, msg);
             return false;
         }
-        System.out.println("estado usuari: " + actual);
+        System.out.println("estado usuari: " + usuarioActual);
 //                System.out.println("estado usuari: " + actual.getGrupoUsuarioList());
-        if (UsuarioController.EN_ESPERA.equals(actual.getEstado())) {
-            System.out.println("estado usuari: " + actual.getEstado());
+        if (UsuarioController.EN_ESPERA.equals(usuarioActual.getEstado())) {
+            System.out.println("estado usuari: " + usuarioActual.getEstado());
             msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta no ha sido activado. Por favor revise su bandeja de correo");
             eliminarSesion();
-        } else if (UsuarioController.INAACTIVO.equals(actual.getEstado())) {
-            System.out.println("estado usuari: " + actual.getEstado());
+        } else if (UsuarioController.INAACTIVO.equals(usuarioActual.getEstado())) {
+            System.out.println("estado usuari: " + usuarioActual.getEstado());
             msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tu cuenta fue desactivado. Por favor comuniquese con el administrador.");
             eliminarSesion();
         } else {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", this.usuario);
-            System.out.println("estado usuari: " + actual.getEstado());
-            grupos = getGrupoUsuarioController().getGruposUsuario(actual);
+            System.out.println("estado usuari: " + usuarioActual.getEstado());
+            grupos = getGrupoUsuarioController().getGruposUsuario(usuarioActual);
         }
         context.addMessage(null, msg);
 //        } else {
@@ -280,12 +280,14 @@ public class LoginController extends Controllers implements Serializable {
 //            String nombreUsuario = req.getUserPrincipal().getName();
 //            actual = ejbFacade.buscarPorUsuario(nombreUsuario);
 //        }
-        if (actual != null) {
+        if (usuarioActual != null) {
             if (grupos != null && !grupos.isEmpty()) {
-                personaActual = getPersonaController().getPersona(actual);
-                if (UsuarioController.EN_PROCESO.equals(actual.getEstado())) {
+                personaActual = getPersonaController().getPersona(usuarioActual);
+                usuarioActual = personaActual.getIdUsuario();
+                if (UsuarioController.EN_PROCESO.equals(usuarioActual.getEstado())) {
                     PersonaController personaController = getPersonaController();
-                    personaController.prepareUpdate(personaActual);
+                    personaController.setSelected(personaActual);
+                    personaController.prepareUpdate();
                     ruta = Vistas.completarPerfil();
                     FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
                 } else {
@@ -313,7 +315,7 @@ public class LoginController extends Controllers implements Serializable {
     }
 
     public void eliminarSesion() {
-        actual = null;
+        usuarioActual = null;
         personaActual = null;
         grupos = null;
         FacesContext fc = FacesContext.getCurrentInstance();

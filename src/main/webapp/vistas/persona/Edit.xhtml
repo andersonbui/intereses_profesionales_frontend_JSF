@@ -59,7 +59,7 @@
                                         
                                         <p:selectOneRadio id="id_estadoUsuario" 
                                                           value="#{personaController.selected.idUsuario.estado}" 
-                                                          rendered="#{loginController.isDocente() and personaController.editar and !personaController.usuarioEnProceso()}">
+                                                          rendered="#{loginController.isDocente() and personaController.editar}">
                                             <f:selectItems value="#{personaController.tiposEstadoUsuario}"
                                                            var="estado"
                                                                 itemValue="#{estado}"

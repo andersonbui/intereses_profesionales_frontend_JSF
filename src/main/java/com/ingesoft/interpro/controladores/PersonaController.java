@@ -38,7 +38,7 @@ public class PersonaController extends Controllers implements Serializable {
     private boolean editar;
 
     public PersonaController() {
-        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO};
+        this.tiposEstadoUsuario = new String[]{UsuarioController.ACTIVO, UsuarioController.INAACTIVO, UsuarioController.EN_PROCESO, UsuarioController.EN_ESPERA};
     }
 
     public boolean isEditar() {
@@ -172,7 +172,7 @@ public class PersonaController extends Controllers implements Serializable {
      */
     public Persona crearPorAdminDocente() {
         LoginController loginController = getLoginController();
-        if (loginController.getActual() == null) {
+        if (loginController.getUsuarioActual() == null) {
             if (!loginController.isDocente()) {
                 return null;
             }
@@ -241,7 +241,7 @@ public class PersonaController extends Controllers implements Serializable {
             estudianteController.update();
 //            getEstudianteGradoController().create();
         }
-//        Persona perso = (Persona) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonaUpdated"), selected);
+        this.update();
     }
 
     public void destroy() {

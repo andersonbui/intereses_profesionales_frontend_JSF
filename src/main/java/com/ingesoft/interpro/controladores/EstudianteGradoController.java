@@ -8,6 +8,7 @@ import com.ingesoft.interpro.entidades.EstudianteGradoPK;
 import com.ingesoft.interpro.facades.EstudianteGradoFacade;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -56,6 +57,7 @@ public class EstudianteGradoController implements Serializable {
 
     public EstudianteGrado prepareCreate() {
         selected = new EstudianteGrado();
+        selected.setFecha(new Date());
         initializeEmbeddableKey();
         return selected;
     }
@@ -118,6 +120,7 @@ public class EstudianteGradoController implements Serializable {
         selected = null;
         List<EstudianteGrado> lista = getFacade().buscarPorIdEstudiante(estudiante);
         if (!lista.isEmpty()) {
+            System.out.println("lista grados: "+lista);
             selected = lista.get(0);
         }
         return selected;

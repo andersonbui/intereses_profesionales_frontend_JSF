@@ -3,14 +3,15 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" >
 
     <ui:composition template="/realizarEncuesta.xhtml">
         <ui:define name="content">
             <h:form>
                 <p:wizard  widgetVar="perfilEstudianteWizard" showNavBar="true"  
-                           nextLabel="Siguiente"  
-                           backLabel="Anterior">
+                           nextLabel="Siguiente" 
+                           backLabel="Anterior" >
                     <p:tab id="areaProfesionalTab" title="Area profesinal">
                         <center>
                             <p:panel header="Profesion preferida" >
@@ -39,6 +40,16 @@
                                     <div class="col-md-3">
                                         <p:outputLabel style="font-weight:bold; color: black;"
                                                        rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
+                                                   value="#{bundle.Label_Institucion}" for="idSelectInstitucion" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p:outputLabel style="font-weight:bold; color: black;"
+                                                       rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
+                                                       value="#{loginController.institucion.nombre}" id="idSelectInstitucion" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p:outputLabel style="font-weight:bold; color: black;"
+                                                       rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
                                                    value="#{bundle.Label_Grado}" for="idSelectGrado" />
                                     </div>
 
@@ -46,7 +57,7 @@
                                         <p:selectOneMenu id="idSelectGrado" 
                                                          rendered="#{loginController.isEstudiante() and  loginController.usuarioEsDeInstitucion()}"
                                                          immediate="true" filter="true" 
-                                                         value="#{gradoController.selected}" required="true" 
+                                                         value="#{encuestaController.grado}" required="true" 
                                                          requiredMessage="#{bundle.CreateEstudianteRequiredMessage_id}">
                                             <f:selectItem itemLabel="Seleccione el grado" itemValue="" noSelectionOption="true"/>
                                             <f:selectItems value="#{gradoController.getItemsInstitucionEstudiante(estudianteController.getEstudiantePorPersona(loginController.personaActual))}"
@@ -54,7 +65,7 @@
                                                            itemValue="#{grado}"
                                                            itemLabel="#{grado.curso}"
                                                            />
-                                            <f:ajax render="idSelectGrado" />
+                                            <!--<f:ajax event="change" listener="{gradoController.actualizargrado()}" />-->
                                         </p:selectOneMenu>
                                     </div>
                                     
@@ -69,62 +80,26 @@
                             <p:panel header="Materias de preferencia"  class="">
                                 <p class="col-md-12"><b>Selecciona en orden descendente las materias que mas te gustan.</b><br/></p>
                                 <div class="row col-md-8 col-md-offset-2" >
-                                    <div class="col-md-3">
-                                        <label style="font-weight:bold; color: black;" 
-                                               value="Materia 1 " for="materia1_mas" >Materia 1</label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p:selectOneMenu filter="true" id="materia1_mas"  
-                                                         value="#{areaController.itemsMas[0]}"
-                                                         required="true"
-                                                         requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{areaController.items}" 
-                                                           var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[0], areaController.itemsMas, areaController.itemsMenos)}"
-                                                           itemValue="#{area}"
-                                                           itemLabel="#{area.nombre}"
-                                                           />
-                                            <p:ajax event="change" update="materia2_mas materia3_mas"/> 
-                                        </p:selectOneMenu>
-                                    </div>
-                                </div>
-                                <div class="row col-md-8 col-md-offset-2" >
-                                    <div class="col-md-3">
-                                        <p:outputLabel  style="font-weight:bold; color: black;" 
-                                                        value="Materia 2 " for="materia2_mas" />
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p:selectOneMenu filter="true" id="materia2_mas" 
-                                                         value="#{areaController.itemsMas[1]}"
-                                                         required="true"
-                                                         requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{areaController.items}"
-                                                           var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[1], areaController.itemsMas, areaController.itemsMenos)}"
-                                                           itemValue="#{area}"
-                                                           itemLabel="#{area.nombre}"
-                                                           />
-                                            <p:ajax event="change" update="materia1_mas materia3_mas"/> 
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p:outputLabel  style="font-weight:bold; color: black;" 
-                                                        value="Materia 3 " for="materia3_mas" />
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p:selectOneMenu filter="true" id="materia3_mas" 
-                                                         value="#{areaController.itemsMas[2]}"
-                                                         required="true"
-                                                         requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{areaController.items}"
-                                                           var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[2], areaController.itemsMas, areaController.itemsMenos)}"
-                                                           itemValue="#{area}"
-                                                           itemLabel="#{area.nombre}"
-                                                           />
-                                            <p:ajax event="change" update="materia1_mas materia2_mas"/> 
-                                        </p:selectOneMenu>
-                                    </div>
+                                    <c:forEach id="id_items_materia1_mas" begin="0" end="2" var="index">
+                                        <div class="col-md-3">
+                                            <p:outputLabel  style="font-weight:bold; color: black;" 
+                                                            value="Materia #{index} " for="materia#{index}_mas" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p:selectOneMenu filter="true" id="materia#{index}_mas" 
+                                                             value="#{areaController.itemsMas[index]}"
+                                                             required="true"
+                                                             requiredMessage="#{bundle.CreateNotaRequiredMessage_materia}">
+                                                <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                                <f:selectItems value="#{areaController.items}"
+                                                               var="area" itemDisabled="#{areaController.verificarSeleccion(area, areaController.itemsMas[index], areaController.itemsMas, areaController.itemsMenos)}"
+                                                               itemValue="#{area}"
+                                                               itemLabel="#{area.nombre}"
+                                                               />
+                                                <p:ajax event="change" update="@parent"/> 
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </c:forEach>
                                 </div>
                             </p:panel>
                         </center>

@@ -6,6 +6,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Persona;
 import com.ingesoft.interpro.facades.EncuestaFacade;
@@ -403,6 +404,40 @@ public class EncuestaController extends Controllers implements Serializable {
             }
         }
 
+    }
+    
+    public void actualizarInformacionPersonal() {
+    }
+    
+    public void setGrado(Grado grado) {
+        LoginController loginController = getLoginController();
+        if(loginController.isEstudiante()) {
+            Estudiante estud = loginController.getEstudiante();
+            EstudianteGradoController estudGradoCtrl = getEstudianteGradoController();
+            EstudianteGrado estudGrado = estudGradoCtrl.prepareCreate();
+            estudGrado.setGrado(grado);
+            estudGrado.setEstudiante(estud);
+            estudGradoCtrl.update();
+            
+            this.getSelected().setGrado(grado);
+            this.update();
+            
+            loginController.actualizarEstudiante();
+            
+            System.out.println("grado actualizado" + grado);
+        }
+    }
+    
+    public Grado getGrado() {
+        LoginController loginController = getLoginController();
+        Grado grado = null;
+        System.out.println("grado isEstudiante: " + loginController.isEstudiante());
+        
+        if(loginController.isEstudiante()) {
+            grado = loginController.utimoGradoObj();
+            System.out.println("ultimo grado: " + grado);
+        }
+        return grado;
     }
 
     public void create() {

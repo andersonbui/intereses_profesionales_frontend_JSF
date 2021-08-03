@@ -1,8 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.entidades.RespuestaAmbiente;
-import com.ingesoft.interpro.controladores.util.JsfUtil;
-import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Variables;
 import com.ingesoft.interpro.entidades.Encuesta;
@@ -268,8 +266,10 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         getEncuestaController().detenerReloj();
         
         /* Guardado de ultimo grupo de respuestas de ambiente*/
-        for (RespuestaAmbiente respuesta : grupo) {
-            getFacade().edit(respuesta);
+        if(grupo != null){
+            for (RespuestaAmbiente respuesta : grupo) {
+                getFacade().edit(respuesta);
+            }
         }
         pasoActual += 1;
         finalizo = true;
@@ -375,10 +375,6 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
 
         cantidadGrupos = itemsRespuest.size() / tamaniogrupo; 
         cantidadGrupos += (itemsRespuest.size() % tamaniogrupo == 0 ? 0 : 1);
-        // @desarrollo
-        if (Utilidades.esDesarrollo()) {
-            cantidadGrupos = 6;
-        }// @end
         return cantidadGrupos;
     }
 
@@ -543,10 +539,13 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
             
             //ubicar la encuesta en la ultima pagina respondida
             if (items_recuperados != null && !items_recuperados.isEmpty()) {
-                pasoActual = (items_recuperados.size() / 6) - 1;
-                if (pasoActual > numGrupos) {
-                    pasoActual = numGrupos - 1;
+                int imagenesXpagina = tamGrupo;
+                int paginaActual = (items_recuperados.size() / imagenesXpagina);
+                if(paginaActual == numGrupos) {
+                    pasoActual = numGrupos;
+                    finalizarEncuesta(null);
                 }
+                pasoActual = paginaActual;
             } else {
                 pasoActual = 0;
             }

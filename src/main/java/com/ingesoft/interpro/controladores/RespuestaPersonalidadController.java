@@ -8,6 +8,7 @@ import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import com.ingesoft.interpro.entidades.PreguntaPersonalidad;
+import com.ingesoft.interpro.entidades.RespuestaPersonalidadPK;
 import com.ingesoft.interpro.entidades.TipoPersonalidad;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.facades.RespuestaPersonalidadFacade;
@@ -39,11 +40,12 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
 
     @EJB
     private com.ingesoft.interpro.facades.RespuestaPersonalidadFacade ejbFacade;
-    private List<RespuestaPersonalidad> items = null;
+    private List<RespuestaPersonalidad> itemsRespuestas = null;
     private RespuestaPersonalidad selected;
     private List<RespuestaPersonalidad> grupo = null;
-    Encuesta EncuestaAcutal;
-
+    private boolean finalizo;
+    List<RespuestaPorPersonalidad> listaResultadosPorPersonalidad;
+    private List<PreguntaPersonalidad> listaPreguntas = null;
     
     int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
     
@@ -53,7 +55,7 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
     /**
      * contador de puntos por respuesta
      */
-    int[] vecContRespuestasPersonalidad;
+    int[] cantidadRespuestasXPregunta;
 
     public RespuestaPersonalidadController() {
         tamGrupo = 4;
@@ -100,7 +102,7 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaPersonalidadCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
@@ -145,6 +147,9 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         grupo = getGrupoItems(pasoActual + 1);
         return pasoActual;
     }
+    public Encuesta getEncuestaActual() {
+        return getEncuestaController().getSelected();
+    }
 
     public int siguientePaso(ActionEvent actionEvent) {
         System.out.println("siguientes paso");
@@ -155,18 +160,20 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
 
     public boolean finalizarEncuesta() {
         getEncuestaController().detenerReloj();
-        for (RespuestaPersonalidad respuesta : grupo) {
-            getFacade().edit(respuesta);
+        if(grupo != null){
+            for (RespuestaPersonalidad respuesta : grupo) {
+                getFacade().edit(respuesta);
+            }
         }
         pasoActual += 1;
 
         realizarEstadisticas();
-        EncuestaAcutal = getEncuestaController().getSelected();
+        Encuesta encuestaActual = getEncuestaActual();
         
-        String personalidad = obtenerPersonalidad(EncuestaAcutal);
-        EncuestaAcutal.getEncuestaPersonalidad().setPersonalidad(personalidad);
-        EncuestaAcutal.getEncuestaPersonalidad().setEstado(EncuestaPersonalidad.FINALIZADA);
-        EncuestaAcutal.getEncuestaPersonalidad().setFechaFinalizada(new Date());
+        String personalidad = obtenerPersonalidad(encuestaActual);
+        encuestaActual.getEncuestaPersonalidad().setPersonalidad(personalidad);
+        encuestaActual.getEncuestaPersonalidad().setEstado(EncuestaPersonalidad.FINALIZADA);
+        encuestaActual.getEncuestaPersonalidad().setFechaFinalizada(new Date());
         
         getEncuestaController().guardarSelected();
         // realizar estadistica de respuestas
@@ -286,17 +293,18 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         valores[1].valor = 30;
         valores[2].valor = 30;
         valores[3].valor = 12;
-        for (RespuestaPersonalidad respuestaPersonalidad : items) {
+        for (RespuestaPersonalidad respuestaPersonalidad : itemsRespuestas) {
             TipoPersonalidad tipopersonalidad = respuestaPersonalidad.getPreguntaPersonalidad().getIdTipoPersonalidad();
             int indice = tipopersonalidad.getIdTipoPersonalidad() - 1;
             valores[indice].tipoPer = tipopersonalidad;
             int signo = respuestaPersonalidad.getPreguntaPersonalidad().getSuma() ? 1 : -1;
             valores[indice].valor += signo * respuestaPersonalidad.getRespuesta();
         }
+        Encuesta encuestaActual = getEncuestaActual();
         for (int i = 0; i < valores.length; i++) {
             respuestaPorPersonalidadController.prepareCreate();
             respuestaPorPersonalidadController.getSelected().setPuntaje(valores[i].valor);
-            respuestaPorPersonalidadController.getSelected().setEncuestaPersonalidad(EncuestaAcutal.getEncuestaPersonalidad());
+            respuestaPorPersonalidadController.getSelected().setEncuestaPersonalidad(encuestaActual.getEncuestaPersonalidad());
             respuestaPorPersonalidadController.getSelected().setTipoPersonalidad(valores[i].tipoPer);
             respuestaPorPersonalidadController.create();
         }
@@ -316,12 +324,22 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
     public int getTamGrupo() {
         return tamGrupo;
     }
+    
+    public int getCantidadGrupos() {
+        List itemsRespuest = getItemsRespuestas();
+        int cantidadGrupos = 0; // numGrupos
+        int tamaniogrupo = getTamGrupo();
 
+        cantidadGrupos = itemsRespuest.size() / tamaniogrupo; 
+        cantidadGrupos += (itemsRespuest.size() % tamaniogrupo == 0 ? 0 : 1);
+        return cantidadGrupos;
+    }
+    
     public List<Integer> getGrupos() {
         List<Integer> gruposPreguntas = new ArrayList<>();
-        items = getItems();
-        numGrupos = items.size() / tamGrupo;
-        numGrupos += (items.size() % tamGrupo == 0 ? 0 : 1);
+        itemsRespuestas = getItemsRespuestas();
+        numGrupos = itemsRespuestas.size() / tamGrupo;
+        numGrupos += (itemsRespuestas.size() % tamGrupo == 0 ? 0 : 1);
         for (int i = 1; i <= numGrupos; i++) {
             gruposPreguntas.add(i);
         }
@@ -330,12 +348,12 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
 
     
     public List<RespuestaPersonalidad> actualizarTodasRespuestas() throws IOException {
-        for (RespuestaPersonalidad item : items) {
+        for (RespuestaPersonalidad item : itemsRespuestas) {
             this.getFacade().edit(item);
         }
         pasoActual = (numGrupos - 1);
         finalizarEncuesta();
-        return items;
+        return itemsRespuestas;
     }
     
     /**
@@ -345,18 +363,18 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
      * @return
      */
     public List<RespuestaPersonalidad> getGrupoItems(int numGrupo) {
-        getItems();
+        getItemsRespuestas();
         // guardar respuestas actuales
         if (grupo != null && !grupo.isEmpty()) {
             HiloGuardado hilo = new HiloGuardado(grupo);
             hilo.start();
         }
         List<RespuestaPersonalidad> listaRespuestas = null;
-        if (items != null) {
+        if (itemsRespuestas != null) {
             listaRespuestas = new ArrayList<>();
             for (int i = tamGrupo * (numGrupo - 1); i < tamGrupo * numGrupo; i++) {
-                if (i >= 0 && i < items.size()) {
-                    listaRespuestas.add(items.get(i));
+                if (i >= 0 && i < itemsRespuestas.size()) {
+                    listaRespuestas.add(itemsRespuestas.get(i));
                 } else {
                     break;
                 }
@@ -367,47 +385,111 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
 
     public void seleccionarPunto(RespuestaPersonalidad respuestaPersonalidad) {
         int posicion = respuestaPersonalidad.getPreguntaPersonalidad().getOrden() - 1;
-        if (vecContRespuestasPersonalidad[posicion] == 0) {
+        if (cantidadRespuestasXPregunta[posicion] == 0) {
             getEncuestaController().aumentarPuntos();
             getEncuestaController().setTiempo(0);//Number(0);
         }
-        vecContRespuestasPersonalidad[posicion]++;
+        cantidadRespuestasXPregunta[posicion]++;
     }
 
-    @Override
-    public void prepararEncuesta(Encuesta encuesta) {
-        List<PreguntaPersonalidad> preguntas = getPreguntaPersonalidadController().getItems();
-        prepararRespuestasAux(preguntas, encuesta);
+    /**
+     * 
+     * @return 
+     */
+    private void setListaPreguntas(List<PreguntaPersonalidad> listaPreguntas) {
+        this.listaPreguntas = listaPreguntas;
     }
     
-    private List<RespuestaPersonalidad> prepararRespuestasAux(List<PreguntaPersonalidad> preguntas, Encuesta encuesta) {
-        EncuestaAcutal = encuesta;
-        items = new ArrayList<>(preguntas.size());
-        vecContRespuestasPersonalidad = new int[preguntas.size()];
-        EncuestaPersonalidad epe = getEncuestaPersonalidadController().crearEncuestaPersonalidad(encuesta);
-        for (PreguntaPersonalidad pregunta : preguntas) {
-            selected = new RespuestaPersonalidad(pregunta.getIdPreguntaPersonalidad(), encuesta.getIdEncuesta());
-            selected.setPreguntaPersonalidad(pregunta);
-            selected.setEncuestaPersonalidad(epe);
-            items.add(selected);
-        }
-
-        for (int i = 0; i < vecContRespuestasPersonalidad.length; i++) {
-            vecContRespuestasPersonalidad[i] = 0;
-        }
-
-        // @desarrollo
-        if (Utilidades.esDesarrollo()) {
-            Random rand = new Random(Calendar.getInstance().getTimeInMillis());
-            for (RespuestaPersonalidad item : items) {
-                item.setRespuesta(1 + rand.nextInt(5));
+    /**
+     * 
+     * @return 
+     */
+    private List<PreguntaPersonalidad> getListaPreguntas() {
+        return listaPreguntas;
+    }
+    
+    public List<RespuestaPersonalidad> obtenerTodosPorEncuesta(Encuesta encuesta) {
+        return getFacade().obtenerTodosPorEncuesta(encuesta);
+    }
+    
+    @Override
+    public void prepararEncuesta(Encuesta encuesta) {
+        
+        reiniciar();
+        
+        List<PreguntaPersonalidad> preguntas = getPreguntaPersonalidadController().getItems();
+        setListaPreguntas(preguntas);
+        
+        finalizo = false;
+        listaResultadosPorPersonalidad = null;
+        prepararRespuestasAux();
+    }
+    
+    private List<RespuestaPersonalidad> prepararRespuestasAux() {
+        List<PreguntaPersonalidad> preguntas = getListaPreguntas();
+        
+        if (itemsRespuestas == null && (preguntas = getListaPreguntas()) != null) {
+            itemsRespuestas = new ArrayList<>(preguntas.size());
+            cantidadRespuestasXPregunta = new int[preguntas.size()];
+            Encuesta encuesta = getEncuestaActual();
+            RespuestaPersonalidad unaRespAmb;
+            List<RespuestaPersonalidad> items_recuperados = obtenerTodosPorEncuesta(encuesta);
+            
+            int contPuntosRecuperados = 0;
+            if(encuesta.getPuntajeEncuesta() != null && encuesta.getPuntajeEncuesta() >= 0) {
+                contPuntosRecuperados = encuesta.getPuntajeEncuesta();
             }
-        }// @end
-        getGrupos();
-        pasoActual = 0;
-        grupo = getGrupoItems(pasoActual + 1);
+            
+            EncuestaPersonalidad epe = getEncuestaPersonalidadController().crearEncuestaPersonalidad(encuesta);
+            
+            for (PreguntaPersonalidad pregunta : preguntas) {
+                unaRespAmb = new RespuestaPersonalidad();
+                unaRespAmb.setPreguntaPersonalidad(pregunta);
+                unaRespAmb.setEncuestaPersonalidad(epe);
+                unaRespAmb.setRespuestaPersonalidadPK(new RespuestaPersonalidadPK(pregunta.getIdPreguntaPersonalidad(), epe.getIdEncuesta()));
+                
+                Integer respuesta = Integer.MIN_VALUE;
+                if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                    int indice = items_recuperados.indexOf(unaRespAmb);
+                    if (indice >= 0) {
+                        int i = (pregunta.getOrden() - 1);
+                        cantidadRespuestasXPregunta[i]++;
+                        respuesta = items_recuperados.get(indice).getRespuesta();
+                    }
+                }
+                // @desarrollo - respuetas para desarrollo
+                if (respuesta == Integer.MIN_VALUE && Utilidades.esDesarrollo()) {
+                    Random rand = new Random(Calendar.getInstance().getTimeInMillis());
+                    respuesta = 1 + rand.nextInt(5);
+                    getEncuestaController().addPuntos_eval(1);
+                }// @end
+                /** 
+                 * si se consigue una respuesta almacenado o 
+                 * aleatorio(desarrollo), entonces, agregarlo a la pregunta 
+                 */
+                if(respuesta != Integer.MIN_VALUE){
+                    unaRespAmb.setRespuesta(respuesta);
+                }
+                itemsRespuestas.add(unaRespAmb);
+            }
 
-        return items;
+            getGrupos();
+            //ubicar la encuesta en la ultima pagina respondida
+            if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                int imagenesXpagina = tamGrupo;
+                int paginaActual = (items_recuperados.size() / imagenesXpagina);
+                if(paginaActual == numGrupos) {
+                    pasoActual = numGrupos;
+                    finalizarEncuesta();
+                }
+                pasoActual = paginaActual;
+            } else {
+                pasoActual = 0;
+            }
+            encuesta.setPuntajeEncuesta(contPuntosRecuperados);
+            grupo = getGrupoItems(pasoActual + 1);
+        }
+        return itemsRespuestas;
     }
 
     public class HiloGuardado extends Thread {
@@ -436,15 +518,15 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaPersonalidadDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<RespuestaPersonalidad> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
+    public List<RespuestaPersonalidad> getItemsRespuestas() {
+        if (itemsRespuestas == null) {
+            itemsRespuestas = getFacade().findAll();
         }
-        return items;
+        return itemsRespuestas;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

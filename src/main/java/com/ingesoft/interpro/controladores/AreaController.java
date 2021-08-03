@@ -45,8 +45,11 @@ public class AreaController implements Serializable {
         // si encuesta esta reanudada
         if (selected != null) {
             List<AreaEncuesta> areas = selected.getAreaEncuestaList();
-            System.out.println("reanudando areas: " + areas);
+            
+//            System.out.println("reanudando areas: " + areas.size());
             for (AreaEncuesta area : areas) {
+                System.out.println("reanudando area: " + area + "| getTipoEleccionMateria:"+area.getTipoEleccionMateria());
+                
                 if (area.getTipoEleccionMateria() != null) {
                     int idTipo = area.getTipoEleccionMateria().getIdTipoEleccionMateria();
                     switch (idTipo) {
@@ -67,15 +70,15 @@ public class AreaController implements Serializable {
         if (Utilidades.esDesarrollo()) {
             List<Area> areas = getItems();
             System.out.println("inicializando: " + areas);
-            itemsMenos[0] = areas.get(0);
-            itemsMenos[1] = areas.get(1);
-            itemsMenos[2] = areas.get(2);
-            itemsMas[0] = areas.get(3);
-            itemsMas[1] = areas.get(4);
-            itemsMas[2] = areas.get(5);
-            itemsNota[0] = areas.get(2);
-            itemsNota[1] = areas.get(5);
-            itemsNota[2] = areas.get(3);
+            itemsMenos[0] = itemsMenos[0] == null? areas.get(0) : itemsMenos[0];
+            itemsMenos[1] = itemsMenos[1] == null? areas.get(1) : itemsMenos[1];
+            itemsMenos[2] = itemsMenos[2] == null? areas.get(2) : itemsMenos[2];
+            itemsMas[0] = itemsMas[0] == null? areas.get(3) : itemsMas[0];
+            itemsMas[1] = itemsMas[1] == null? areas.get(4) : itemsMas[1];
+            itemsMas[2] = itemsMas[2] == null? areas.get(5) : itemsMas[2];
+            itemsNota[0] = itemsNota[0] == null? areas.get(2) : itemsNota[0];
+            itemsNota[1] = itemsNota[1] == null? areas.get(5) : itemsNota[1];
+            itemsNota[2] = itemsNota[2] == null? areas.get(3) : itemsNota[2];
         }
     }
 

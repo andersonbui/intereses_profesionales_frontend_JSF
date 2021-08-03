@@ -96,7 +96,7 @@
                                                                itemValue="#{area}"
                                                                itemLabel="#{area.nombre}"
                                                                />
-                                                <p:ajax event="change" update="@parent"/> 
+                                                <p:ajax event="change" update="@parent" listener="#{areaEncuestaController.almacenarEncuestaAreasMas()}" /> 
                                             </p:selectOneMenu>
                                         </div>
                                     </c:forEach>
@@ -123,7 +123,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia2_menos materia3_menos"/>
+                                            <p:ajax event="change" update="materia2_menos materia3_menos"  listener="#{areaEncuestaController.almacenarEncuestaAreasMenos()}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="col-md-3">
@@ -141,7 +141,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia1_menos materia3_menos"/>
+                                            <p:ajax event="change" update="materia1_menos materia3_menos" listener="#{areaEncuestaController.almacenarEncuestaAreasMenos()}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="col-md-3">
@@ -159,7 +159,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia1_menos materia2_menos"/> 
+                                            <p:ajax event="change" update="materia1_menos materia2_menos" listener="#{areaEncuestaController.almacenarEncuestaAreasMenos()}" /> 
                                         </p:selectOneMenu>
                                     </div>
                                 </div>
@@ -184,7 +184,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia2_mejorNota materia3_mejorNota"/>
+                                            <p:ajax event="change" update="materia2_mejorNota materia3_mejorNota"  listener="#{areaEncuestaController.almacenarEncuestaAreasNota()}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="col-md-3">
@@ -202,7 +202,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia1_mejorNota materia3_mejorNota"/> 
+                                            <p:ajax event="change" update="materia1_mejorNota materia3_mejorNota" listener="#{areaEncuestaController.almacenarEncuestaAreasNota()}" /> 
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="col-md-3">
@@ -220,7 +220,7 @@
                                                            itemValue="#{area}"
                                                            itemLabel="#{area.nombre}"
                                                            />
-                                            <p:ajax event="change" update="materia1_mejorNota materia2_mejorNota"/> 
+                                            <p:ajax event="change" update="materia1_mejorNota materia2_mejorNota" listener="#{areaEncuestaController.almacenarEncuestaAreasNota()}" /> 
                                         </p:selectOneMenu>
                                     </div>
                                 </div>

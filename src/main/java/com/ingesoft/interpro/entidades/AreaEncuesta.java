@@ -122,7 +122,7 @@ public class AreaEncuesta implements Serializable {
 
     @Override
     public String toString() {
-        return "AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " ]";
+        return "AreaEncuesta[ areaEncuestaPK=" + areaEncuestaPK + " | area=" + idArea + "]";
     }
     
 }

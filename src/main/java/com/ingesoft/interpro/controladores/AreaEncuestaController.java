@@ -65,48 +65,80 @@ public class AreaEncuestaController extends Controllers implements Serializable 
         return ejbFacade;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public AreaEncuesta prepareCreate() {
         selected = new AreaEncuesta();
         initializeEmbeddableKey();
         return selected;
     }
 
-    public void almacenarEncuestaAreas(Encuesta encuesta) {
+    /**
+     * 
+     */
+    public void almacenarEncuestaAreasMas() {
         AreaController areaController = getAreaController();
         TipoEleccionMateriaController tipoEleccionMateriaController = getTipoEleccionMateriaController();
 
+        Encuesta encuesta = getEncuestaController().getSelected();
+        
+        Area[] areas = areaController.getItemsMas();
+        TipoEleccionMateria tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMayor();
+        almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
+    }
+    
+    /**
+     * 
+     */
+    public void almacenarEncuestaAreasMenos() {
+        AreaController areaController = getAreaController();
+        TipoEleccionMateriaController tipoEleccionMateriaController = getTipoEleccionMateriaController();
+
+        Encuesta encuesta = getEncuestaController().getSelected();
+        
         Area[] areas = areaController.getItemsMenos();
         TipoEleccionMateria tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMenor();
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
+    }
+    
+    /**
+     * 
+     */
+    public void almacenarEncuestaAreasNota() {
+        AreaController areaController = getAreaController();
+        TipoEleccionMateriaController tipoEleccionMateriaController = getTipoEleccionMateriaController();
 
-        areas = areaController.getItemsMas();
-        tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaMayor();
-        almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
-
-        areas = areaController.getItemsNota();
-        tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaPorNota();
+        Encuesta encuesta = getEncuestaController().getSelected();
+        
+        Area[] areas = areaController.getItemsNota();
+        TipoEleccionMateria tipoEleccionMateria = tipoEleccionMateriaController.getTipoEleccionMateriaPorNota();
         almacenarAreasEncuesta(areas, encuesta, tipoEleccionMateria);
     }
 
     protected void almacenarAreasEncuesta(Area[] areas, Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria) {
         for (int i = 0; i < areas.length; i++) {
             Area area = areas[i];
-            selected = obtenerAreaEncuesta(encuesta, tipoEleccionMateria, (short) i);
-            selected.setIdArea(area);
-            create();
+            if(area != null){
+                selected = obtenerAreaEncuesta(encuesta, tipoEleccionMateria, (short) i, area);
+            }
         }
     }
 
-    public AreaEncuesta obtenerAreaEncuesta(Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria, short posicion) {
+    public AreaEncuesta obtenerAreaEncuesta(Encuesta encuesta, TipoEleccionMateria tipoEleccionMateria, short posicion, Area area) {
         AreaEncuesta areaEncuesta = getAreaEncuesta(new AreaEncuestaPK(posicion, encuesta.getIdEncuesta(), tipoEleccionMateria.getIdTipoEleccionMateria()));
         if (areaEncuesta == null) {
             prepareCreate();
             selected.setEncuesta(encuesta);
             selected.getAreaEncuestaPK().setPosicion((short) posicion);
             selected.setTipoEleccionMateria(tipoEleccionMateria);
-            areaEncuesta = selected;
+        } else {
+            selected = areaEncuesta;
         }
-        return areaEncuesta;
+        selected.setIdArea(area);
+        selected = this.update();
+        return selected;
     }
 
     public AreaEncuesta obtenerItem(int index) {
@@ -120,8 +152,12 @@ public class AreaEncuestaController extends Controllers implements Serializable 
         }
     }
 
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaUpdated"), selected);
+    /**
+     * 
+     * @return 
+     */
+    public AreaEncuesta update() {
+        return (AreaEncuesta) persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("AreaEncuestaUpdated"), selected);
     }
 
     public void destroy() {

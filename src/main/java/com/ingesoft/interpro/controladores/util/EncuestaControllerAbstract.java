@@ -328,6 +328,12 @@ public abstract class EncuestaControllerAbstract <
      * @return 
      */
     public int getNumGrupos() {
+        if(numGrupos == 0){
+            numGrupos = definirNumeroGrupos();
+            if(numGrupos == 0){
+                numGrupos = 1;
+            }
+        }
         return numGrupos;
     }
     
@@ -400,7 +406,8 @@ public abstract class EncuestaControllerAbstract <
      * @return 
      */
     public int getnombrePaso() {
-        return (getPasoActual() * 100 / getNumGrupos());
+        int numgrupos = getNumGrupos();
+        return (getPasoActual() * 100 / numgrupos);
     }
 
     /**

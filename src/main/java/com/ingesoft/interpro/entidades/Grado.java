@@ -148,9 +148,8 @@ public class Grado implements Serializable {
             return false;
         }
         Grado other = (Grado) object;
-        System.out.println("comparando: other.idGrado:"+other.idGrado+"| this.idGrado:"+this.idGrado);
+//        System.out.println("comparando: other.idGrado:"+other.idGrado+"| this.idGrado:"+this.idGrado);
         boolean condicion = (this.idGrado == null && other.idGrado != null) || (this.idGrado != null && !this.idGrado.equals(other.idGrado));
-        System.out.println("comparando: "+(condicion));
         if (condicion) {
             return false;
         }

@@ -231,10 +231,10 @@ public class EncuestaController extends Controllers implements Serializable {
     
         
     public void guaradarInfoPersonal() {
-        getAreaEncuestaController().almacenarEncuestaAreas(selected);
-        Grado grado = getGradoController().getSelected();
-        selected.setGrado(grado);
-        update();
+//        getAreaEncuestaController().almacenarEncuestaAreas(selected);
+//        Grado grado = getGradoController().getSelected();
+//        selected.setGrado(grado);
+//        update();
     }
     
     public void siguienteEncuesta() throws IOException {

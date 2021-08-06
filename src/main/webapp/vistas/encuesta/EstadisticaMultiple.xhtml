@@ -21,16 +21,14 @@
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
                                          value="#{estadisticaAmbienteController.institucion}" 
-                                         required="true"
-                                         immediate="true" 
-                                         requiredMessage="#{bundle.EditEstudianteGradoRequiredMessage_grado}">
+                                         immediate="true" >
 
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
                                            itemValue="#{institucion}"/>
-                            <f:ajax render="id_selects, id_estudiantes" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
+                            <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 
                         <p:outputLabel value="#{bundle.Label_Grado}" for="id_select_grado" />
@@ -59,6 +57,12 @@
                                            itemValue="#{estudiante}"/>
                             <f:ajax listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
+                        
+                        <p:outputLabel value="#{bundle.Label_estudiante}" for="id_email_estudiante" />
+                        <p:inputText id="id_email_estudiante" value="#{estadisticaAmbienteController.email}" 
+                                     >
+                            <f:ajax render="id_selects" event="change" listener="#{estadisticaAmbienteController.ingresarEmailBusqueda()}" />
+                        </p:inputText>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}"
                                      value="cargar" 
@@ -67,13 +71,13 @@
                     <button type="button" value=""   onclick="generarpdf()" >
                         <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                     </button>
-                    <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}"
-                              value="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante()}" var="result"> 
+                    <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante() != null}"
+                              value="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante()}" var="result"> 
 
                         <br/>
                         <!-- ADD_PAGE -->
                         <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail" 
-                                     rendered="#{estadisticaAmbienteController.cargarEstadisticasPorCadaEstudiante() != null}">
+                                     rendered="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante() != null}">
 
                             <p:outputPanel>
                                 <h4 style="text-align:center">Estimado estudiante <b>#{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido}</b></h4>

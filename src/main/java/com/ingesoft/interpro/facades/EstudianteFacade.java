@@ -54,4 +54,13 @@ public class EstudianteFacade extends AbstractFacade<Estudiante> {
         }
         return null;
     }
+    
+    public List<Estudiante> buscarPorEmail(String email) {
+        Query query = em.createNamedQuery("Estudiante.findByEmail");
+        query.setParameter("email", email);
+        if (!query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
 }

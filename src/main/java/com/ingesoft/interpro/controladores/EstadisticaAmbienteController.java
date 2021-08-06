@@ -44,6 +44,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
     private String string_grafico;
     String[] colores = {"008000", "FF0000", "FFD42A", "0000FF", "FFFF00", "00FFFF"};
     String tiempo;
+    String email;
 
     List<DatosRiasec> listaDatosRaisec;
     private String personalidad;
@@ -118,6 +119,14 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         this.fechafin = fechafin;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     public void onDateSelect(SelectEvent event) {
         fechafin = null;
         string_grafico = null;
@@ -176,6 +185,25 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         return graficas;
     }
 
+    /**
+     * Ejecutar cuando se ingresar email para busqueda de estudiante
+     */
+    public void ingresarEmailBusqueda() {
+        System.out.println("ingresarEmailBusqueda");
+        cadenasgrafico = null;
+        string_grafico = null;
+        listaDatosRaisec = null;
+        personalidad = null;
+        institucion = null;
+        estudiante = null;
+        grado = null;
+        getEncuestaController().setItems(null);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     public String cargarGraficoResultadoAmbiente() {
         int opcion = detectarTipoEstadistica();
         System.out.println("opcion: " + opcion);
@@ -190,16 +218,49 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         return result;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public List<ResultadoEstMultiple> cargarEstadisticasPorCadaEstudiante() {
-        if (getEstadisticaAmbienteController().getInstitucion() != null && cadenasgrafico == null) {
+        if (getEstadisticaAmbienteController().getInstitucion() != null) {
+            cadenasgrafico = null;
             List<Estudiante> listaEst = getEstudianteController().getItems(getEstadisticaAmbienteController().getInstitucion());
-            if (listaEst != null) {
-                cadenasgrafico = new ArrayList<>();
+            if (listaEst != null && !listaEst.isEmpty()) {
                 for (Estudiante unestudiante : listaEst) {
-                    cadenasgrafico.add(cargarGraficoResultadoAmbiente(unestudiante));
+                    ResultadoEstMultiple unres = cargarGraficoResultadoAmbiente(unestudiante);
+                    if( unres != null ) {
+                        if( cadenasgrafico == null ) {
+                            cadenasgrafico = new ArrayList<>();
+                        }
+                        cadenasgrafico.add(unres);
+                    }
                 }
             }
+            return cadenasgrafico;
         }
+        if( getEmail() != null && !"".equals(getEmail()) ) {
+            List<Estudiante> listaEst = getEstudianteController().getEstudiantePorEmail(getEmail());
+            if (listaEst != null && !listaEst.isEmpty()) {
+                for (Estudiante unestudiante : listaEst) {
+                    ResultadoEstMultiple unres = cargarGraficoResultadoAmbiente(unestudiante);
+                    if( unres != null ) {
+                        if( cadenasgrafico == null ) {
+                            cadenasgrafico = new ArrayList<>();
+                        }
+                        cadenasgrafico.add(unres);
+                    }
+                }
+            }
+            return cadenasgrafico;
+        }
+        return cadenasgrafico;
+    }
+    
+    public List<ResultadoEstMultiple> getEstadisticasPorCadaEstudiante() {
+//        if (cadenasgrafico == null) {
+//            cadenasgrafico = cargarEstadisticasPorCadaEstudiante();
+//        }
         return cadenasgrafico;
     }
 
@@ -221,6 +282,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
             FacesMessage msg;
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficientes datos para crear la estadistica", "");
             context.addMessage(null, msg);
+            return null;
         }
 
         

@@ -30,7 +30,7 @@
                             <f:selectItems value="#{institucionController.itemsAvailableSelectOne}"
                                            var="institucion"
                                            itemLabel="#{institucion.nombre}"
-                                           itemValue="#{institucion}"/>
+                                           itemValue="#{institucion}" />
                             <f:ajax render="id_selects" listener="#{estadisticaAmbienteController.reiniciarEstadistica()}" />
                         </p:selectOneMenu>
 

@@ -222,6 +222,10 @@ public class EstudianteController extends Controllers implements Serializable {
         return getFacade().findPorPersona(persona);
     }
 
+    public List<Estudiante> getEstudiantePorEmail(String email) {
+        return getFacade().buscarPorEmail(email);
+    }
+    
     public List<Estudiante> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }

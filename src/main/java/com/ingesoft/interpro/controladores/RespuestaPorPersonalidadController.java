@@ -5,6 +5,7 @@ import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
+import com.ingesoft.interpro.entidades.RespuestaPorPersonalidadPK;
 import com.ingesoft.interpro.facades.RespuestaPorPersonalidadFacade;
 
 import java.io.Serializable;
@@ -42,6 +43,9 @@ public class RespuestaPorPersonalidadController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
+        if(selected.getRespuestaPorPersonalidadPK() == null) {
+            selected.setRespuestaPorPersonalidadPK(new RespuestaPorPersonalidadPK());
+        }
         selected.getRespuestaPorPersonalidadPK().setIdEncuesta(selected.getEncuestaPersonalidad().getIdEncuesta());
         selected.getRespuestaPorPersonalidadPK().setIdTipoPersonalidad(selected.getTipoPersonalidad().getIdTipoPersonalidad());
     }

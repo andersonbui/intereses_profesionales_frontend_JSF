@@ -61,33 +61,43 @@
                         </h:panelGroup>
                     </div>
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje" rendered="#{!estiloController.esUltimoPaso()}" >
-                        <h1><p:progressBar value="#{estiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
-                           <br/>
-                           <ui:repeat value="#{estiloController.grupoActual}" var="respuesta">
+                            <h1><p:progressBar value="#{estiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{estiloController.anteriorPaso}"
+                                                  update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.puedeAnteriorPaso()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{estiloController.siguientePaso}"
+                                                  update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.puedeSiguientePasoNoUltimo()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{estiloController.finalizarEncuesta()}"
+                                                  update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.esPenultimoPaso()}" >
+                                </p:commandButton>
+                            </h:panelGroup>
+                            <ui:repeat value="#{estiloController.grupoActual}" var="respuesta">
                                #{respuesta.idpreguntaEstilos.enunciado} <br/>
                                <p:selectOneRadio id="id_resp_estilo" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
                                     <f:selectItems value="#{respuesta.idpreguntaEstilos.tipoEstiloPreguntaList}" var="tep" 
                                                    itemLabel="#{tep.opcion}" itemValue="#{tep.indice}"  class="pregunta_estilo" />
                                     <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{estiloController.seleccionarPunto(respuesta)}" />
                                 </p:selectOneRadio>
-                           </ui:repeat>
+                            </ui:repeat>
                         </p:panel>
-                        <h:panelGroup  style="background-color: black;" >
-                            <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{estiloController.anteriorPaso}"
-                                              update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.puedeAnteriorPaso()}" >
-                            </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{estiloController.siguientePaso}"
-                                              update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.puedeSiguientePasoNoUltimo()}" >
-                            </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{estiloController.finalizarEncuesta()}"
-                                              update=":PreguntaEstilosAprenForm, @form" rendered="#{estiloController.esPenultimoPaso()}" >
-                            </p:commandButton>
-                        </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje"  rendered="#{estiloController.esUltimoPaso()}" >
                         <p:panel header="Preguntas de Estilos aprendizaje uno">
                             <h1><p:progressBar value="#{estiloController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton class="float-l btn" value="anterior" ajax="true" 
+                                                 actionListener="#{estiloController.anteriorPaso}"
+                                                 update=":PreguntaEstilosAprenForm, @form" >
+                                </p:commandButton>
+                                <p:commandButton value="Siguiente" ajax="true" style="float:right;" class="float-r btn"
+                                                 action="#{encuestaController.siguienteEncuesta()}"
+                                                 rendered="#{estiloController.esUltimoPaso()}"
+                                                 > 
+                                </p:commandButton>
+                            </h:panelGroup>
 
                             <div class="contentenedor-preguntas-estilo" >
                                 <ui:repeat value="#{estiloController.estadisticaEncuentaEstiloApren}" var="respuesta">
@@ -95,17 +105,6 @@
                                 </ui:repeat>
                             </div>
                         </p:panel>
-                        <h:panelGroup  style="background-color: black; display: block;" >
-                            <p:commandButton class="float-l btn" value="anterior" ajax="true" 
-                                             actionListener="#{estiloController.anteriorPaso}"
-                                             update=":PreguntaEstilosAprenForm, @form" >
-                            </p:commandButton>
-                            <p:commandButton value="Siguiente" ajax="true" style="float:right;" class="float-r btn"
-                                             action="#{encuestaController.siguienteEncuesta()}"
-                                             rendered="#{estiloController.esUltimoPaso()}"
-                                             > 
-                            </p:commandButton>
-                        </h:panelGroup>
                     </h:panelGroup>
 
                 </div>

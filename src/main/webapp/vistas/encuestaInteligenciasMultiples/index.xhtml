@@ -25,8 +25,8 @@
                 <p:dialog header="Instrucciones de encuesta" widgetVar="instruccionesIntelMultiplesDialog"
                           modal="true"  width="50%" height="250px" closable="false" style="padding:10px 40px; width:250px; height:250px;"  >
                     <div style="font-size:1.2em">
-                        <p> la descripción para la sección de estilos de aprendizaje.
-                            En esta sección de estilos de aprendizaje por favor seleccióne para cada pregunta una de las dos posibles respuestas y continue dando clic en el boton siguiente<br/>
+                        <p> la descripción para la sección de Inteligencias multiples.
+                            En esta sección de Inteligencias multiples por favor seleccióne para cada pregunta una de las dos posibles respuestas y continue dando clic en el boton siguiente<br/>
                         </p>
                         <br/>
                     </div>
@@ -39,7 +39,7 @@
             </h:form>
             <h:outputScript >
                 $(document).ready(function () {
-                PF('instruccionesIntelMultiplesDialog').show();
+                    PF('instruccionesIntelMultiplesDialog').show();
                 });
             </h:outputScript>
             <h:form id="PreguntasIntelMultiplesForm" >
@@ -61,8 +61,20 @@
                         </h:panelGroup>
                     </div>
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje" rendered="#{!encuestaInteligenciasMultiplesController.esUltimoPaso()}" >
-                        <h1><p:progressBar value="#{encuestaInteligenciasMultiplesController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
-                        <p:panel header="Preguntas de Estilos aprendizaje uno">
+                        <p:panel header="Preguntas de Inteligencias multiples">
+                            <h1><p:progressBar value="#{encuestaInteligenciasMultiplesController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <br/>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.anteriorPaso}"
+                                                  update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.puedeAnteriorPaso()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.siguientePaso}"
+                                                  update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.puedeSiguientePasoNoUltimo()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.finalizarEncuesta()}"
+                                                  update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.esPenultimoPaso()}" >
+                                </p:commandButton>
+                            </h:panelGroup>
                            <p:panelGrid id="panel" styleClass="panelgrid">
                                 <ui:repeat value="#{encuestaInteligenciasMultiplesController.grupoActual}" var="item">
                                     <p:row>
@@ -81,21 +93,21 @@
 
                             </p:panelGrid>
                         </p:panel>
-                        <h:panelGroup  style="background-color: black;" >
-                            <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.anteriorPaso}"
-                                              update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.puedeAnteriorPaso()}" >
-                            </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.siguientePaso}"
-                                              update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.puedeSiguientePasoNoUltimo()}" >
-                            </p:commandButton>
-                            <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{encuestaInteligenciasMultiplesController.finalizarEncuesta()}"
-                                              update=":PreguntasIntelMultiplesForm, @form" rendered="#{encuestaInteligenciasMultiplesController.esPenultimoPaso()}" >
-                            </p:commandButton>
-                        </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup class="panel-preguntas-estilos-aprendizaje"  rendered="#{encuestaInteligenciasMultiplesController.esUltimoPaso()}" >
-                        <p:panel header="Preguntas de Estilos aprendizaje uno">
+                        <p:panel header="Preguntas de Inteligencias multiples">
                             <h1><p:progressBar value="#{encuestaInteligenciasMultiplesController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton class="float-l btn" value="anterior" ajax="true" 
+                                                 actionListener="#{encuestaInteligenciasMultiplesController.anteriorPaso}"
+                                                 update=":PreguntasIntelMultiplesForm, @form" >
+                                </p:commandButton>
+                                <p:commandButton value="Ver resumen de encuestas" ajax="true" style="float:right;" class="float-r btn"
+                                                 action="#{encuestaController.pasoResumen()}"
+                                                 rendered="#{encuestaInteligenciasMultiplesController.esUltimoPaso()}"
+                                                 > 
+                                </p:commandButton>
+                            </h:panelGroup>
 
                             <div class="contentenedor-preguntas-estilo" >
                                 <ui:repeat value="#{encuestaInteligenciasMultiplesController.estadisticaEncuentaEstiloApren}" var="respuesta">
@@ -103,17 +115,6 @@
                                 </ui:repeat>
                             </div>
                         </p:panel>
-                        <h:panelGroup  style="background-color: black; display: block;" >
-                            <p:commandButton class="float-l btn" value="anterior" ajax="true" 
-                                             actionListener="#{encuestaInteligenciasMultiplesController.anteriorPaso}"
-                                             update=":PreguntasIntelMultiplesForm, @form" >
-                            </p:commandButton>
-                            <p:commandButton value="Ver resumen de encuestas" ajax="true" style="float:right;" class="float-r btn"
-                                             action="#{encuestaController.pasoResumen()}"
-                                             rendered="#{encuestaInteligenciasMultiplesController.esUltimoPaso()}"
-                                             > 
-                            </p:commandButton>
-                        </h:panelGroup>
                     </h:panelGroup>
 
                 </div>

@@ -6,7 +6,9 @@
 package com.ingesoft.interpro.controladores.util;
 
 import com.ingesoft.interpro.entidades.DatosRiasec;
+import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaPorEstilo;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public class ResultadoEstMultiple {
     List<DatosRiasec> listaDatRiasec;
     double promedioPuntajeEncuesta;
     double promedioPuntajeEValuacion;
+    List<RespuestaPorEstilo> respuestaPorEstilo;
+    Encuesta encuesta;
 
     public String getGrafico() {
         return grafico;
@@ -69,6 +73,21 @@ public class ResultadoEstMultiple {
     public void setPromedioPuntajeEValuacion(double promedioPuntajeEValuacion) {
         this.promedioPuntajeEValuacion = promedioPuntajeEValuacion;
     }
-    
+
+    public List<RespuestaPorEstilo> getRespuestaPorEstilo() {
+        return respuestaPorEstilo;
+    }
+
+    public void setRespuestaPorEstilo(List<RespuestaPorEstilo> respuestaPorEstilo) {
+        this.respuestaPorEstilo = respuestaPorEstilo;
+    }
+
+    public Encuesta getEncuesta() {
+        return encuesta;
+    }
+
+    public void setEncuesta(Encuesta encuesta) {
+        this.encuesta = encuesta;
+    }
     
 }

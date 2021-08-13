@@ -149,6 +149,10 @@ public class Encuesta implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
+//    public Date getFechaCreacion() {
+//        return fechaCreacion.toString();
+//    }
+    
     @XmlTransient
     public List<AreaEncuesta> getAreaEncuestaList() {
         return areaEncuestaList;

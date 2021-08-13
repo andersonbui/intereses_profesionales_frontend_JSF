@@ -24,7 +24,7 @@ public abstract class ControllerAbstract<Entidad, EntidadFacade>  extends Contro
         return (AbstractFacade) getEjbFacade();
     }
     
-    private Entidad selected;
+    public Entidad selected;
     private List<Entidad> items = null;
     
     public List<Entidad> getItems() {

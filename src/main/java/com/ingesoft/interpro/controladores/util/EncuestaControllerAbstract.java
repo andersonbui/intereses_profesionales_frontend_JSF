@@ -5,7 +5,6 @@
  */
 package com.ingesoft.interpro.controladores.util;
 
-import com.ingesoft.interpro.controladores.EncuestaController;
 import com.ingesoft.interpro.controladores.EncuestaControllerInterface;
 import com.ingesoft.interpro.entidades.Encuesta;
 import java.io.Serializable;
@@ -493,7 +492,5 @@ public abstract class EncuestaControllerAbstract <
     public void setVecContadorRespuestasEstiloApren(int[] vecContadorRespuestasEstiloApren) {
         this.vecContadorRespuestasEstiloApren = vecContadorRespuestasEstiloApren;
     }
-    
-    
     
 }

@@ -5,7 +5,7 @@ import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstiloPK;
-import com.ingesoft.interpro.facades.RespuestaEstiloFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.RespuestaEstiloFacade;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -26,7 +26,7 @@ public class RespuestaEstilosController extends RespuestaControllerAbstract <
             EncuestaEstilosAprendizaje> {
 
     @EJB
-    private com.ingesoft.interpro.facades.RespuestaEstiloFacade ejbFacade;
+    private com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.RespuestaEstiloFacade ejbFacade;
     
     public RespuestaEstilosController() {
     }
@@ -34,7 +34,6 @@ public class RespuestaEstilosController extends RespuestaControllerAbstract <
     public void inicializar(Encuesta selected) {
 
     }
-
 
     protected void initializeEmbeddableKey() {
     }

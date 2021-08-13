@@ -356,6 +356,12 @@ public class EncuestaController extends Controllers implements Serializable {
         }
     }
 
+    /**
+     * @deprecated 
+     * @param i
+     * @param personalidad
+     * @return 
+     */
     public String resultado_personalidad(int i, String personalidad) {
         if (personalidad == null || "".equals(personalidad)) {
             return null;
@@ -367,6 +373,12 @@ public class EncuestaController extends Controllers implements Serializable {
 
     }
     
+    /**
+     * @deprecated 
+     * @param i
+     * @param personalidad
+     * @return 
+     */
     public String resultado_personalidad_descripcion(int i, String personalidad) {
         if (personalidad == null || "".equals(personalidad)) {
             return "";

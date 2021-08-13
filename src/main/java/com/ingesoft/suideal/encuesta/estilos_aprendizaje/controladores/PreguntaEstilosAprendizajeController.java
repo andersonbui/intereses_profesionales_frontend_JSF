@@ -3,7 +3,7 @@ package com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.PreguntaEstilosAprendizaje;
 import com.ingesoft.interpro.controladores.util.PreguntaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.PreguntaEstilosAprendizajeFsFacade;
 import java.io.IOException;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class PreguntaEstilosAprendizajeController  extends PreguntaControllerAbs
         >  {
 
     @EJB
-    private com.ingesoft.interpro.facades.PreguntaEstilosAprendizajeFsFacade ejbFacade;
+    private com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.PreguntaEstilosAprendizajeFsFacade ejbFacade;
     
     public PreguntaEstilosAprendizajeController() {
     }

@@ -11,6 +11,7 @@ import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstiloCon
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaPorEstilosController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.PreguntaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.RespuestaInteligenciasMultiplesController;
@@ -274,6 +275,13 @@ public abstract class Controllers implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         RespuestaPorPersonalidadController respuestaPorPersonalidadController = (RespuestaPorPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorPersonalidadController");
         return respuestaPorPersonalidadController;
+    }
+    
+    public RespuestaPorEstilosController getRespuestaPorEstilosController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaPorEstilosController respuestaPorEstilosController = (RespuestaPorEstilosController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorEstilosController");
+        return respuestaPorEstilosController;
     }
 
     public EvaluacionController getEvaluacionController() {

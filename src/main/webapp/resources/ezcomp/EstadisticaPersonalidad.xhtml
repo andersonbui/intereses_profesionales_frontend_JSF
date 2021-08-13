@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <!-- simple components https://www.apuntesdejava.com/2014/06/tutorial-jsf-22-sesion-5-facelets.html#google_vignette -->
+    <!-- INTERFACE -->
+    <cc:interface  >
+        <cc:attribute name="personalidad" required="true"  />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+         <style type="text/css">
+            .value {
+                font-weight: bold;
+                margin-left:  auto;
+            }
+
+            .contentenedor-preguntas-estilo {
+                width: 100px;
+                margin: auto;
+            }
+            
+            
+            .personalidad {
+                display: inline-block;
+                width: 24%;
+            }
+
+            .grupo-img-personalidad {
+                width:100%;
+            }
+
+            .img_personalidad {
+                 height: 14vw; 
+                 width: 80%; 
+                 padding: 10px; 
+                 margin: 0px 10px; 
+                 border:red ridge thick 
+            }
+
+            .txt_personalidad {
+                padding: 20px 20px; 
+                font-weight: bold;
+            }
+        </style>
+        <h3 style="text-align: center;">Estadistica Personalidad</h3>
+        
+        <h:body id='idpersonalidad'  rendered="#{cc.attrs.personalidad != null}" >
+
+            <h1 style="text-align: center;" value="">Personalidad: #{cc.attrs.personalidad}</h1>
+            <center class="grupo-img-personalidad">
+                <c:forEach begin="0" end="3" var="index">
+                    <div class="personalidad">
+                        <div>
+                            <p:graphicImage title="#{estadisticaPersonalidadController.resultado_personalidad_descripcion(index, cc.attrs.personalidad )}" 
+                                            name="#{estadisticaPersonalidadController.resultado_personalidad(index,  cc.attrs.personalidad)}" class="img_personalidad" style="" />   
+                        </div>
+                        <div>
+                            <p:outputLabel value="#{estadisticaPersonalidadController.resultado_personalidad_descripcion(index,  cc.attrs.personalidad )}" class="txt_personalidad" />
+                        </div>
+                    </div>
+                </c:forEach>
+            </center>
+        </h:body>
+    </cc:implementation>
+</html>

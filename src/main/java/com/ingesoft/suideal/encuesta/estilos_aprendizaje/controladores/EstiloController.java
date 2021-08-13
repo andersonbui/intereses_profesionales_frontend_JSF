@@ -4,10 +4,11 @@ import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.EncuestaControllerAbstract;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.facades.EncuestaEstilosAprendizajeFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizajeFacade;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.PreguntaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstilo;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaPorEstilo;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstilo;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstiloPregunta;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class EstiloController
             PreguntaEstilosAprendizaje> {
 
     @EJB
-    private com.ingesoft.interpro.facades.EncuestaEstilosAprendizajeFacade ejbFacade;
+    private com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizajeFacade ejbFacade;
     
     private List<Contador<TipoEstilo>> estadisticaEncuentaEstiloApren;
       
@@ -90,6 +91,11 @@ public class EstiloController
         return getSelected();
     }
 
+    /**
+     * 
+     * @param actualRespuesta
+     * @return 
+     */
     @Override
     public RespuestaEstilo respuestaAleatoria(RespuestaEstilo actualRespuesta) {
         char valuerand = ((new Random()).nextBoolean())? 'A': 'B';
@@ -108,30 +114,27 @@ public class EstiloController
         return getSelected();
     }
 
+    /**
+     * 
+     */
     @Override
     public void reiniciar() {
         setPasoActual(0);
         setGrupoActual(getGrupoItems(getPasoActual() + 1));
     }
 
+    /**
+     * 
+     * @param encuesta 
+     */
     @Override
     public void prepararEncuesta(Encuesta encuesta) {
-//         System.out.println("prepararEncuesta| encuesta"+encuesta);
         setTamGrupo(5);
         this.setListaPreguntas(getPreguntas());
         this.definirNumeroGrupos();
         this.reiniciar();
     }
 
-//    public void seleccionarPunto(RespuestaEstilo respuestaEstilo) {
-//        int posicion = respuestaEstilo.getIdpreguntaEstilos().getOrden()- 1;
-//        if (vecContadorRespuestasEstiloApren[posicion] == 0) {
-//            getEncuestaController().aumentarPuntos();
-//            getEncuestaController().setTiempo(0);//Number(0);
-//        }
-//        vecContadorRespuestasEstiloApren[posicion]++;
-//    }
-    
     /**
      * 
      * @return
@@ -149,12 +152,25 @@ public class EstiloController
         
         estadisticaEncuentaEstiloApren = estadisticaEncuesta(getEncuestaGeneral().getEncuestaEstilosAprendizaje());
         
+        guardarEstadisticasEstilo(estadisticaEncuentaEstiloApren);
+        
         setPasoActual(getPasoActual() + 1);
         getEncuestaController().finalizarEncuesta();
         return true;
     }
     
+    private void guardarEstadisticasEstilo(List<Contador<TipoEstilo>> estadisticaEncuentaEstiloApren) {
         
+        RespuestaPorEstilosController rpec = getRespuestaPorEstilosController();
+        RespuestaPorEstilo respuestaEst = rpec.prepareCreate();
+        for (Contador<TipoEstilo> contador : estadisticaEncuentaEstiloApren) {
+            respuestaEst.setTipoEstilo(contador.getTipo());
+            respuestaEst.setEncuestaEstilosAprendizaje(this.getSelected());
+            respuestaEst.setRespuesta(contador.getContador().shortValue());
+        }
+        rpec.update();
+    }
+
     /**
      * Calcula Estadistica de tipo estilo de una encuesta
      * @param encuesta
@@ -167,9 +183,10 @@ public class EstiloController
         if(itemsRespuestas == null ){
             return null;
         }
-        Contador<TipoEstilo>[][] contador = new Contador[2][4]; /** 8 es la cantidad de tipos de estilo */
-        contador[0] = new Contador[4];
-        contador[1] = new Contador[4];
+        int cantDatos = 4;
+        Contador<TipoEstilo>[][] contador = new Contador[2][cantDatos]; /** 8 es la cantidad de tipos de estilo */
+        contador[0] = new Contador[cantDatos];
+        contador[1] = new Contador[cantDatos];
         int indice;
         int columna;
         int fila;
@@ -192,12 +209,12 @@ public class EstiloController
         }
         List<Contador<TipoEstilo>> vectorRes = new ArrayList<>();
         
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < cantDatos; i++) {
             vectorRes.add(new Contador());
         }
         int resta;
         /** Calculo de grupos de tipos de estilo */
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < vectorRes.size(); i++) {
             
             indice = contador[0][i].getContador() > contador[1][i].getContador() ? 0 : 1;
             resta = Math.abs(contador[0][i].getContador() - contador[1][i].getContador());
@@ -279,7 +296,7 @@ public class EstiloController
     public List<Contador<TipoEstilo>> getEstadisticaEncuentaEstiloApren() {
         return estadisticaEncuentaEstiloApren;
     }
-    
+
 //    
     /************************************************************************
      * CONVERTER

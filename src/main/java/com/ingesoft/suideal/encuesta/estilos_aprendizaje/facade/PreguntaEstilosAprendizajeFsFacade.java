@@ -1,5 +1,6 @@
-package com.ingesoft.interpro.facades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade;
 
+import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.PreguntaEstilosAprendizaje;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

@@ -11,12 +11,13 @@
         <ui:define name="title">
             <h:outputText value="#{bundle.ListEncuestaTitle}"></h:outputText>
         </ui:define>
-
+        
+            
         <ui:define name="content">
             #{estadisticaAmbienteController.reiniciarTodo()}
             <h:form id="EstadisticaForm" style="border: whitesmoke 30px solid">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" id="id_selects">
+                    <p:panelGrid columns="2" id="id_selects" >
 
                         <p:outputLabel value="#{bundle.Label_institucion}" for="id_select_institucion" />
                         <p:selectOneMenu id="id_select_institucion" 
@@ -71,6 +72,13 @@
                     <button type="button" value=""   onclick="generarpdf()" >
                         <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                     </button>
+                    <div>
+                        <br/>
+                        <h:outputFormat style="width:100%" rendered="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante() == null}" >
+                            No se encontraron datos
+                        </h:outputFormat>
+                        
+                    </div>
                     <p:repeat id="id_estudiantes" rendered="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante() != null}"
                               value="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante()}" var="result"> 
 
@@ -80,23 +88,23 @@
                                      rendered="#{estadisticaAmbienteController.getEstadisticasPorCadaEstudiante() != null}">
 
                             <p:outputPanel>
-                                <h4 style="text-align:center">Estimado estudiante <b>#{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido}</b></h4>
-                                <p  style="font-size: 1.5em; text-align: left">Email: #{result.estudiante.idPersona.email} </p>
-                                <p:outputLabel  style="font-size: 1.5em; text-align: left">Grado #{estudianteController.ultimoGrado(result.estudiante)}</p:outputLabel>
+                                <div style="" >
+                                    <h4 style="text-align:center">Estimado estudiante <b>#{result.estudiante.idPersona.nombre} #{result.estudiante.idPersona.apellido}</b></h4>
+                                    <p  style="font-size: 1.5em; text-align: left">Email: #{result.estudiante.idPersona.email} </p>
+                                    <p:outputLabel  style="font-size: 1.5em; text-align: left">Grado #{estudianteController.ultimoGrado(result.estudiante)}</p:outputLabel>
+                                    <br/>
+                                    <p:outputLabel value="Puntaje de Juego: #{result.getPromedioPuntajeEncuesta()}"></p:outputLabel>
+                                    <br/>
+                                    <p:outputLabel value="Puntaje Evaluacion: #{result.getPromedioPuntajeEValuacion()}"></p:outputLabel>
+                                </div>
                                 <br/>
-                                <p:outputLabel value="Puntaje de Juego: #{result.getPromedioPuntajeEncuesta()}"></p:outputLabel>
-                                <br/>
-                                <p:outputLabel value="Puntaje Evaluacion: #{result.getPromedioPuntajeEValuacion()}"></p:outputLabel>
-                                <br/>
-                                <h:outputFormat rendered="#{result.personalidad!=''}">
-                                    <h2> Sus resultados son: </h2>
-                                </h:outputFormat>
                                 <h:outputFormat rendered="#{result.personalidad==''}">
-                                    <h2> No ha completado la encuesta.</h2>
+                                    <h2> No ha completado la encuesta de personalidad.</h2>
                                 </h:outputFormat>
+                                <center><strong><h1> Estadistica Personalidad</h1></strong></center>
                                 <br/>
                                 <h:body id='idpersonalidad' rendered="#{result.personalidad!='' and encuestaController.resultado_personalidad_descripcion(index, result.personalidad ) != null}" >
-                                    <h1 style="text-align: center;" value="">Personalidad: #{result.personalidad}</h1>
+                                    <h3 style="text-align: center;" value="">Personalidad: #{result.personalidad}</h3>
                                     <center class="grupo-img-personalidad">
                                         <c:forEach begin="0" end="3" var="index">
                                             <div class="personalidad">
@@ -111,7 +119,8 @@
                                         </c:forEach>
                                     </center>
                                 </h:body>
-
+                                <br/>
+                                <center><strong><h1> Estadistica Ambiente</h1></strong></center>
                                 <h:panelGrid columns="2" rendered="#{result.grafico != null}">
                                     <h:column >
                                         <div  style=" ">

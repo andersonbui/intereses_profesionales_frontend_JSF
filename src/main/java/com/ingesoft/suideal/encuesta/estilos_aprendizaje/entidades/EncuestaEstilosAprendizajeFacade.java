@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ingesoft.interpro.facades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

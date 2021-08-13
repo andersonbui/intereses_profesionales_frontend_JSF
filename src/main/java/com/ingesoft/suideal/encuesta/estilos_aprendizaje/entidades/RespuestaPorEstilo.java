@@ -5,7 +5,6 @@
  */
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
-import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstilo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

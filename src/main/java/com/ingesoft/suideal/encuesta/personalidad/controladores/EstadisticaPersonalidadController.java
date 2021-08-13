@@ -1,4 +1,4 @@
-package com.ingesoft.interpro.controladores;
+package com.ingesoft.suideal.encuesta.personalidad.controladores;
 
 import be.ceau.chart.BarChart;
 import be.ceau.chart.color.Color;
@@ -298,6 +298,68 @@ public class EstadisticaPersonalidadController implements Serializable {
         @Override
         public String toString() {
             return "Datos{" + "color=" + color + ", label=" + label + ", tipo=" + tipo + ", valor=" + valor + '}';
+        }
+
+    }
+    
+    /**
+     * 
+     * @param i
+     * @param personalidad
+     * @return 
+     */
+    public String resultado_personalidad(int i, String personalidad) {
+        if (personalidad == null || "".equals(personalidad)) {
+            return null;
+        }
+        String result_personalidad = personalidad;
+        String url = "img/resultado_test_personalidad/" + i + result_personalidad.charAt(i) + ".jpg";
+
+        return url;
+
+    }
+    
+    /**
+     * 
+     * @param i
+     * @param personalidad
+     * @return 
+     */
+    public String resultado_personalidad_descripcion(int i, String personalidad) {
+        if (personalidad == null || "".equals(personalidad)) {
+            return "";
+        }
+//        System.out.println("resultado_personalidad_descripcion: "+personalidad);
+        Character result_personalidad = null;
+        try{
+            result_personalidad = personalidad.charAt(i);
+        }catch (Exception e) {
+            System.out.println("personalidad vacia");
+        }
+        if (null == result_personalidad) {
+            return null;
+        } else {
+            String codigo_personalidad = "" + i + result_personalidad;
+            switch (codigo_personalidad) {
+                case "0E":
+                    return "Estrovertido";
+                case "0I":
+                    return "Introvertido";
+                case "1I":
+                    return "Intuitivo";
+                case "1S":
+                    return "Sensato";
+                case "2E":
+                    return "Emocional";
+                case "2R":
+                    return "Racional";
+                case "3J":
+                    return "Juzgador";
+                case "3P":
+                    return "Perceptivo";
+                default:
+                    return null;
+            }
         }
 
     }

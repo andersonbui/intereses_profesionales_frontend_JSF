@@ -1,6 +1,6 @@
-package com.ingesoft.interpro.facades;
+package com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade;
 
-import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaEstilo;
 import java.util.List;

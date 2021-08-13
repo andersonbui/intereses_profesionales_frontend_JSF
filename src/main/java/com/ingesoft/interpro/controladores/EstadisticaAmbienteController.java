@@ -258,9 +258,6 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
     }
     
     public List<ResultadoEstMultiple> getEstadisticasPorCadaEstudiante() {
-//        if (cadenasgrafico == null) {
-//            cadenasgrafico = cargarEstadisticasPorCadaEstudiante();
-//        }
         return cadenasgrafico;
     }
 

@@ -5,7 +5,7 @@ import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstilo;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.controladores.util.JsfUtil.PersistAction;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.facades.TipoEstiloFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.TipoEstiloFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +25,7 @@ import javax.faces.convert.FacesConverter;
 public class TipoEstiloController  extends Controllers implements Serializable {
 
     @EJB
-    private com.ingesoft.interpro.facades.TipoEstiloFacade ejbFacade;
+    private com.ingesoft.suideal.encuesta.estilos_aprendizaje.facade.TipoEstiloFacade ejbFacade;
     private List<TipoEstilo> items = null;
     private TipoEstilo selected;
 

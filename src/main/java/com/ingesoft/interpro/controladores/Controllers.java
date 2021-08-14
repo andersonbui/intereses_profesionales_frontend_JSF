@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.suideal.encuesta.ambiente.controladores.EstadisticaAmbienteController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaEstilosController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.PreguntaEstilosAprendizajeController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstiloController;

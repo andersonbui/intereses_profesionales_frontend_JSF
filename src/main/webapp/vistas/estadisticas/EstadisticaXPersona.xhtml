@@ -51,8 +51,12 @@
                         <p:outputPanel>
                             <ezcomp:EstadisticaPersonalidad  rendered="#{result.personalidad != null}"  
                                                              personalidad="#{result.personalidad}" ></ezcomp:EstadisticaPersonalidad>
+
                             <ezcomp:EstadisticaEstilosAprendizaje rendered="#{result.respuestaPorEstilo != null}" 
                                                                   listRespuestasXEstilos="#{result.respuestaPorEstilo}" ></ezcomp:EstadisticaEstilosAprendizaje>
+                                                                  
+                            <ezcomp:EstadisticaAmbientes id_grafico="#{result.encuesta.idEncuesta}" rendered="#{result.graficoAmbiente != null and result.graficoAmbiente != ''}" 
+                                graficoAmbiente="#{result.graficoAmbiente}" ></ezcomp:EstadisticaAmbientes>
 
                         </p:outputPanel>
                         <!--</h:panelGrid>-->

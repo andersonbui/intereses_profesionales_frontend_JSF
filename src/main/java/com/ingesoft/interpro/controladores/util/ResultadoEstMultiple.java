@@ -31,6 +31,10 @@ public class ResultadoEstMultiple {
     public String getGrafico() {
         return grafico;
     }
+    
+    public String getGraficoAmbiente() {
+        return grafico;
+    }
 
     public void setGrafico(String grafico) {
         this.grafico = grafico;

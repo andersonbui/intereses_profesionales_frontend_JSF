@@ -1,5 +1,6 @@
 package com.ingesoft.interpro.controladores;
 
+import com.ingesoft.suideal.encuesta.ambiente.controladores.EstadisticaAmbienteController;
 import com.ingesoft.interpro.entidades.RespuestaAmbiente;
 import com.ingesoft.interpro.controladores.util.Utilidades;
 import com.ingesoft.interpro.controladores.util.Variables;

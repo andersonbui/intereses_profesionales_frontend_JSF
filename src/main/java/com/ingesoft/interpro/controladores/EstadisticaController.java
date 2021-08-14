@@ -17,6 +17,7 @@ public class EstadisticaController  extends Controllers implements Serializable 
 
     private List<ResultadoEstMultiple> items;
     public String email;
+    List<EstadisticasControllerInterface> listaEstadisticas;
 
     @Override
     protected AbstractFacade getFacade() {
@@ -27,6 +28,7 @@ public class EstadisticaController  extends Controllers implements Serializable 
         listaEstadisticas = new ArrayList();
         listaEstadisticas.add(getEstadisticaEstiloController());
         listaEstadisticas.add(getEstadisticaPersonalidadController());
+        listaEstadisticas.add(getEstadisticaAmbienteController());
     }
 
     public void inicializar(Encuesta selected) {
@@ -74,8 +76,6 @@ public class EstadisticaController  extends Controllers implements Serializable 
         }
         return listadoResultado;
     }
-    
-    List<EstadisticasControllerInterface> listaEstadisticas;
     
     public ResultadoEstMultiple calcularItemsByEncuesta(Encuesta encuesta) {
         ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();

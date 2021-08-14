@@ -8,6 +8,8 @@ import be.ceau.chart.options.BarOptions;
 import be.ceau.chart.options.scales.BarScale;
 import be.ceau.chart.options.scales.YAxis;
 import be.ceau.chart.options.ticks.LinearTicks;
+import com.ingesoft.interpro.controladores.EstadisticasControllerInterface;
+import com.ingesoft.interpro.controladores.util.ResultadoEstMultiple;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
@@ -27,7 +29,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "estadisticaPersonalidadController")
 @SessionScoped
-public class EstadisticaPersonalidadController implements Serializable {
+public class EstadisticaPersonalidadController implements Serializable, EstadisticasControllerInterface {
 
     Institucion institucion;
     Grado grado;
@@ -247,6 +249,26 @@ public class EstadisticaPersonalidadController implements Serializable {
             return listaResultados;
         }
         return null;
+    }
+    
+    public List<ResultadoPorAmbiente> resultadosPorEncuesta(Encuesta encuesta) {
+
+        List<ResultadoPorAmbiente> listaResultadosPorAmbiente = encuesta.getResultadoPorAmbienteList();
+        return listaResultadosPorAmbiente;
+    }
+    
+    /**
+     * 
+     * @param resultadosEstMultiple
+     */
+    @Override
+    public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
+        Encuesta encuesta = resultadosEstMultiple.getEncuesta();
+        if(encuesta != null && encuesta.getEncuestaPersonalidad()!= null){
+            List respPorPersonaloidad = encuesta.getEncuestaPersonalidad().getRespuestaPorPersonalidadList();
+            resultadosEstMultiple.setRespuestaPorPersonalidad(respPorPersonaloidad);
+            resultadosEstMultiple.setPersonalidad(encuesta.getEncuestaPersonalidad().getPersonalidad());
+        }
     }
 
     /**

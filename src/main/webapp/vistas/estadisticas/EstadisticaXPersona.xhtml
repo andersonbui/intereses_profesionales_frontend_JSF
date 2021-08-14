@@ -21,13 +21,13 @@
                     <p:panelGrid columns="2" id="id_selects" >
 
                         <p:outputLabel value="#{bundle.Label_estudiante}" for="id_email_estudiante" />
-                        <p:inputText id="id_email_estudiante" value="#{estadisticaEstiloController.email}" 
+                        <p:inputText id="id_email_estudiante" value="#{estadisticaController.email}" 
                                      >
                             <f:ajax render="id_selects" event="change" />
                         </p:inputText>
                         
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{estadisticaEstiloController.calcularItemsByEmail()}"
+                    <p:commandButton actionListener="#{estadisticaController.calcularItemsByEmail()}"
                                      value="cargar" 
                                      update=":growl,display,@form:id_datosrepeat" >
                     </p:commandButton>
@@ -36,18 +36,18 @@
                     </button>
                     <div>
                         <br/>
-                        <h:outputFormat style="width:100%" rendered="#{estadisticaEstiloController.getItemsByEmail() == null}" >
+                        <h:outputFormat style="width:100%" rendered="#{estadisticaController.getItemsByEmail() == null}" >
                             No se encontraron datos
                         </h:outputFormat>
                     </div>
-                    <p:repeat id="id_datosrepeat" rendered="#{estadisticaEstiloController.getItemsByEmail() != null}"
-                              value="#{estadisticaEstiloController.getItemsByEmail()}" var="result"> 
+                    <p:repeat id="id_datosrepeat" rendered="#{estadisticaController.getItemsByEmail() != null}"
+                              value="#{estadisticaController.getItemsByEmail()}" var="result"> 
 
                         <br/>
                         <h6  style="text-align: center;">#{result.encuesta.fechaCreacion}</h6>
                         <!-- ADD_PAGE -->
                         <!--<h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail"--> 
-                                     <!--rendered="{estadisticaEstiloController.getItemsByEmail() != null}">-->
+                                     <!--rendered="{estadisticaController.getItemsByEmail() != null}">-->
                         <p:outputPanel>
                             <ezcomp:EstadisticaPersonalidad  rendered="#{result.personalidad != null}"  
                                                              personalidad="#{result.personalidad}" ></ezcomp:EstadisticaPersonalidad>

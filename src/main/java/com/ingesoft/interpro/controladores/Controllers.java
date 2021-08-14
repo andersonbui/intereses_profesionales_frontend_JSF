@@ -11,10 +11,12 @@ import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstiloCon
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;
+import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstadisticaEstiloController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaPorEstilosController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.PreguntaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.RespuestaInteligenciasMultiplesController;
+import com.ingesoft.suideal.encuesta.personalidad.controladores.EstadisticaPersonalidadController;
 import java.io.Serializable;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -262,6 +264,13 @@ public abstract class Controllers implements Serializable {
         EstadisticaAmbienteController estadisticaAmbienteController = (EstadisticaAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaAmbienteController");
         return estadisticaAmbienteController;
     }
+    
+    public EstadisticaPersonalidadController getEstadisticaPersonalidadController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaPersonalidadController estadisticaPersonalidadController = (EstadisticaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaPersonalidadController");
+        return estadisticaPersonalidadController;
+    }
 
     public RespuestaPersonalidadController getRespuestaPersonalidadController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -365,6 +374,20 @@ public abstract class Controllers implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EstiloController estiloController = (EstiloController) elResolver.getValue(facesContext.getELContext(), null, "estiloController");
         return estiloController;
+    }
+    
+    public EstadisticaController getEstadisticaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaController estadisticaController = (EstadisticaController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaController");
+        return estadisticaController;
+    }
+    
+    public EstadisticaEstiloController getEstadisticaEstiloController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaEstiloController estadisticaEstiloController = (EstadisticaEstiloController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaEstiloController");
+        return estadisticaEstiloController;
     }
 
     public PreguntaEstilosAprendizajeController getPreguntaEstilosAprendizajeController() {

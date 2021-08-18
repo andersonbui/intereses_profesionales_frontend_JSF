@@ -102,7 +102,7 @@ public class RespuestaPorEstilo implements Serializable {
 
     @Override
     public String toString() {
-        return "RespuestaPorEstilo[ PK=" + respuestaPorEstiloPK + " ]";
+        return "RespuestaPorEstilo[ PK=" + respuestaPorEstiloPK + "| tipoEstilo:"+tipoEstilo + "| encuestaEstilosAprendizaje:"+encuestaEstilosAprendizaje+" ]";
     }
 
     public TipoEstilo getTipoEstilo() {

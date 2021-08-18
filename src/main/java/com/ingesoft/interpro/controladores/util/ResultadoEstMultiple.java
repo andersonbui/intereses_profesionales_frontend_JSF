@@ -10,6 +10,7 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaPorEstilo;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaPorInteligencia;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class ResultadoEstMultiple {
     double promedioPuntajeEValuacion;
     List<RespuestaPorEstilo> respuestaPorEstilo;
     List<RespuestaPorPersonalidad> respuestaPorPersonalidad;
+    List<RespuestaPorInteligencia> respuestaPorInteligencia;
     Encuesta encuesta;
 
     public String getGrafico() {
@@ -102,6 +104,14 @@ public class ResultadoEstMultiple {
 
     public void setRespuestaPorPersonalidad(List<RespuestaPorPersonalidad> respuestaPorPersonalidad) {
         this.respuestaPorPersonalidad = respuestaPorPersonalidad;
+    }
+
+    public List<RespuestaPorInteligencia> getRespuestaPorInteligencia() {
+        return respuestaPorInteligencia;
+    }
+
+    public void setRespuestaPorInteligencia(List<RespuestaPorInteligencia> respuestaPorInteligencia) {
+        this.respuestaPorInteligencia = respuestaPorInteligencia;
     }
     
 }

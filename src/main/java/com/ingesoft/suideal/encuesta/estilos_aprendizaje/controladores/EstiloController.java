@@ -162,13 +162,15 @@ public class EstiloController
     private void guardarEstadisticasEstilo(List<Contador<TipoEstilo>> estadisticaEncuentaEstiloApren) {
         
         RespuestaPorEstilosController rpec = getRespuestaPorEstilosController();
-        RespuestaPorEstilo respuestaEst = rpec.prepareCreate();
+        
         for (Contador<TipoEstilo> contador : estadisticaEncuentaEstiloApren) {
+            RespuestaPorEstilo respuestaEst = rpec.prepareCreate();
             respuestaEst.setTipoEstilo(contador.getTipo());
             respuestaEst.setEncuestaEstilosAprendizaje(this.getSelected());
             respuestaEst.setRespuesta(contador.getContador().shortValue());
+            System.out.println("respuestaEstrespuestaEst:"+respuestaEst);
+            rpec.update();
         }
-        rpec.update();
     }
 
     /**

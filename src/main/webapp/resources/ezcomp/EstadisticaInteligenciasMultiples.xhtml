@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <!-- simple components https://www.apuntesdejava.com/2014/06/tutorial-jsf-22-sesion-5-facelets.html#google_vignette -->
+    <!-- INTERFACE -->
+    <cc:interface  >
+        <cc:attribute name="listRespuestasXInteligencias" required="true"  />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+         <style type="text/css">
+            .value {
+                font-weight: bold;
+                margin-left:  auto;
+            }
+
+            .contentenedor-preguntas-intelmul {
+                width: 300px;
+                margin: auto;
+            }
+        </style>
+        
+        <h3 style="text-align: center;">Estadistica Inteligencias Multiples</h3>
+        
+        <div class="contentenedor-preguntas-intelmul" >
+            <ui:repeat value="#{cc.attrs.listRespuestasXInteligencias}" var="respuesta">
+                #{respuesta.respuesta} |  <span title="#{respuesta.tipoInteligenciasMultiples.tipo}"> #{respuesta.tipoInteligenciasMultiples.descripcion}</span><br/>
+            </ui:repeat>
+        </div>
+    </cc:implementation>
+</html>

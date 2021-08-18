@@ -124,8 +124,6 @@ CREATE TABLE IF NOT EXISTS `RespuestaPorInteligencia` (
   `respuesta` TINYINT(4) NOT NULL,
   PRIMARY KEY (`idTipoInteligenciasMultiples`, `idEncuestaInteligenciasMultiples`),
   INDEX `fk_RespuestaPosInteligencia_EncuestaInteligenciasMultiples1_idx` (`idEncuestaInteligenciasMultiples` ASC),
-  UNIQUE INDEX `idTipoInteligenciasMultiples_UNIQUE` (`idTipoInteligenciasMultiples` ASC),
-  UNIQUE INDEX `idEncuesta_UNIQUE` (`idEncuestaInteligenciasMultiples` ASC),
   CONSTRAINT `fk_RespuestaPosInteligencia_TipoInteligenciasMultiples1`
     FOREIGN KEY (`idTipoInteligenciasMultiples`)
     REFERENCES `TipoInteligenciasMultiples` (`id`)

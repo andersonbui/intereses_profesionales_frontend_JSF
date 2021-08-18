@@ -6,7 +6,6 @@
 package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.ResultadoEstMultiple;
-import com.ingesoft.interpro.entidades.Encuesta;
 
 /**
  *

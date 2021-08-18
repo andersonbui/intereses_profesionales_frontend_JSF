@@ -66,8 +66,8 @@ public class EncuestaInteligenciasMultiples implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuestaInteligenciasMultiples")
     private List<RespuestaInteligenciasMultiples> respuestaInteligenciasMultiplesList;
     
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuestaInteligenciasMultiples")
-    private RespuestaPorInteligencia respuestaPorInteligencia;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuestaInteligenciasMultiples")
+    private List<RespuestaPorInteligencia> respuestaPorInteligencia;
     
     @JoinColumn(name = "idEncuesta", referencedColumnName = "idEncuesta", insertable = false, updatable = false)
     @OneToOne(optional = false)
@@ -126,11 +126,11 @@ public class EncuestaInteligenciasMultiples implements Serializable {
         this.respuestaInteligenciasMultiplesList = respuestaInteligenciasMultiplesList;
     }
 
-    public RespuestaPorInteligencia getRespuestaPorInteligencia() {
+    public List<RespuestaPorInteligencia> getRespuestaPorInteligencia() {
         return respuestaPorInteligencia;
     }
 
-    public void setRespuestaPorInteligencia(RespuestaPorInteligencia respuestaPorInteligencia) {
+    public void setRespuestaPorInteligencia(List<RespuestaPorInteligencia> respuestaPorInteligencia) {
         this.respuestaPorInteligencia = respuestaPorInteligencia;
     }
 

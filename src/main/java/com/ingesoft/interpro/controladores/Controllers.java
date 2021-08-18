@@ -15,8 +15,10 @@ import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstadisticaEstiloController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaPorEstilosController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EstadisticaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.PreguntaInteligenciasMultiplesController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.RespuestaInteligenciasMultiplesController;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.RespuestaPorInteligenciaController;
 import com.ingesoft.suideal.encuesta.personalidad.controladores.EstadisticaPersonalidadController;
 import java.io.Serializable;
 import java.util.Properties;
@@ -333,6 +335,20 @@ public abstract class Controllers implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         EncuestaInteligenciasMultiplesController encuestaInteligenciasMultiplesController = (EncuestaInteligenciasMultiplesController) elResolver.getValue(facesContext.getELContext(), null, "encuestaInteligenciasMultiplesController");
         return encuestaInteligenciasMultiplesController;
+    }
+    
+    public RespuestaPorInteligenciaController getRespuestaPorInteligenciaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaPorInteligenciaController respuestaPorInteligenciaController = (RespuestaPorInteligenciaController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorInteligenciaController");
+        return respuestaPorInteligenciaController;
+    }
+    
+    public EstadisticaInteligenciasMultiplesController getEstadisticaInteligenciasMultiplesController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaInteligenciasMultiplesController estadisticaInteligenciasMultiplesController = (EstadisticaInteligenciasMultiplesController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaInteligenciasMultiplesController");
+        return estadisticaInteligenciasMultiplesController;
     }
     
     public EncuestaPersonalidadController getEncuestaPersonalidadController() {

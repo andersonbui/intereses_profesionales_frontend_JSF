@@ -119,7 +119,7 @@ public class RespuestaPorInteligencia implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.interpro.entidades.RespuestaPorInteligencia[ respuestaPorInteligenciaPK=" + respuestaPorInteligenciaPK + " ]";
+        return "RespuestaPorInteligencia[ PK=" + respuestaPorInteligenciaPK + "| tipoInteligenciasMultiples: "+ tipoInteligenciasMultiples+"| encuestaInteligenciasMultiples: "+ encuestaInteligenciasMultiples+" ]";
     }
     
 }

@@ -8,6 +8,7 @@ import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstil
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.PreguntaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
+import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaPorInteligencia;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.TipoInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.EncuestaInteligenciasMultiplesFacade;
 import java.util.ArrayList;
@@ -115,15 +116,6 @@ public class EncuestaInteligenciasMultiplesController
         return restarget;
     }
     
-//    @Override
-//    public void seleccionarPunto(RespuestaInteligenciasMultiples respuestaEstilo) {
-//        if (!respuestaEstilo.isRespondida()) {
-//            getEncuestaController().aumentarPuntos();
-//            getEncuestaController().setTiempo(0);
-//            respuestaEstilo.responder();
-//        }
-//    }
-    
     @Override
     public void reiniciar() {
         setPasoActual(0);
@@ -150,6 +142,11 @@ public class EncuestaInteligenciasMultiplesController
         return super.getSelected() ;
     }
     
+    /**
+     * 
+     * @return
+     * @throws InterruptedException 
+     */
     @Override
     public boolean finalizarEncuesta() throws InterruptedException {
         getEncuestaController().detenerReloj();
@@ -164,9 +161,29 @@ public class EncuestaInteligenciasMultiplesController
         
         estadisticaEncuentaIntelMultiples = estadisticaEncuesta(getEncuestaGeneral().getEncuestaInteligenciasMultiples());
         
+        guardarEstadisticasInteligencias(estadisticaEncuentaIntelMultiples);
+        
         setPasoActual(getPasoActual() + 1);
         getEncuestaController().finalizarEncuesta();
         return true;
+    }
+    
+    /**
+     * Guardar datos de resultados de encuesta en BD
+     * @param estadisticaEncuentaIntelMulti 
+     */
+    private void guardarEstadisticasInteligencias(List<Contador<TipoInteligenciasMultiples>> estadisticaEncuentaIntelMulti) {
+        
+        RespuestaPorInteligenciaController rpec = getRespuestaPorInteligenciaController();
+        for (Contador<TipoInteligenciasMultiples> contador : estadisticaEncuentaIntelMulti) {
+            RespuestaPorInteligencia respuestaEst = rpec.prepareCreate();
+            respuestaEst.setTipoInteligenciasMultiples(contador.getTipo());
+            respuestaEst.setEncuestaInteligenciasMultiples(this.getSelected());
+            respuestaEst.setRespuesta(contador.getContador().shortValue());
+            
+            System.out.println("respuestaEst:"+respuestaEst);
+            rpec.update();
+        }
     }
     
     /**
@@ -189,13 +206,13 @@ public class EncuestaInteligenciasMultiplesController
         /** Sumatoria de tipos de estilo de las respuestas */
         for (RespuestaInteligenciasMultiples item : itemsRespuestas) {
             PreguntaInteligenciasMultiples pregunta = item.getPreguntaInteligenciasMultiples();
+            TipoInteligenciasMultiples tiposIntelMulti = pregunta.getIdTipoInteligenciasMultiples();
+            
+            indice = tiposIntelMulti.getId() - 1;
             if(item.getRespuesta() == 1){
-                TipoInteligenciasMultiples tiposIntelMulti = pregunta.getIdTipoInteligenciasMultiples();
-
-                indice = tiposIntelMulti.getId() - 1;
                 contador.get(indice).aumentarContador();
-                contador.get(indice).setTipo(tiposIntelMulti);
-            }
+            } 
+            contador.get(indice).setTipo(tiposIntelMulti);
         }
         
         contador.sort((Contador uno, Contador dos) -> {

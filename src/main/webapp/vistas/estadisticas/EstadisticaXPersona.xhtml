@@ -58,6 +58,9 @@
                             <ezcomp:EstadisticaAmbientes id_grafico="#{result.encuesta.idEncuesta}" rendered="#{result.graficoAmbiente != null and result.graficoAmbiente != ''}" 
                                 graficoAmbiente="#{result.graficoAmbiente}" ></ezcomp:EstadisticaAmbientes>
 
+
+                            <ezcomp:EstadisticaInteligenciasMultiples rendered="#{result.respuestaPorInteligencia != null}" 
+                                                                      listRespuestasXInteligencias="#{result.respuestaPorInteligencia}" ></ezcomp:EstadisticaInteligenciasMultiples>
                         </p:outputPanel>
                         <!--</h:panelGrid>-->
                         <hr />

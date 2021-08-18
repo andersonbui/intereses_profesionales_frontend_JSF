@@ -29,6 +29,7 @@ public class EstadisticaController  extends Controllers implements Serializable 
         listaEstadisticas.add(getEstadisticaEstiloController());
         listaEstadisticas.add(getEstadisticaPersonalidadController());
         listaEstadisticas.add(getEstadisticaAmbienteController());
+        listaEstadisticas.add(getEstadisticaInteligenciasMultiplesController());
     }
 
     public void inicializar(Encuesta selected) {

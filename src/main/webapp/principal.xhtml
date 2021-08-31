@@ -29,8 +29,7 @@
 
             function graficar(id, json = null) {
                 if (json !== null) {
-                    if (id !== null) {
-                        console.log(json);
+                        if (id !== null) {
                         var ctx = document.getElementById(id);
                         new Chart(ctx, json);
                     }

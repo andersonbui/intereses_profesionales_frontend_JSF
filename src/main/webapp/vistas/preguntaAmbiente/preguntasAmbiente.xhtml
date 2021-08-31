@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <!--<p:dialog id="PreguntaCreateDlgAmbiente"  closable="true" widgetVar="PreguntaAmbienteCreateDialog" modal="true" resizable="false" appendTo="@(body)">-->
 
@@ -284,21 +285,9 @@
 
                                     <p:row style="border:red ridge thick">
                                         <p:column width="50%">
-                                            <h:body id='divgrafico' >
-                                                <p:panelGrid id="grafica"  rendered="#{estadisticaAmbienteController.getGraficoModelo() != null}">
-                                                    <script>
-                                                        $(document).ready(function () {
-                                                            graficar(#{estadisticaAmbienteController.getGraficoModelo()});
-                                                        });
-                                                    </script>
-                                                    <div style="height: 300px; width: 700px;" >
-                                                        <canvas id="myChart" width="700" height="300"></canvas>
-                                                    </div>
-                                                </p:panelGrid>
-                                            </h:body>
-<!--                                            <p:chart type="bar" model="{respuestaAmbienteController.graficoModelo}" 
-                                                     style="height:250px;  text-align: center; "
-                                                     />-->
+                                            <ezcomp:EstadisticaAmbientes id_grafico="grafica_123" 
+                                                        rendered="#{estadisticaAmbienteController.getGraficoModelo() != null and estadisticaAmbienteController.getGraficoModelo() != ''}" 
+                                                        graficoAmbiente="#{estadisticaAmbienteController.getGraficoModelo()}" ></ezcomp:EstadisticaAmbientes>
                                         </p:column>
                                         <p:column>
                                             <h5>Los puntajes más altos para su perfil fueron: </h5>

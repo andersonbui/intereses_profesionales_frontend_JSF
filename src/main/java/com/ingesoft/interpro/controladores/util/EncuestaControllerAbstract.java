@@ -43,11 +43,6 @@ public abstract class EncuestaControllerAbstract <
     private int numGrupos;
     
     /**
-     * Encuesta general asociada
-     */
-    Encuesta encuesta;
-    
-    /**
      * Total de pregutnas a responder
      */
     private List<Pregunta> listaPreguntas = null;
@@ -87,10 +82,12 @@ public abstract class EncuestaControllerAbstract <
      * @return 
      */
     public int definirNumeroGrupos() {
-        List respuestas = getRespuestas();
-        int numeroGrupos = respuestas.size() / getTamGrupo();
-        numeroGrupos += (respuestas.size() % getTamGrupo() == 0 ? 0 : 1);
-        numGrupos = numeroGrupos;
+        List listPreguntas = getListaPreguntas();
+        if(listPreguntas != null){
+            int numeroGrupos = listPreguntas.size() / getTamGrupo();
+            numeroGrupos += (listPreguntas.size() % getTamGrupo() == 0 ? 0 : 1);
+            numGrupos = numeroGrupos;
+        }
         return numGrupos;
     }
     
@@ -124,7 +121,7 @@ public abstract class EncuestaControllerAbstract <
      * Obtener listado de todas las preguntas disponibles en BD
      * @return 
      */
-    public List<Pregunta> getPreguntas(){
+    public List<Pregunta> getPreguntasBD(){
         PreguntaControllerAbstract preguntaController = getPreguntaController();
         return preguntaController.getItems();
     }
@@ -171,8 +168,9 @@ public abstract class EncuestaControllerAbstract <
      * @return ista de respuestas del grupo
      */
     public List<Respuesta> getGrupoItems(int numGrupo){
-        List<Respuesta> lsItemsRespuestas = getRespuestas();
-        guardarRespuestas(getGrupoActual());
+        List<Respuesta> lsItemsRespuestas = getItemsRespuestas();
+        List<Respuesta> listaResp = getGrupoActual();
+        guardarRespuestas(listaResp);
         int tamanioGrupo = getTamGrupo();
         List<Respuesta> listaRespuestas = null;
         if (lsItemsRespuestas != null) {
@@ -195,7 +193,10 @@ public abstract class EncuestaControllerAbstract <
     public List<Respuesta> getRespuestas() {
         List<Respuesta> listaItemsRespuestas = getItemsRespuestas();
         if (listaItemsRespuestas == null || true) { //|| listaPreguntas.size() < itemsRespuestas.size()
-            List<Pregunta> listaItemsPreguntas = getPreguntas();
+            List<Pregunta> listaItemsPreguntas = getPreguntasBD();
+            setListaPreguntas(listaItemsPreguntas);
+            definirNumeroGrupos();
+            
             Encuesta encuestaGeneral = getEncuestaGeneral();
             int contPuntosRecuperados = 0;
             if(encuestaGeneral.getPuntajeEncuesta() != null && encuestaGeneral.getPuntajeEncuesta() >= 0) {
@@ -232,6 +233,25 @@ public abstract class EncuestaControllerAbstract <
             }
             encuestaGeneral.setPuntajeEncuesta(contPuntosRecuperados);
             setItemsRespuestas(listaItemsRespuestas);
+            
+            int aux_pasoactual = 0;
+            //ubicar la encuesta en la ultima pagina respondida
+            if (items_recuperados != null && !items_recuperados.isEmpty()) {
+                int preguntasXpagina = getTamGrupo();
+                int paginaActual = (items_recuperados.size() / preguntasXpagina);
+                paginaActual += (items_recuperados.size() % preguntasXpagina == 0 ? 0 : 1);                
+                if(paginaActual == getNumGrupos()) {
+//                    aux_pasoactual = getNumGrupos();
+                    try {
+                        finalizarEncuesta();
+                    } catch (InterruptedException ex) {
+                    }
+                }
+                aux_pasoactual = paginaActual;
+            } 
+            setPasoActual(aux_pasoactual);
+            getEncuestaGeneral().setPuntajeEncuesta(contPuntosRecuperados);
+            setGrupoActual(getGrupoItems(aux_pasoactual + 1));
         }
         
         //ubicar la encuesta en la ultima pagina respondida

@@ -37,7 +37,18 @@
                             <canvas id="#{cc.attrs.id_grafico}_grafico" width="700" height="300"></canvas>
                         </div>
                         <script>
-                            graficar("#{cc.attrs.id_grafico}_grafico",#{cc.attrs.graficoAmbiente});
+                            setTimeout(() => {
+                                graficarbarras = function (id, json = null) {
+                                    if (json !== null) {
+                                            if (id !== null) {
+                                            console.log("json:"+ json);
+                                            var ctx = document.getElementById(id);
+                                            new Chart(ctx, json);
+                                        }
+                                    }
+                                }
+                                graficarbarras("#{cc.attrs.id_grafico}_grafico", #{cc.attrs.graficoAmbiente});
+                            }, 700)
                         </script>
                     </p:panelGrid>
                 </h:body>

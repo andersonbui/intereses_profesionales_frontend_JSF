@@ -129,10 +129,9 @@ public class EstiloController
      */
     @Override
     public void prepararEncuesta(Encuesta encuesta) {
-        setTamGrupo(5);
-        this.setListaPreguntas(getPreguntas());
-        this.definirNumeroGrupos();
         this.reiniciar();
+        setTamGrupo(5);
+        getRespuestas();
     }
 
     /**
@@ -145,7 +144,9 @@ public class EstiloController
         getEncuestaController().detenerReloj();
         
         Thread hilo = guardarRespuestas(getGrupoActual());
-        hilo.join();
+        if(hilo != null){
+            hilo.join();
+        }
         // colocar como finalizada y guarda cambios
         getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
         update();
@@ -155,7 +156,6 @@ public class EstiloController
         guardarEstadisticasEstilo(estadisticaEncuentaEstiloApren);
         
         setPasoActual(getPasoActual() + 1);
-        getEncuestaController().finalizarEncuesta();
         return true;
     }
     

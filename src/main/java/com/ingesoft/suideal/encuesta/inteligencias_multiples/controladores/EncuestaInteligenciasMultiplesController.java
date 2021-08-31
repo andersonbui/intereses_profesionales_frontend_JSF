@@ -116,18 +116,24 @@ public class EncuestaInteligenciasMultiplesController
         return restarget;
     }
     
+    /**
+     * 
+     */
     @Override
     public void reiniciar() {
         setPasoActual(0);
         setGrupoActual(getGrupoItems(getPasoActual() + 1));
     }
     
+    /**
+     * 
+     * @param encuesta 
+     */
     @Override
     public void prepararEncuesta(Encuesta encuesta) {
-        setTamGrupo(5);
-        this.setListaPreguntas(getPreguntas());
-        this.definirNumeroGrupos();
         this.reiniciar();
+        setTamGrupo(5); 
+        getRespuestas();
     }
 
     /**
@@ -152,7 +158,10 @@ public class EncuestaInteligenciasMultiplesController
         getEncuestaController().detenerReloj();
         
         Thread hilo = guardarRespuestas(getGrupoActual());
-        hilo.join();
+        if(hilo != null){
+            
+            hilo.join();
+        }
         // colocar como finalizada y guarda cambios
         setSelected(null);
         getSelected().setEstado(EncuestaInteligenciasMultiples.FINALIZADA);
@@ -164,7 +173,6 @@ public class EncuestaInteligenciasMultiplesController
         guardarEstadisticasInteligencias(estadisticaEncuentaIntelMultiples);
         
         setPasoActual(getPasoActual() + 1);
-        getEncuestaController().finalizarEncuesta();
         return true;
     }
     

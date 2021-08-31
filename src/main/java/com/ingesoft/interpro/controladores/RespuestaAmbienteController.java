@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -88,11 +88,7 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     }
 
     public List<ResultadoPorAmbiente> getListaResultadoPorAmbiente() {
-        List<ResultadoPorAmbiente> listaResultadosPorValorAmbiente = new ArrayList();
-        for (int i = 0; i < 3; i++) {
-            listaResultadosPorValorAmbiente.add(listaResultadosPorAmbiente.get(i));
-        }
-        return listaResultadosPorValorAmbiente;
+        return listaResultadosPorAmbiente;
     }
 
     public boolean isFinalizo() {
@@ -277,7 +273,8 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
 
         //System.out.println("Paso siguiente finalizar: " + pasoActual);
         // realizar estadistica de respuestas
-        realizarEstadisticas();
+        EncuestaController encuestaController = getEncuestaController();
+        actualizarEstadisticas(encuestaController.getSelected());
         
         getEncuestaController().guardarSelected();
         // preprara 
@@ -301,16 +298,42 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
 
         return pasoActual;
     }
+    
+    private void actualizarEstadisticas(Encuesta encuesta){
+        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
+        ResultadoPorAmbienteController resultadoPorAmbienteController = getResultadoPorAmbienteController();
+
+        List<ResultadoPorAmbiente> listaResults = encuesta.getResultadoPorAmbienteList();
+        
+        Elemento[] valores = realizarEstadisticas(this.itemsRespuestas);
+        if(listaResults == null || listaResults.isEmpty()){
+            for (Elemento valor : valores) {
+                resultadoPorAmbienteController.prepareCreate();
+                resultadoPorAmbienteController.getSelected().setValor((float) valor.valor);
+                resultadoPorAmbienteController.getSelected().setEncuesta(getEncuestaAcutal());
+                resultadoPorAmbienteController.getSelected().setTipoAmbiente(valor.tipoPer);
+                resultadoPorAmbienteController.create();
+            }
+        } else {
+            HashMap<TipoAmbiente,ResultadoPorAmbiente> dict = new HashMap();
+            for (ResultadoPorAmbiente valor : listaResults) {
+                dict.put(valor.getTipoAmbiente(), valor);
+            }
+            for (Elemento valor : valores) {
+                ResultadoPorAmbiente elem = dict.get(valor.tipoPer);
+                elem.setValor((float)valor.valor);
+                
+                resultadoPorAmbienteController.setSelected(elem);
+                resultadoPorAmbienteController.update();
+            }
+        }
+        
+    }
 
     /**
-     *
+     * Obtener estadisticas Ambiente
      */
-    private void realizarEstadisticas() {
-        // TODO falta esperar los hilos de guardado para despues realizar la estadistica
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elOtroResolver = facesContext.getApplication().getELResolver();
-        ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) elOtroResolver.getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
-
+    private Elemento[] realizarEstadisticas(List<RespuestaAmbiente> itemsRespuestas) {
         Elemento[] valores = new Elemento[6];
 
         valores[0] = new Elemento();
@@ -333,14 +356,7 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
             valores[indice].tipoPer = tipoAmb;
             valores[indice].valor += respuestaAmbiente.getRespuesta();
         }
-
-        for (int i = 0; i < valores.length; i++) {
-            resultadoPorAmbienteController.prepareCreate();
-            resultadoPorAmbienteController.getSelected().setValor((float) valores[i].valor);
-            resultadoPorAmbienteController.getSelected().setEncuesta(getEncuestaAcutal());
-            resultadoPorAmbienteController.getSelected().setTipoAmbiente(valores[i].tipoPer);
-            resultadoPorAmbienteController.create();
-        }
+        return valores;
     }
 
     @Override
@@ -355,6 +371,7 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         
         finalizo = false;
         listaResultadosPorAmbiente = null;
+        itemsRespuestas = null;
         getItemsRespuestas();
     }
 
@@ -379,41 +396,10 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         return cantidadGrupos;
     }
 
-//    public RespuestaAmbiente getSelected() {
-//        return selected;
-//    }
-//
-//    public void setSelected(RespuestaAmbiente selected) {
-//        this.selected = selected;
-//    }
-
-//    @Override
-//    protected void setEmbeddableKeys() {
-//        selected.getRespuestaAmbientePK().setIdPreguntasAmbiente(selected.getPreguntaAmbiente().getIdPreguntaAmbiente());
-//        selected.getRespuestaAmbientePK().setIdEncuesta(selected.getEncuesta().getIdEncuesta());
-//    }
-//
-//    protected void initializeEmbeddableKey() {
-//        selected.setRespuestaAmbientePK(new com.ingesoft.interpro.entidades.RespuestaAmbientePK());
-//    }
-
     @Override
     protected RespuestaAmbienteFacade getFacade() {
         return ejbFacade;
     }
-
-//    public RespuestaAmbiente prepareCreate() {
-//        selected = new RespuestaAmbiente();
-//        initializeEmbeddableKey();
-//        return selected;
-//    }
-//
-//    public void create() {
-//        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteCreated"), selected);
-//        if (!JsfUtil.isValidationFailed()) {
-//            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
-//        }
-//    }
 
     public String obtenerColor(String tipo) {
         String color = "#000000";
@@ -443,18 +429,6 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     public String claseNoSeleccionada(RespuestaAmbiente item) {
         return item.getRespuesta().isNaN() ? "border: 2px solid red; padding: 4px;" : "border: 2px solid white; padding: 4px;";
     }
-
-//    public void update() {
-//        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteUpdated"), selected);
-//    }
-//    
-//    public void destroy() {
-//        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("RespuestaAmbienteDeleted"), selected);
-//        if (!JsfUtil.isValidationFailed()) {
-//            selected = null; // Remove selection
-//            itemsRespuestas = null;    // Invalidate list of items to trigger re-query.
-//        }
-//    }
 
     /**
      * obtiene las respuestas de un determinado grupo

@@ -8,7 +8,6 @@ package com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores;
 import com.ingesoft.interpro.controladores.util.Contador;
 import com.ingesoft.interpro.controladores.util.RespuestaControllerAbstract;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
-import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaInteligenciasMultiples;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.facades.EncuestaInteligenciasMultiplesFacade;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
 import java.util.ArrayList;
@@ -84,19 +83,19 @@ public class EncuestaInteligenciasMultiplesControllerTest {
 //    public void tearDown() {
 //    }
 
-    /**
-     * Test of getGrupo method, of class EncuestaInteligenciasMultiplesController.
-     */
-    @org.junit.jupiter.api.Test
-    public void testGetGrupo() {
-        System.out.println("getGrupo");
-        EncuestaInteligenciasMultiplesController instance = new EncuestaInteligenciasMultiplesController();
-        List<RespuestaInteligenciasMultiples> expResult = new ArrayList<>();   
-        instance.setGrupoActual(expResult);
-        List<RespuestaInteligenciasMultiples> result = instance.getGrupoActual();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-    }
+//    /**
+//     * Test of getGrupo method, of class EncuestaInteligenciasMultiplesController.
+//     */
+//    @org.junit.jupiter.api.Test
+//    public void testGetGrupo() {
+//        System.out.println("getGrupo");
+//        EncuestaInteligenciasMultiplesController instance = new EncuestaInteligenciasMultiplesController();
+//        List<RespuestaInteligenciasMultiples> expResult = new ArrayList<>();   
+//        instance.setGrupoActual(expResult);
+//        List<RespuestaInteligenciasMultiples> result = instance.getGrupoActual();
+//        assertEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//    }
 //
 //    /**
 //     * Test of setEmbeddableKeys method, of class EncuestaInteligenciasMultiplesController.

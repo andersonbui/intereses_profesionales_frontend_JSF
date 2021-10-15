@@ -506,6 +506,9 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
                 break;
             case 111:
                 List<Encuesta> listaEncuestas  = estudiante.getEncuestaList();
+                if(listaTotalEncuestas == null){
+                    listaTotalEncuestas =  new ArrayList();
+                }
                 listaTotalEncuestas.addAll(listaEncuestas);
                 listaResultados = resultadosPorEncuestas(listaEncuestas);
                 break;

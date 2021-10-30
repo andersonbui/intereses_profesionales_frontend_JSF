@@ -4,7 +4,7 @@
 
     <groupId>com.ingeniosoft</groupId>
     <artifactId>intereses_profesionales</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.3</version>
     <packaging>war</packaging>
 
     <name>intereses_profesionales</name>

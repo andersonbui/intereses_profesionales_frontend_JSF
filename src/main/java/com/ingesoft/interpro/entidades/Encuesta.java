@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.entidades;
 
+import com.ingesoft.suideal.encuesta.chaside.entidades.EncuestaChaside;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.EncuestaEstilosAprendizaje;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.EncuestaInteligenciasMultiples;
 import java.io.Serializable;
@@ -103,6 +104,9 @@ public class Encuesta implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private EncuestaInteligenciasMultiples encuestaInteligenciasMultiples;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "encuesta")
+    private EncuestaChaside encuestaChaside;    
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "encuesta")
     private List<AreaEncuesta> areaEncuestaList;
@@ -275,6 +279,14 @@ public class Encuesta implements Serializable {
     @Override
     public String toString() {
         return "Encuesta[ idEncuesta=" + idEncuesta + " ]";
+    }
+
+    public EncuestaChaside getEncuestaChaside() {
+        return encuestaChaside;
+    }
+
+    public void setEncuestaChaside(EncuestaChaside encuestaChaside) {
+        this.encuestaChaside = encuestaChaside;
     }
 
 }

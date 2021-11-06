@@ -57,12 +57,11 @@ ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `interpro`.`RespuestaChaside` (
-  `idRespuestaChaside` INT NOT NULL AUTO_INCREMENT,
-  `respuesta` TINYINT(1) NOT NULL,
-  `fecha` DATETIME NOT NULL,
   `idEncuestaChaside` INT NOT NULL,
   `idPreguntaChaside` INT NOT NULL,
-  PRIMARY KEY (`idRespuestaChaside`),
+  `respuesta` TINYINT(1) NOT NULL,
+  `fecha` DATETIME NOT NULL,
+  PRIMARY KEY (`idEncuestaChaside`, `idPreguntaChaside`),
   INDEX `fk_RespuestaChaside_EncuestaChaside1_idx` (`idEncuestaChaside` ASC),
   INDEX `fk_RespuestaChaside_PreguntaChaside1_idx` (`idPreguntaChaside` ASC),
   CONSTRAINT `fk_RespuestaChaside_EncuestaChaside1`

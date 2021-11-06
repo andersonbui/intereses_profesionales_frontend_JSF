@@ -396,7 +396,7 @@ public class EncuestaController extends Controllers implements Serializable {
             String codigo_personalidad = "" + i + result_personalidad;
             switch (codigo_personalidad) {
                 case "0E":
-                    return "Estrovertido";
+                    return "Extrovertido";
                 case "0I":
                     return "Introvertido";
                 case "1I":

@@ -94,13 +94,13 @@ public class PreguntaInteligenciasMultiplesController extends PreguntaController
         return "PreguntaInteligenciasMultiplesDeleted";
     }
     
-    public List<PreguntaInteligenciasMultiples> obtenerTodosPorEncuesta(EncuestaInteligenciasMultiples encuestaInteligenciasMultiples) {
-        return getEjbFacade().getItemsXEncuesta(encuestaInteligenciasMultiples);
-    }
+//    public List<PreguntaInteligenciasMultiples> obtenerTodosPorEncuesta(EncuestaInteligenciasMultiples encuestaInteligenciasMultiples) {
+//        return getEjbFacade().getItemsXEncuesta(encuestaInteligenciasMultiples);
+//    }
     
-    public List<PreguntaInteligenciasMultiples> getItemsXEncuesta(EncuestaInteligenciasMultiples encuestaInteligenciasMultiples) {
-        return getEjbFacade().getItemsXEncuesta(encuestaInteligenciasMultiples);
-    }
+//    public List<PreguntaInteligenciasMultiples> getItemsXEncuesta(EncuestaInteligenciasMultiples encuestaInteligenciasMultiples) {
+//        return getEjbFacade().getItemsXEncuesta(encuestaInteligenciasMultiples);
+//    }
     
     public PreguntaInteligenciasMultiples getPreguntaInteligenciasMultiples(Integer id) {
         return getEjbFacade().find(id);

@@ -5,6 +5,7 @@
  */
 package com.ingesoft.suideal.encuesta.chaside.entidades;
 
+import com.ingesoft.interpro.controladores.util.RespuestaEncuestaAbstract;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "RespuestaChaside.findByIdEncuestaChaside", query = "SELECT r FROM RespuestaChaside r WHERE r.respuestaChasidePK.idEncuestaChaside = :idEncuestaChaside"),
     @NamedQuery(name = "RespuestaChaside.findByRespuesta", query = "SELECT r FROM RespuestaChaside r WHERE r.respuesta = :respuesta"),
     @NamedQuery(name = "RespuestaChaside.findByFecha", query = "SELECT r FROM RespuestaChaside r WHERE r.fecha = :fecha")})
-public class RespuestaChaside implements Serializable {
+public class RespuestaChaside  extends RespuestaEncuestaAbstract
+    < EncuestaChaside, PreguntaChaside> {
 
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +46,7 @@ public class RespuestaChaside implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "respuesta")
-    private boolean respuesta;
+    private short respuesta;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha")
@@ -66,12 +68,28 @@ public class RespuestaChaside implements Serializable {
         this.respuestaChasidePK = respuestaChasidePK;
     }
 
-    public RespuestaChaside(RespuestaChasidePK respuestaChasidePK, boolean respuesta, Date fecha) {
+    public RespuestaChaside(RespuestaChasidePK respuestaChasidePK, short respuesta, Date fecha) {
         this.respuestaChasidePK = respuestaChasidePK;
         this.respuesta = respuesta;
         this.fecha = fecha;
     }
 
+    /**
+     * 
+     * @param encuestaChaside
+     * @param preguntaChaside
+     */
+    @Override
+    public void inicializar(EncuestaChaside encuestaChaside, PreguntaChaside preguntaChaside) {
+        
+        this.encuestaChaside = encuestaChaside;
+        this.preguntaChaside = preguntaChaside;
+        this.respuestaChasidePK = new RespuestaChasidePK(
+            preguntaChaside.getIdPreguntaChaside(),
+            encuestaChaside.getIdEncuesta()
+        );
+    }
+    
     public RespuestaChasidePK getRespuestaChasidePK() {
         return respuestaChasidePK;
     }
@@ -80,11 +98,11 @@ public class RespuestaChaside implements Serializable {
         this.respuestaChasidePK = respuestaChasidePK;
     }
 
-    public boolean getRespuesta() {
+    public short getRespuesta() {
         return respuesta;
     }
 
-    public void setRespuesta(boolean respuesta) {
+    public void setRespuesta(short respuesta) {
         this.respuesta = respuesta;
     }
 

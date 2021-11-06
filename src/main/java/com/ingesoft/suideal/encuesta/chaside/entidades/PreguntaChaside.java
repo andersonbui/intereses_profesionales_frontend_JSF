@@ -5,6 +5,7 @@
  */
 package com.ingesoft.suideal.encuesta.chaside.entidades;
 
+import com.ingesoft.interpro.controladores.util.PreguntaEncuesta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -34,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PreguntaChaside.findAll", query = "SELECT p FROM PreguntaChaside p"),
     @NamedQuery(name = "PreguntaChaside.findByIdPreguntaChaside", query = "SELECT p FROM PreguntaChaside p WHERE p.idPreguntaChaside = :idPreguntaChaside"),
     @NamedQuery(name = "PreguntaChaside.findByEnunciado", query = "SELECT p FROM PreguntaChaside p WHERE p.enunciado = :enunciado")})
-public class PreguntaChaside implements Serializable {
+public class PreguntaChaside  extends PreguntaEncuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

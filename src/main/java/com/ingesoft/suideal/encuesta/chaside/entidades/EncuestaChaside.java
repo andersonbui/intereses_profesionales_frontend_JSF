@@ -42,6 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EncuestaChaside.findByEstado", query = "SELECT e FROM EncuestaChaside e WHERE e.estado = :estado")})
 public class EncuestaChaside implements Serializable {
 
+    public static String PENDINENTE = "PENDINENTE";
+    public static String FINALIZADA = "FINALIZADA";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -74,6 +77,12 @@ public class EncuestaChaside implements Serializable {
         this.idEncuesta = idEncuesta;
     }
 
+    public EncuestaChaside(Encuesta encuesta) {
+        this.idEncuesta = encuesta.getIdEncuesta();
+        this.encuesta = encuesta;
+    }
+
+    
     public Integer getIdEncuesta() {
         return idEncuesta;
     }

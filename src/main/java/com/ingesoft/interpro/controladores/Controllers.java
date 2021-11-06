@@ -12,6 +12,10 @@ import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstiloCon
 import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;
+import com.ingesoft.suideal.encuesta.chaside.controladores.ChasideController;
+import com.ingesoft.suideal.encuesta.chaside.controladores.PreguntaChasideController;
+import com.ingesoft.suideal.encuesta.chaside.controladores.RespuestaChasideController;
+import com.ingesoft.suideal.encuesta.chaside.controladores.ResultadoChasideController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstadisticaEstiloController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaPorEstilosController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
@@ -289,13 +293,6 @@ public abstract class Controllers implements Serializable {
         return respuestaPorPersonalidadController;
     }
     
-    public RespuestaPorEstilosController getRespuestaPorEstilosController() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELResolver elResolver = facesContext.getApplication().getELResolver();
-        RespuestaPorEstilosController respuestaPorEstilosController = (RespuestaPorEstilosController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorEstilosController");
-        return respuestaPorEstilosController;
-    }
-
     public EvaluacionController getEvaluacionController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
@@ -385,6 +382,13 @@ public abstract class Controllers implements Serializable {
         ResultadoPorAmbienteController resultadoPorAmbienteController = (ResultadoPorAmbienteController) elResolver.getValue(facesContext.getELContext(), null, "resultadoPorAmbienteController");
         return resultadoPorAmbienteController;
     }
+    
+    public EstadisticaController getEstadisticaController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaController estadisticaController = (EstadisticaController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaController");
+        return estadisticaController;
+    }
 
     public EstiloController getEstiloController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -393,12 +397,13 @@ public abstract class Controllers implements Serializable {
         return estiloController;
     }
     
-    public EstadisticaController getEstadisticaController() {
+    public RespuestaPorEstilosController getRespuestaPorEstilosController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELResolver elResolver = facesContext.getApplication().getELResolver();
-        EstadisticaController estadisticaController = (EstadisticaController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaController");
-        return estadisticaController;
+        RespuestaPorEstilosController respuestaPorEstilosController = (RespuestaPorEstilosController) elResolver.getValue(facesContext.getELContext(), null, "respuestaPorEstilosController");
+        return respuestaPorEstilosController;
     }
+
     
     public EstadisticaEstiloController getEstadisticaEstiloController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -426,6 +431,42 @@ public abstract class Controllers implements Serializable {
         ELResolver elResolver = facesContext.getApplication().getELResolver();
         PreguntaPersonalidadController preguntaPersonalidadController = (PreguntaPersonalidadController) elResolver.getValue(facesContext.getELContext(), null, "preguntaPersonalidadController");
         return preguntaPersonalidadController;
+    }
+    
+    
+    public ChasideController getChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        ChasideController chasideController = (ChasideController) elResolver.getValue(facesContext.getELContext(), null, "chasideController");
+        return chasideController;
+    }
+    
+    public ResultadoChasideController getResultadoChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        ResultadoChasideController ResultadoChasideController = (ResultadoChasideController) elResolver.getValue(facesContext.getELContext(), null, "resultadoChasideController");
+        return ResultadoChasideController;
+    }
+
+//    public EstadisticaChasideController getEstadisticaChasideController() {
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        ELResolver elResolver = facesContext.getApplication().getELResolver();
+//        EstadisticaChasideController estadisticaChasideController = (EstadisticaChasideController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaChasideController");
+//        return estadisticaChasideController;
+//    }
+
+    public PreguntaChasideController getPreguntaChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        PreguntaChasideController preguntaChasideController = (PreguntaChasideController) elResolver.getValue(facesContext.getELContext(), null, "preguntaChasideController");
+        return preguntaChasideController;
+    }
+    
+    public RespuestaChasideController getRespuestaChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        RespuestaChasideController respuestaChasideController = (RespuestaChasideController) elResolver.getValue(facesContext.getELContext(), null, "respuestaChasideController");
+        return respuestaChasideController;
     }
     
 }

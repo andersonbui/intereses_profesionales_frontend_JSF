@@ -16,6 +16,7 @@ import com.ingesoft.suideal.encuesta.chaside.controladores.ChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.PreguntaChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.RespuestaChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.ResultadoChasideController;
+import com.ingesoft.suideal.encuesta.chaside.controladores.TipoClaseChasideController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.EstadisticaEstiloController;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.controladores.RespuestaPorEstilosController;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.controladores.EncuestaInteligenciasMultiplesController;
@@ -454,6 +455,13 @@ public abstract class Controllers implements Serializable {
 //        EstadisticaChasideController estadisticaChasideController = (EstadisticaChasideController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaChasideController");
 //        return estadisticaChasideController;
 //    }
+    
+    public TipoClaseChasideController getTipoClaseChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        TipoClaseChasideController tipoClaseChasideController = (TipoClaseChasideController) elResolver.getValue(facesContext.getELContext(), null, "tipoClaseChasideController");
+        return tipoClaseChasideController;
+    }
 
     public PreguntaChasideController getPreguntaChasideController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

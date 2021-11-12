@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "resultadosChasideController")
+@ManagedBean(name = "resultadoChasideController")
 @SessionScoped
 public class ResultadoChasideController extends RespuestaControllerAbstract <
             ResultadoChaside,

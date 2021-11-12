@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="/realizarEncuesta.xhtml">
+
+        <ui:define name="content">
+            <style type="text/css">
+                .value {
+                    font-weight: bold;
+                    margin-left:  auto;
+                }
+
+                .contentenedor-preguntas-chaside {
+                    width: 600px;
+                    margin: auto;
+                }
+                
+                .col-resultados {
+                    overflow-wrap: break-word;
+                    padding: 40px 10px 10px 10px;
+                }
+            </style>
+            <h:form >
+                <p:dialog header="Instrucciones de encuesta" widgetVar="instruccionesChasideDialog"
+                          modal="true"  width="50%" height="250px" closable="false" style="padding:10px 40px; width:250px; height:250px;"  >
+                    <div style="font-size:1.2em">
+                        <p> la descripción para la sección de chaside de aprendizaje.
+                            En esta sección de chaside de aprendizaje por favor seleccióne para cada pregunta una de las dos posibles respuestas y continue dando clic en el boton siguiente<br/>
+                        </p>
+                        <br/>
+                    </div>
+                    <div style="width:80px; margin:auto">
+                        <p:commandButton value="Aceptar" update="@form,PreguntaChasideForm" ajax="true" 
+                                         actionListener="#{encuestaController.arrancarReloj()}" 
+                                         onclick="PF('instruccionesChasideDialog').hide();" />
+                    </div>
+                </p:dialog>
+            </h:form>
+            <h:outputScript >
+                $(document).ready(function () {
+                PF('instruccionesChasideDialog').show();
+                });
+            </h:outputScript>
+            <h:form id="PreguntaChasideForm" >
+
+                <div id="display">
+                    <div style="width: 100%; display: table; padding: 10px 100px;" >
+                        <div class="float-l">
+                            <p:outputLabel value="Puntos de juego: " style=" font-size: 30px; font-weight:bold;"/>
+                            <h:outputText id="puntos_id" value="#{encuestaController.puntos}" style=" font-size: 18px; font-weight:bold; color: black"/>
+                        </div>
+                        <!--<p:clock mode="server" syncInterval="6000"  autoSync="true" ></p:clock>-->
+                        <h:panelGroup id="grupoTimeJuego" class="float-r">
+                            <p:poll id="timeJuego" interval="1"  process="grupoTimeJuego,puntos_id"
+                                    listener="#{encuestaController.incrementTiempo()}"
+                                    update="grupoTimeJuego,puntos_id" autoStart="#{!encuestaController.relojDetenido()}"
+                                    stop="#{encuestaController.relojDetenido()}" />
+                            <p:knob min="0" max="15" widgetVar="knob" 
+                                    value="#{encuestaController.tiempo}" height="70px" />
+                        </h:panelGroup>
+                    </div>
+                    <h:panelGroup class="panel-preguntas-chaside" rendered="#{!chasideController.esUltimoPaso()}" >
+                        <p:panel header="Preguntas de Chaside uno">
+                            <h1><p:progressBar value="#{chasideController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton  class="float-l btn" value="anterior" ajax="true" actionListener="#{chasideController.anteriorPaso}"
+                                                  update=":PreguntaChasideForm, @form" rendered="#{chasideController.puedeAnteriorPaso()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="siguiente" ajax="true" actionListener="#{chasideController.siguientePaso}"
+                                                  update=":PreguntaChasideForm, @form" rendered="#{chasideController.puedeSiguientePasoNoUltimo()}" >
+                                </p:commandButton>
+                                <p:commandButton  class="float-r btn" value="Finalizar" ajax="true" actionListener="#{chasideController.finalizarEncuesta()}"
+                                                  update=":PreguntaChasideForm, @form" rendered="#{chasideController.esPenultimoPaso()}" >
+                                </p:commandButton>
+                            </h:panelGroup>
+                            <ui:repeat value="#{chasideController.grupoActual}" var="respuesta">
+                               #{respuesta.preguntaChaside.enunciado} <br/>
+                               <p:selectOneRadio id="id_resp_chaside" value="#{respuesta.respuesta}" required="true" class="select_pregunta_est">
+                                                <f:selectItem itemValue="1" itemLabel='SI' />
+                                                <f:selectItem itemValue="0" itemLabel='NO' />
+                                    <p:ajax event="click" update="@form:grupoTimeJuego,@form:puntos_id" listener="#{chasideController.seleccionarPunto(respuesta)}" />
+                                </p:selectOneRadio>
+                            </ui:repeat>
+                        </p:panel>
+                    </h:panelGroup>
+                    <h:panelGroup class="panel-preguntas-chaside"  rendered="#{chasideController.esUltimoPaso()}" >
+                        <p:panel header="Preguntas de Chaside uno">
+                            <h1><p:progressBar value="#{chasideController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
+                            <h:panelGroup  style="display: block; height: 55px;" >
+                                <p:commandButton class="float-l btn" value="anterior" ajax="true" 
+                                                 actionListener="#{chasideController.anteriorPaso}"
+                                                 update=":PreguntaChasideForm, @form" >
+                                </p:commandButton>
+                                <p:commandButton value="Siguiente" ajax="true" style="float:right;" class="float-r btn"
+                                                 action="#{encuestaController.siguienteEncuesta()}"
+                                                 rendered="#{chasideController.esUltimoPaso()}"
+                                                 > 
+                                </p:commandButton>
+                            </h:panelGroup>
+
+                            <div class="contentenedor-preguntas-chaside row" >
+                                <ui:repeat value="#{chasideController.estadisticaEncuentaChaside}" var="respuesta">
+                                    <div class="col-resultados col-md-6" >
+                                        <b> Letra: </b> #{respuesta.tipoClaseChaside.tipoChaside.nombre}<br/>
+                                        <b> Puntaje </b> #{respuesta.resultado}<br/>
+                                        <div title="clase"> <b> #{respuesta.tipoClaseChaside.claseChaside.nombre}:</b> #{respuesta.tipoClaseChaside.descripcion}</div>
+                                        <div title="tipo"> <b> Profesion: </b> #{respuesta.tipoClaseChaside.tipoChaside.profesion}</div>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </p:panel>
+                    </h:panelGroup>
+
+                </div>
+            </h:form>
+            <h:form>
+                <p:commandButton value="ir a resumen" ajax="true"
+                                 actionListener="#{chasideController.actualizarTodasRespuestas()}"
+                                 update=":PreguntaChasideForm, @form" 
+                                 rendered="#{encuestaController.esDesarrollo()}"
+                                 > 
+                </p:commandButton>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

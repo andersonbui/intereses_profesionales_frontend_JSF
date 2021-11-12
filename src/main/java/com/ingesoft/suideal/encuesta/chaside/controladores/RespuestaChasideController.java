@@ -6,6 +6,7 @@ import com.ingesoft.suideal.encuesta.chaside.entidades.EncuestaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.RespuestaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.RespuestaChasidePK;
 import com.ingesoft.suideal.encuesta.chaside.facade.RespuestaChasideFacade;
+import java.util.Date;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -46,6 +47,7 @@ public class RespuestaChasideController extends RespuestaControllerAbstract <
     @Override
     public RespuestaChaside prepareCreate() {
         setSelected(new RespuestaChaside());
+        getSelected().setFecha(new Date());
         initializeEmbeddableKey();
         return getSelected();
     }

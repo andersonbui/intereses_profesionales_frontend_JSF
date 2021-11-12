@@ -9,8 +9,11 @@ import com.ingesoft.suideal.encuesta.chaside.entidades.PreguntaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.RespuestaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.ResultadoChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.TipoChaside;
+import com.ingesoft.suideal.encuesta.chaside.entidades.TipoClaseChaside;
+import com.ingesoft.suideal.encuesta.chaside.entidades.TipoClaseChasidePK;
 import com.ingesoft.suideal.encuesta.chaside.facade.EncuestaChasideFacade;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import java.util.List;
@@ -25,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@ManagedBean(name = "estiloController")
+@ManagedBean(name = "chasideController")
 @SessionScoped
 public class ChasideController 
         extends EncuestaControllerAbstract<
@@ -37,7 +40,7 @@ public class ChasideController
     @EJB
     private com.ingesoft.suideal.encuesta.chaside.facade.EncuestaChasideFacade ejbFacade;
     
-    private List<Contador<TipoChaside>> estadisticaEncuentaChasideApren;
+    private List<Contador<ResultadoChaside>> estadisticaEncuentaChaside;
       
     public ChasideController() {
         super();
@@ -147,29 +150,26 @@ public class ChasideController
             hilo.join();
         }
         // colocar como finalizada y guarda cambios
-        getSelected().setEstado(EncuestaChaside.FINALIZADA);
+//        getSelected().setEstado(EncuestaChaside.FINALIZADA); // TODO: descomentar
         update();
         
-        estadisticaEncuentaChasideApren = estadisticaEncuesta(getEncuestaGeneral().getEncuestaChaside());
+        estadisticaEncuentaChaside = estadisticaEncuesta(getEncuestaGeneral().getEncuestaChaside());
         
-        guardarEstadisticasChaside(estadisticaEncuentaChasideApren);
+        guardarEstadisticasChaside(estadisticaEncuentaChaside);
         
         setPasoActual(getPasoActual() + 1);
         return true;
     }
     
-    private void guardarEstadisticasChaside(List<Contador<TipoChaside>> estadisticaEncuentaChasideApren) {
+    private void guardarEstadisticasChaside(List<Contador<ResultadoChaside>> estadisticaEncuentaChaside) {
         
         ResultadoChasideController rpec = getResultadoChasideController();
         
-//        for (Contador<TipoChaside> contador : estadisticaEncuentaChasideApren) {
-//            ResultadoChaside respuestaEst = rpec.prepareCreate();
-//            respuestaEst.setTipoChaside(contador.getTipo());
-//            respuestaEst.setEncuestaChaside(this.getSelected());
-//            respuestaEst.setRespuesta(contador.getContador().shortValue());
-//            System.out.println("respuestaEstrespuestaEst:"+respuestaEst);
-//            rpec.update();
-//        }
+        for (Contador<ResultadoChaside> contador : estadisticaEncuentaChaside) {
+            System.out.println("respuestaEstrespuestaEst:"+contador.getTipo());
+            rpec.setSelected(contador.getTipo());
+            rpec.update();
+        }
     }
 
     /**
@@ -177,53 +177,58 @@ public class ChasideController
      * @param encuesta
      * @return 
      */
-    public List<Contador<TipoChaside>> estadisticaEncuesta(EncuestaChaside encuesta){
-//        List<RespuestaChaside> itemsRespuestas = getRespuestaChasideController().getItemsXEncuesta(encuesta);
-//        setItemsRespuestas(itemsRespuestas);
-//        
-//        if(itemsRespuestas == null ){
-//            return null;
-//        }
-//        int cantDatos = 4;
-//        Contador<TipoChaside>[][] contador = new Contador[2][cantDatos]; /** 8 es la cantidad de tipos de estilo */
-//        contador[0] = new Contador[cantDatos];
-//        contador[1] = new Contador[cantDatos];
-//        int indice;
-//        int columna;
-//        int fila;
-//        
-//        /** Sumatoria de tipos de estilo de las respuestas */
-//        for (RespuestaChaside item : itemsRespuestas) {
-//            PreguntaChaside pregunta = item.getIdpreguntaChaside();
-//            List<TipoChasidePregunta> listaTiposChasidePregunta = pregunta.getTipoChasidePreguntaList();
-//            TipoChasidePregunta obj = (listaTiposChasidePregunta.get(0).getIndice().equals(item.getRespuesta()))?listaTiposChasidePregunta.get(0):listaTiposChasidePregunta.get(1);
-//                 
-//            indice = obj.getTipoChaside().getId()-1;
-//            columna = indice % 2;
-//            fila = indice / 2;
-//            if(contador[columna][fila] == null) {
-//                contador[columna][fila] = new Contador();
-//            }
-//            contador[columna][fila].aumentarContador();
-//            contador[columna][fila].setTipo(obj.getTipoChaside());
-//            
-//        }
-        List<Contador<TipoChaside>> vectorRes = new ArrayList<>();
-//        
-//        for (int i = 0; i < cantDatos; i++) {
-//            vectorRes.add(new Contador());
-//        }
-//        int resta;
-//        /** Calculo de grupos de tipos de estilo */
-//        for (int i = 0; i < vectorRes.size(); i++) {
-//            
-//            indice = contador[0][i].getContador() > contador[1][i].getContador() ? 0 : 1;
-//            resta = Math.abs(contador[0][i].getContador() - contador[1][i].getContador());
-//            
-//            vectorRes.get(i).setTipo(contador[indice][i].getTipo());
-//            vectorRes.get(i).setContador(resta);
-//            
-//        }
+    public List<Contador<ResultadoChaside>> estadisticaEncuesta(EncuestaChaside encuesta){
+        List<RespuestaChaside> itemsRespuestas = getRespuestaChasideController().getItemsXEncuesta(encuesta);
+        setItemsRespuestas(itemsRespuestas);
+        List<Contador<ResultadoChaside>> vectorRes = new ArrayList<>();
+        
+        TipoClaseChasideController unTipoClaseChasideController = getTipoClaseChasideController();
+        ResultadoChasideController unResultadoChasideController = getResultadoChasideController();
+        
+        if(itemsRespuestas == null ){
+            return null;
+        }
+        int cantClases = 2; // cantidad de tipos
+        int cantTipos = 7; // cantidad de tipos
+        Contador<ResultadoChaside>[][] contador = new Contador[cantClases][cantTipos]; /** 8 es la cantidad de tipos de estilo */
+        contador[0] = new Contador[cantTipos];
+        contador[1] = new Contador[cantTipos];
+        int idEncuesta = getEncuestaGeneral().getIdEncuesta();
+        int idClase;
+        int idTipo;
+        int columna;
+        int fila;
+        
+        /** Sumatoria de tipos de estilo de las respuestas */
+        for (RespuestaChaside item : itemsRespuestas) {
+            PreguntaChaside pregunta = item.getPreguntaChaside();
+            idClase = pregunta.getIdClaseChaside().getIdClaseChaside();
+            idTipo = pregunta.getIdTipoChaside().getIdTipoChaside();
+            columna = idClase - 1;
+            fila = idTipo - 1;
+            
+            if(contador[columna][fila] == null) {
+                Contador unContador = new Contador<ResultadoChaside>(){
+                    @Override
+                    public int aumentarContador() {
+                        int suma = 1 + getTipo().getResultado();
+                        getTipo().setResultado((short)suma);
+                        return getTipo().getResultado();
+                    }
+                };
+                unContador.setContador(0);
+                
+                TipoClaseChaside unTipoClaseChaside = unTipoClaseChasideController.getTipoClaseChaside(new TipoClaseChasidePK(idTipo, idClase));
+                ResultadoChaside resultadoChaside = unResultadoChasideController.prepareCreate();
+                resultadoChaside.setEncuestaChaside(encuesta);
+                resultadoChaside.setTipoClaseChaside(unTipoClaseChaside);
+                resultadoChaside.setResultado((short)0);
+                unContador.setTipo(resultadoChaside);
+                contador[columna][fila] = unContador;
+                vectorRes.add(unContador);
+            }
+            contador[columna][fila].aumentarContador();
+        }
         return vectorRes;
     }
 
@@ -272,12 +277,12 @@ public class ChasideController
      */
    @Override
     public String getRuta() {
-        return "/vistas/preguntasChaside/index.xhtml";
+        return "/vistas/chaside/chasideindex.xhtml";
     }
     
     @Override
     public String getName() {
-        return "Chaside aprendizaje";
+        return "Chaside";
     }
 
     @Override
@@ -294,8 +299,26 @@ public class ChasideController
      * 
      * @return 
      */
-    public List<Contador<TipoChaside>> getEstadisticaEncuentaChasideApren() {
-        return estadisticaEncuentaChasideApren;
+    public ResultadoChaside[] getEstadisticaEncuentaChaside() {
+        ResultadoChaside[] listaResultadod = new ResultadoChaside[2];
+        
+        // almacena el 
+        int[] claseMax = new int[2];
+        claseMax[0] = -1;
+        claseMax[1] = -1;
+        int indice;
+        
+        for (Contador<ResultadoChaside> contador : estadisticaEncuentaChaside) {
+            int clase = contador.getTipo().getResultadoChasidePK().getIdClaseChaside();
+            int tipo = contador.getTipo().getResultadoChasidePK().getIdTipoChaside();
+            indice = clase - 1;
+            
+            if( listaResultadod[indice] == null || listaResultadod[indice].getResultado() < contador.getTipo().getResultado()){
+                listaResultadod[indice] = contador.getTipo();
+            }
+        }
+        
+        return listaResultadod;
     }
 
 //    

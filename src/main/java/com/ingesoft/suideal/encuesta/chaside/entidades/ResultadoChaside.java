@@ -65,7 +65,7 @@ public class ResultadoChaside implements Serializable {
         this.resultadoChasidePK = resultadoChasidePK;
     }
 
-    public Short getResultado() {
+    public short getResultado() {
         return resultado;
     }
 
@@ -111,7 +111,7 @@ public class ResultadoChaside implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ingesoft.suideal.encuesta.chaside.entidades.ResultadoChaside[ resultadoChasidePK=" + resultadoChasidePK + " ]";
+        return "ResultadoChaside[ PK=" + resultadoChasidePK + "| resultado: "+resultado+ "]";
     }
     
 }

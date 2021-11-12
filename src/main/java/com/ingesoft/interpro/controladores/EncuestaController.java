@@ -287,9 +287,10 @@ public class EncuestaController extends Controllers implements Serializable {
     
     public List getListadoEncuestas(){
         List unaListaEncuestas = new ArrayList();
-        unaListaEncuestas.add(getRespuestaAmbienteController());
-        unaListaEncuestas.add(getRespuestaPersonalidadController());
-        unaListaEncuestas.add(getEstiloController());
+//        unaListaEncuestas.add(getRespuestaAmbienteController());
+//        unaListaEncuestas.add(getRespuestaPersonalidadController());
+//        unaListaEncuestas.add(getEstiloController());
+        unaListaEncuestas.add(getChasideController());
         unaListaEncuestas.add(getEncuestaInteligenciasMultiplesController());
         return unaListaEncuestas;
     }

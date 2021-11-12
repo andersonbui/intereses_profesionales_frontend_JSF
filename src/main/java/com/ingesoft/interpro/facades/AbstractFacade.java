@@ -36,12 +36,32 @@ public abstract class AbstractFacade<T> {
             getEntityManager().flush();
             return enti2;
         } catch (EJBException e) {
+            System.out.println("---------------------------EXCEPCION-------------------");
             @SuppressWarnings("ThrowableResultIgnored")
             Exception cause = e.getCausedByException();
-            System.out.println("---------------------------EXCEPCION-------------------");
             if (cause instanceof ConstraintViolationException) {
                 @SuppressWarnings("ThrowableResultIgnored")
                 ConstraintViolationException cve = (ConstraintViolationException) e.getCausedByException();
+                for (Iterator<ConstraintViolation<?>> it = cve.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<? extends Object> v = it.next();
+                    System.err.println(v);
+                    System.err.println("==>>" + v.getMessage());
+                }
+            }
+//            Assert.fail("ejb exception");
+        }
+        catch (ConstraintViolationException e) {
+            e.getConstraintViolations().forEach(err->System.out.println("EXCEPCION: " + err.toString()));
+        }
+        catch (Exception e) {
+            System.out.println("EXCEPCION: "+e.getMessage());
+            System.out.println("cause: "+e.getCause().getMessage());
+            Throwable cause = e.getCause();
+            
+            System.out.println("type: "+( cause.toString()));
+            if (cause instanceof ConstraintViolationException) {
+                @SuppressWarnings("ThrowableResultIgnored")
+                ConstraintViolationException cve = (ConstraintViolationException) e.getCause();
                 for (Iterator<ConstraintViolation<?>> it = cve.getConstraintViolations().iterator(); it.hasNext();) {
                     ConstraintViolation<? extends Object> v = it.next();
                     System.err.println(v);

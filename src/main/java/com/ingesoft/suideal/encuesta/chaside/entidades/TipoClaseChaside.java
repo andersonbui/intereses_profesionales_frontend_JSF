@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TipoClaseChaside.findAll", query = "SELECT t FROM TipoClaseChaside t"),
     @NamedQuery(name = "TipoClaseChaside.findByIdTipoChaside", query = "SELECT t FROM TipoClaseChaside t WHERE t.tipoClaseChasidePK.idTipoChaside = :idTipoChaside"),
     @NamedQuery(name = "TipoClaseChaside.findByIdClaseChaside", query = "SELECT t FROM TipoClaseChaside t WHERE t.tipoClaseChasidePK.idClaseChaside = :idClaseChaside"),
+    @NamedQuery(name = "TipoClaseChaside.findByIdClaseIdTipoChaside", query = "SELECT t FROM TipoClaseChaside t WHERE "
+            + " t.tipoClaseChasidePK.idClaseChaside = :idClaseChaside and t.tipoClaseChasidePK.idTipoChaside = :idTipoChaside"),
     @NamedQuery(name = "TipoClaseChaside.findByDescripcion", query = "SELECT t FROM TipoClaseChaside t WHERE t.descripcion = :descripcion")})
 public class TipoClaseChaside implements Serializable {
 

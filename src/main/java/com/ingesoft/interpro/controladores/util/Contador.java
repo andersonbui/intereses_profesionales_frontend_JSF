@@ -35,7 +35,7 @@ public class Contador<Tipo> implements Comparable<Contador> {
 
     @Override
     public String toString() {
-        return "ContadorTiposEstilos{" + "contador=" + contador + ", tipoEstilo=" + tipo + '}';
+        return "Contador{" + "contador=" + contador + ", tipoEstilo=" + tipo + '}';
     }
 
     @Override

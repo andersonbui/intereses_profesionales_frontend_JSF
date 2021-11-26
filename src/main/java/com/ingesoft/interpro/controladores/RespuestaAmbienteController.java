@@ -376,6 +376,11 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     }
 
     @Override
+    public boolean isPending(Encuesta encuesta) {
+        return false;
+    }
+
+    @Override
     public String getRuta() {
         return "/vistas/preguntaAmbiente/preguntasAmbiente.xhtml";
     }

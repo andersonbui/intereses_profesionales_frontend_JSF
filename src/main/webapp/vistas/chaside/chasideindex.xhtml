@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:composition template="/realizarEncuesta.xhtml">
 
@@ -93,27 +93,19 @@
                         <p:panel header="Preguntas de Chaside uno">
                             <h1><p:progressBar value="#{chasideController.getnombrePaso()}" labelTemplate="{value}%" displayOnly="true"/></h1>
                             <h:panelGroup  style="display: block; height: 55px;" >
-                                <p:commandButton class="float-l btn" value="anterior" ajax="true" 
-                                                 actionListener="#{chasideController.anteriorPaso}"
-                                                 update=":PreguntaChasideForm, @form" >
-                                </p:commandButton>
-                                <p:commandButton value="Siguiente" ajax="true" style="float:right;" class="float-r btn"
+                                <p:commandButton value="iguiente encuesta" ajax="true" style="float:right;" class="float-r btn"
                                                  action="#{encuestaController.siguienteEncuesta()}"
                                                  rendered="#{chasideController.esUltimoPaso()}"
                                                  > 
                                 </p:commandButton>
                             </h:panelGroup>
-
-                            <div class="contentenedor-preguntas-chaside row" >
-                                <ui:repeat value="#{chasideController.estadisticaEncuentaChaside}" var="respuesta">
-                                    <div class="col-resultados col-md-6" >
-                                        <b> Letra: </b> #{respuesta.tipoClaseChaside.tipoChaside.nombre}<br/>
-                                        <b> Puntaje </b> #{respuesta.resultado}<br/>
-                                        <div title="clase"> <b> #{respuesta.tipoClaseChaside.claseChaside.nombre}:</b> #{respuesta.tipoClaseChaside.descripcion}</div>
-                                        <div title="tipo"> <b> Profesion: </b> #{respuesta.tipoClaseChaside.tipoChaside.profesion}</div>
-                                    </div>
-                                </ui:repeat>
-                            </div>
+                            <p:panelGrid styleClass="panelgrid">
+                                <h1>Felicidades #{encuestaController.selected.estudiante.idPersona.nombre} #{encuestaController.selected.estudiante.idPersona.apellido}</h1>
+                                <p><b>#{encuestaController.selected.estudiante.idPersona.email}</b></p>
+                                <p><b>Has completado las preguntas de </b></p>
+                                <ezcomp:EstadisticaChaside 
+                                    estadisticaEncuentaChaside="#{chasideController.estadisticaEncuentaChaside}" ></ezcomp:EstadisticaChaside>
+                            </p:panelGrid>
                         </p:panel>
                     </h:panelGroup>
 

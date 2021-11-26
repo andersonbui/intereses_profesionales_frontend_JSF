@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <!-- simple components https://www.apuntesdejava.com/2014/06/tutorial-jsf-22-sesion-5-facelets.html#google_vignette -->
+    <!-- INTERFACE -->
+    <cc:interface  >
+        <cc:attribute name="estadisticaEncuentaChaside" required="true"  />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <style type="text/css">
+            .value {
+                font-weight: bold;
+                margin-left:  auto;
+            }
+
+            .contentenedor-preguntas-chaside {
+                width: 600px;
+                margin: auto;
+            }
+
+            .col-resultados {
+                overflow-wrap: break-word;
+                padding: 40px 10px 10px 10px;
+            }
+        </style>
+        <h3 style="text-align: center;">Estadistica Chaside</h3>
+        
+        <div class="contentenedor-preguntas-chaside row" >
+            <ui:repeat value="#{cc.attrs.estadisticaEncuentaChaside}" var="respuesta">
+                <div class="col-resultados col-md-6" >
+                    <b> Letra: </b> #{respuesta.tipoClaseChaside.tipoChaside.nombre}<br/>
+                    <b> Puntaje </b> #{respuesta.resultado}<br/>
+                    <div title="clase"> <b> #{respuesta.tipoClaseChaside.claseChaside.nombre}:</b> #{respuesta.tipoClaseChaside.descripcion}</div>
+                    <div title="tipo"> <b> Profesion: </b> #{respuesta.tipoClaseChaside.tipoChaside.profesion}</div>
+                </div>
+            </ui:repeat>
+        </div>
+    </cc:implementation>
+</html>

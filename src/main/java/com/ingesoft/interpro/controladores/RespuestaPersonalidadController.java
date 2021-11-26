@@ -147,6 +147,7 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         grupo = getGrupoItems(pasoActual + 1);
         return pasoActual;
     }
+    
     public Encuesta getEncuestaActual() {
         return getEncuestaController().getSelected();
     }
@@ -311,6 +312,12 @@ public class RespuestaPersonalidadController extends Controllers implements Seri
         return true;
     }
 
+    @Override
+    public boolean isPending(Encuesta encuesta) {
+        EncuestaPersonalidad encuestaPersonalidad = encuesta.getEncuestaPersonalidad();
+        return encuestaPersonalidad == null || !EncuestaPersonalidad.FINALIZADA.equals(encuestaPersonalidad.getEstado());
+    }
+    
     @Override
     public String getRuta() {
         return "/vistas/preguntaPersonalidad/preguntasPersonalidad.xhtml";

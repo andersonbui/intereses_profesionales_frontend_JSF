@@ -52,24 +52,4 @@ public class EncuestaFacade extends AbstractFacade<Encuesta> {
         return null;
     }
 
-    public Encuesta encuestaSinTerminar(Estudiante estudiante) {
-        Encuesta encuestaSeleccionada = null;
-        List<Encuesta> lista = buscarPorEstudiante(estudiante);
-        if (lista != null && !lista.isEmpty()) {
-//            lista.stream().filter((t) -> {
-//                return t.getEstado() == null || t.getEstado() == "" || t.getEstado().equals(EncuestaPersonalidad.PENDINENTE) ; 
-//            });
-            for (int i = lista.size() - 1; i >= 0; i--) {
-
-                Encuesta encuesta = lista.get(i);
-                System.out.println("----------estado: <" + encuesta.getEstado() + ">");
-                if (encuesta.getEstado() == null || "".equals(encuesta.getEstado()) || "NULL".equals(encuesta.getEstado())
-                        || "SINTERMINAR".equals(encuesta.getEstado())) {
-                    encuestaSeleccionada = encuesta;
-                    break;
-                }
-            }
-        }
-        return encuestaSeleccionada;
-    }
 }

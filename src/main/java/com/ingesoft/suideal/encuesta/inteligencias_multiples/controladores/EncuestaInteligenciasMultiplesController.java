@@ -136,6 +136,12 @@ public class EncuestaInteligenciasMultiplesController
         getRespuestas();
     }
 
+    @Override
+    public boolean isPending(Encuesta encuesta) {
+        EncuestaInteligenciasMultiples encuestaInteligenciasMultip = encuesta.getEncuestaInteligenciasMultiples();
+        return encuestaInteligenciasMultip == null || !EncuestaInteligenciasMultiples.FINALIZADA.equals(encuestaInteligenciasMultip.getEstado());
+    }
+    
     /**
      * 
      * @return 

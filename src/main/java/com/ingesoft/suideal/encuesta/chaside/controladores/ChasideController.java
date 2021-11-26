@@ -8,18 +8,17 @@ import com.ingesoft.suideal.encuesta.chaside.entidades.EncuestaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.PreguntaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.RespuestaChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.ResultadoChaside;
-import com.ingesoft.suideal.encuesta.chaside.entidades.TipoChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.TipoClaseChaside;
 import com.ingesoft.suideal.encuesta.chaside.entidades.TipoClaseChasidePK;
 import com.ingesoft.suideal.encuesta.chaside.facade.EncuestaChasideFacade;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -136,6 +135,12 @@ public class ChasideController
         getRespuestas();
     }
 
+    @Override
+    public boolean isPending(Encuesta encuesta) {
+        EncuestaChaside encuestaChaside = encuesta.getEncuestaChaside();
+        return encuestaChaside == null || !EncuestaChaside.FINALIZADA.equals(encuestaChaside.getEstado());
+    }
+    
     /**
      * 
      * @return
@@ -150,7 +155,8 @@ public class ChasideController
             hilo.join();
         }
         // colocar como finalizada y guarda cambios
-//        getSelected().setEstado(EncuestaChaside.FINALIZADA); // TODO: descomentar
+        getSelected().setEstado(EncuestaChaside.FINALIZADA);
+        getSelected().setFechaFinalizada(new Date());
         update();
         
         estadisticaEncuentaChaside = estadisticaEncuesta(getEncuestaGeneral().getEncuestaChaside());
@@ -180,7 +186,7 @@ public class ChasideController
     public List<Contador<ResultadoChaside>> estadisticaEncuesta(EncuestaChaside encuesta){
         List<RespuestaChaside> itemsRespuestas = getRespuestaChasideController().getItemsXEncuesta(encuesta);
         setItemsRespuestas(itemsRespuestas);
-        List<Contador<ResultadoChaside>> vectorRes = new ArrayList<>();
+        List<Contador<ResultadoChaside>> listaContadorResultado = new ArrayList<>();
         
         TipoClaseChasideController unTipoClaseChasideController = getTipoClaseChasideController();
         ResultadoChasideController unResultadoChasideController = getResultadoChasideController();
@@ -225,11 +231,11 @@ public class ChasideController
                 resultadoChaside.setResultado((short)0);
                 unContador.setTipo(resultadoChaside);
                 contador[columna][fila] = unContador;
-                vectorRes.add(unContador);
+                listaContadorResultado.add(unContador);
             }
             contador[columna][fila].aumentarContador();
         }
-        return vectorRes;
+        return listaContadorResultado;
     }
 
     /************************************************************************
@@ -294,34 +300,22 @@ public class ChasideController
     public RespuestaControllerAbstract getRespuestaController() {
         return  getRespuestaChasideController();
     }
-
+    
     /**
      * 
      * @return 
      */
     public ResultadoChaside[] getEstadisticaEncuentaChaside() {
-        ResultadoChaside[] listaResultadod = new ResultadoChaside[2];
         
-        // almacena el 
-        int[] claseMax = new int[2];
-        claseMax[0] = -1;
-        claseMax[1] = -1;
-        int indice;
-        
-        for (Contador<ResultadoChaside> contador : estadisticaEncuentaChaside) {
-            int clase = contador.getTipo().getResultadoChasidePK().getIdClaseChaside();
-            int tipo = contador.getTipo().getResultadoChasidePK().getIdTipoChaside();
-            indice = clase - 1;
-            
-            if( listaResultadod[indice] == null || listaResultadod[indice].getResultado() < contador.getTipo().getResultado()){
-                listaResultadod[indice] = contador.getTipo();
-            }
-        }
-        
+        EstadisticaChasideController estadisticaChasideController = getEstadisticaChasideController();
+        List<ResultadoChaside> listaResultados = estadisticaEncuentaChaside.stream().map((Contador<ResultadoChaside> elemento) -> {
+            return elemento.getTipo();
+        }).collect(Collectors.toList());
+        ResultadoChaside[] listaResultadod = estadisticaChasideController.obtenerMayorResultado(listaResultados);
         return listaResultadod;
     }
 
-//    
+
     /************************************************************************
      * CONVERTER
      ************************************************************************/

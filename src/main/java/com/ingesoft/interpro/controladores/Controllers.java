@@ -13,6 +13,7 @@ import com.ingesoft.interpro.controladores.util.CredencialesGF;
 import com.ingesoft.interpro.controladores.util.JsfUtil;
 import com.ingesoft.interpro.facades.AbstractFacade;
 import com.ingesoft.suideal.encuesta.chaside.controladores.ChasideController;
+import com.ingesoft.suideal.encuesta.chaside.controladores.EstadisticaChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.PreguntaChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.RespuestaChasideController;
 import com.ingesoft.suideal.encuesta.chaside.controladores.ResultadoChasideController;
@@ -449,12 +450,12 @@ public abstract class Controllers implements Serializable {
         return ResultadoChasideController;
     }
 
-//    public EstadisticaChasideController getEstadisticaChasideController() {
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        ELResolver elResolver = facesContext.getApplication().getELResolver();
-//        EstadisticaChasideController estadisticaChasideController = (EstadisticaChasideController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaChasideController");
-//        return estadisticaChasideController;
-//    }
+    public EstadisticaChasideController getEstadisticaChasideController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELResolver elResolver = facesContext.getApplication().getELResolver();
+        EstadisticaChasideController estadisticaChasideController = (EstadisticaChasideController) elResolver.getValue(facesContext.getELContext(), null, "estadisticaChasideController");
+        return estadisticaChasideController;
+    }
     
     public TipoClaseChasideController getTipoClaseChasideController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

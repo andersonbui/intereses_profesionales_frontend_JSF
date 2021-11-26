@@ -9,6 +9,7 @@ import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
+import com.ingesoft.suideal.encuesta.chaside.entidades.ResultadoChaside;
 import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.RespuestaPorEstilo;
 import com.ingesoft.suideal.encuesta.inteligencias_multiples.entidades.RespuestaPorInteligencia;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ResultadoEstMultiple {
     List<RespuestaPorEstilo> respuestaPorEstilo;
     List<RespuestaPorPersonalidad> respuestaPorPersonalidad;
     List<RespuestaPorInteligencia> respuestaPorInteligencia;
+    ResultadoChaside[] resultadoChaside;
     Encuesta encuesta;
 
     public String getGrafico() {
@@ -113,5 +115,12 @@ public class ResultadoEstMultiple {
     public void setRespuestaPorInteligencia(List<RespuestaPorInteligencia> respuestaPorInteligencia) {
         this.respuestaPorInteligencia = respuestaPorInteligencia;
     }
-    
+
+    public ResultadoChaside[] getResultadoChaside() {
+        return resultadoChaside;
+    }
+
+    public void setResultadoChaside(ResultadoChaside[] resultadoChaside) {
+        this.resultadoChaside = resultadoChaside;
+    }
 }

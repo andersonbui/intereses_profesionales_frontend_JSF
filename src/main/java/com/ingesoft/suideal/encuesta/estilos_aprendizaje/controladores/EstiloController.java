@@ -113,6 +113,12 @@ public class EstiloController
         this.update();
         return getSelected();
     }
+    
+    @Override
+    public boolean isPending(Encuesta encuesta) {
+        EncuestaEstilosAprendizaje encuestaEstilosAprendizaje  = encuesta.getEncuestaEstilosAprendizaje();
+        return encuestaEstilosAprendizaje == null || !EncuestaEstilosAprendizaje.FINALIZADA.equals(encuestaEstilosAprendizaje.getEstado());
+    }
 
     /**
      * 
@@ -149,6 +155,7 @@ public class EstiloController
         }
         // colocar como finalizada y guarda cambios
         getSelected().setEstado(EncuestaEstilosAprendizaje.FINALIZADA);
+        getSelected().setFechaFinalizada(new Date());
         update();
         
         estadisticaEncuentaEstiloApren = estadisticaEncuesta(getEncuestaGeneral().getEncuestaEstilosAprendizaje());

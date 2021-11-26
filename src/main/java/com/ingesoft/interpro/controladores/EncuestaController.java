@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -46,7 +47,7 @@ public class EncuestaController extends Controllers implements Serializable {
     boolean detener_reloj;
     
     private int contadorEncuesta = 0;
-    private List<EncuestaControllerInterface> listaEncuestas;
+    private List<EncuestaControllerInterface> listaEncuestasController;
     
     protected DefaultMenuModel model;
     
@@ -86,13 +87,15 @@ public class EncuestaController extends Controllers implements Serializable {
     }
 
     public DefaultMenuModel getModel() {
-        if(model == null && listaEncuestas != null && !listaEncuestas.isEmpty()){
+        
+        List<EncuestaControllerInterface> unaListaEncuestasController = getListadoEncuestasController();
+        if(model == null && unaListaEncuestasController != null && !unaListaEncuestasController.isEmpty()){
             model = new DefaultMenuModel();
             
             DefaultMenuItem firstSubMenu = new DefaultMenuItem("Informacion Personal");
             model.addElement(firstSubMenu); 
             
-            for (EncuestaControllerInterface listaEncuesta : listaEncuestas) {
+            for (EncuestaControllerInterface listaEncuesta : unaListaEncuestasController) {
                 firstSubMenu = new DefaultMenuItem(listaEncuesta.getName());
                 model.addElement(firstSubMenu); 
             }
@@ -240,11 +243,13 @@ public class EncuestaController extends Controllers implements Serializable {
     public void siguienteEncuesta() throws IOException {
         contadorEncuesta++;
         this.pasoActivo = contadorEncuesta + 1;
-        if(contadorEncuesta >= listaEncuestas.size()) {
+        
+        List<EncuestaControllerInterface> unaListaEncuestasController = getListadoEncuestasController();
+        if(contadorEncuesta >= unaListaEncuestasController.size()) {
             pasoResumen();
             return;
         }
-        EncuestaControllerInterface encuesta = listaEncuestas.get(contadorEncuesta);
+        EncuestaControllerInterface encuesta = unaListaEncuestasController.get(contadorEncuesta);
         encuesta.prepararEncuesta(selected);
         String ruta = encuesta.getRuta();
         System.out.println("encuesta ruta: " + ruta + " | this.pasoActivo: "+this.pasoActivo);
@@ -276,23 +281,48 @@ public class EncuestaController extends Controllers implements Serializable {
         selected = sinterminar;
         sinterminar = null;
     }
-
-    protected void obtenerEncuestaSinTerminar(Estudiante estudiante) {
-        sinterminar = getFacade().encuestaSinTerminar(estudiante);
+    
+    /**
+     * 
+     * @param encuesta
+     * @return 
+     */
+    private boolean haySubEncuestaPendiente(Encuesta encuesta) {
+        
+        List<EncuestaControllerInterface> unaListaEncuestasController = getListadoEncuestasController();
+        
+        List<Boolean> listarespuesta = (List<Boolean>) unaListaEncuestasController.stream().filter((EncuestaControllerInterface unaencuesta) -> {
+            return unaencuesta.isPending(encuesta);
+        }).map(elem -> true).collect(Collectors.toList());
+        
+        return !listarespuesta.isEmpty();
+    }
+    
+    protected List<Encuesta>  obtenerEncuestaSinTerminar(Estudiante estudiante) {
+        
+        List<Encuesta> lista = getFacade().buscarPorEstudiante(estudiante);
+        
+        List<Encuesta> listaSinFinalizar = lista.stream().filter((Encuesta uanaencuesta) -> {
+            return haySubEncuestaPendiente(uanaencuesta);
+        }).collect(Collectors.toList());
+        
+        return listaSinFinalizar;
     }
     
     public void guardarSelected() {
         getFacade().edit(getSelected());
     }
     
-    public List getListadoEncuestas(){
-        List unaListaEncuestas = new ArrayList();
-//        unaListaEncuestas.add(getRespuestaAmbienteController());
-//        unaListaEncuestas.add(getRespuestaPersonalidadController());
-//        unaListaEncuestas.add(getEstiloController());
-        unaListaEncuestas.add(getChasideController());
-        unaListaEncuestas.add(getEncuestaInteligenciasMultiplesController());
-        return unaListaEncuestas;
+    public List<EncuestaControllerInterface> getListadoEncuestasController(){
+        if(listaEncuestasController == null){
+            listaEncuestasController = new ArrayList();
+            listaEncuestasController.add(getRespuestaAmbienteController());
+            listaEncuestasController.add(getRespuestaPersonalidadController());
+            listaEncuestasController.add(getEstiloController());
+            listaEncuestasController.add(getEncuestaInteligenciasMultiplesController());
+            listaEncuestasController.add(getChasideController());
+        }
+        return listaEncuestasController;
     }
     
     private Encuesta actualizarSelected() {
@@ -312,28 +342,39 @@ public class EncuestaController extends Controllers implements Serializable {
     /**
      * Prepara y crea una encuesta con fecha y esudiante
      *
+     * @return 
      * @throws java.io.IOException
      */
-    public void prepararYCrear() throws IOException {
+    public List<Encuesta> prepararYCrear() throws IOException {
         LoginController loginController = getLoginController();
         Persona persona = loginController.getPersonaActual();
         Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
-        obtenerEncuestaSinTerminar(estud);
-        System.out.println("verificar encuesta:"+selected+"|sinterminar:"+sinterminar);
+        
+        List<Encuesta> listaEncuestasPendientes = obtenerEncuestaSinTerminar(estud);
+        System.err.println("listaEncuestas:"+listaEncuestasPendientes.size());
+        return listaEncuestasPendientes;
+    }
+    
+    
+    public boolean comenzarEncuesta() throws IOException {
+        
+        LoginController loginController = getLoginController();
+        Persona persona = loginController.getPersonaActual();
+        Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
+        
+        System.out.println("encuesta recibida encuesta:"+selected);
         if (selected == null) {
-            System.out.println("encuesta null");
-            if (sinterminar != null) {
-                System.out.println("encontro sinterminar");
-                RequestContext requestContext = RequestContext.getCurrentInstance();
-                requestContext.execute("PF('dialog_encuesta_no_terminada').show()");
-                return;
-            } else {
-                crearEncuesta();
-            }
+            System.out.println("Crear encuesta nueva");
+//            if (sinterminar != null) {
+//                System.out.println("encontro sinterminar");
+//                RequestContext requestContext = RequestContext.getCurrentInstance();
+//                requestContext.execute("PF('dialog_encuesta_no_terminada').show()");
+//                return;
+//            }
+            crearEncuesta();
         }
         pasoActivo = -1;
         contadorEncuesta = -1;
-        listaEncuestas = getListadoEncuestas();
                 
         detener_reloj = true;
         getAreaEncuestaController().inicializar();
@@ -355,6 +396,7 @@ public class EncuestaController extends Controllers implements Serializable {
             System.out.println("No se ha encontrado la persona o estudiante correspondiente.");
 //            e.printStackTrace();
         }
+        return false;
     }
 
     /**
@@ -489,10 +531,6 @@ public class EncuestaController extends Controllers implements Serializable {
         this.tiempo = tiempo_eval;
     }
     
-    public List<EncuestaControllerInterface> getListaEncuestas() {
-        return listaEncuestas;
-    }
-    
     public void setModel(DefaultMenuModel model) {
         this.model = model;
     }
@@ -501,7 +539,7 @@ public class EncuestaController extends Controllers implements Serializable {
      * @param listaEncuestas 
      */
     public void setListaEncuestas(List<EncuestaControllerInterface> listaEncuestas) {
-        this.listaEncuestas = listaEncuestas;
+        this.listaEncuestasController = listaEncuestas;
     }
     
     public void setItems(List<Encuesta> items) {
@@ -513,6 +551,7 @@ public class EncuestaController extends Controllers implements Serializable {
     }
 
     public void setSelected(Encuesta selected) {
+        System.out.println("nuevo seleccionado:"+selected);
         this.selected = selected;
     }
 

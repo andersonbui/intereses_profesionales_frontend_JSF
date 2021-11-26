@@ -30,6 +30,7 @@ public class EstadisticaController  extends Controllers implements Serializable 
         listaEstadisticas.add(getEstadisticaPersonalidadController());
         listaEstadisticas.add(getEstadisticaAmbienteController());
         listaEstadisticas.add(getEstadisticaInteligenciasMultiplesController());
+        listaEstadisticas.add(getEstadisticaChasideController());
     }
 
     public void inicializar(Encuesta selected) {
@@ -82,8 +83,8 @@ public class EstadisticaController  extends Controllers implements Serializable 
         ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();
         resEstMultiple.setEncuesta(encuesta);
         
-        for (EstadisticasControllerInterface listaEstadistica : listaEstadisticas) {
-            listaEstadistica.setResultados(resEstMultiple);
+        for (EstadisticasControllerInterface unaEstadistica : listaEstadisticas) {
+            unaEstadistica.setResultados(resEstMultiple);
         }
         
         return resEstMultiple;

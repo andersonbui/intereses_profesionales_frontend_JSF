@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Encuesta.findByFechaFinalizada", query = "SELECT e FROM Encuesta e WHERE e.fechaFinalizada = :fecha")
     , @NamedQuery(name = "Encuesta.maxIdEncuesta", query = "SELECT max(e.idEncuesta) FROM Encuesta e")
     , @NamedQuery(name = "Encuesta.findByPersonalidad", query = "SELECT e FROM Encuesta e WHERE e.encuestaPersonalidad = :encuestaPersonalidad")
-    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudiante = :estudiante order by e.fechaCreacion asc")
+    , @NamedQuery(name = "Encuesta.findByEstudiante", query = "SELECT e FROM Encuesta e WHERE e.estudiante = :estudiante order by e.fechaCreacion desc")
     , @NamedQuery(name = "Encuesta.findByGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado order by e.fechaCreacion asc")
     , @NamedQuery(name = "Encuesta.findByEstudianteGrado", query = "SELECT e FROM Encuesta e WHERE e.grado = :grado AND e.estudiante = :estudiante order by e.fechaCreacion asc")
 })

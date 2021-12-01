@@ -5,6 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="/principal.xhtml">
@@ -35,40 +36,20 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{misResultadosController.cargarGraficoMisResultado()}"
                                      value="cargar" 
-                                     update="grafica,:growl,display,divgrafico,idpersonalidad">
+                                     update=":growl,display,id_elem_grafico,idpersonalidad">
                     </p:commandButton>
                     <br/>
                     <h:body id='idpersonalidad'  rendered="#{misResultadosController.personalidad != null}" >
                         <center><h3><b>Estimado estudiante #{loginController.personaActual.nombre} #{loginController.personaActual.apellido} los resultados para usted son: </b></h3></center>
                         <br/>
-
-                        <h1 style="text-align: center;" value="">Personalidad: #{misResultadosController.personalidad}</h1>
-                        <center class="grupo-img-personalidad">
-                            <c:forEach begin="0" end="3" var="index">
-                                <div class="personalidad">
-                                    <div>
-                                        <p:graphicImage title="#{encuestaController.resultado_personalidad_descripcion(index,misResultadosController.personalidad )}" name="#{encuestaController.resultado_personalidad(index,misResultadosController.personalidad)}" class="img_personalidad" style="" />   
-                                    </div>
-                                    <div>
-                                        <p:outputLabel value="#{encuestaController.resultado_personalidad_descripcion(index, misResultadosController.personalidad )}" class="txt_personalidad" />
-                                    </div>
-                                </div>
-                            </c:forEach>
-                        </center>
+                        <ezcomp:EstadisticaPersonalidad  rendered="#{misResultadosController.personalidad != null}"  
+                                                             personalidad="#{misResultadosController.personalidad}" ></ezcomp:EstadisticaPersonalidad>
                     </h:body>
                     <br/>
                     <div class="row" style="margin: 50px;">
                         <div>
-                            <h:body id='divgrafico' >
-                                <p:panelGrid id="grafica"  rendered="#{misResultadosController.getGraficoModelo() != null}">
-                                    <script>
-                                        graficar(#{misResultadosController.getGraficoModelo()});
-                                    </script>
-                                    <div style="height: 300px; width: 700px;" >
-                                        <canvas id="myChart" width="700" height="300"></canvas>
-                                    </div>
-                                </p:panelGrid>
-                            </h:body>
+                            <ezcomp:EstadisticaAmbientes id="id_elem_grafico" id_grafico="id_grafico_ambiente" rendered="#{misResultadosController.getGraficoModelo() != null and misResultadosController.getGraficoModelo() != ''}" 
+                                graficoAmbiente="#{misResultadosController.getGraficoModelo()}" ></ezcomp:EstadisticaAmbientes>
                         </div>
                         <div>
                             <p:outputLabel value="Puntaje encuesta: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
@@ -84,17 +65,9 @@
                             </p:dataTable>
                         </div>
                     </div>
+                    
                 </h:panelGroup>
             </h:form>
-            <script type="text/javascript">
-                function graficar(json) {
-                    if (json !== null) {
-                        console.log(json);
-                        var ctx = document.getElementById("myChart");
-                        var myChart = new Chart(ctx, json);
-                    }
-                }
-            </script>
         </ui:define>
     </ui:composition>
 

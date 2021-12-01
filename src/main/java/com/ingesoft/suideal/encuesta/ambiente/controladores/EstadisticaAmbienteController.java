@@ -216,7 +216,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         String result = cargarGraficoResultadoEncuesta(opcion);
 
         encuestaController.setItems(listaTotalEncuestas);
-        personalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(listaTotalEncuestas);
+        personalidad = getEstadisticaPersonalidadController().obtenerPromedioPersonalidad(listaTotalEncuestas);
 
         return result;
     }
@@ -299,7 +299,6 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
             context.addMessage(null, msg);
             return null;
         }
-
         
         resul.setGrafico(stringgrafico);
         resul.setEstudiante(estudiante);
@@ -311,7 +310,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         resul.setPromedioPuntajeEValuacion(encuestaController.promedioPuntajeEvaluacion());
         resul.setPromedioPuntajeEncuesta(encuestaController.promedioPuntajeEncuesta());
         
-        String unapersonalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(listaEncuestas);
+        String unapersonalidad = getEstadisticaPersonalidadController().obtenerPromedioPersonalidad(listaEncuestas);
         resul.setPersonalidad(unapersonalidad);
         return resul;
     }
@@ -450,10 +449,15 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
      */
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
-        Encuesta unaencuesta =  resultadosEstMultiple.getEncuesta();
-        String grafico = obtenergraficoPorEncuesta(unaencuesta);
-        resultadosEstMultiple.setGrafico(grafico);
-        System.out.println("grafico:"+grafico);
+        
+        List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
+        System.out.println("lista_encuestas Ambiente:"+lista_encuestas.size());
+        if(lista_encuestas != null && lista_encuestas.size() > 0){
+            Encuesta una_encuesta = lista_encuestas.get(0);
+            String grafico = obtenergraficoPorEncuesta(una_encuesta);
+            resultadosEstMultiple.setGrafico(grafico);
+            System.out.println("Ambiente:"+grafico);
+        }
     }
     
     /**

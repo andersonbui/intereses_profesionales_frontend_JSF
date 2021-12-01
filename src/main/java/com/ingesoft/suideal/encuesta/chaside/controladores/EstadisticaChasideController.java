@@ -1,6 +1,5 @@
 package com.ingesoft.suideal.encuesta.chaside.controladores;
 
-import com.ingesoft.suideal.encuesta.chaside.controladores.*;
 import com.ingesoft.interpro.controladores.Controllers;
 import com.ingesoft.interpro.controladores.EstadisticasControllerInterface;
 import com.ingesoft.interpro.controladores.util.ResultadoEstMultiple;
@@ -45,13 +44,15 @@ public class EstadisticaChasideController  extends Controllers implements Serial
      */
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
-        System.out.println("obteniendo resultado chaside");
-        Encuesta encuesta = resultadosEstMultiple.getEncuesta();
-        List<ResultadoChaside>  listaResultadoChaside;
-        if(encuesta != null && encuesta.getEncuestaChaside() != null){
-            listaResultadoChaside = encuesta.getEncuestaChaside().getResultadoChasideList();
-            ResultadoChaside[] listaResultadod = obtenerMayorResultado(listaResultadoChaside);
-            resultadosEstMultiple.setResultadoChaside(listaResultadod);
+        List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
+        System.out.println("lista_encuestas chaside:"+lista_encuestas.size());
+        if(lista_encuestas != null && lista_encuestas.size() > 0){
+            Encuesta encuesta = lista_encuestas.get(0);
+            if(encuesta.getEncuestaChaside() != null){
+                List<ResultadoChaside> listaResultadoChaside = encuesta.getEncuestaChaside().getResultadoChasideList();
+                ResultadoChaside[] listaResultadod = obtenerMayorResultado(listaResultadoChaside);
+                resultadosEstMultiple.setResultadoChaside(listaResultadod);
+            }
         }
     }
 

@@ -171,7 +171,7 @@ public class EstadisticaAreasController extends Controllers implements Serializa
         String result = cargarGraficoResultadoEncuesta(opcion);
 
         encuestaController.setItems(listaTotalEncuestas);
-        personalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(listaTotalEncuestas);
+        personalidad = getEstadisticaPersonalidadController().obtenerPromedioPersonalidad(listaTotalEncuestas);
 
         return result;
     }

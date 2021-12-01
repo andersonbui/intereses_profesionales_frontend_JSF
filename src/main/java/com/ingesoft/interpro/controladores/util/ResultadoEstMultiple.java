@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class ResultadoEstMultiple {
 
+    final static public String METODO_INDIV = "INDIVIDUAL";
+    final static public String METODO_PROMEDIO = "PROMEDIO";
+    
     String grafico;
     String personalidad;
     Estudiante estudiante;
@@ -30,7 +33,8 @@ public class ResultadoEstMultiple {
     List<RespuestaPorPersonalidad> respuestaPorPersonalidad;
     List<RespuestaPorInteligencia> respuestaPorInteligencia;
     ResultadoChaside[] resultadoChaside;
-    Encuesta encuesta;
+    List<Encuesta> listaEncuestas;
+    String metodo;
 
     public String getGrafico() {
         return grafico;
@@ -93,11 +97,18 @@ public class ResultadoEstMultiple {
     }
 
     public Encuesta getEncuesta() {
-        return encuesta;
+        if(listaEncuestas != null && listaEncuestas.size() > 0){
+           return listaEncuestas.get(0);
+        }
+        return null;
+    }
+    
+    public List<Encuesta> getListaEncuestas() {
+        return listaEncuestas;
     }
 
-    public void setEncuesta(Encuesta encuesta) {
-        this.encuesta = encuesta;
+    public void setListaEncuestas(List<Encuesta> listaEncuestas) {
+        this.listaEncuestas = listaEncuestas;
     }
 
     public List<RespuestaPorPersonalidad> getRespuestaPorPersonalidad() {
@@ -123,4 +134,13 @@ public class ResultadoEstMultiple {
     public void setResultadoChaside(ResultadoChaside[] resultadoChaside) {
         this.resultadoChaside = resultadoChaside;
     }
+
+    public String getMetodo() {
+        return metodo;
+    }
+
+    public void setMetodo(String metodo) {
+        this.metodo = metodo;
+    }
+
 }

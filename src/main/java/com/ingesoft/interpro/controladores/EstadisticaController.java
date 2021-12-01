@@ -53,41 +53,57 @@ public class EstadisticaController  extends Controllers implements Serializable 
         items = calcularItemsByEmail(email);
         return items;
     }
+    
     public List<ResultadoEstMultiple> calcularItemsByEmail(String email) {
+        return calcularItemsByEmail(email, ResultadoEstMultiple.METODO_INDIV);
+    }
+   
+    private List<ResultadoEstMultiple> calcularItemsByEmail(String email, String metodo ) {
             List<Estudiante> listEst = getEstudianteController().getEstudiantePorEmail(email);
             System.out.println("listEst: "+listEst);
             List<ResultadoEstMultiple> listadoResultado = new ArrayList();
-                
+            
             if(listEst != null && !listEst.isEmpty()) {
                 Estudiante est = listEst.get(0);
-                List listadoResp = calcularItemsByEstudiante(est);
+                List listadoResp = calcularItemsByEstudiante(est, metodo);
                 listadoResultado.addAll(listadoResp);
             }
             
         return listadoResultado;
     }
 
-    public List<ResultadoEstMultiple> calcularItemsByEstudiante(Estudiante estudiante) {
+    private List<ResultadoEstMultiple> calcularItemsByEstudiante(Estudiante estudiante, String metodo ) {
         List<ResultadoEstMultiple> listadoResultado = new ArrayList();
 
         List<Encuesta> listEncuestas = getEncuestaController().listarEncuestasSelected(estudiante);
-
-        for (Encuesta encuesta : listEncuestas) {
-            ResultadoEstMultiple resEstMultiple = calcularItemsByEncuesta(encuesta);
+        
+        if(metodo != null && !"".equals(metodo) && !ResultadoEstMultiple.METODO_INDIV.equals(metodo)){
+            ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();
+            resEstMultiple.setListaEncuestas(listEncuestas);
+            resEstMultiple.setMetodo(metodo);
+            resEstMultiple = calcularItemsByEncuesta(resEstMultiple);
             listadoResultado.add(resEstMultiple);
+        } else {
+            for (Encuesta encuesta : listEncuestas) {
+                List<Encuesta> auxlistaEncuesta = new ArrayList<>();
+                auxlistaEncuesta.add(encuesta);
+                ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();
+                resEstMultiple.setListaEncuestas(auxlistaEncuesta);
+                resEstMultiple = calcularItemsByEncuesta(resEstMultiple);
+                listadoResultado.add(resEstMultiple);
+            }
         }
+        
         return listadoResultado;
     }
     
-    public ResultadoEstMultiple calcularItemsByEncuesta(Encuesta encuesta) {
-        ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();
-        resEstMultiple.setEncuesta(encuesta);
+    private ResultadoEstMultiple calcularItemsByEncuesta(ResultadoEstMultiple resEstMultiple ) {
         
-        for (EstadisticasControllerInterface unaEstadistica : listaEstadisticas) {
+        listaEstadisticas.forEach(unaEstadistica -> {
             unaEstadistica.setResultados(resEstMultiple);
-        }
+        });
         
         return resEstMultiple;
     }
-
+    
 }

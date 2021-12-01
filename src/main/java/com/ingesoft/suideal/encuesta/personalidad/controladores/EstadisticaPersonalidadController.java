@@ -8,14 +8,18 @@ import be.ceau.chart.options.BarOptions;
 import be.ceau.chart.options.scales.BarScale;
 import be.ceau.chart.options.scales.YAxis;
 import be.ceau.chart.options.ticks.LinearTicks;
+import com.ingesoft.interpro.controladores.Controllers;
 import com.ingesoft.interpro.controladores.EstadisticasControllerInterface;
+import com.ingesoft.interpro.controladores.util.ElementoPersonalidad;
 import com.ingesoft.interpro.controladores.util.ResultadoEstMultiple;
 import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.EstudianteGrado;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
+import com.ingesoft.interpro.entidades.RespuestaPorPersonalidad;
 import com.ingesoft.interpro.entidades.ResultadoPorAmbiente;
+import com.ingesoft.interpro.facades.AbstractFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "estadisticaPersonalidadController")
 @SessionScoped
-public class EstadisticaPersonalidadController implements Serializable, EstadisticasControllerInterface {
+public class EstadisticaPersonalidadController extends Controllers implements Serializable, EstadisticasControllerInterface {
 
     Institucion institucion;
     Grado grado;
@@ -39,6 +43,9 @@ public class EstadisticaPersonalidadController implements Serializable, Estadist
     private String string_grafico;
     String[] personalidades = {"iirj","isej","isep","iiep","iirp","isrp","iiej","isrp",
         "eiej","eirj","esej","esep","eiep","eirp","esrp","esrj" };
+    
+    int[] ORDEN_RESPUESTA_PERSONALIDAD = {2, 3, 1, 0};
+    
 
     public EstadisticaPersonalidadController() {
 
@@ -263,11 +270,20 @@ public class EstadisticaPersonalidadController implements Serializable, Estadist
      */
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
-        Encuesta encuesta = resultadosEstMultiple.getEncuesta();
-        if(encuesta != null && encuesta.getEncuestaPersonalidad()!= null){
-            List respPorPersonaloidad = encuesta.getEncuestaPersonalidad().getRespuestaPorPersonalidadList();
-            resultadosEstMultiple.setRespuestaPorPersonalidad(respPorPersonaloidad);
-            resultadosEstMultiple.setPersonalidad(encuesta.getEncuestaPersonalidad().getPersonalidad());
+        
+        List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
+        if(lista_encuestas != null && lista_encuestas.size() > 0){
+            if(resultadosEstMultiple.getMetodo() != null && !"".equals(resultadosEstMultiple.getMetodo()) && !ResultadoEstMultiple.METODO_INDIV.equals(resultadosEstMultiple.getMetodo())){
+                String personalidad_str = obtenerPromedioPersonalidad(lista_encuestas);
+                resultadosEstMultiple.setPersonalidad(personalidad_str);
+            } else {
+                Encuesta encuesta = lista_encuestas.get(0);
+                if(encuesta != null && encuesta.getEncuestaPersonalidad()!= null){
+                    List respPorPersonaloidad = encuesta.getEncuestaPersonalidad().getRespuestaPorPersonalidadList();
+                    resultadosEstMultiple.setRespuestaPorPersonalidad(respPorPersonaloidad);
+                    resultadosEstMultiple.setPersonalidad(encuesta.getEncuestaPersonalidad().getPersonalidad());
+                }
+            }
         }
     }
 
@@ -305,6 +321,101 @@ public class EstadisticaPersonalidadController implements Serializable, Estadist
         return listaDatos;
     }
 
+        
+    /**
+     *
+     * @param encuestaAcutal
+     * @return
+     */
+    private ElementoPersonalidad[] obtenerValores(Encuesta encuestaAcutal) {
+
+        List<RespuestaPorPersonalidad> lista = getRespuestaPorPersonalidadController().buscarRespuestaPorPersonalidadPorEncuesta(encuestaAcutal);
+        if (lista == null) {
+            return null;
+        }
+        if (lista.size() != ORDEN_RESPUESTA_PERSONALIDAD.length) {
+            System.out.println("lista getRespuestaPorPersonalidadList: " + lista.size());
+            return null;
+        }
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (RespuestaPorPersonalidad respuestaPorPersonalidad : lista) {
+            int indice = respuestaPorPersonalidad.getTipoPersonalidad().getIdTipoPersonalidad() - 1;
+            valores[indice] = new ElementoPersonalidad();
+            valores[indice].puntaje = respuestaPorPersonalidad.getPuntaje();
+            valores[indice].tipo = respuestaPorPersonalidad.getTipoPersonalidad().getTipo();
+        }
+
+        ElementoPersonalidad[] valoresAux = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        for (int i = 0; i < ORDEN_RESPUESTA_PERSONALIDAD.length; i++) {
+            valoresAux[i] = valores[ORDEN_RESPUESTA_PERSONALIDAD[i]];
+        }
+        return valoresAux;
+    }
+    
+    /**
+     *
+     * @param encuesta
+     * @return
+     */
+    public String obtenerPersonalidad(Encuesta encuesta) {
+        ElementoPersonalidad[] valores = obtenerValores(encuesta);
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+    
+    /**
+     *
+     * @param encuestas
+     * @return
+     */
+    public String obtenerPromedioPersonalidad(List<Encuesta> encuestas) {
+        ElementoPersonalidad[] valores = new ElementoPersonalidad[ORDEN_RESPUESTA_PERSONALIDAD.length];
+        int cont_encuestaPerson = 0;
+        for (int i = 0; i < valores.length; i++) {
+            valores[i] = new ElementoPersonalidad();
+            valores[i].puntaje = 0;
+        }
+        // suma
+        for (Encuesta encuesta : encuestas) {
+            ElementoPersonalidad[] valoresaux = obtenerValores(encuesta);
+            if (valoresaux != null) {
+                cont_encuestaPerson++;
+                for (int i = 0; i < valoresaux.length; i++) {
+                    valores[i].tipo = valoresaux[i].tipo;
+                    valores[i].puntaje += valoresaux[i].puntaje;
+                }
+            }
+        }
+        if (cont_encuestaPerson == 0) {
+            return "";
+        }
+        // promedio
+        for (int i = 0; i < valores.length; i++) {
+            valores[i].puntaje /= cont_encuestaPerson;
+        }
+
+        String personalidad = "";
+        String tipo;
+
+        for (ElementoPersonalidad indice : valores) {
+            tipo = indice.tipo;
+            personalidad += (indice.puntaje <= 24) ? tipo.charAt(0) : tipo.charAt(1);
+        }
+        return personalidad;
+    }
+
+    @Override
+    protected AbstractFacade getFacade() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     public class Datos {
 
         Color color;

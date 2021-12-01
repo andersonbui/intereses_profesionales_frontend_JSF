@@ -3,6 +3,7 @@ package com.ingesoft.interpro.controladores;
 import com.ingesoft.interpro.controladores.util.Vistas;
 import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
+import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
@@ -65,10 +66,14 @@ public class MisReultadosController extends Controllers implements Serializable 
         estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
 //        estudianteController.setEncuesta(estudiante);
         if (encuesta != null) {
-            System.out.println("cargarGraficoMisResultado encuesta ");
             List<Encuesta> encuestas = new ArrayList();
             encuestas.add(encuesta);
-            personalidad = encuesta.getEncuestaPersonalidad().getPersonalidad();
+            EncuestaPersonalidad unaEncuestaPersonalidad = encuesta.getEncuestaPersonalidad();
+            if(unaEncuestaPersonalidad == null) {
+                personalidad = "";
+            } else {
+                personalidad = unaEncuestaPersonalidad.getPersonalidad();
+            }
             encuestaController.setItems(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuesta(encuesta);
         } else {
@@ -78,7 +83,7 @@ public class MisReultadosController extends Controllers implements Serializable 
             }
             encuestaController.setItems(encuestas);
             
-            personalidad = getRespuestaPersonalidadController().obtenerPromedioPersonalidad(encuestas);
+            personalidad = getEstadisticaPersonalidadController().obtenerPromedioPersonalidad(encuestas);
             return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
     }

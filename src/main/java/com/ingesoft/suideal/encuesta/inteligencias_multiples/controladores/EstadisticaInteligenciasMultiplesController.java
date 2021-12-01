@@ -7,6 +7,7 @@ import com.ingesoft.interpro.entidades.Encuesta;
 import com.ingesoft.interpro.facades.AbstractFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -25,9 +26,13 @@ public class EstadisticaInteligenciasMultiplesController  extends Controllers im
      */
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
-        Encuesta encuesta = resultadosEstMultiple.getEncuesta();
-        if(encuesta != null && encuesta.getEncuestaInteligenciasMultiples() != null){
-            resultadosEstMultiple.setRespuestaPorInteligencia(encuesta.getEncuestaInteligenciasMultiples().getRespuestaPorInteligencia());
+        
+        List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
+        if(lista_encuestas != null && lista_encuestas.size() > 0){
+            Encuesta encuesta = lista_encuestas.get(0);
+            if(encuesta != null && encuesta.getEncuestaInteligenciasMultiples() != null){
+                resultadosEstMultiple.setRespuestaPorInteligencia(encuesta.getEncuestaInteligenciasMultiples().getRespuestaPorInteligencia());
+            }
         }
     }
 

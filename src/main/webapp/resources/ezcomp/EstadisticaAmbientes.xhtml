@@ -9,6 +9,7 @@
     <!-- INTERFACE -->
     <cc:interface  >
         <cc:attribute name="graficoAmbiente" required="true"  />
+        <cc:attribute name="riasec" required="false"  />
         <cc:attribute name="id_grafico" required="true"  />
     </cc:interface>
 
@@ -52,6 +53,16 @@
                         </script>
                     </p:panelGrid>
                 </h:body>
+                <div class="row" style="margin: 50px;">
+                    <div>
+                        <h3>Profesiones Comunes para tus habilidades</h3>
+                        <p:dataTable rendered="#{cc.attrs.riasec != null}" var="dato" value="#{cc.attrs.riasec}" rows="5" paginator="true">
+                            <p:column headerText="profesion" >
+                                <h:outputText value="#{dato.profesion}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
             </div>
         </div>
     </cc:implementation>

@@ -226,9 +226,9 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
      * @return 
      */
     public List<ResultadoEstMultiple> cargarEstadisticasPorCadaEstudiante() {
-        if (getEstadisticaAmbienteController().getInstitucion() != null) {
+        if (getInstitucion() != null) {
             cadenasgrafico = null;
-            List<Estudiante> listaEst = getEstudianteController().getItems(getEstadisticaAmbienteController().getInstitucion());
+            List<Estudiante> listaEst = getEstudianteController().getItems(getInstitucion());
             if (listaEst != null && !listaEst.isEmpty()) {
                 for (Estudiante unestudiante : listaEst) {
                     ResultadoEstMultiple unres = cargarGraficoResultadoAmbiente(unestudiante);
@@ -329,6 +329,9 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
         List<ResultadoPorAmbiente> listaResultados = null;
 //        listaResultados = resultadosPorEstudiante(estudiante, listaTotalEncuestas);
         List<Encuesta> lisEncuestas = estudiante.getEncuestaList();
+        if(listaTotalEncuestas == null){
+            listaTotalEncuestas = new ArrayList<>();
+        }
         listaTotalEncuestas.addAll(lisEncuestas);
         listaResultados = resultadosPorEncuestas(lisEncuestas);
         
@@ -348,7 +351,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
     }
 
     public List<DatosRiasec> generarDatosRiasec(Encuesta encuesta) {
-        DatosAmbiente[] datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(encuesta);
+        DatosAmbiente[] datos = cargarDatosResultadoPor(encuesta);
         return generarDatosRiasec(datos);
     }
 
@@ -360,7 +363,7 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
     }
 
     public List<DatosRiasec> generarDatosRiasec(Estudiante estudiante) {
-        DatosAmbiente[] datos = getEstadisticaAmbienteController().cargarDatosResultadoPor(estudiante);
+        DatosAmbiente[] datos = cargarDatosResultadoPor(estudiante);
         return generarDatosRiasec(datos);
     }
 
@@ -451,11 +454,12 @@ public class EstadisticaAmbienteController extends Controllers implements Serial
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
         
         List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
-        System.out.println("lista_encuestas Ambiente:"+lista_encuestas.size());
         if(lista_encuestas != null && lista_encuestas.size() > 0){
+            System.out.println("lista_encuestas Ambiente:"+lista_encuestas.size());
             Encuesta una_encuesta = lista_encuestas.get(0);
             String grafico = obtenergraficoPorEncuesta(una_encuesta);
             resultadosEstMultiple.setGrafico(grafico);
+            resultadosEstMultiple.setListaDatRiasec(generarDatosRiasec(una_encuesta));
             System.out.println("Ambiente:"+grafico);
         }
     }

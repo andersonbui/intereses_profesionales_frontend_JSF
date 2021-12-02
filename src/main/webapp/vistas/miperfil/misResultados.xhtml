@@ -36,33 +36,26 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{misResultadosController.cargarGraficoMisResultado()}"
                                      value="cargar" 
-                                     update=":growl,display,id_elem_grafico,idpersonalidad">
+                                     update=":growl,display,idpersonalidad,id_lista_estadisticas">
                     </p:commandButton>
                     <br/>
                     <h:body id='idpersonalidad'  rendered="#{misResultadosController.personalidad != null}" >
-                        <center><h3><b>Estimado estudiante #{loginController.personaActual.nombre} #{loginController.personaActual.apellido} los resultados para usted son: </b></h3></center>
+                        <center><h3><b>Estimado estudiante #{loginController.personaActual.nombre} #{loginController.personaActual.apellido}<br/>sus resultados son: </b></h3></center>
                         <br/>
-                        <ezcomp:EstadisticaPersonalidad  rendered="#{misResultadosController.personalidad != null}"  
-                                                             personalidad="#{misResultadosController.personalidad}" ></ezcomp:EstadisticaPersonalidad>
                     </h:body>
                     <br/>
+                     <ezcomp:ListaEstadisticas  id="id_lista_estadisticas"
+                         listaResultadoEstMultiple="#{misResultadosController.listaResultados}" ></ezcomp:ListaEstadisticas>
+                                        
                     <div class="row" style="margin: 50px;">
-                        <div>
-                            <ezcomp:EstadisticaAmbientes id="id_elem_grafico" id_grafico="id_grafico_ambiente" rendered="#{misResultadosController.getGraficoModelo() != null and misResultadosController.getGraficoModelo() != ''}" 
-                                graficoAmbiente="#{misResultadosController.getGraficoModelo()}" ></ezcomp:EstadisticaAmbientes>
-                        </div>
+                        
                         <div>
                             <p:outputLabel value="Puntaje encuesta: #{encuestaController.promedioPuntajeEncuesta()}"></p:outputLabel>
                             <br/>
                             <p:outputLabel value="Puntaje Evaluacion: #{encuestaController.promedioPuntajeEvaluacion()}"></p:outputLabel>
                             <br/>
                             <p:outputLabel value="Ingeniero: #{misResultadosController.prediccion()}"></p:outputLabel>
-                            <h3>Profesiones Comunes para tus habilidades</h3>
-                            <p:dataTable var="dato" value="#{misResultadosController.datosRiasec()}" rows="5" paginator="true">
-                                <p:column headerText="profesion" >
-                                    <h:outputText value="#{dato.profesion}" />
-                                </p:column>
-                            </p:dataTable>
+
                         </div>
                     </div>
                     

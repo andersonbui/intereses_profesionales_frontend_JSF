@@ -65,17 +65,24 @@ public class EstadisticaController  extends Controllers implements Serializable 
             
             if(listEst != null && !listEst.isEmpty()) {
                 Estudiante est = listEst.get(0);
-                List listadoResp = calcularItemsByEstudiante(est, metodo);
+                List listadoResp = calcularEstadisticas(est, metodo);
                 listadoResultado.addAll(listadoResp);
             }
             
         return listadoResultado;
     }
 
-    private List<ResultadoEstMultiple> calcularItemsByEstudiante(Estudiante estudiante, String metodo ) {
-        List<ResultadoEstMultiple> listadoResultado = new ArrayList();
+    public List<ResultadoEstMultiple> calcularEstadisticas(Estudiante estudiante, String metodo ) {
+        List<ResultadoEstMultiple> listadoResultado = null;
 
         List<Encuesta> listEncuestas = getEncuestaController().listarEncuestasSelected(estudiante);
+        listadoResultado = EstadisticaController.this.calcularEstadisticas(listEncuestas, metodo);
+        
+        return listadoResultado;
+    }
+    
+    public List<ResultadoEstMultiple> calcularEstadisticas(List<Encuesta> listEncuestas, String metodo ) {
+        List<ResultadoEstMultiple> listadoResultado = new ArrayList();
         
         if(metodo != null && !"".equals(metodo) && !ResultadoEstMultiple.METODO_INDIV.equals(metodo)){
             ResultadoEstMultiple resEstMultiple = new ResultadoEstMultiple();

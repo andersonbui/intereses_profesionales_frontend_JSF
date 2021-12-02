@@ -45,8 +45,8 @@ public class EstadisticaChasideController  extends Controllers implements Serial
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
         List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
-        System.out.println("lista_encuestas chaside:"+lista_encuestas.size());
         if(lista_encuestas != null && lista_encuestas.size() > 0){
+            System.out.println("lista_encuestas chaside:"+lista_encuestas.size());
             Encuesta encuesta = lista_encuestas.get(0);
             if(encuesta.getEncuestaChaside() != null){
                 List<ResultadoChaside> listaResultadoChaside = encuesta.getEncuestaChaside().getResultadoChasideList();

@@ -44,7 +44,7 @@
                               value="#{estadisticaController.getItemsByEmail()}" var="result"> 
 
                         <br/>
-                        <h6  style="text-align: center;">#{result.encuesta.fechaCreacion}</h6>
+                        <h6  style="text-align: center;">#{result.encuesta.fechaCreacion} - #{result.encuesta.idEncuesta}</h6>
                         <!-- ADD_PAGE -->
                         <!--<h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail"--> 
                                      <!--rendered="{estadisticaController.getItemsByEmail() != null}">-->
@@ -54,7 +54,6 @@
 
                             <ezcomp:EstadisticaEstilosAprendizaje rendered="#{result.respuestaPorEstilo != null}" 
                                                                   listRespuestasXEstilos="#{result.respuestaPorEstilo}" ></ezcomp:EstadisticaEstilosAprendizaje>
-                                                                  
                             <ezcomp:EstadisticaAmbientes id_grafico="#{result.encuesta.idEncuesta}" rendered="#{result.graficoAmbiente != null and result.graficoAmbiente != ''}" 
                                 graficoAmbiente="#{result.graficoAmbiente}" ></ezcomp:EstadisticaAmbientes>
 
@@ -83,9 +82,6 @@
                     mywindow.document.write('</body></html>');
                     mywindow.document.close(); // necessary for IE >= 10
                     mywindow.focus(); // necessary for IE >= 10
-
-                    //mywindow.print();
-//                    mywindow.close();
 
                     return true;
                 }

@@ -27,6 +27,7 @@ public class EstadisticaEstiloController  extends Controllers implements Seriali
     @Override
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
         List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
+        System.out.println("lista_encuestas:"+lista_encuestas);
         if(lista_encuestas != null && lista_encuestas.size() > 0){
             Encuesta encuesta = lista_encuestas.get(0);
             if(encuesta != null && encuesta.getEncuestaEstilosAprendizaje() != null){

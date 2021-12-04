@@ -26,7 +26,7 @@
         <h3 style="text-align: center;">Estadistica Estilos Aprendizaje</h3>
         
         <div class="contentenedor-preguntas-estilo" >
-            <ui:repeat value="#{cc.attrs.listRespuestasXEstilos}" var="respuesta">
+            <ui:repeat value="#{cc.attrs.listRespuestasXEstilos}" var="respuesta" >
                 #{respuesta.respuesta} |  <span title="#{respuesta.tipoEstilo.definicion}"> #{respuesta.tipoEstilo.nombre.toUpperCase()}</span><br/>
             </ui:repeat>
         </div>

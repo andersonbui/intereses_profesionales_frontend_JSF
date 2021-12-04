@@ -2,9 +2,7 @@ package com.ingesoft.interpro.controladores;
 
 import com.ingesoft.interpro.controladores.util.ResultadoEstMultiple;
 import com.ingesoft.interpro.controladores.util.Vistas;
-import com.ingesoft.interpro.entidades.DatosRiasec;
 import com.ingesoft.interpro.entidades.Encuesta;
-import com.ingesoft.interpro.entidades.EncuestaPersonalidad;
 import com.ingesoft.interpro.entidades.Estudiante;
 import com.ingesoft.interpro.entidades.Grado;
 import com.ingesoft.interpro.entidades.Institucion;
@@ -27,7 +25,6 @@ public class MisReultadosController extends Controllers implements Serializable 
     private String string_grafico;
 
     private String personalidad;
-    List<DatosRiasec> listaresUnicos;
     
     List<ResultadoEstMultiple> listaResultados;
 
@@ -46,7 +43,6 @@ public class MisReultadosController extends Controllers implements Serializable 
     public void reiniciarEstadistica() {
         System.out.println("reiniciando ...");
         string_grafico = null;
-        listaresUnicos = null;
     }
 
     public String getGraficoModelo() {
@@ -72,24 +68,13 @@ public class MisReultadosController extends Controllers implements Serializable 
         EstudianteController estudianteController = getEstudianteController();
         estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
         
-        System.out.println("encuesta:" +encuesta);
-//        estudianteController.setEncuesta(estudiante);
         if (encuesta != null) {
             List<Encuesta> encuestas = new ArrayList();
             encuestas.add(encuesta);
             this.listaResultados = getEstadisticaController().calcularEstadisticas(encuestas, ResultadoEstMultiple.METODO_PROMEDIO);
         } else {
             this.listaResultados = getEstadisticaController().calcularEstadisticas(estudiante, ResultadoEstMultiple.METODO_PROMEDIO);
-//            List<Encuesta> encuestas = encuestaController.listarEncuestasSelected(estudiante);
-//            if (encuestas == null) {
-//                return "";
-//            }
-//            encuestaController.setItems(encuestas);
-//            
-//            personalidad = getEstadisticaPersonalidadController().obtenerPromedioPersonalidad(encuestas);
-//            return getEstadisticaAmbienteController().cargarGraficoResultadoEncuestaEstudiante(estudiante);
         }
-        System.out.println("listaResultados:" +listaResultados.size());
         return "";
     }
 
@@ -100,23 +85,6 @@ public class MisReultadosController extends Controllers implements Serializable 
             prediccion = mineriaController.predecir(encuesta);
         }
         return prediccion;
-    }
-
-    public List<DatosRiasec> datosRiasec() {
-        if (listaresUnicos != null) {
-            return listaresUnicos;
-        }
-        System.out.println("encuesta : " + encuesta);
-        if (encuesta != null) {
-            System.out.println("encuesta!= null : " + listaresUnicos);
-            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(encuesta);
-        } else {
-            System.out.println("else : " + listaresUnicos);
-            EstudianteController estudianteController = getEstudianteController();
-            estudiante = estudianteController.getEstudiantePorPersona(getLoginController().getPersonaActual());
-            listaresUnicos = getEstadisticaAmbienteController().generarDatosRiasec(estudiante);
-        }
-        return listaresUnicos;
     }
 
     public String getPersonalidad() {

@@ -22,7 +22,9 @@ public class EstadisticaChasideController  extends Controllers implements Serial
     }
 
     public ResultadoChaside[] obtenerMayorResultado( List<ResultadoChaside> listaResultados){
-        
+        if(listaResultados == null || listaResultados.isEmpty()) {
+            return null;
+        }
         int indice;
         ResultadoChaside[] listaResultadod = new ResultadoChaside[2];
         for (ResultadoChaside resultado : listaResultados) {
@@ -46,7 +48,7 @@ public class EstadisticaChasideController  extends Controllers implements Serial
     public void setResultados(ResultadoEstMultiple resultadosEstMultiple) {
         List<Encuesta> lista_encuestas = resultadosEstMultiple.getListaEncuestas();
         if(lista_encuestas != null && lista_encuestas.size() > 0){
-            System.out.println("lista_encuestas chaside:"+lista_encuestas.size());
+//            System.out.println("lista_encuestas chaside:"+lista_encuestas.size());
             Encuesta encuesta = lista_encuestas.get(0);
             if(encuesta.getEncuestaChaside() != null){
                 List<ResultadoChaside> listaResultadoChaside = encuesta.getEncuestaChaside().getResultadoChasideList();

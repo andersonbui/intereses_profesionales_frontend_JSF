@@ -134,6 +134,13 @@ public abstract class Controllers implements Serializable {
         return persona;
     }
 
+    public MisReultadosController getMisResultadosController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        MisReultadosController misResultadosController = (MisReultadosController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "misResultadosController");
+        return misResultadosController;
+    }
+    
     public MineriaController getMineriaController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         MineriaController mineriaController = (MineriaController) facesContext.getApplication().getELResolver().

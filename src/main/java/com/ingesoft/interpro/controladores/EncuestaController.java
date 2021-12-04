@@ -27,7 +27,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 
@@ -260,7 +259,10 @@ public class EncuestaController extends Controllers implements Serializable {
     public void pasoResumen() throws IOException {
         actualizarSelected();
         String rutaGeneral = Vistas.getRutaGeneral();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/encuesta/resumen.xhtml");
+        ArrayList<Encuesta> listaEns;
+        getMisResultadosController().setEncuesta(selected);
+        getMisResultadosController().cargarGraficoMisResultado();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(rutaGeneral+"/vistas/miperfil/misResultados.xhtml");
     }
     
     public void finalizar() throws IOException {
@@ -316,11 +318,11 @@ public class EncuestaController extends Controllers implements Serializable {
     public List<EncuestaControllerInterface> getListadoEncuestasController(){
         if(listaEncuestasController == null){
             listaEncuestasController = new ArrayList();
-            listaEncuestasController.add(getRespuestaAmbienteController());
-            listaEncuestasController.add(getRespuestaPersonalidadController());
+//            listaEncuestasController.add(getRespuestaAmbienteController());
+//            listaEncuestasController.add(getRespuestaPersonalidadController());
             listaEncuestasController.add(getEstiloController());
             listaEncuestasController.add(getEncuestaInteligenciasMultiplesController());
-            listaEncuestasController.add(getChasideController());
+//            listaEncuestasController.add(getChasideController());
         }
         return listaEncuestasController;
     }

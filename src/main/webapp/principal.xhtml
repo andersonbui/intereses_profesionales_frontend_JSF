@@ -4,6 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       >
 
     <h:head>
@@ -108,7 +109,7 @@
                             <p:menuitem value="Perfil"  outcome="/vistas/miperfil/VerPerfil.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Encuesta" rendered="#{loginController.estudiante}">
-                            <p:menuitem value="Realizar encuesta" action="#{encuestaController.prepararYCrear}" />
+                            <p:menuitem value="Realizar encuesta" onclick="PF('dialog_encuesta_no_terminada').show()"/>
                             <p:menuitem value="Ver mis resultados" outcome="#{misResultadosController.verMisResultados(loginController.personaActual)}" />
                         </p:submenu>
                         <p:submenu label="Estadisticas"  rendered="">
@@ -160,6 +161,59 @@
             </div>
             <p:dialog header="Basic Dialog" widgetVar="dlg1" minHeight="40">
                 <p:outputLabel id="molestia"   value="Resistance to PrimeFaces is futile!" />
+            </p:dialog>
+            <p:dialog header="Encuestas pendientes" widgetVar="dialog_encuesta_no_terminada"
+                      modal="true" height="400"  width="700" closable="true" style="padding:10px 40px;" >
+                <h:form>
+                    <div style="font-size:1.2em">
+                        <p> 
+                           Seleccione una encuesta pendiente que desea reanudar
+                        </p>
+                        <p:dataTable var="customer" value="#{encuestaController.prepararYCrear()}" rows="5"
+                            paginator="true"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                            rowsPerPageTemplate="5,10,15"
+                            selectionMode="single"
+                            selection="#{encuestaController.selected}"
+                            rowKey="#{customer.idEncuesta}"
+            
+                            >
+
+                            <p:ajax event="rowSelect" listener="#{encuestaController.comenzarEncuesta()}" />
+
+                            <p:column headerText="ID Encuesta">
+                                <h:outputText value="#{customer.idEncuesta}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha Creacion">
+                                <h:outputText value="#{customer.fechaCreacion}" />
+                            </p:column>
+
+                            <p:column headerText="Puntaje Encuesta">
+                                <h:outputText value="#{customer.puntajeEncuesta}" />
+                            </p:column>
+
+                            <f:facet name="paginatorTopLeft">
+                                <p:commandButton type="button" icon="pi pi-refresh"/>
+                            </f:facet>
+
+                            <f:facet name="paginatorBottomRight">
+                                <p:commandButton type="button" icon="pi pi-cloud-upload"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                        <br/>
+                        O comience una nueva
+                        <p:commandButton value="Comenzar nueva encuesta" update="@form" ajax="true" 
+                            action="#{encuestaController.comenzarEncuesta()}" 
+                            onclick="PF('dialog_encuesta_no_terminada').hide();" />
+                    </div>
+                    <div style="width:100%; margin:auto">
+                        <p:commandButton value="Cancelar"  ajax="true" 
+                                         onclick="PF('dialog_encuesta_no_terminada').hide();" />
+                    </div>
+                </h:form>
             </p:dialog>
             <div id="content" class="snippet-hidden">
                 <ui:insert name="content">Content</ui:insert>

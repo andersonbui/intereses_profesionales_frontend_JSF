@@ -6,7 +6,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      >
 
     <ui:composition template="/principal.xhtml">
         <ui:define name="title">
@@ -37,7 +38,7 @@
                     <div>
                         <br/>
                         <h:outputFormat style="width:100%" rendered="#{estadisticaController.getItemsByEmail() == null}" >
-                            No se encontraron datos
+                            No se encontraron coincidencias
                         </h:outputFormat>
                     </div>
                     <p:repeat id="id_datosrepeat" rendered="#{estadisticaController.getItemsByEmail() != null}"
@@ -51,7 +52,7 @@
                         <p:outputPanel>
                             <ezcomp:EstadisticaPersonalidad  rendered="#{result.personalidad != null}"  
                                                              personalidad="#{result.personalidad}" ></ezcomp:EstadisticaPersonalidad>
-
+                                        
                             <ezcomp:EstadisticaEstilosAprendizaje rendered="#{result.respuestaPorEstilo != null}" 
                                                                   listRespuestasXEstilos="#{result.respuestaPorEstilo}" ></ezcomp:EstadisticaEstilosAprendizaje>
                             <ezcomp:EstadisticaAmbientes id_grafico="#{result.encuesta.idEncuesta}" rendered="#{result.graficoAmbiente != null and result.graficoAmbiente != ''}" 
@@ -69,23 +70,7 @@
                     </p:repeat>
                 </h:panelGroup>
             </h:form>
-            <script>
-                function generarpdf() {
-                    var printContents = document.getElementById('EstadisticaForm').innerHTML;
-
-                    var mywindow = window.open('', 'Resultados del uso de la plataforma', 'height=400,width=600');
-                    mywindow.document.write('<html><head><title>Resultados del uso de la plataforma</title>');
-                    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-                    mywindow.document.write(document.head.innerHTML);
-                    mywindow.document.write('</head><body >');
-                    mywindow.document.write(printContents);
-                    mywindow.document.write('</body></html>');
-                    mywindow.document.close(); // necessary for IE >= 10
-                    mywindow.focus(); // necessary for IE >= 10
-
-                    return true;
-                }
-            </script>
+            <h:outputScript library="js" name="impresion_pdf.js"/>
         </ui:define>
     </ui:composition>
 

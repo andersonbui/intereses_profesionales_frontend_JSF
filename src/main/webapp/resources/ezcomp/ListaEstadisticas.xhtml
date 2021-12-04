@@ -14,13 +14,13 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-            <h:panelGroup id="display">
+            <h:panelGroup id="id_panelGroup">
                 <button type="button" value=""   onclick="generarpdf()" >
                     <i class='far fa-file-pdf' style='font-size:20px;color:red'></i> Imprimir 
                 </button>
                 <div>
                     <br/>
-                    <h:outputFormat style="width:100%" rendered="#{cc.attrs.listaResultadoEstMultiple == null}" >
+                    <h:outputFormat style="width:100%" rendered="#{cc.attrs.listaResultadoEstMultiple == null || listaResultadoEstMultiple.isEmpty()}" >
                         No se encontraron datos
                     </h:outputFormat>
                 </div>
@@ -33,7 +33,7 @@
                     <!--<h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail"--> 
                                  <!--rendered="{estadisticaController.getItemsByEmail() != null}">-->
                     <p:outputPanel>
-                        <ezcomp:EstadisticaPersonalidad  rendered="#{result.personalidad != null}"  
+                        <ezcomp:EstadisticaPersonalidad  rendered="#{result.personalidad != null and result.personalidad != ''}"  
                             personalidad="#{result.personalidad}" ></ezcomp:EstadisticaPersonalidad>
 
                         <ezcomp:EstadisticaEstilosAprendizaje rendered="#{result.respuestaPorEstilo != null}" 
@@ -53,22 +53,6 @@
                     <hr />
                 </p:repeat>
             </h:panelGroup>
-            <script>
-                function generarpdf() {
-                    var printContents = document.getElementById('EstadisticaForm').innerHTML;
-
-                    var mywindow = window.open('', 'Resultados del uso de la plataforma', 'height=400,width=600');
-                    mywindow.document.write('<html><head><title>Resultados del uso de la plataforma</title>');
-                    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-                    mywindow.document.write(document.head.innerHTML);
-                    mywindow.document.write('</head><body >');
-                    mywindow.document.write(printContents);
-                    mywindow.document.write('</body></html>');
-                    mywindow.document.close(); // necessary for IE >= 10
-                    mywindow.focus(); // necessary for IE >= 10
-
-                    return true;
-                }
-            </script>
+            <h:outputScript library="js" name="impresion_pdf.js"/>
     </cc:implementation>
 </html>

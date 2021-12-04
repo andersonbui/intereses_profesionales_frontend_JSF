@@ -42,7 +42,6 @@
                                 graficarbarras = function (id, json = null) {
                                     if (json !== null) {
                                             if (id !== null) {
-                                            console.log("json:"+ json);
                                             var ctx = document.getElementById(id);
                                             new Chart(ctx, json);
                                         }

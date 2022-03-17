@@ -144,5 +144,11 @@ public class PreguntaInteligenciasMultiples extends PreguntaEncuesta implements 
     public String toString() {
         return "com.ingesoft.interpro.entidades.PreguntaInteligenciasMultiples[ id=" + id + " ]";
     }
+
+    @Override
+    public int compareTo(PreguntaEncuesta object) {
+        PreguntaInteligenciasMultiples other = (PreguntaInteligenciasMultiples) object;
+        return Short.compare(this.getOrden(),other.getOrden());
+    }
     
 }

@@ -99,6 +99,11 @@
                                 </p:commandButton>
                             </h:panelGroup>
 
+                            <h1>Felicidades #{encuestaController.selected.estudiante.idPersona.nombre} #{encuestaController.selected.estudiante.idPersona.apellido}</h1>
+                            <p><b>#{encuestaController.selected.estudiante.idPersona.email}</b></p>
+                            <p><b>Has completado las preguntas de Estilos de aprendizaje</b></p>
+                            <br/>
+                            
                             <div class="contentenedor-preguntas-estilo" >
                                 <ui:repeat value="#{estiloController.estadisticaEncuentaEstiloApren}" var="respuesta">
                                     #{respuesta.contador} |  <span title="#{respuesta.tipo.definicion}"> #{respuesta.tipo.nombre}</span><br/>

@@ -118,7 +118,7 @@ public class RespuestaAmbiente implements Serializable {
 
     @Override
     public String toString() {
-        return "RespuestaAmbiente[ respuestaAmbientePK=" + respuestaAmbientePK + " ]";
+        return "RespuestaAmbiente[ respuestaAmbientePK=" + respuestaAmbientePK +", respuesta: "+respuesta +" ]";
     }
     
 }

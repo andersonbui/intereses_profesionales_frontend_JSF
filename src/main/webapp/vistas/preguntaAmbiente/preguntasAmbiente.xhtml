@@ -55,7 +55,7 @@
                 PF('instruccionesAmbienteDialog').show();
                 });
             </h:outputScript>
-            <h:form id="PreguntaAmbienteForm"  style="display: block;">
+            <h:form id="PreguntaAmbienteForm"  style="display: block;" >
                 <center>
                     <div id="display">
                         <div style="width: 100%; display: table; padding: 10px 100px;" >
@@ -84,26 +84,28 @@
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="siguiente" ajax="true" actionListener="#{respuestaAmbienteController.siguientePaso()}"
                                                      update="@form" 
-                                                     rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" >
+                                                     rendered="#{respuestaAmbienteController.puedeSiguientePasoNoUltimo()}" type="submit" form="" >
+                                                     <p:ajax event="click"  update="@(.panelgrid)" />
                                     </p:commandButton>
                                     <p:commandButton class="float-r" value="Finalizar" ajax="true" actionListener="#{respuestaAmbienteController.casiFinaliza()}"
                                                      update="@form" rendered="#{respuestaAmbienteController.esPenultimoPaso() or respuestaAmbienteController.getnombrePaso() > 99}" >
+                                                     <p:ajax event="click"  update="@(.panelgrid)" />
                                     </p:commandButton>
                                 </h:panelGroup>
                                 <p:dataGrid value="#{respuestaAmbienteController.grupo}" var="item" columns="3" styleClass="panelgrid">
                                     <p:column >
                                         <div style="#{respuestaAmbienteController.claseNoSeleccionada(item)}">
                                             <div  style="background-color:#{respuestaAmbienteController.obtenerColor(item.preguntaAmbiente.idTipoAmbiente.tipo)}; height: 200px; width: 100%; ">
-                                                <p:graphicImage title="#{respuestaAmbienteController.obtenerEnunciado(item)}" 
-                                                                name="#{respuestaAmbienteController.obtenerImagen(item)}" 
+                                                <p:graphicImage title="#{respuestaAmbienteController.obtenerEnunciado(item)}"
+                                                                name="#{respuestaAmbienteController.obtenerImagen(item)}"
                                                                 style=" height: 70%; width: 270px;" />
                                                 <div class="dock">
-                                                    <h:inputHidden value="#{item.respuesta}" requiredMessage="hola" > 
+                                                    <h:inputHidden value="#{item.respuesta}"> 
                                                         <f:validator validatorId="validadorSeleccionImagen" />
                                                     </h:inputHidden>
                                                     <ul>
                                                         <li id="megusta1#{item.preguntaAmbiente.idPreguntaAmbiente}">
-                                                            <p:commandLink styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}">
+                                                            <p:commandLink styleClass="#{item.respuesta==1.0? 'seleccionado' : ''}" update="@(.input-hidden-image)" >
                                                                 <em><span>Me gusta</span></em>
                                                                 <p:graphicImage name="img/emoji_feliz.png" />
                                                                 <p:ajax event="click" listener="#{respuestaAmbienteController.meGusta(item)}" 
@@ -198,7 +200,8 @@
                                     <p:commandButton class="float-r btn" value="Finalizar" ajax="true" 
                                                      actionListener="#{respuestaAmbienteController.finalizarEncuesta}"
                                                      update=":PreguntaAmbienteForm, @form" 
-                                                     rendered="#{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or encuestaController.esDesarrollo()}" >
+                                                     rendered="#{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or true}" >
+                                                     <!-- TODO: rendered="{(respuestaAmbienteController.esPenultimoPaso() and !respuestaAmbienteEvaluacionController.hayMasImagenes() and respuestaAmbienteEvaluacionController.maxRespuestasImagen()) or encuestaController.esDesarrollo()}" >-->
                                     </p:commandButton>
                                
                                 </h:panelGroup>

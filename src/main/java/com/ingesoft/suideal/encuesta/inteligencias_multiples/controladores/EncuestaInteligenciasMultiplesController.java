@@ -195,7 +195,6 @@ public class EncuestaInteligenciasMultiplesController
             respuestaEst.setEncuestaInteligenciasMultiples(this.getSelected());
             respuestaEst.setRespuesta(contador.getContador().shortValue());
             
-            System.out.println("respuestaEst:"+respuestaEst);
             rpec.update();
         }
     }

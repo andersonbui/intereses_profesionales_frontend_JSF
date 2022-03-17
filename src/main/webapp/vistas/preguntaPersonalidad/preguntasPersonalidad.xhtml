@@ -115,7 +115,8 @@
                                 </p:commandButton>
                             </h:panelGroup>
                             <p:panelGrid styleClass="panelgrid" >
-                                <h1>Felicidades</h1>
+                                <h1>Felicidades #{encuestaController.selected.estudiante.idPersona.nombre} #{encuestaController.selected.estudiante.idPersona.apellido}</h1>
+                                <p><b>#{encuestaController.selected.estudiante.idPersona.email}</b></p>
                                 <p>Has completado las preguntas de personalidad</p>
 
                                 <p:outputLabel value="Su personalidad es:" style="font-size: 30px; font-weight:bold;"/>

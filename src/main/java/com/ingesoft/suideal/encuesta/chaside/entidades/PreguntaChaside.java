@@ -137,5 +137,11 @@ public class PreguntaChaside  extends PreguntaEncuesta implements Serializable {
     public String toString() {
         return "PreguntaChaside[ idPreguntaChaside=" + idPreguntaChaside + " ]";
     }
+
+    @Override
+    public int compareTo(PreguntaEncuesta object) {
+        PreguntaChaside other = (PreguntaChaside) object;
+        return this.idPreguntaChaside.compareTo(other.idPreguntaChaside);
+    }
     
 }

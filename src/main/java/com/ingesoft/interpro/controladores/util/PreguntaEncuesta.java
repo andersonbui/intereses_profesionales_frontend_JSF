@@ -11,6 +11,6 @@ import java.io.Serializable;
  *
  * @author anderson
  */
-public abstract class PreguntaEncuesta implements Serializable {
+public abstract class PreguntaEncuesta implements Serializable, Comparable<PreguntaEncuesta> {
 
 }

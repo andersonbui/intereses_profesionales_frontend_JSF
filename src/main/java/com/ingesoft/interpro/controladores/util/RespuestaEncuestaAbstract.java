@@ -34,6 +34,8 @@ public abstract class RespuestaEncuestaAbstract <
         setEstaRespondida(true);
     }
     
+    public abstract boolean isValid();
+    
     public abstract void inicializar(EncuestaPersonalizada encuestaPersonalizada, 
             PreguntaEncuesta preguntaEncuesta);
     

@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.entidades;
 
+import com.ingesoft.interpro.controladores.util.RespuestaEncuestaAbstract;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -30,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RespuestaPersonalidad.findByIdPreguntaPersonalidad", query = "SELECT r FROM RespuestaPersonalidad r WHERE r.respuestaPersonalidadPK.idPreguntaPersonalidad = :idPreguntaPersonalidad")
     , @NamedQuery(name = "RespuestaPersonalidad.findByRespuesta", query = "SELECT r FROM RespuestaPersonalidad r WHERE r.respuesta = :respuesta")
     , @NamedQuery(name = "RespuestaPersonalidad.findByIdEncuesta", query = "SELECT r FROM RespuestaPersonalidad r WHERE r.respuestaPersonalidadPK.idEncuesta = :idEncuesta")})
-public class RespuestaPersonalidad implements Serializable {
+public class RespuestaPersonalidad  extends RespuestaEncuestaAbstract
+    < EncuestaPersonalidad, PreguntaPersonalidad > {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -73,6 +75,17 @@ public class RespuestaPersonalidad implements Serializable {
         this.respuestaPersonalidadPK = respuestaPersonalidadPK;
     }
 
+    @Override
+    public boolean isValid() {
+        return respuesta >= 0;
+    }
+
+    @Override
+    public void inicializar(EncuestaPersonalidad encuestaPersonalizada, PreguntaPersonalidad preguntaEncuesta) {
+    }
+    
+    
+    
     public int getRespuesta() {
         return respuesta;
     }

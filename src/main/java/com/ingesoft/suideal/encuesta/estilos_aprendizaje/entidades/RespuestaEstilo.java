@@ -75,6 +75,11 @@ public class RespuestaEstilo  extends RespuestaEncuestaAbstract
             encuestaEstilosAprendizaje.getIdEncuesta()
         );
     }
+
+    @Override
+    public boolean isValid() {
+        return !(respuesta == null || "".equals(respuesta.toString()));
+    }
     
     public RespuestaEstiloPK getRespuestaEstiloPK() {
         return respuestaEstiloPK;

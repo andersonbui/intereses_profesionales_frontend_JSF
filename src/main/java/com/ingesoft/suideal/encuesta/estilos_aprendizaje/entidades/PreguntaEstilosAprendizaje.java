@@ -5,7 +5,7 @@
  */
 package com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades;
 
-import com.ingesoft.suideal.encuesta.estilos_aprendizaje.entidades.TipoEstiloPregunta;
+import com.ingesoft.interpro.controladores.util.PreguntaEncuesta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PreguntaEstilosAprendizaje.findByEnunciado", query = "SELECT p FROM PreguntaEstilosAprendizaje p WHERE p.enunciado = :enunciado"),
     @NamedQuery(name = "PreguntaEstilosAprendizaje.findByUrlimagen", query = "SELECT p FROM PreguntaEstilosAprendizaje p WHERE p.urlimagen = :urlimagen"),
     @NamedQuery(name = "PreguntaEstilosAprendizaje.findByOrden", query = "SELECT p FROM PreguntaEstilosAprendizaje p WHERE p.orden = :orden")})
-public class PreguntaEstilosAprendizaje implements Serializable {
+public class PreguntaEstilosAprendizaje extends PreguntaEncuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -142,6 +142,12 @@ public class PreguntaEstilosAprendizaje implements Serializable {
     @Override
     public String toString() {
         return "PreguntaEstilosAprendizaje[ id=" + id + " ]";
+    }
+
+    @Override
+    public int compareTo(PreguntaEncuesta object) {
+        PreguntaEstilosAprendizaje other = (PreguntaEstilosAprendizaje) object;
+        return this.getOrden().compareTo(other.getOrden());
     }
     
 }

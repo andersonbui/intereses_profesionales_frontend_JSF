@@ -52,7 +52,7 @@ public class RespuestaInteligenciasMultiples
     public RespuestaInteligenciasMultiples() {
         setEstaRespondida(false);
     }
-
+    
     public RespuestaInteligenciasMultiples(RespuestaInteligenciasMultiplesPK respuestaInteligenciasMultiplesPK) {
         this.respuestaInteligenciasMultiplesPK = respuestaInteligenciasMultiplesPK;
     }
@@ -109,6 +109,11 @@ public class RespuestaInteligenciasMultiples
 
     public void setPreguntaInteligenciasMultiples(PreguntaInteligenciasMultiples preguntaInteligenciasMultiples) {
         this.preguntaInteligenciasMultiples = preguntaInteligenciasMultiples;
+    }
+
+    @Override
+    public boolean isValid() {
+        return respuesta != null && respuesta >= 0;
     }
     
     @Override

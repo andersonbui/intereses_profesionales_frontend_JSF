@@ -5,6 +5,7 @@
  */
 package com.ingesoft.interpro.entidades;
 
+import com.ingesoft.interpro.controladores.util.PreguntaEncuesta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -37,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "PreguntaAmbiente.findByEnunciado", query = "SELECT p FROM PreguntaAmbiente p WHERE p.enunciado = :enunciado")
     , @NamedQuery(name = "PreguntaAmbiente.findByUrlImagen", query = "SELECT p FROM PreguntaAmbiente p WHERE p.urlImagen = :urlImagen")
     , @NamedQuery(name = "PreguntaAmbiente.findByOrden", query = "SELECT p FROM PreguntaAmbiente p WHERE p.orden = :orden")})
-public class PreguntaAmbiente implements Serializable {
+public class PreguntaAmbiente  extends PreguntaEncuesta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -150,6 +151,12 @@ public class PreguntaAmbiente implements Serializable {
     @Override
     public String toString() {
         return "PreguntaAmbiente[ idPreguntaAmbiente=" + idPreguntaAmbiente + " ]";
+    }
+
+    @Override
+    public int compareTo(PreguntaEncuesta object) {
+        PreguntaAmbiente other = (PreguntaAmbiente) object;
+        return this.getOrden().compareTo(other.getOrden());
     }
 
 }

@@ -9,6 +9,7 @@ import com.ingesoft.interpro.controladores.EncuestaControllerInterface;
 import com.ingesoft.interpro.entidades.Encuesta;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public abstract class EncuestaControllerAbstract <
             EncuestaEspecifica, 
             EncuestaEspecificaFacade, 
             Respuesta extends RespuestaEncuestaAbstract, 
-            Pregunta
+            Pregunta extends PreguntaEncuesta
         > 
         extends ControllerAbstract<EncuestaEspecifica, EncuestaEspecificaFacade>
         implements Serializable, EncuestaControllerInterface {
@@ -203,6 +204,7 @@ public abstract class EncuestaControllerAbstract <
                 contPuntosRecuperados = encuestaGeneral.getPuntajeEncuesta();
             }
             int tamListPreguntas = listaItemsPreguntas.size();
+            Collections.sort(listaPreguntas);
             listaItemsRespuestas = new ArrayList<>(tamListPreguntas);
             
             obtenerEncuestaEspecifica(encuestaGeneral);
@@ -211,6 +213,8 @@ public abstract class EncuestaControllerAbstract <
             List<Respuesta> items_recuperados = respuestaContr.obtenerTodosPorEncuesta(getSelected());
             Respuesta actualRespuesta;
             Respuesta unaRespuestaAuxiliar;
+            boolean esConsecutivoRecuperado = true;
+            int cantidadConsecutivosRecuperados = 0;
             
             for (Pregunta pregunta : listaItemsPreguntas) {
                 actualRespuesta = crearRespuestaEncuesta(pregunta);
@@ -221,13 +225,17 @@ public abstract class EncuestaControllerAbstract <
                         unaRespuestaAuxiliar = items_recuperados.get(indice);
                     }
                 }
-                if (unaRespuestaAuxiliar == null) {
+                if (unaRespuestaAuxiliar == null || !unaRespuestaAuxiliar.isValid()) {
+                    esConsecutivoRecuperado = false;
                     if(Utilidades.esDesarrollo()){
                         respuestaAleatoria(actualRespuesta);
                     }
                 } else {
                     actualRespuesta = unaRespuestaAuxiliar;
                     actualRespuesta.responder();
+                }
+                if(esConsecutivoRecuperado){
+                    cantidadConsecutivosRecuperados++;
                 }
                 listaItemsRespuestas.add(actualRespuesta);
             }
@@ -236,19 +244,18 @@ public abstract class EncuestaControllerAbstract <
             
             int aux_pasoactual = 0;
             //ubicar la encuesta en la ultima pagina respondida
-            if (items_recuperados != null && !items_recuperados.isEmpty()) {
-                int preguntasXpagina = getTamGrupo();
-                int paginaActual = (items_recuperados.size() / preguntasXpagina);
-                paginaActual += (items_recuperados.size() % preguntasXpagina == 0 ? 0 : 1);                
-                if(paginaActual == getNumGrupos()) {
+            int preguntasXpagina = getTamGrupo();
+            int paginaActual = (cantidadConsecutivosRecuperados / preguntasXpagina);
+            paginaActual += (cantidadConsecutivosRecuperados % preguntasXpagina == 0 ? 0 : 1);                
+            if(paginaActual == getNumGrupos()) {
 //                    aux_pasoactual = getNumGrupos();
-                    try {
-                        finalizarEncuesta();
-                    } catch (InterruptedException ex) {
-                    }
+                try {
+                    finalizarEncuesta();
+                } catch (InterruptedException ex) {
                 }
-                aux_pasoactual = paginaActual;
-            } 
+            }
+            aux_pasoactual = paginaActual;
+            
             setPasoActual(aux_pasoactual);
             getEncuestaGeneral().setPuntajeEncuesta(contPuntosRecuperados);
             setGrupoActual(getGrupoItems(aux_pasoactual + 1));

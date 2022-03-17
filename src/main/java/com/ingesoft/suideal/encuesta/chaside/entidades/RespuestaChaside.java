@@ -74,6 +74,11 @@ public class RespuestaChaside  extends RespuestaEncuestaAbstract
         this.fecha = fecha;
     }
 
+    @Override
+    public boolean isValid() {
+        return respuesta >= 0;
+    }
+    
     /**
      * 
      * @param encuestaChaside

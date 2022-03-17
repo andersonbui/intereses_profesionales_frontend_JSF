@@ -174,15 +174,9 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     public int siguientePaso() {
         System.out.println("siguientes paso: " + pasoActual);
         int intervaloEvaluacion = 5;
-        // @desarrollo
-        if (Utilidades.esDesarrollo()) {
-            intervaloEvaluacion = 3;
-        }// @end
         if ((pasoActual + 1) % intervaloEvaluacion == 0) {
             detenerReloj();
             setEvaluacion(true);
-//            System.out.println("reloj: "+relojDetenido());
-
             reinicioPasoActualEvaluacion();
             getRespuestaAmbienteEvaluacionController().getItemPreguntaEvaluacion();
         }
@@ -306,26 +300,26 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         List<ResultadoPorAmbiente> listaResults = encuesta.getResultadoPorAmbienteList();
         
         Elemento[] valores = realizarEstadisticas(this.itemsRespuestas);
-        if(listaResults == null || listaResults.isEmpty()){
-            for (Elemento valor : valores) {
+        
+        HashMap<TipoAmbiente,ResultadoPorAmbiente> dict = new HashMap();
+        if(!(listaResults == null || listaResults.isEmpty())) {
+            for (ResultadoPorAmbiente valor : listaResults) {
+                dict.put(valor.getTipoAmbiente(), valor);
+            }
+        }
+        for (Elemento valor : valores) {
+            ResultadoPorAmbiente elem = dict.get(valor.tipoPer);
+            if (elem == null) {
                 resultadoPorAmbienteController.prepareCreate();
                 resultadoPorAmbienteController.getSelected().setValor((float) valor.valor);
                 resultadoPorAmbienteController.getSelected().setEncuesta(getEncuestaAcutal());
                 resultadoPorAmbienteController.getSelected().setTipoAmbiente(valor.tipoPer);
                 resultadoPorAmbienteController.create();
+                elem = resultadoPorAmbienteController.getSelected();
             }
-        } else {
-            HashMap<TipoAmbiente,ResultadoPorAmbiente> dict = new HashMap();
-            for (ResultadoPorAmbiente valor : listaResults) {
-                dict.put(valor.getTipoAmbiente(), valor);
-            }
-            for (Elemento valor : valores) {
-                ResultadoPorAmbiente elem = dict.get(valor.tipoPer);
-                elem.setValor((float)valor.valor);
-                
-                resultadoPorAmbienteController.setSelected(elem);
-                resultadoPorAmbienteController.update();
-            }
+            elem.setValor((float)valor.valor);
+            resultadoPorAmbienteController.setSelected(elem);
+            resultadoPorAmbienteController.update();
         }
         
     }
@@ -354,7 +348,11 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
             TipoAmbiente tipoAmb = respuestaAmbiente.getPreguntaAmbiente().getIdTipoAmbiente();
             int indice = tipoAmb.getIdTipoAmbiente() - 1;
             valores[indice].tipoPer = tipoAmb;
-            valores[indice].valor += respuestaAmbiente.getRespuesta();
+            if(!Float.isNaN(respuestaAmbiente.getRespuesta())){
+                valores[indice].valor += respuestaAmbiente.getRespuesta();
+            } else {
+                System.out.println("nan");
+            }
         }
         return valores;
     }
@@ -480,12 +478,16 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
     public List<RespuestaAmbiente> getItemsRespuestas() {
         List<PreguntaAmbiente> preguntas;
         if (itemsRespuestas == null && (preguntas = getListaPreguntas()) != null) {
-             
+            
+            Collections.sort(preguntas);
             itemsRespuestas = new ArrayList<>(preguntas.size());
             cantidadRespuestasXPregunta = new int[preguntas.size()];
             Encuesta encuesta = getEncuestaAcutal();
             RespuestaAmbiente unaRespAmb;
             List<RespuestaAmbiente> items_recuperados = obtenerTodosPorEncuesta(encuesta);
+            
+            boolean esConsecutivoRecuperado = true;
+            int cantidadConsecutivosRecuperados = 0;
             
             for (PreguntaAmbiente pregunta : preguntas) {
                 unaRespAmb = new RespuestaAmbiente(pregunta, encuesta);
@@ -499,7 +501,7 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
                     }
                 }
                 // @desarrollo - respuetas para desarrollo
-                if (respuesta.isNaN() && Utilidades.esDesarrollo()) {
+                if ((respuesta == null || respuesta.isNaN()) && Utilidades.esDesarrollo()) {
                     double[] valores = {0.0, 0.5, 1.0}; // PARA VALORES DE PRUEBA
                     Random rand = new Random(Calendar.getInstance().getTimeInMillis());
                     respuesta = (float) valores[rand.nextInt(3)];
@@ -509,26 +511,26 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
                  * si se consigue una respuesta almacenado o 
                  * aleatorio(desarrollo), entonces, agregarlo a la pregunta 
                  */
-                if(!respuesta.isNaN()){
+                if(!(respuesta == null || respuesta.isNaN())){
                     unaRespAmb.setRespuesta(respuesta);
+                }else{
+                    esConsecutivoRecuperado = false;
                 }
                 itemsRespuestas.add(unaRespAmb);
+                if(esConsecutivoRecuperado){
+                    cantidadConsecutivosRecuperados++;
+                }
             }
             
             numGrupos = getCantidadGrupos();
-            
             //ubicar la encuesta en la ultima pagina respondida
-            if (items_recuperados != null && !items_recuperados.isEmpty()) {
-                int imagenesXpagina = tamGrupo;
-                int paginaActual = (items_recuperados.size() / imagenesXpagina);
-                if(paginaActual == numGrupos) {
-                    pasoActual = numGrupos;
-                    finalizarEncuesta(null);
-                }
-                pasoActual = paginaActual;
-            } else {
-                pasoActual = 0;
+            int imagenesXpagina = tamGrupo;
+            int paginaActual = (cantidadConsecutivosRecuperados / imagenesXpagina);
+            if(paginaActual == numGrupos) {
+                pasoActual = numGrupos;
+                finalizarEncuesta(null);
             }
+            pasoActual = paginaActual;
 
             grupo = getGrupoItems(pasoActual + 1);
         }
@@ -558,6 +560,7 @@ public class RespuestaAmbienteController extends Controllers implements Serializ
         @Override
         public void run() {
             for (RespuestaAmbiente respuesta : itemsRespuestas) {
+                System.out.println("----guardando: "+respuesta);
                 getFacade().edit(respuesta);
             }
             encuestaController.getFacade().edit(encuestaController.getSelected());

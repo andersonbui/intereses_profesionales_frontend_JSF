@@ -96,6 +96,7 @@ public class EncuestaController extends Controllers implements Serializable {
             
             for (EncuestaControllerInterface listaEncuesta : unaListaEncuestasController) {
                 firstSubMenu = new DefaultMenuItem(listaEncuesta.getName());
+                firstSubMenu.setOnclick("alet(\"Hola andres\")");
                 model.addElement(firstSubMenu); 
             }
             
@@ -187,7 +188,7 @@ public class EncuestaController extends Controllers implements Serializable {
     }
 
     public EncuestaController arrancarReloj() {
-        detener_reloj = false;
+        detener_reloj = true; // TODO: cambiar a false
         return this;
     }
 
@@ -303,11 +304,12 @@ public class EncuestaController extends Controllers implements Serializable {
     protected List<Encuesta>  obtenerEncuestaSinTerminar(Estudiante estudiante) {
         
         List<Encuesta> lista = getFacade().buscarPorEstudiante(estudiante);
-        
-        List<Encuesta> listaSinFinalizar = lista.stream().filter((Encuesta uanaencuesta) -> {
-            return haySubEncuestaPendiente(uanaencuesta);
-        }).collect(Collectors.toList());
-        
+        List<Encuesta> listaSinFinalizar = null;
+        if(lista != null){
+            listaSinFinalizar = lista.stream().filter((Encuesta uanaencuesta) -> {
+                return haySubEncuestaPendiente(uanaencuesta);
+            }).collect(Collectors.toList());
+        }
         return listaSinFinalizar;
     }
     
@@ -318,11 +320,11 @@ public class EncuestaController extends Controllers implements Serializable {
     public List<EncuestaControllerInterface> getListadoEncuestasController(){
         if(listaEncuestasController == null){
             listaEncuestasController = new ArrayList();
-//            listaEncuestasController.add(getRespuestaAmbienteController());
-//            listaEncuestasController.add(getRespuestaPersonalidadController());
+            listaEncuestasController.add(getRespuestaAmbienteController());
+            listaEncuestasController.add(getRespuestaPersonalidadController());
             listaEncuestasController.add(getEstiloController());
             listaEncuestasController.add(getEncuestaInteligenciasMultiplesController());
-//            listaEncuestasController.add(getChasideController());
+            listaEncuestasController.add(getChasideController());
         }
         return listaEncuestasController;
     }
@@ -353,7 +355,9 @@ public class EncuestaController extends Controllers implements Serializable {
         Estudiante estud = getEstudianteController().getEstudiantePorPersona(persona);
         
         List<Encuesta> listaEncuestasPendientes = obtenerEncuestaSinTerminar(estud);
-        System.err.println("listaEncuestas:"+listaEncuestasPendientes.size());
+        if(listaEncuestasPendientes == null || listaEncuestasPendientes.isEmpty()){
+            System.err.println("No se encontro encuesta para estudiante:"+estud);
+        }
         return listaEncuestasPendientes;
     }
     
